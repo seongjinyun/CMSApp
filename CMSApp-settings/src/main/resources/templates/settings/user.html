@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="zxx" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>AdminLTE 3 | Dashboard</title>
+
+	<th:block th:replace="~{fragments/header_link :: header_link}"/>
+	<th:block th:replace="~{fragments/datatables_header_link :: datatables_header_link}"/>
+	
+</head>
+<body class="hold-transition sidebar-mini layout-fixed">
+<div class="wrapper">
+
+  <!-- Preloader -->
+  <th:block th:replace="~{fragments/preloader :: preloader}"/>
+	
+  <!-- Navbar -->
+	<th:block th:replace="~{fragments/navi :: navi}"/>
+  <!-- /.navbar -->
+
+  <!-- Main Sidebar Container -->
+  <th:block th:replace="~{fragments/sidebar :: sidebar}"/>
+  <!-- /.sidebar -->
+
+  <!-- Content Wrapper. Contains page content -->
+  <div class="content-wrapper">
+    <!-- Content Header (Page header) -->
+    <div class="content-header">
+      <div class="container-fluid">
+        <div class="row mb-2">
+          <div class="col-sm-6">
+            <h1 class="m-0" style="font-weight: bold;">이용자 설정</h1>
+          </div><!-- /.col -->
+          <div class="col-sm-6">
+            <ol class="breadcrumb float-sm-right">
+              <li class="breadcrumb-item"><a href="#">Settings</a></li>
+              <li class="breadcrumb-item active">User</li>
+            </ol>
+          </div><!-- /.col -->
+        </div><!-- /.row -->
+      </div><!-- /.container-fluid -->
+    </div>
+    <!-- /.content-header -->
+
+    <!-- Main content -->
+    <section class="content">
+		<div class="card">
+		    <div class="card-header">
+		        <h5 class="card-title" style="font-weight: bold;">사용자 역할 설정</h5>
+		    </div>
+			<div class="card-body">
+		        <table id="example1" class="table table-bordered table-striped">
+		            <thead>
+		                <tr>
+		                    <th><input type='checkbox' name='chkAll' onclick='chkChange(this);'></th>
+		                    <th>사용자명</th>
+		                    <th>역할</th>
+		                    <th>부서</th>
+		                    <th>마지막 활동</th>
+		                </tr>
+		            </thead>
+		            <tbody>
+		                <tr>
+		                    <td><input type='checkbox' name='chkProc' value=''/> </td>
+		                    <td>장원영</td>
+		                    <td>Draft Writer</td>
+		                    <td>개발</td>
+		                    <td>2024-05-23</td>
+		                </tr>
+		                <tr>
+		                    <td><input type='checkbox' name='chkProc' value=''/> </td>
+		                    <td>안유진</td>
+		                    <td>Editor</td>
+		                    <td>개발</td>
+		                    <td>2024-05-22</td>
+		                </tr>
+		            </tbody>    
+		        </table>
+		    </div>
+  		</div>
+  	</section>
+  <!-- /.content -->
+  </div>
+  <!-- /.content-wrapper -->
+  
+  <th:block th:replace="~{fragments/footer :: footer}"/>
+
+  <!-- Control Sidebar -->
+  <aside class="control-sidebar control-sidebar-dark">
+    <!-- Control sidebar content goes here -->
+  </aside>
+  <!-- /.control-sidebar -->
+</div>
+<!-- ./wrapper -->
+	
+  <th:block th:replace="~{fragments/footer_link :: footer_link}"/>
+  <th:block th:replace="~{fragments/datatables_footer_link :: datatables_footer_link}"/>
+
+</body>
+</html>

@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="zxx" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>AdminLTE 3 | Dashboard</title>
+
+	<th:block th:replace="~{fragments/header_link :: header_link}"/>
+	
+</head>
+<body class="hold-transition sidebar-mini layout-fixed">
+<div class="wrapper">
+
+  <!-- Preloader -->
+  <th:block th:replace="~{fragments/preloader :: preloader}"/>
+	
+  <!-- Navbar -->
+	<th:block th:replace="~{fragments/navi :: navi}"/>
+  <!-- /.navbar -->
+
+  <!-- Main Sidebar Container -->
+  <th:block th:replace="~{fragments/sidebar :: sidebar}"/>
+  <!-- /.sidebar -->
+
+  <!-- Content Wrapper. Contains page content -->
+  <div class="content-wrapper">
+    <!-- Content Header (Page header) -->
+    <div class="content-header">
+      <div class="container-fluid">
+        <div class="row mb-2">
+          <div class="col-sm-6">
+            <h1 class="m-0" style="font-weight: bold;">일반 설정</h1>
+          </div><!-- /.col -->
+          <div class="col-sm-6">
+            <ol class="breadcrumb float-sm-right">
+              <li class="breadcrumb-item"><a href="#">Settings</a></li>
+              <li class="breadcrumb-item active">General</li>
+            </ol>
+          </div><!-- /.col -->
+        </div><!-- /.row -->
+      </div><!-- /.container-fluid -->
+    </div>
+    <!-- /.content-header -->
+
+    <!-- Main content -->
+    <section class="content">
+	    <div class="card">
+	        <div class="card-header">
+	            <h3 class="card-title" style="font-weight: bold;">사이트 설정</h3>
+	            <div class="card-tools">
+	                <button type="button" class="btn btn-tool" data-card-widget="collapse" title="Collapse">
+	                    <i class="fas fa-minus"></i>
+	                </button>
+	                <button type="button" class="btn btn-tool" data-card-widget="remove" title="Remove">
+	                    <i class="fas fa-times"></i>
+	                </button>
+	            </div>
+	        </div>
+	        <div class="card-body">
+			    <div class="d-flex justify-content-between form-group">
+			    	<label for="" class="col-sm-2 col-form-label">관리 계정 정보 변경</label>
+			    	<div class="col-sm-8">
+			    		<input type="text" id="inputID" class="form-control" value="ID 입력">
+			    		<input type="password" id="inputPW" class="form-control" value="PW 입력">
+					</div>
+					<input type="submit" value="Save Changes" class="col-sm-1 btn btn-success float-right" style="height: 38px">
+			    </div>
+			</div>
+			<hr>
+	        <div class="card-body">
+			    <div class="d-flex justify-content-between form-group">
+			    	<label for="inputName" class="col-sm-2 col-form-label">사이트명 설정</label>
+			    	<div class="col-sm-8">
+			    		<input type="text" id="inputName" class="form-control" value="프로젝트명">
+					</div>
+					<input type="submit" value="Save Changes" class="col-sm-1 btn btn-success float-right" style="height: 38px">
+			    </div>
+			</div>
+			<hr>
+			<div class="card-body">
+			    <div class="d-flex justify-content-between form-group">
+			    	<label for="" class="col-sm-2 col-form-label">에디터 설정</label>
+	        		<div class="form-group col-sm-8">
+					    <div class="form-check">
+					        <input class="form-check-input" type="radio" name="summernote" checked="">
+					        <label class="form-check-label">summernote</label>
+					    </div>
+					    <div class="form-check">
+					        <input class="form-check-input" type="radio" disabled="">
+					        <label class="form-check-label">markdown</label>
+					    </div>
+					</div>
+			        <input type="submit" value="Save Changes" class="col-sm-1 btn btn-success float-right" style="height: 38px">	
+			    </div>
+			</div>
+			<hr>
+			<div class="card-body">
+			    <div class="d-flex justify-content-between">
+			        <label for="" class="col-sm-2 col-label">사이트 삭제</label>
+			        <button type="button" class="col-sm-1 btn btn-danger float-right" data-toggle="modal" data-target="#modal-danger" style="height: 38px">
+						삭제
+					</button>
+			    </div>
+			</div>
+	    </div>
+	</section>
+	<!-- modal alert if delete button pushed -->
+	<div class="modal fade" id="modal-danger" style="display: none;" aria-hidden="true">
+	    <div class="modal-dialog">
+	        <div class="modal-content bg-default">
+	            <div class="modal-header">
+	                <h4 class="modal-title">프로젝트 삭제</h4>
+	                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+	                    <span aria-hidden="true">×</span>
+	                </button>
+	            </div>
+	            <div class="modal-body">
+	            	<!-- validation 적용 필요 -->
+	                <p style="color: red; font-weight: bold;">정말 이 "프로젝트명"을 삭제하시겠습니까?</p>
+	                <p style="color: red; font-weight: bold;">프로젝트는 삭제 이후 다시 되돌릴 수 없습니다.</p>
+	                <p></p>
+	                <p>삭제를 위해 아래에 "프로젝트명" 입력</p>
+	                <div class="form-group">
+			        	<input type="text" id="confirm_delete" class="form-control" value="프로젝트명">
+			    	</div>
+			    	<p style="font-weight: bold; text-align: center;">프로젝트 삭제에 대한 책임을 이해했습니다.</p>
+	            </div>	            
+	            <div class="modal-footer justify-content-between">
+	                <button type="button" class="btn btn-outline-light" data-dismiss="modal">Close</button>
+	                <button type="button" class="btn btn-danger">Delete Project</button>
+	            </div>
+	        </div>
+	    </div>
+	</div><!-- /.modal -->
+    <!-- /.content -->
+  </div>
+  <!-- /.content-wrapper -->
+  
+  <th:block th:replace="~{fragments/footer :: footer}"/>
+
+  <!-- Control Sidebar -->
+  <aside class="control-sidebar control-sidebar-dark">
+    <!-- Control sidebar content goes here -->
+  </aside>
+  <!-- /.control-sidebar -->
+</div>
+<!-- ./wrapper -->
+	
+  <th:block th:replace="~{fragments/footer_link :: footer_link}"/>
+
+</body>
+</html>
