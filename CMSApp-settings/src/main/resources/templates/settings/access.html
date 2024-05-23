@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="zxx" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>AdminLTE 3 | Dashboard</title>
+
+	<th:block th:replace="~{fragments/header_link :: header_link}"/>
+	<th:block th:replace="~{fragments/datatables_header_link :: datatables_header_link}"/>
+	<th:block th:replace="~{fragments/advanced_forms_header_link :: advanced_forms_header_link}"/>
+	
+</head>
+<body class="hold-transition sidebar-mini layout-fixed">
+<div class="wrapper">
+
+  <!-- Preloader -->
+  <th:block th:replace="~{fragments/preloader :: preloader}"/>
+	
+  <!-- Navbar -->
+	<th:block th:replace="~{fragments/navi :: navi}"/>
+  <!-- /.navbar -->
+
+  <!-- Main Sidebar Container -->
+  <th:block th:replace="~{fragments/sidebar :: sidebar}"/>
+  <!-- /.sidebar -->
+
+  <!-- Content Wrapper. Contains page content -->
+  <div class="content-wrapper">
+    <!-- Content Header (Page header) -->
+    <div class="content-header">
+      <div class="container-fluid">
+        <div class="row mb-2">
+          <div class="col-sm-6">
+            <h1 class="m-0" style="font-weight: bold;">부서 권한 설정</h1>
+          </div><!-- /.col -->
+          <div class="col-sm-6">
+            <ol class="breadcrumb float-sm-right">
+              <li class="breadcrumb-item"><a href="#">Settings</a></li>
+              <li class="breadcrumb-item active">Access</li>
+            </ol>
+          </div><!-- /.col -->
+        </div><!-- /.row -->
+      </div><!-- /.container-fluid -->
+    </div>
+    <!-- /.content-header -->
+
+    <!-- Main content -->
+    <h6 style="color: gray; margin-left: 50px; margin-bottom: 20px;">프로젝트에 대한 부서의 접근 권한을 관리합니다.</h5>
+    <section class="content">
+    	<div class="container-fluid">
+    		<div class="row">
+	    		<div class="col-md-5">
+    				<div class="card">
+					    <div class="card-header">
+					        <h3 class="card-title" style="font-weight: bold;">부서 추가</h3>
+					        <div class="card-tools">
+					            <button type="button" class="btn btn-tool" data-card-widget="collapse" title="Collapse">
+					                <i class="fas fa-minus"></i>
+					            </button>
+					        </div>
+					    </div>
+					    <div class="card-body">
+					        <div class="form-group">
+					            <label for="inputDeptName">부서명</label>
+					            <input type="text" id="inputDeptName" class="form-control">
+					        </div>
+					        <div class="form-group">
+					            <label for="inputDeptManager">관리자(Editor) 추가</label>
+								<select class="select2 form-control" multiple="multiple" data-placeholder="(다중)선택" style="width: 100%;">
+									<option>아이린</option>
+									<option>슬기</option>
+									<option>웬디</option>
+									<option>조이</option>
+									<option>예리</option>
+								</select>
+					        </div>
+					    </div>
+					</div>
+					<div class="card">
+					    <div class="card-header">
+					        <h3 class="card-title" style="font-weight: bold;">프로젝트 추가</h3>
+					        <div class="card-tools">
+					            <button type="button" class="btn btn-tool" data-card-widget="collapse" title="Collapse">
+					                <i class="fas fa-minus"></i>
+					            </button>
+					        </div>
+					    </div>
+					    <div class="card-body">
+					        <div class="form-group">
+					            <label for="inputProjectName">프로젝트명</label>
+					            <input type="text" id="inputProjectName" class="form-control">
+					        </div>
+					        <div class="form-group">
+					            <label for="inputDeptManager">담당 부서 추가</label>
+								<select class="select2 form-control" multiple="multiple" data-placeholder="(다중)선택" style="width: 100%;">
+									<option>1팀</option>
+									<option>2팀</option>
+									<option>3팀</option>
+									<option>4팀</option>
+									<option>5팀</option>
+								</select>
+					        </div>
+					    </div>
+					</div>
+    			</div>
+    			<div class="col-md-7">
+    				<div class="card">
+					    <div class="card-header">
+					        <h3 class="card-title" style="font-weight: bold;">접근 부서 설정</h3>
+					    </div>
+						<div class="card-body">
+					        <table id="example2" class="table table-bordered table-striped">
+					            <thead>
+					                <tr>
+					                    <th><input type='checkbox' name='chkAll' onclick='chkChange(this);'></th>
+					                    <th>부서</th>
+					                    <th>프로젝트</th>
+					                </tr>
+					            </thead>
+					            <tbody>
+					                <tr>
+					                    <td><input type='checkbox' name='chkProc' value=''/> </td>
+					                    <td>개발</td>
+					                    <td>
+						                    <div class="form-group">
+												<label>Select Multiple</label>
+												<select class="select2 form-control" multiple="multiple" data-placeholder="Select a State" style="width: 100%;">
+													<option>option 1</option>
+													<option>option 2</option>
+													<option>option 3</option>
+													<option>option 4</option>
+													<option>option 5</option>
+												</select>
+											</div>
+										</td>
+					                </tr>
+					                <tr>
+					                    <td><input type='checkbox' name='chkProc' value=''/> </td>
+					                    <td>개발</td>
+					                    <td>
+						                    <div class="form-group">
+												<label>Select Multiple</label>
+												<select class="select2 form-control" multiple="multiple" data-placeholder="Select a State" style="width: 100%;">
+													<option>option 1</option>
+													<option>option 2</option>
+													<option>option 3</option>
+													<option>option 4</option>
+													<option>option 5</option>
+												</select>
+											</div>
+										</td>
+					                </tr>
+					            </tbody>    
+					        </table>
+					        <button type="submit" class="btn btn-primary float-right" style="margin-top: 30px;">Submit</button>
+					    </div>
+			  		</div>
+    			</div>
+    		</div>    				
+    	</div>
+
+  	</section>
+  <!-- /.content -->
+  </div>
+  <!-- /.content-wrapper -->
+  
+  <th:block th:replace="~{fragments/footer :: footer}"/>
+
+  <!-- Control Sidebar -->
+  <aside class="control-sidebar control-sidebar-dark">
+    <!-- Control sidebar content goes here -->
+  </aside>
+  <!-- /.control-sidebar -->
+</div>
+<!-- ./wrapper -->
+	
+  <th:block th:replace="~{fragments/footer_link :: footer_link}"/>
+  <th:block th:replace="~{fragments/datatables_footer_link :: datatables_footer_link}"/>
+  <th:block th:replace="~{fragments/advanced_forms_footer_link :: advanced_forms_footer_link}"/>
+
+</body>
+</html>
