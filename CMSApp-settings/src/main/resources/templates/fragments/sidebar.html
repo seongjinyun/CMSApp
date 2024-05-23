@@ -111,15 +111,33 @@
 					</a>
 					<ul class="nav nav-treeview">
 						<li class="nav-item">
-							<a href="./index.html" class="nav-link"> 
+							<a th:href="@{general}" class="nav-link"> 
 								<i class="far fa-circle nav-icon"></i>
-								<p>접근권한</p>
+								일반
 							</a>
 						</li>
 						<li class="nav-item">
-							<a href="./index.html" class="nav-link"> 
+							<a th:href="@{log}" class="nav-link"> 
 								<i class="far fa-circle nav-icon"></i>
-								<p>이용자</p>
+								로그
+							</a>
+						</li>
+						<li class="nav-item">
+							<a th:href="@{access}" class="nav-link"> 
+								<i class="far fa-circle nav-icon"></i>
+								부서 및 프로젝트
+							</a>
+						</li>
+						<li class="nav-item">
+							<a th:href="@{user}" class="nav-link"> 
+								<i class="far fa-circle nav-icon"></i>
+								이용자
+							</a>
+						</li>
+						<li class="nav-item">
+							<a th:href="@{role}" class="nav-link"> 
+								<i class="far fa-circle nav-icon"></i>
+								역할 및 권한
 							</a>
 						</li>
 					</ul>

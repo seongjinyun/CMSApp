@@ -11,5 +11,28 @@ public class MainController {
 		return "settings/general";
 	}
 	
+	@GetMapping("/general")
+	public String getGeneral() {
+		return "settings/general";
+	}
 	
+	@GetMapping("/user")
+	public String getUser() {
+		return "settings/user";
+	}
+	
+	@GetMapping("/access")
+	public String getAccess() {
+		return "settings/access";
+	}
+	
+	@GetMapping("/role")
+	public String getRole() {
+		return "settings/role";
+	}
+	
+	@GetMapping("/log")
+	public String getLog() {
+		return "settings/log";
+	}
 }

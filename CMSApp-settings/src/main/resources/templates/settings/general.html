@@ -29,7 +29,7 @@
       <div class="container-fluid">
         <div class="row mb-2">
           <div class="col-sm-6">
-            <h1 class="m-0">일반 설정</h1>
+            <h1 class="m-0" style="font-weight: bold;">일반 설정</h1>
           </div><!-- /.col -->
           <div class="col-sm-6">
             <ol class="breadcrumb float-sm-right">
@@ -46,7 +46,7 @@
     <section class="content">
 	    <div class="card">
 	        <div class="card-header">
-	            <h3 class="card-title">Projects</h3>
+	            <h3 class="card-title" style="font-weight: bold;">사이트 설정</h3>
 	            <div class="card-tools">
 	                <button type="button" class="btn btn-tool" data-card-widget="collapse" title="Collapse">
 	                    <i class="fas fa-minus"></i>
@@ -58,8 +58,19 @@
 	        </div>
 	        <div class="card-body">
 			    <div class="d-flex justify-content-between form-group">
-			    	<label for="inputName" class="col-sm-1 col-form-label">Project Name</label>
-			    	<div class="col-sm-10">
+			    	<label for="" class="col-sm-2 col-form-label">관리 계정 정보 변경</label>
+			    	<div class="col-sm-8">
+			    		<input type="text" id="inputID" class="form-control" value="ID 입력">
+			    		<input type="password" id="inputPW" class="form-control" value="PW 입력">
+					</div>
+					<input type="submit" value="Save Changes" class="col-sm-1 btn btn-success float-right" style="height: 38px">
+			    </div>
+			</div>
+			<hr>
+	        <div class="card-body">
+			    <div class="d-flex justify-content-between form-group">
+			    	<label for="inputName" class="col-sm-2 col-form-label">사이트명 설정</label>
+			    	<div class="col-sm-8">
 			    		<input type="text" id="inputName" class="form-control" value="프로젝트명">
 					</div>
 					<input type="submit" value="Save Changes" class="col-sm-1 btn btn-success float-right" style="height: 38px">
@@ -68,8 +79,8 @@
 			<hr>
 			<div class="card-body">
 			    <div class="d-flex justify-content-between form-group">
-			    	<label for="" class="col-sm-1 col-form-label">Editor</label>
-	        		<div class="form-group col-sm-10">
+			    	<label for="" class="col-sm-2 col-form-label">에디터 설정</label>
+	        		<div class="form-group col-sm-8">
 					    <div class="form-check">
 					        <input class="form-check-input" type="radio" name="summernote" checked="">
 					        <label class="form-check-label">summernote</label>
@@ -84,10 +95,10 @@
 			</div>
 			<hr>
 			<div class="card-body">
-			    <div class="form-group">
-			        <label for="inputName">Delete Project</label>
-			        <button type="button" class="btn btn-danger float-right" data-toggle="modal" data-target="#modal-danger" style="height: 38px">
-						Delete
+			    <div class="d-flex justify-content-between">
+			        <label for="" class="col-sm-2 col-label">사이트 삭제</label>
+			        <button type="button" class="col-sm-1 btn btn-danger float-right" data-toggle="modal" data-target="#modal-danger" style="height: 38px">
+						삭제
 					</button>
 			    </div>
 			</div>
@@ -104,6 +115,7 @@
 	                </button>
 	            </div>
 	            <div class="modal-body">
+	            	<!-- validation 적용 필요 -->
 	                <p style="color: red; font-weight: bold;">정말 이 "프로젝트명"을 삭제하시겠습니까?</p>
 	                <p style="color: red; font-weight: bold;">프로젝트는 삭제 이후 다시 되돌릴 수 없습니다.</p>
 	                <p></p>
