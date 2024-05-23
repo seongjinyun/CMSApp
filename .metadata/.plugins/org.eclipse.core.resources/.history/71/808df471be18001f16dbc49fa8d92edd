@@ -1,0 +1,5 @@
+package com.sds.cmsapp.domain;
+
+public class Published_version_name {
+
+}
