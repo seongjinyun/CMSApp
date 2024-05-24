@@ -5,7 +5,24 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>AdminLTE 3 | Dashboard</title>
 
-	<th:block th:replace="~{fragments/header_link :: header_link}"/>
+  <th:block th:replace="~{fragments/header_link :: header_link}"/>
+  
+  <script>
+        function checkDeleteInput() {
+            // 입력 필드의 값을 가져옵니다.
+            var input = document.getElementById('confirm_delete').value;
+            // 버튼 요소를 가져옵니다.
+            var deleteButton = document.getElementById('delete_button');
+            // 입력 값이 'project'와 일치하는지 확인합니다.
+            if (input === 'project') {
+                // 일치하면 버튼을 활성화합니다.
+                deleteButton.disabled = false;
+            } else {
+                // 일치하지 않으면 버튼을 비활성화합니다.
+                deleteButton.disabled = true;
+            }
+        }
+    </script>
 	
 </head>
 <body class="hold-transition sidebar-mini layout-fixed">
@@ -33,7 +50,7 @@
           </div><!-- /.col -->
           <div class="col-sm-6">
             <ol class="breadcrumb float-sm-right">
-              <li class="breadcrumb-item"><a href="#">Settings</a></li>
+              <li class="breadcrumb-item"><a th:href="@{general}">Settings</a></li>
               <li class="breadcrumb-item active">General</li>
             </ol>
           </div><!-- /.col -->
@@ -120,15 +137,16 @@
 	                <p style="color: red; font-weight: bold;">프로젝트는 삭제 이후 다시 되돌릴 수 없습니다.</p>
 	                <p></p>
 	                <p>삭제를 위해 아래에 "프로젝트명" 입력</p>
-	                <div class="form-group">
-			        	<input type="text" id="confirm_delete" class="form-control" value="프로젝트명">
-			    	</div>
+	                <input type="text" id="confirm_delete" name="confirm_delete" 
+               			th:value="${confirm_delete}" class="form-control" 
+               			onkeyup="checkDeleteInput()">
 			    	<p style="font-weight: bold; text-align: center;">프로젝트 삭제에 대한 책임을 이해했습니다.</p>
 	            </div>	            
 	            <div class="modal-footer justify-content-between">
 	                <button type="button" class="btn btn-outline-light" data-dismiss="modal">Close</button>
-	                <button type="button" class="btn btn-danger">Delete Project</button>
-	            </div>
+	                <button type="button" id="delete_button" class="btn btn-danger" disabled>
+			            Delete Project
+			        </button>
 	        </div>
 	    </div>
 	</div><!-- /.modal -->

@@ -35,7 +35,7 @@
           </div><!-- /.col -->
           <div class="col-sm-6">
             <ol class="breadcrumb float-sm-right">
-              <li class="breadcrumb-item"><a href="#">Settings</a></li>
+              <li class="breadcrumb-item"><a th:href="@{general}">Settings</a></li>
               <li class="breadcrumb-item active">Role</li>
             </ol>
           </div><!-- /.col -->
@@ -73,16 +73,16 @@
 							        <div class="col">
 							            <div class="form-group">
 							                <div class="form-check">
-							                    <input class="form-check-input" type="checkbox">
-							                    <label class="form-check-label">Checkbox</label>
+							                    <input class="form-check-input" type="checkbox" checked>
+							                    <label class="form-check-label">Drafts</label>
 							                </div>
 							                <div class="form-check">
-							                    <input class="form-check-input" type="checkbox" checked>
-							                    <label class="form-check-label">Checkbox checked</label>
+							                    <input class="form-check-input" type="checkbox">
+							                    <label class="form-check-label">Review</label>
 							                </div>
 							                <div class="form-check">
 							                    <input class="form-check-input" type="checkbox" disabled>
-							                    <label class="form-check-label">Checkbox disabled</label>
+							                    <label class="form-check-label">Publish</label>
 							                </div>
 							            </div>
 							        </div> 
