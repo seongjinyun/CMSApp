@@ -29,12 +29,11 @@
 	      <div class="container-fluid">
 	        <div class="row mb-2">
 	          <div class="col-sm-6">
-	            <h1>폴더 명</h1>
+	            <h1>휴지통</h1>
 	          </div>
 	          <div class="col-sm-6">
 	            <ol class="breadcrumb float-sm-right">
-	              <li class="breadcrumb-item"><a href="#">폴더 명1</a></li>
-	              <li class="breadcrumb-item active">폴더 명2</li>
+	              <li class="breadcrumb-item"><a href="#">휴지통</a></li>
 	            </ol>
 	          </div>
 	        </div>
@@ -49,43 +48,22 @@
 
               <div class="card-tools">
                 <div class="input-group input-group-sm">
-                  <input type="text" class="form-control" id="searchFileInput" placeholder="Search File">
+                <input type="text" class="form-control" id="searchFileInput" placeholder="Search File">
                   <div class="input-group-append">
                     <div class="btn btn-primary">
                       <i class="fas fa-search"></i>
                     </div>
                   </div>
-                  <input type="button" class="btn btn-default btn-sm" value="필터" id="filterButton">
-                  <input type="button" class="btn btn-default btn-sm" value="글 작성" id="write">
+                
+                  <input type="button" class="btn btn-default btn-sm" value="삭제" id="delete">
                 </div>
                 
-                <!-- Select box hidden by default -->
-				<div id="filterOptions" style="display:none;">
-				    <label><input type="checkbox" name="option1" value="option1"> Option 1</label><br>
-				    <label><input type="checkbox" name="option2" value="option2"> Option 2</label><br>
-				    <label><input type="checkbox" name="option3" value="option3"> Option 3</label>
-				  </div>
               </div>
               <!-- /.card-tools -->
             </div>
             <!-- /.card-header -->
             <div class="card-body p-0">
-              <div class="mailbox-controls">
-                <div class="btn-group">
-                  <button type="button" class="btn btn-default btn-sm">
-                    <i class="far fa-trash-alt"></i>
-                  </button>
-                  <button type="button" class="btn btn-default btn-sm">
-                    <i class="fas fa-reply"></i>
-                  </button>
-                  <button type="button" class="btn btn-default btn-sm">
-                    <i class="fas fa-share"></i>
-                  </button>
-                </div>
-                <!-- /.btn-group -->
-                <button type="button" class="btn btn-default btn-sm">
-                  <i class="fas fa-sync-alt"></i>
-                </button>
+                 <div class="mailbox-controls">
                 <div class="float-right">
                   1-50/200
                   <div class="btn-group">
@@ -96,11 +74,9 @@
                       <i class="fas fa-chevron-right"></i>
                     </button>
                   </div>
-                  <!-- /.btn-group -->
                 </div>
                 <!-- /.float-right -->
               </div>
-              
               <div class="table-responsive mailbox-messages">
                 <table class="table table-hover table-striped">
                   <!-- 소제목 -->
@@ -114,7 +90,7 @@
                     <td class="mailbox-star"><a href="#"></a></td>
                     <td>제목</td>
                     <td>문서 버전</td>
-                    <td>업데이트 날짜</td>
+                    <td>삭제된 날짜</td>
                     <td>상태</td>
                   </tr>
                   <!-- ./소제목 -->
@@ -126,7 +102,7 @@
                         <label for="check1"></label>
                       </div>
                     </td>
-                    <td class="mailbox-star"><a href="#"><i class="fa fa-star" aria-hidden="true"></i></a></td>
+                    <td class="mailbox-star"><a href="#"><i class="fa fa-star-o" aria-hidden="true"></i></a></td>
                     <td class="mailbox-subject"><a href="/document">튜토리얼</a></td>
                     <td class="mailbox-name">v2.1</td>
                     <td class="mailbox-date">2024.05.23 16:44</td>
@@ -177,8 +153,6 @@
 <script>
 $(function(){
 	checkBoxAll();
-	write();
-	filterFile();
 	searchFile();
   });
   
@@ -192,27 +166,14 @@ $(function(){
 	    });
   }
   
-  function write(){
-	  $("#write").click(function() {
-			//글쓰기 폼 요청
-			location.href="/document";
-		});
-  }
-	function filterFile(){
-		$('#filterButton').click(function(){
-			$('#filterOptions').toggle();
-		});
-	}
-	  
-	  function searchFile(){
+  function searchFile(){
 		 $('#searchFileInput').on('keyup', function(){
-			 var value = $(this).val().toLowerCase();
-			 $("tbody tr").filter(function() {
-			 	$(this).toggle($(this).find(".mailbox-subject").text().toLowerCase().indexOf(value) > -1)
+			   var value = $(this).val().toLowerCase();
+			   $("tbody tr").filter(function() {
+			  	 $(this).toggle($(this).find(".mailbox-subject").text().toLowerCase().indexOf(value) > -1)
 			});
 		});
 	  }
-
   </script>
 </body>
 </html>

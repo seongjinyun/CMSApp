@@ -29,12 +29,11 @@
 	      <div class="container-fluid">
 	        <div class="row mb-2">
 	          <div class="col-sm-6">
-	            <h1>폴더 명</h1>
+	            <h1>즐겨찾기</h1>
 	          </div>
 	          <div class="col-sm-6">
 	            <ol class="breadcrumb float-sm-right">
-	              <li class="breadcrumb-item"><a href="#">폴더 명1</a></li>
-	              <li class="breadcrumb-item active">폴더 명2</li>
+	              <li class="breadcrumb-item"><a href="#">즐겨찾기</a></li>
 	            </ol>
 	          </div>
 	        </div>
@@ -56,7 +55,6 @@
                     </div>
                   </div>
                   <input type="button" class="btn btn-default btn-sm" value="필터" id="filterButton">
-                  <input type="button" class="btn btn-default btn-sm" value="글 작성" id="write">
                 </div>
                 
                 <!-- Select box hidden by default -->
@@ -139,7 +137,7 @@
                         <label for="check2"></label>
                       </div>
                     </td>
-                    <td class="mailbox-star"><a href="#"><i class="fas fa-star-o text-warning"></i></a></td>
+                    <td class="mailbox-star"><a href="#"><i class="fa fa-star"></i></a></td>
                     <td class="mailbox-subject"><a href="/document">튜토리얼</a></td>
                     <td class="mailbox-name">v1.1</td>
                     <td class="mailbox-date">2024.05.21 16:44</td>
@@ -177,7 +175,6 @@
 <script>
 $(function(){
 	checkBoxAll();
-	write();
 	filterFile();
 	searchFile();
   });
@@ -190,13 +187,6 @@ $(function(){
 	        $("input[type=checkbox]").prop("checked",false);
 	      }
 	    });
-  }
-  
-  function write(){
-	  $("#write").click(function() {
-			//글쓰기 폼 요청
-			location.href="/document";
-		});
   }
 	function filterFile(){
 		$('#filterButton').click(function(){

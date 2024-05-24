@@ -63,16 +63,22 @@
 			<section class="content">
 				<div class="row">
 					<div class="col"><p>글 작성</p></div>
-					<div class="col-4">
+					<div class="col-6">
 						<div class="float-right">
 							<button type="button" class="btn btn-primary" id="versionControlButton">
 								<i class=""></i> 버전 관리
 							</button>
-							<button type="button" class="btn btn-default" id="draftButton">
-								<i class="fas fa-pencil-alt"></i> Draft
+							
+							<button type="button" class="btn btn-default" id="document_list">
+								<i class="far fa-list-alt"></i>목록
 							</button>
+
+							<button type="button" class="btn btn-default" id="draftButton">
+								<i class="fas fa-save"></i> 저장
+							</button>
+							
 							<button type="button" class="btn btn-primary">
-								<i class="far fa-envelope"></i> Edit
+								<i class="fas fa-edit"></i> 수정
 							</button>
 							
 							<!-- draft 창 -->
@@ -153,42 +159,47 @@
 	<script>
   $(function () {
     // Summernote
-    $('#summernote').summernote({
-    	height: 300,                 // 에디터 높이
-		  minHeight: null,             // 최소 높이
-		  maxHeight: null,             // 최대 높이
-		  focus: true,                  // 에디터 로딩후 포커스를 맞출지 여부
-		  lang: "ko-KR",					// 한글 설정
-		  placeholder: '내용을 입력하세요.'	//placeholder 설정
-    });
+    summernote();
+    draftBtn();
+    versionControlBtn();
   })
+  function summernote(){
+	  $('#summernote').summernote({
+	    	height: 300,                 // 에디터 높이
+			  minHeight: null,             // 최소 높이
+			  maxHeight: null,             // 최대 높이
+			  focus: true,                  // 에디터 로딩후 포커스를 맞출지 여부
+			  lang: "ko-KR",					// 한글 설정
+			  placeholder: '내용을 입력하세요.'	//placeholder 설정
+	    });
+  }
   
-  // Draft 창 스크립트
-  document.getElementById('draftButton').addEventListener('click', function() {
-    var popup = document.getElementById('draftPopup');
-    popup.style.display = popup.style.display === 'none' || popup.style.display === '' ? 'block' : 'none';
-  });
-
-  document.addEventListener('click', function(event) {
-    var isClickInside = document.getElementById('draftButton').contains(event.target) || document.getElementById('draftPopup').contains(event.target);
-    if (!isClickInside) {
-      document.getElementById('draftPopup').style.display = 'none';
-    }
-  });
+  function draftBtn(){
+	  // Draft 창 스크립트
+	  $('#draftButton').click(function() {
+		    $('#draftPopup').toggle();
+		  });
+  }
   
-  // 버전관리 창 스크립트
-  document.getElementById('versionControlButton').addEventListener('click', function() {
-    var sidebar = document.getElementById('versionSidebar');
-    sidebar.style.display = sidebar.style.display === 'none' || sidebar.style.display === '' ? 'block' : 'none';
-  });
-
-  document.addEventListener('click', function(event) {
-    var isClickInsideSidebar = document.getElementById('versionSidebar').contains(event.target);
-    var isClickInsideButton = document.getElementById('versionControlButton').contains(event.target);
-    if (!isClickInsideSidebar && !isClickInsideButton) {
-      document.getElementById('versionSidebar').style.display = 'none';
-    }
-  });
+  function versionControlBtn(){
+	  // 버전관리 창 스크립트
+	  $('#versionControlButton').click(function() {
+		    $('#versionSidebar').toggle();
+		  });
+  }
+  //빈공간 클릭시 draft or version sidebar 비활성화 스크립트
+	$(document).ready(function() {
+	  $(document).click(function(event) {
+	    if (!$(event.target).closest('#draftButton, #draftPopup').length) {
+	      $('#draftPopup').hide();
+	    }
+	  });
+	  $(document).click(function(event) {
+	    if (!$(event.target).closest('#versionControlButton, #versionSidebar').length) {
+	      $('#versionSidebar').hide();
+	    }
+	  });
+	});
 </script>
 </body>
 </html>
