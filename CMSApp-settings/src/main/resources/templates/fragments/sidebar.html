@@ -101,7 +101,9 @@
 					</ul>
 				</li>
 			
-				<!-- 주문관리 메뉴 -->               
+				<!-- 주문관리 메뉴 -->
+				<!-- ##### themeleaf를 이용한 링크 ##### -->
+				<!-- ##### 240524 p태그 추가(접었을 때 동그라미만 보이게) ##### -->               
 				<li class="nav-item menu-open">
 					<a href="#"class="nav-link"> 
 						<i class="nav-icon fas fa-tachometer-alt"></i>
@@ -113,31 +115,31 @@
 						<li class="nav-item">
 							<a th:href="@{general}" class="nav-link"> 
 								<i class="far fa-circle nav-icon"></i>
-								일반
+								<p>일반</p>
 							</a>
 						</li>
 						<li class="nav-item">
 							<a th:href="@{log}" class="nav-link"> 
 								<i class="far fa-circle nav-icon"></i>
-								로그
+								<p>로그</p>
 							</a>
 						</li>
 						<li class="nav-item">
 							<a th:href="@{access}" class="nav-link"> 
 								<i class="far fa-circle nav-icon"></i>
-								부서 및 프로젝트
+								<p>부서 및 프로젝트</p>
 							</a>
 						</li>
 						<li class="nav-item">
 							<a th:href="@{user}" class="nav-link"> 
 								<i class="far fa-circle nav-icon"></i>
-								이용자
+								<p>이용자 관리</p>
 							</a>
 						</li>
 						<li class="nav-item">
 							<a th:href="@{role}" class="nav-link"> 
 								<i class="far fa-circle nav-icon"></i>
-								역할 및 권한
+								<p>역할 및 권한</p>
 							</a>
 						</li>
 					</ul>
