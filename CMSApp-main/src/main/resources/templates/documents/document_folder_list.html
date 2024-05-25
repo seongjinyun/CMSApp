@@ -103,7 +103,7 @@
               <div class="table-responsive mailbox-messages">
                 <table class="table table-hover table-striped">
                   <!-- 소제목 -->
-                  <tr>
+                  <tr class="subtitle">
                     <td>
                       <div class="icheck-primary">
                         <input type="checkbox" value="" id="checkall">
@@ -205,12 +205,12 @@ $(function(){
   }
   
   function searchFile(){
-	 $('#searchFileInput').on('keyup', function(){
-		   var value = $(this).val().toLowerCase();
-		   $("tbody tr").filter(function() {
-		  	 $(this).toggle($(this).find(".mailbox-subject").text().toLowerCase().indexOf(value) > -1)
+	  $('#searchFileInput').on('keyup', function(){
+			 var value = $(this).val().toLowerCase();
+			 $("tbody tr:not(.subtitle)").filter(function() {
+			 	$(this).toggle($(this).find(".mailbox-subject").text().toLowerCase().indexOf(value) > -1)
+			});
 		});
-	});
   }
 
   </script>
