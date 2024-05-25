@@ -51,18 +51,19 @@
     </style>
 	 
 	 <script>
+	 	// 이미지 로드용
         function loadFile(input) {
             let file = input.files[0]; // 선택파일 가져오기
 
-            let newImage = document.createElement("img"); //새 이미지 태그 생성
+            let newImage = document.createElement("img"); // 새 이미지 태그 생성
 
             //이미지 source 가져오기
             newImage.src = URL.createObjectURL(file);
-            newImage.style.width = "100%"; //div에 꽉차게 넣으려고
+            newImage.style.width = "100%"; 		// div에 꽉차게 넣기
             newImage.style.height = "100%";
             newImage.style.objectFit = "cover"; // div에 넘치지 않고 들어가게
 
-            //이미지를 image-show div에 추가
+            // 이미지를 image-show div에 추가
             let container = document.getElementById('image-show');
             container.appendChild(newImage);
         }
@@ -146,7 +147,10 @@
 								</div>
 								<div class="form-group">
 					                <label>Profile Image</label>
-					                <div class="addImage" id="image-show" style="margin: auto; display: block;"> <!-- 이미지 띄울 공간 --></div>
+					                <div class="addImage" id="image-show" 
+					                	 style="margin: auto; display: block; width: 45%; height: 45%; background-color: lightgray; border-radius: 20px 20px / 20px 20px; overflow: hidden;">
+					                 	<!-- 이미지 띄울 공간 -->
+					                </div>
 									<input type="file" accept="image/*" onchange="loadFile(this)" style="margin: auto; margin-top: 15px; display: block;">
 					            </div>
 					            

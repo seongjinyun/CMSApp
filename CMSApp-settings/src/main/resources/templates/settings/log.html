@@ -46,24 +46,121 @@
             <div class="row">
                 <div class="col-md-12">
                     <div class="timeline">
-                        
+                        <!-- https://fontawesome.com/search?q=document&o=r&m=free -->
                         <!-- 날짜가 변경되면 출력 -->
                         <div class="time-label">
-                            <span class="bg-red">날짜 변경</span>
+                            <span class="bg-red">날짜 변경시 출력</span>
                         </div>
                         <!-- 문서 상태가 변경되면 출력 -->
                         <div>
-                            <i class="fas fa-user bg-green"></i>
+                            <i class="fas fa-solid fa-book bg-white"></i>
                             <div class="timeline-item">
                                 <span class="time"><i class="fas fa-clock"></i>status_log.getRegdate()</span>
                                 <h3 class="timeline-header no-border">
-                                	사원 A님이 문서 1을 ~~했습니다. 
+                                	배포 승인된 문서들이 최종 배포되었습니다. 버전: v0.000.000 
                                 </h3>
                                 <!-- status_log.getEmp.getEmp_name()
                                 	상태 변경 status_log.getStatus_code() + 코멘트 status_log.getComments() -->
                                 <!-- 작성/검토요청/검토승인/검토반려/ -->
                             </div>
                         </div>
+                        <div>
+                            <i class="fas fa-solid fa-ban bg-white"></i>
+                            <div class="timeline-item">
+                                <span class="time"><i class="fas fa-clock"></i>status_log.getRegdate()</span>
+                                <h3 class="timeline-header no-border">
+                                	사원 C님이 문서 1을 배포 반려하였습니다. 
+                                </h3>
+                                <!-- status_log.getEmp.getEmp_name()
+                                	상태 변경 status_log.getStatus_code() + 코멘트 status_log.getComments() -->
+                                <!-- 작성/검토요청/검토승인/검토반려/ -->
+                            </div>
+                        </div>
+                        <div>
+                            <i class="fas fa-solid fa-check bg-white"></i>
+                            <div class="timeline-item">
+                                <span class="time"><i class="fas fa-clock"></i>status_log.getRegdate()</span>
+                                <h3 class="timeline-header no-border">
+                                	사원 C님이 문서 1을 배포 승인하였습니다. 
+                                </h3>
+                                <!-- status_log.getEmp.getEmp_name()
+                                	상태 변경 status_log.getStatus_code() + 코멘트 status_log.getComments() -->
+                                <!-- 작성/검토요청/검토승인/검토반려/ -->
+                            </div>
+                        </div>
+                        <div>
+                            <i class="fas fa-solid fa-file-import bg-white"></i>
+                            <div class="timeline-item">
+                                <span class="time"><i class="fas fa-clock"></i>status_log.getRegdate()</span>
+                                <h3 class="timeline-header no-border">
+                                	사원 B님이 문서 1을 배포 요청하였습니다. 
+                                </h3>
+                                <!-- status_log.getEmp.getEmp_name()
+                                	상태 변경 status_log.getStatus_code() + 코멘트 status_log.getComments() -->
+                                <!-- 작성/검토요청/검토승인/검토반려/ -->
+                            </div>
+                        </div>
+                        <div>
+                            <i class="fas fa-solid fa-ban bg-white"></i>
+                            <div class="timeline-item">
+                                <span class="time"><i class="fas fa-clock"></i>status_log.getRegdate()</span>
+                                <h3 class="timeline-header no-border">
+                                	사원 B님이 문서 1을 검토 반려하였습니다. 
+                                </h3>
+                                <!-- status_log.getEmp.getEmp_name()
+                                	상태 변경 status_log.getStatus_code() + 코멘트 status_log.getComments() -->
+                                <!-- 작성/검토요청/검토승인/검토반려/ -->
+                            </div>
+                        </div>
+                        <div>
+                            <i class="fas fa-solid fa-check bg-white"></i>
+                            <div class="timeline-item">
+                                <span class="time"><i class="fas fa-clock"></i>status_log.getRegdate()</span>
+                                <h3 class="timeline-header no-border">
+                                	사원 B님이 문서 1을 검토 승인하였습니다. 
+                                </h3>
+                                <!-- status_log.getEmp.getEmp_name()
+                                	상태 변경 status_log.getStatus_code() + 코멘트 status_log.getComments() -->
+                                <!-- 작성/검토요청/검토승인/검토반려/ -->
+                            </div>
+                        </div>
+                        <div>
+                            <i class="fas fa-solid fa-file-import bg-white"></i>
+                            <div class="timeline-item">
+                                <span class="time"><i class="fas fa-clock"></i>status_log.getRegdate()</span>
+                                <h3 class="timeline-header no-border">
+                                	사원 A님이 문서 1을 검토 요청하였습니다. 
+                                </h3>
+                                <!-- status_log.getEmp.getEmp_name()
+                                	상태 변경 status_log.getStatus_code() + 코멘트 status_log.getComments() -->
+                                <!-- 작성/검토요청/검토승인/검토반려/ -->
+                            </div>
+                        </div>
+                        <div>
+                            <i class="fas fa-solid fa-file-signature bg-white"></i>
+                            <div class="timeline-item">
+                                <span class="time"><i class="fas fa-clock"></i>status_log.getRegdate()</span>
+                                <h3 class="timeline-header no-border">
+                                	사원 A님이 문서 1을 수정했습니다. 
+                                </h3>
+                                <!-- status_log.getEmp.getEmp_name()
+                                	상태 변경 status_log.getStatus_code() + 코멘트 status_log.getComments() -->
+                                <!-- 작성/검토요청/검토승인/검토반려/ -->
+                            </div>
+                        </div>
+                        <div>
+                            <i class="fas fa-solid fa-file bg-white"></i>
+                            <div class="timeline-item">
+                                <span class="time"><i class="fas fa-clock"></i>status_log.getRegdate()</span>
+                                <h3 class="timeline-header no-border">
+                                	사원 A님이 문서 1을 새로 작성하였습니다. 
+                                </h3>
+                                <!-- status_log.getEmp.getEmp_name()
+                                	상태 변경 status_log.getStatus_code() + 코멘트 status_log.getComments() -->
+                                <!-- 작성/검토요청/검토승인/검토반려/ -->
+                            </div>
+                        </div>
+                        
                         <!-- 타임라인상 제일 오래된 항목 -->
                         <div>
                             <i class="fas fa-clock bg-gray"></i>
