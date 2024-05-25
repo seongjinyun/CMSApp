@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html lang="zxx" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>AdminLTE 3 | Dashboard</title>
+
+	<th:block th:replace="~{fragments/header_link :: header_link}"/>
+	<th:block th:replace="~{fragments/datatables_header_link :: datatables_header_link}"/>
+	<th:block th:replace="~{fragments/advanced_forms_header_link :: advanced_forms_header_link}"/>
+	<!-- 
+	<script>
+        function getSelectedUsers() {
+            let selectedUsers = [];
+            let rows = document.querySelectorAll("table tbody tr");
+            rows.forEach(function(row) {
+                let checkbox = row.querySelector('input[type="checkbox"]');
+                if (checkbox.checked) {
+                    let userId = row.getAttribute('data-user-id');
+                    let select = row.querySelector('select');
+                    selectedUsers.push({id: userId, status: select.value});
+                }
+            });
+            return selectedUsers;
+        }
+
+        function submitSelectedUsers() {
+            let selectedUsers = getSelectedUsers();
+            let xhr = new XMLHttpRequest();
+            xhr.open("POST", "/updateUsers", true);
+            xhr.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
+            xhr.onreadystatechange = function () {
+                if (xhr.readyState === 4 && xhr.status === 200) {
+                    alert("Users updated successfully!");
+                    window.location.reload();
+                }
+            };
+            xhr.send(JSON.stringify(selectedUsers));
+        }
+    </script>
+	 --> 
+	 
+	 <style>
+        .addImage {
+            width: 45%;
+            height: 45%;
+            background-color: lightgray;
+            border-radius: 20px 20px / 20px 20px;
+            overflow: hidden;
+        }
+    </style>
+	 
+	 <script>
+        function loadFile(input) {
+            let file = input.files[0]; // 선택파일 가져오기
+
+            let newImage = document.createElement("img"); //새 이미지 태그 생성
+
+            //이미지 source 가져오기
+            newImage.src = URL.createObjectURL(file);
+            newImage.style.width = "100%"; //div에 꽉차게 넣으려고
+            newImage.style.height = "100%";
+            newImage.style.objectFit = "cover"; // div에 넘치지 않고 들어가게
+
+            //이미지를 image-show div에 추가
+            let container = document.getElementById('image-show');
+            container.appendChild(newImage);
+        }
+	</script>
+
+</head>
+<body class="hold-transition sidebar-mini layout-fixed">
+<div class="wrapper">
+
+  <!-- Preloader -->
+  <th:block th:replace="~{fragments/preloader :: preloader}"/>
+	
+  <!-- Navbar -->
+	<th:block th:replace="~{fragments/navi :: navi}"/>
+  <!-- /.navbar -->
+
+  <!-- Main Sidebar Container -->
+  <th:block th:replace="~{fragments/sidebar :: sidebar}"/>
+  <!-- /.sidebar -->
+
+  <!-- Content Wrapper. Contains page content -->
+  <div class="content-wrapper">
+    <!-- Content Header (Page header) -->
+    <div class="content-header">
+      <div class="container-fluid">
+        <div class="row mb-2">
+          <div class="col-sm-6">
+            <h1 class="m-0" style="font-weight: bold;">이용자 관리</h1>
+          </div><!-- /.col -->
+          <div class="col-sm-6">
+            <ol class="breadcrumb float-sm-right">
+              <li class="breadcrumb-item"><a th:href="@{general}">Settings</a></li>
+              <li class="breadcrumb-item active">User</li>
+            </ol>
+          </div><!-- /.col -->
+        </div><!-- /.row -->
+      </div><!-- /.container-fluid -->
+    </div>
+    <!-- /.content-header -->
+
+    <!-- Main content -->
+    <h6 style="color: gray; margin-left: 50px; margin-bottom: 20px;">이용자를 추가하거나 부서와 역할을 변경할 수 있습니다.</h6>
+    <section class="content">
+      	<div class="container-fluid">
+    		<div class="row">
+    			<div class="col-md-4">
+    				<div class="card">
+					    <div class="card-header">
+					        <h5 class="card-title" style="font-weight: bold;">사용자 추가</h5>
+					        <div class="card-tools">
+					            <button type="button" class="btn btn-tool" data-card-widget="collapse" title="Collapse">
+					                <i class="fas fa-minus"></i>
+					            </button>
+					        </div>
+					    </div>
+						<div class="card-body">
+					        <form class="inputImg" enctype="multipart/form-data">
+							    <div class="form-group">
+					                <label>사용자명</label>
+					                <input type="text" class="form-control" placeholder="Enter ...">
+					            </div>
+					            <div class="form-group">
+					                <label>ID</label>
+					                <input type="text" class="form-control" placeholder="Enter ...">
+					            </div>
+					            <div class="form-group">
+					                <label>PW</label>
+					                <input type="password" class="form-control" placeholder="Enter ...">
+					            </div>
+							    <div class="row">
+							        <div class="col">
+							            <div class="form-group">
+							            	<label>Role</label>
+							                <select class="select1 form-control" data-placeholder="역할 선택" style="width: 100%;">
+												<option>Draft Writer</option>
+												<option>Editor</option>
+												<option>Admin</option>
+											</select>
+							            </div>
+							        </div> 
+								</div>
+								<div class="form-group">
+					                <label>Profile Image</label>
+					                <div class="addImage" id="image-show" style="margin: auto; display: block;"> <!-- 이미지 띄울 공간 --></div>
+									<input type="file" accept="image/*" onchange="loadFile(this)" style="margin: auto; margin-top: 15px; display: block;">
+					            </div>
+					            
+								<input type="submit" value="Save Changes" class="btn btn-success float-right" style="height: 38px;">
+							</form>
+					    </div>
+			 		</div>
+    			</div>
+    			<div class="col-md-8">
+    				<div class="card">
+					    <div class="card-header">
+					        <h5 class="card-title" style="font-weight: bold;">사용자 역할 설정</h5>
+			       		        <div class="card-tools">
+					            <button type="button" class="btn btn-tool" data-card-widget="collapse" title="Collapse">
+					                <i class="fas fa-minus"></i>
+					            </button>
+					        </div>
+					    </div>
+						<div class="card-body">
+					        <table id="emp" class="table table-bordered table-striped">
+					            <thead>
+					                <tr>
+					                    <th><input type='checkbox' name='chkAll' onclick='chkChange(this);'></th>
+					                    <th>사용자명</th>
+					                    <th>역할</th>
+					                    <th>부서</th>
+					                    <th>마지막 활동</th>
+					                </tr>
+					            </thead>
+					            <tbody>
+					                <tr id="tr1">
+					                <!-- <tr th:each="user, iterStat : ${users}"> -->
+					                    <td><input type='checkbox' name='chk' value=''/> </td>
+					                    <td>장원영</td>
+					                    <td>
+					                    	<select class="select1 form-control" data-placeholder="역할 선택" style="width: 100%;">
+												<option>Draft Writer</option>
+												<option>Editor</option>
+												<option>Admin</option>
+											</select>
+					                    </td>
+					                    <td>
+											<select class="select2 form-control" multiple="multiple" data-placeholder="부서 선택(다중)" style="width: 100%;">
+												<option>기획 1팀</option>
+												<option>개발 1팀</option>
+												<option>영업 1팀</option>
+											</select>
+										</td>
+					                    <td>2024-05-23</td>
+					                </tr>
+					                <tr id="tr2">
+					                    <td><input type='checkbox' name='chk' value=''/> </td>
+					                    <td>안유진</td>
+					                    <td>
+											<select class="select1 form-control" data-placeholder="역할 선택" style="width: 100%;">
+												<option>Draft Writer</option>
+												<option>Editor</option>
+												<option>Admin</option>
+											</select>
+										</td>
+					                    <td>
+											<select class="select2 form-control" multiple="multiple" data-placeholder="부서 선택(다중)" style="width: 100%;">
+												<option>기획 1팀</option>
+												<option>개발 1팀</option>
+												<option>영업 1팀</option>
+											</select>
+										</td>
+					                    <td>2024-05-22</td>
+					                </tr>
+					            </tbody>    
+					        </table>
+					        <input type="submit" value="Save Changes" class="btn btn-success float-right" style="height: 38px; margin-top: 20px;">
+					    </div>
+			  		</div>
+    			</div>
+    		</div>
+   		</div>  	
+  	</section>
+  <!-- /.content -->
+  </div>
+  <!-- /.content-wrapper -->
+  
+  <th:block th:replace="~{fragments/footer :: footer}"/>
+
+  <!-- Control Sidebar -->
+  <aside class="control-sidebar control-sidebar-dark">
+    <!-- Control sidebar content goes here -->
+  </aside>
+  <!-- /.control-sidebar -->
+</div>
+<!-- ./wrapper -->
+	
+  <th:block th:replace="~{fragments/footer_link :: footer_link}"/>
+  <th:block th:replace="~{fragments/datatables_footer_link :: datatables_footer_link}"/>
+  <th:block th:replace="~{fragments/advanced_forms_footer_link :: advanced_forms_footer_link}"/>
+
+</body>
+</html>

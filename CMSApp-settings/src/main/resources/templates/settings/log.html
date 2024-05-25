@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="zxx" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>AdminLTE 3 | Dashboard</title>
+
+	<th:block th:replace="~{fragments/header_link :: header_link}"/>
+	
+</head>
+<body class="hold-transition sidebar-mini layout-fixed">
+<div class="wrapper">
+
+  <!-- Preloader -->
+  <th:block th:replace="~{fragments/preloader :: preloader}"/>
+	
+  <!-- Navbar -->
+	<th:block th:replace="~{fragments/navi :: navi}"/>
+  <!-- /.navbar -->
+
+  <!-- Main Sidebar Container -->
+  <th:block th:replace="~{fragments/sidebar :: sidebar}"/>
+  <!-- /.sidebar -->
+
+  <!-- Content Wrapper. Contains page content -->
+  <div class="content-wrapper">
+
+   <section class="content-header">
+       <div class="container-fluid">
+           <div class="row mb-2">
+               <div class="col-sm-6">
+                   <h1 class="m-0" style="font-weight: bold;">로그</h1>
+                </div>
+                <div class="col-sm-6">
+                    <ol class="breadcrumb float-sm-right">
+                        <li class="breadcrumb-item"><a th:href="@{general}">Settings</a></li>
+             				<li class="breadcrumb-item active">Log</li>
+                    </ol>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="content">
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="timeline">
+                        
+                        <!-- 날짜가 변경되면 출력 -->
+                        <div class="time-label">
+                            <span class="bg-red">날짜 변경</span>
+                        </div>
+                        <!-- 문서 상태가 변경되면 출력 -->
+                        <div>
+                            <i class="fas fa-user bg-green"></i>
+                            <div class="timeline-item">
+                                <span class="time"><i class="fas fa-clock"></i>status_log.getRegdate()</span>
+                                <h3 class="timeline-header no-border">
+                                	사원 A님이 문서 1을 ~~했습니다. 
+                                </h3>
+                                <!-- status_log.getEmp.getEmp_name()
+                                	상태 변경 status_log.getStatus_code() + 코멘트 status_log.getComments() -->
+                                <!-- 작성/검토요청/검토승인/검토반려/ -->
+                            </div>
+                        </div>
+                        <!-- 타임라인상 제일 오래된 항목 -->
+                        <div>
+                            <i class="fas fa-clock bg-gray"></i>
+                        </div>
+                        
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+    </section>
+	</div><!-- /.content-wrapper -->
+   <!-- /.content -->
+  <th:block th:replace="~{fragments/footer :: footer}"/>
+
+  <!-- Control Sidebar -->
+  <aside class="control-sidebar control-sidebar-dark">
+    <!-- Control sidebar content goes here -->
+  </aside>
+  <!-- /.control-sidebar -->
+	
+  <th:block th:replace="~{fragments/footer_link :: footer_link}"/>
+</div><!-- /.wrapper -->
+</body>
+</html>
