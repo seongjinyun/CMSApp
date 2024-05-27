@@ -16,8 +16,13 @@ public class MainController {
 		return "settings/general";
 	}
 	
+	@GetMapping("/mypage")
+	public String getMyInfo() {
+		return "settings/mypage";
+	}
+	
 	@GetMapping("/user")
-	public String getUser() {
+	public String getUserInfo() {
 		return "settings/user";
 	}
 	
