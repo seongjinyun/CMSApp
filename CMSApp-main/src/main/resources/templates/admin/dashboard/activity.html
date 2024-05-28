@@ -903,13 +903,16 @@ a.show_list {
 	<script>
         $(function () {
 
+        	// 코멘트 툴팁 보기
             $('[data-toggle="popover"]').popover();
 
+        	// 날짜 선택: 디폴트로 "오늘" 표시
+        	$('#daterange-btn span').html("오늘");
+        	
             // 요약 탭 - Date range button
             $('#daterange-btn')
                 .daterangepicker(
                     {
-
                         // 초기화
                         startDate: moment(),
                         endDate: moment(),
@@ -929,10 +932,16 @@ a.show_list {
                         autoApply: true
                     },
                     function (start, end) {
-
-                        $('#daterange-btn span').html(
-                            start.format('YYYY/MM/DD') + ' - '
-                            + end.format('YYYY/MM/DD'));
+                    	if (this.chosenLabel == "오늘") {
+                    		$('#daterange-btn span').html("오늘");
+                    	} else if (this.chosenLabel == "어제") {
+                    		$('#daterange-btn span').html("어제");
+                    	} else {
+	                        $('#daterange-btn span').html(
+	                        		start.format('YYYY/MM/DD') + ' - '
+	                                + end.format('YYYY/MM/DD')
+	                        );
+                    	}
 
                         $.ajax({
                             type: 'GET',
@@ -942,9 +951,7 @@ a.show_list {
                                 endDate: end.format('YYYY/MM/DD')
                             },
                             success: function (result, status, xhr) {
-
                                 alert("성공");
-
                             },
                             error: function (xhr, status, err) {
                                 alert("실패");
@@ -953,69 +960,22 @@ a.show_list {
                         });
                     });
             
-          //배포 문서 탭 - 일자 범위 선택
-            $('#daterange-btn2')
-                .daterangepicker(
-                    {
-
-                        // 초기화
-                        startDate: moment(),
-                        endDate: moment(),
-
-                        // 라벨 설정
-                        ranges: {
-                            '오늘': [moment(), moment()],
-                            '어제': [moment().subtract(1, 'days'),
-                            moment().subtract(1, 'days')],
-                            '지난 7일': [moment().subtract(6, 'days'),
-                            moment()],
-                            '지난 30일': [moment().subtract(29, 'days'),
-                            moment()]
-                        },
-
-                        // [취소], [적용] 버튼 없음
-                        autoApply: true
-                    },
-                    function (start, end) {
-
-                        $('#daterange-btn span').html(
-                            start.format('YYYY/MM/DD') + ' - '
-                            + end.format('YYYY/MM/DD'));
-
-                        $.ajax({
-                            type: 'GET',
-                            url: '/test/daterange',
-                            data: {
-                                startDate: start.format('YYYY/MM/DD'),
-                                endDate: end.format('YYYY/MM/DD')
-                            },
-                            success: function (result, status, xhr) {
-
-                                alert("성공");
-
-                            },
-                            error: function (xhr, status, err) {
-                                alert("실패");
-                            }
-
-                        });
-                    });
           
           			// 검색 기능
-		              $("#example1").DataTable({
-		                "responsive": true, "lengthChange": false, "autoWidth": false,
-		                "buttons": ["copy", "csv", "excel", "pdf", "print", "colvis"]
-		              }).buttons().container().appendTo('#example1_wrapper .col-md-6:eq(0)');
-          			
-		              $('#example2').DataTable({
-		                "paging": true,
-		                "lengthChange": false,
-		                "searching": false,
-		                "ordering": true,
-		                "info": true,
-		                "autoWidth": false,
-		                "responsive": true,
-		              });
+                    $("#example1").DataTable({
+                        "responsive": true, "lengthChange": false, "autoWidth": false,
+                        "buttons": ["copy", "csv", "excel", "pdf", "print", "colvis"]
+                    }).buttons().container().appendTo('#example1_wrapper .col-md-6:eq(0)');
+                
+                    $('#example2').DataTable({
+                        "paging": true,
+                        "lengthChange": false,
+                        "searching": false,
+                        "ordering": true,
+                        "info": true,
+                        "autoWidth": false,
+                        "responsive": true,
+                    });
 
 
         });
