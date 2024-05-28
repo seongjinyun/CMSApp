@@ -29,12 +29,11 @@
 	      <div class="container-fluid">
 	        <div class="row mb-2">
 	          <div class="col-sm-6">
-	            <h1>폴더 명</h1>
+	            <h1>프로젝트 목록</h1>
 	          </div>
 	          <div class="col-sm-6">
 	            <ol class="breadcrumb float-sm-right">
-	              <li class="breadcrumb-item"><a href="#">폴더 명1</a></li>
-	              <li class="breadcrumb-item active">폴더 명2</li>
+	              <li class="breadcrumb-item"><a href="#">OO프로젝트</a></li>
 	            </ol>
 	          </div>
 	        </div>
@@ -56,7 +55,6 @@
                     </div>
                   </div>
                   <input type="button" class="btn btn-default btn-sm" value="필터" id="filterButton">
-                  <input type="button" class="btn btn-default btn-sm" value="글 작성" id="write">
                 </div>
                 
                 <!-- Select box hidden by default -->
@@ -112,10 +110,10 @@
                       </div>
                     </td>
                     <td class="mailbox-star"><a href="#"></a></td>
-                    <td>제목</td>
-                    <td>문서 버전</td>
+                    <td>이름</td>
+                    <td></td>
                     <td>업데이트 날짜</td>
-                    <td>상태</td>
+                    <td>부서 명</td>
                   </tr>
                   <!-- ./소제목 -->
                   <tbody>
@@ -126,11 +124,11 @@
                         <label for="check1"></label>
                       </div>
                     </td>
-                    <td class="mailbox-star"><a href="#"><i class="fa fa-star" aria-hidden="true"></i></a></td>
-                    <td class="mailbox-subject"><a href="/document">튜토리얼</a></td>
-                    <td class="mailbox-name">v2.1</td>
+                    <td class="mailbox-star"><a href="#"><i class="fa fa-star-o" aria-hidden="true"></i></a></td>
+                    <td class="mailbox-subject"><a href="/document_folder_list">A프로젝트</a></td>
+                    <td class="mailbox-name"></td>
                     <td class="mailbox-date">2024.05.23 16:44</td>
-                    <td class="mailbox-attachment">리뷰 중</td>
+                    <td class="mailbox-attachment">AA부서</td>
                   </tr>
                   <tr>
                     <td>
@@ -138,12 +136,12 @@
                         <input type="checkbox" value="" id="check2">
                         <label for="check2"></label>
                       </div>
-                   </td>
+                    </td>
                     <td class="mailbox-star"><a href="#"><i class="fas fa-star-o text-warning"></i></a></td>
-                    <td class="mailbox-subject"><a href="/document">시작</a></td>
-                    <td class="mailbox-name">v1.1</td>
+                    <td class="mailbox-subject"><a href="/document_folder_list">B프로젝트</a></td>
+                    <td class="mailbox-name"></td>
                     <td class="mailbox-date">2024.05.21 16:44</td>
-                    <td class="mailbox-attachment">배포</td>
+                    <td class="mailbox-attachment">OO부서</td>
                   </tr>
                  </tbody>
                 </table>
@@ -177,41 +175,35 @@
 <script>
 $(function(){
 	checkBoxAll();
-	write();
 	filterFile();
 	searchFile();
   });
   
   function checkBoxAll(){
-	  $("#checkall").click(function(){
-	      if($("#checkall").prop("checked")) {
-	        $("input[type=checkbox]").prop("checked",true);
-	      } else {
-	        $("input[type=checkbox]").prop("checked",false);
-	      }
-	    });
+	$("#checkall").click(function(){
+	     if($("#checkall").prop("checked")) {
+	     $("input[type=checkbox]").prop("checked",true);
+	     } else {
+	     $("input[type=checkbox]").prop("checked",false);
+	   }
+	 });
   }
   
-  function write(){
-	  $("#write").click(function() {
-			//글쓰기 폼 요청
-			location.href="/document";
-		});
+  
+  function filterFile(){
+	 $('#filterButton').click(function(){
+		$('#filterOptions').toggle();
+	});
   }
-	function filterFile(){
-		$('#filterButton').click(function(){
-			$('#filterOptions').toggle();
-		});
-	}
-	  
-	  function searchFile(){
-		 $('#searchFileInput').on('keyup', function(){
+  
+  function searchFile(){
+	  $('#searchFileInput').on('keyup', function(){
 			 var value = $(this).val().toLowerCase();
 			 $("tbody tr:not(.subtitle)").filter(function() {
 			 	$(this).toggle($(this).find(".mailbox-subject").text().toLowerCase().indexOf(value) > -1)
 			});
 		});
-	  }
+  }
 
   </script>
 </body>
