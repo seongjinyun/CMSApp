@@ -104,20 +104,20 @@
                 <table class="table table-hover table-striped">
                   <!-- 소제목 -->
                   <tr class="subtitle">
-                    <td>
+                    <th>
                       <div class="icheck-primary">
                         <input type="checkbox" value="" id="checkall">
                         <label for="checkall"></label>
                       </div>
-                    </td>
-                    <td class="mailbox-star"><a href="#"></a></td>
-                    <td>이름</td>
-                    <td></td>
-                    <td>업데이트 날짜</td>
-                    <td>파일 유형</td>
+                    </th>
+                    <th class="mailbox-star"><a href="#"></a></th>
+<th id="name-header">이름<button class="sort-btn" data-sort="asc" style="border: none; background: none; padding: 0; margin-left: 5px;"><i class="fas fa-sort"></i></button></th>
+                    <th></th>
+<th>업데이트 날짜 <button class="sort-btn" data-sort="asc" style="border: none; background: none; padding: 0; margin-left: 5px;"><i class="fas fa-sort"></i></button></th>
+                    <th>파일 유형</th>
                   </tr>
                   <!-- ./소제목 -->
-                  <tbody>
+                  <tbody id="tbody">
                   <tr>
                     <td>
                       <div class="icheck-primary">
@@ -126,7 +126,7 @@
                       </div>
                     </td>
                     <td class="mailbox-star"><a href="#"><i class="fa fa-star-o" aria-hidden="true"></i></a></td>
-                    <td class="mailbox-subject"><a href="/document_list">개발</a></td>
+                    <td class="mailbox-subject"><a href="/document_list">디자인</a></td>
                     <td class="mailbox-name"></td>
                     <td class="mailbox-date">2024.05.23 16:44</td>
                     <td class="mailbox-attachment">폴더</td>
@@ -179,6 +179,8 @@ $(function(){
 	write();
 	filterFile();
 	searchFile();
+	titleSort();
+	dateSort();
   });
   
   function checkBoxAll(){
@@ -212,6 +214,60 @@ $(function(){
 			});
 		});
   }
+  function dateSort(){
+	  $('.sort-btn').on('click', function() {
+		    var $button = $(this);
+		    var isAsc = $button.data('sort') === 'asc';
+		    var columnIndex = $button.closest('th').index();
+		    
+		    var $rows = $('table tbody tr').get();
+		    
+		    $rows.sort(function(a, b) {
+		      var dateA = new Date($(a).children('td').eq(columnIndex).text().trim());
+		      var dateB = new Date($(b).children('td').eq(columnIndex).text().trim());
+		      
+		      return isAsc ? dateA - dateB : dateB - dateA;
+		    });
+		    
+		    $.each($rows, function(index, row) {
+		      $("#tbody").append(row);
+		    });
+		    
+		    // 정렬 방향 토글 및 아이콘 변경
+		    $button.data('sort', isAsc ? 'desc' : 'asc');
+		    $button.find('i').removeClass().addClass(isAsc ? 'fas fa-sort-down' : 'fas fa-sort-up');
+		  });
+  }
+  
+  function titleSort(){
+	  var asc = true; // 정렬 상태 초기화
+
+	  $('#name-header').on('click', function() {
+	    var rows = $('#tbody tr').get(); // tbody 내의 모든 행을 가져옴
+
+	    rows.sort(function(a, b) {
+	      var A = $(a).find('.mailbox-subject a').text().toUpperCase();
+	      var B = $(b).find('.mailbox-subject a').text().toUpperCase();
+
+	      return asc ? A.localeCompare(B, 'ko') : B.localeCompare(A, 'ko'); // 'ko' 로케일 추가하여 한글 정렬
+	    });
+
+	    $.each(rows, function(index, row) {
+	      $('#tbody').append(row); // 정렬된 순서대로 tbody에 다시 추가
+	    });
+
+	    asc = !asc; // 정렬 상태 변경
+
+	    // 아이콘 변경 로직
+	    if (asc) {
+	      $('#name-header i').removeClass('fa-sort-down').addClass('fa-sort-up');
+	    } else {
+	      $('#name-header i').removeClass('fa-sort-up').addClass('fa-sort-down');
+	    }
+	  });
+  }
+	  
+	  
 
   </script>
 </body>
