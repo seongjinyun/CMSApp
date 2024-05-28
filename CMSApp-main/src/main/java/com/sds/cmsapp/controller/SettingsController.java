@@ -1,4 +1,4 @@
-package com.sds.cmsapp.setting.controller;
+package com.sds.cmsapp.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
