@@ -24,7 +24,7 @@ public class MainController {
 	
 	
 	@GetMapping("/writer/dashboard/activity")
-	public String getWriterDashboardAnalytics() {
+	public String getWriterDashboardActivity() {
 		return "writer/dashboard/activity";
 	}
 	
