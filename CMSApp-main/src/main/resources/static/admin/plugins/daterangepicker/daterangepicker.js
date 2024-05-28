@@ -72,10 +72,10 @@
             direction: 'ltr',
             format: moment.localeData().longDateFormat('L'),
             separator: ' - ',
-            applyLabel: 'Apply',
-            cancelLabel: 'Cancel',
+            applyLabel: '적용',
+            cancelLabel: '취소',
             weekLabel: 'W',
-            customRangeLabel: 'Custom Range',
+            customRangeLabel: '직접 선택',
             daysOfWeek: moment.weekdaysMin(),
             monthNames: moment.monthsShort(),
             firstDay: moment.localeData().firstDayOfWeek()

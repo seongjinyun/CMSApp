@@ -52,13 +52,42 @@
 
 			<!-- Main content -->
 			<section class="content pb-3">
+			
+			
+				<div class="container-fluid m-0">
+									<!-- row -->
+					<div class="row m-0">
+					
+					<div class="col-md-6">
+						<!-- from-group -->
+						<div class="form-group">
+							<!-- input-group -->
+							<div class="input-group">
+								<!-- button -->
+								<button type="button" class="btn btn-default float-right"
+									id="daterange-btn">
+									<i class="far fa-calendar-alt"></i> 날짜 선택: <span></span> <i
+										class="fas fa-caret-down"></i>
+								</button>
+							</div>
+						</div>
+						<!-- form-group end -->
+</div>
+					<div class="col-md-6">
+						<button class="btn btn-primary">전체 보기</button>
+</div>
+					</div>
+				</div>
+			
+			
 				<div class="container-fluid h-100">
+					
 					<div class="card card-row card-secondary">
 						<div class="card-header">
 							<h3 class="card-title">초안</h3>
 						</div>
 						<div class="card-body">
-							
+
 							<div class="card card-light card-outline">
 								<div class="card-header">
 									<h5 class="card-title">Create Actions</h5>
@@ -68,17 +97,11 @@
 										</a>
 									</div>
 								</div>
-								<div class="card-body">
-									<p>Lorem ipsum dolor sit amet, consectetuer adipiscing
-										elit. Aenean commodo ligula eget dolor. Aenean massa. Cum
-										sociis natoque penatibus et magnis dis parturient montes,
-										nascetur ridiculus mus.</p>
-								</div>
 							</div>
 						</div>
 					</div>
-					
-					<div class="card card-row card-primary">
+
+					<div class="card card-row card-warning">
 						<div class="card-header">
 							<h3 class="card-title">리뷰 중</h3>
 						</div>
@@ -95,10 +118,10 @@
 							</div>
 						</div>
 					</div>
-					
-					<div class="card card-row card-default">
+
+					<div class="card card-row card-success">
 						<div class="card-header bg-info">
-							<h3 class="card-title">베타 배포</h3>
+							<h3 class="card-title">리뷰 완료</h3>
 						</div>
 						<div class="card-body">
 							<div class="card card-light card-outline">
@@ -110,19 +133,13 @@
 										</a>
 									</div>
 								</div>
-								<div class="card-body">
-									<p>Lorem ipsum dolor sit amet, consectetuer adipiscing
-										elit. Aenean commodo ligula eget dolor. Aenean massa. Cum
-										sociis natoque penatibus et magnis dis parturient montes,
-										nascetur ridiculus mus.</p>
-								</div>
 							</div>
 						</div>
 					</div>
-					
-					<div class="card card-row card-success">
+
+					<div class="card card-row card-info">
 						<div class="card-header">
-							<h3 class="card-title">최종 배포</h3>
+							<h3 class="card-title">배포 완료</h3>
 						</div>
 						<div class="card-body">
 							<div class="card card-primary card-outline">
@@ -153,6 +170,62 @@
 	<!-- ./wrapper -->
 
 	<th:block th:replace="~{fragments/footer_link :: footer_link}" />
+		<script>
+        $(function () {
+
+            $('[data-toggle="popover"]').popover();
+
+            // 요약 탭 - Date range button
+            $('#daterange-btn')
+                .daterangepicker(
+                    {
+
+                        // 초기화
+                        startDate: moment(),
+                        endDate: moment(),
+
+                        // 라벨 설정
+                        ranges: {
+                            '오늘': [moment(), moment()],
+                            '어제': [moment().subtract(1, 'days'),
+                            moment().subtract(1, 'days')],
+                            '지난 7일': [moment().subtract(6, 'days'),
+                            moment()],
+                            '지난 30일': [moment().subtract(29, 'days'),
+                            moment()]
+                        },
+
+                        // [취소], [적용] 버튼 없음
+                        autoApply: true
+                    },
+                    function (start, end) {
+
+                        $('#daterange-btn span').html(
+                            start.format('YYYY/MM/DD') + ' - '
+                            + end.format('YYYY/MM/DD'));
+
+                        $.ajax({
+                            type: 'GET',
+                            url: '/test/daterange',
+                            data: {
+                                startDate: start.format('YYYY/MM/DD'),
+                                endDate: end.format('YYYY/MM/DD')
+                            },
+                            success: function (result, status, xhr) {
+
+                                alert("성공");
+
+                            },
+                            error: function (xhr, status, err) {
+                                alert("실패");
+                            }
+
+                        });
+                    });
+            
+        });
+        
+        </script>
 
 </body>
 
