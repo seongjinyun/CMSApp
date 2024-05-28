@@ -9,35 +9,40 @@ public class DocumentsController {
 	//글 작성 폼
 	@GetMapping("/document")
 	public String getDocument() {
-		return "documents/document";
+		return "documents/writeform";
 	} 
 
 	//프로젝트 목록
-	@GetMapping("/document_folder_list")
+	@GetMapping("/document/folder_list")
 	public String getDocumentFolderList() {
-		return "documents/document_folder_list";
+		return "documents/folder_list";
 	} 
 	
 	//파일목록
-	@GetMapping("/document_list")
+	@GetMapping("/document/list")
 	public String getDocumentList() {
-		return "documents/document_list";
+		return "documents/list";
 	} 
 	
 	//휴지통
-	@GetMapping("/document_trash")
+	@GetMapping("/document/trash")
 	public String getRecycleBin() {
-		return "documents/document_trash";
+		return "documents/trash";
 	} 
 	
 	//즐겨찾기
-	@GetMapping("/document_bookmark")
+	@GetMapping("/document/bookmark")
 	public String getBookmark() {
-		return "documents/document_bookmark";
+		return "documents/bookmark";
 	} 
 	//전체보기 (프로젝트 목록)
-	@GetMapping("/document_project_list")
+	@GetMapping("/document/project_list")
 	public String getProjectList() {
 		return "documents/document_project_list";
 	} 
+	// 글 상세보기
+	@GetMapping("/document/detail")
+	public String getDetail() {
+		return "documents/detail";
+	}
 }

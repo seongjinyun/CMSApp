@@ -71,7 +71,7 @@
             <!-- /.card-header -->
             <div class="card-body p-0">
               <div class="mailbox-controls">
-                <div class="btn-group">            
+                <div class="btn-group">
                   <button type="button" class="btn btn-default btn-sm" onClick="goToTrash();">
                     <i class="far fa-trash-alt"></i>
                   </button>
@@ -132,7 +132,7 @@
                       </div>
                     </td>
                     <td class="mailbox-star"><a href="#"><i class="fa fa-star" aria-hidden="true"></i></a></td>
-                    <td class="mailbox-subject"><a href="/document">튜토리얼</a></td>
+                    <td class="mailbox-subject"><a href="/document/detail">튜토리얼</a></td>
                     <td class="mailbox-name">v2.1</td>
                     <td class="mailbox-date">2024.05.23 16:44</td>
                     <td class="mailbox-attachment">리뷰 중</td>
@@ -145,7 +145,7 @@
                       </div>
                    </td>
                     <td class="mailbox-star"><a href="#"><i class="fas fa-star-o text-warning"></i></a></td>
-                    <td class="mailbox-subject"><a href="/document">시작</a></td>
+                    <td class="mailbox-subject"><a href="/document/detail">시작</a></td>
                     <td class="mailbox-name">v1.1</td>
                     <td class="mailbox-date">2024.05.21 16:44</td>
                     <td class="mailbox-attachment">배포</td>
@@ -239,7 +239,7 @@ $(function(){
   function write(){
 	  $("#write").click(function() {
 			//글쓰기 폼 요청
-			location.href="/document";
+			location.href="/document/write";
 		});
   }
 	function filterFile(){

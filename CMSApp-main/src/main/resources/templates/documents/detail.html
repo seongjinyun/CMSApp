@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="zxx" xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>AdminLTE 3 | Dashboard</title>
+
+<th:block th:replace="~{fragments/header_link :: header_link}" />
+<style>
+		.popup {
+			display: none;
+			position: absolute;
+			top: 40px; /* 버튼 아래에 위치 */
+			right: 80px;
+			width: 200px;
+			padding: 10px;
+			border: 1px solid #ccc;
+			background: #fff;
+			box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+			z-index: 1000;
+		}
+		
+		.popup button {
+			display: block;
+			width: 100%;
+			margin-bottom: 5px;
+		}
+		.version-sidebar {
+		    position: fixed;
+		    right: 0;
+		    top: 0;
+		    width: 500px; /* 사이드바 너비 */
+		    height: 100%; /* 전체 높이 */
+		    background-color: #f4f4f4; /* 배경 색상 */
+		    box-shadow: -2px 0 5px rgba(0, 0, 0, 0.5);
+		    padding: 20px;
+		    display: none; /* 기본적으로 보이지 않음 */
+		    z-index: 2000; /* 다른 요소들 위에 표시 */
+		}
+		.timeline-wrapper {
+		  height: 100%; /* 원하는 높이로 설정 */
+		  overflow-y: auto; /* 세로 스크롤 활성화 */
+		}
+</style>
+</head>
+<body class="hold-transition sidebar-mini layout-fixed">
+	<div class="wrapper">
+
+		<!-- Preloader -->
+		<th:block th:replace="~{fragments/preloader :: preloader}" />
+
+		<!-- Navbar -->
+		<th:block th:replace="~{fragments/navi :: navi}" />
+		<!-- /.navbar -->
+
+		<!-- Main Sidebar Container -->
+		<th:block th:replace="~{fragments/sidebar :: sidebar}" />
+		<!-- /.sidebar -->
+
+
+		<!-- Content Wrapper. Contains page content -->
+		<div class="content-wrapper">
+			<section class="content">
+				<div class="row">
+					<div class="col"><p>글 작성 글 상세보기 입니다</p></div>
+					<div class="col-6">
+						<div class="float-right">
+							<button type="button" class="btn btn-primary btn-sm mt-1" id="versionControlButton">
+								<i class=""></i> 버전 관리
+							</button>
+							
+							<button type="button" class="btn btn-default btn-sm mt-1" id="document_list" onclick="getList();">
+								<i class="far fa-list-alt"></i>목록
+							</button>
+
+							<button type="button" class="btn btn-primary btn-sm mt-1" onclick="edit();">
+								<i class="fas fa-edit"></i> 수정
+							</button>
+							
+							<button type="button" class="btn btn-danger btn-sm mt-1" onclick="del();">
+								<i class="fas fa-trash"></i> 삭제
+							</button>
+							
+							<!-- draft 창 -->
+							<div class="popup" id="draftPopup">
+								<button type="button" class="btn btn-secondary">배포 요청</button>
+							</div>
+						</div>
+						<!-- 버전관리 사이드바 -->
+						<div class="version-sidebar" id="versionSidebar" style="display: none;">
+						    <!-- 사이드바 내용 -->
+						    <div class="timeline-wrapper">
+								<div class="timeline">
+					              <!-- timeline time label -->
+					              <div class="time-label">
+					                <span class="bg-red">2024.05.22 14:11</span>
+					              </div>
+					              <!-- /.timeline-label -->
+					              <!-- 버전관리 내용 -->
+					              <div>
+					                <i class="fas fa-envelope bg-blue"></i>
+					                <div class="timeline-item">
+					                  <span class="time"><i class="fas fa-clock"></i> 12:05</span>
+					                  <h3 class="timeline-header">제목</h3>
+					
+					                  <div class="timeline-body">
+					                    <p><b>v1.0</b></p>
+					                  </div>
+					                  <div class="timeline-footer">
+					                    <a class="btn btn-primary btn-sm">열기</a>
+					                    <a class="btn btn-danger btn-sm">삭제</a>
+					                  </div>
+					                </div>
+					              </div>
+					              <!-- END timeline item -->
+					              <div>
+					                <i class="fas fa-clock bg-gray"></i>
+					              </div>
+					            </div>
+							</div>
+						</div>
+					</div>
+					<div class="col-md-12">
+						<div class="card card-outline card-info">
+							<div class="card-header">
+								<div class="col-sm-12">
+									<h5 class="ml-2 mt-2">제목 들어올곳</h5>
+									<font size=1>작성자</font>
+								</div>
+							</div>
+							<!-- /.card-header -->
+							<div class="card-body">
+								서머노트 내용 db에서 가져오기
+								<a class="dropdown-item" href="#">태그</a>
+     							<a class="dropdown-item" href="#">테스트</a>
+      							<a class="dropdown-item" href="#">지우고쓰세요</a>
+							</div>
+						</div>
+					</div>
+					<!-- /.col-->
+				</div>
+				<!-- ./row -->
+			</section>
+		</div>
+		<!-- /.content-wrapper -->
+
+		<th:block th:replace="~{fragments/footer :: footer}" />
+
+		<!-- Control Sidebar -->
+		<aside class="control-sidebar control-sidebar-dark">
+			<!-- Control sidebar content goes here -->
+		</aside>
+		<!-- /.control-sidebar -->
+	</div>
+	<!-- ./wrapper -->
+
+	<th:block th:replace="~{fragments/footer_link :: footer_link}" />
+	<script>
+  $(function () {
+    // Summernote
+    summernote();
+    draftBtn();
+    versionControlBtn();
+  })
+  function summernote(){
+	  $('#summernote').summernote({
+	    	height: 300,                 // 에디터 높이
+			  minHeight: null,             // 최소 높이
+			  maxHeight: null,             // 최대 높이
+			  focus: true,                  // 에디터 로딩후 포커스를 맞출지 여부
+			  lang: "ko-KR",					// 한글 설정
+			  placeholder: '내용을 입력하세요.'	//placeholder 설정
+	    });
+  }
+  
+  function draftBtn(){
+	  // Draft 창 스크립트
+	  $('#draftButton').click(function() {
+		    $('#draftPopup').toggle();
+		  });
+  }
+  
+  function versionControlBtn(){
+	  // 버전관리 창 스크립트
+	  $('#versionControlButton').click(function() {
+		    $('#versionSidebar').toggle();
+		  });
+  }
+  
+    function getList(){
+    	location.href = "/document_list";
+    }
+
+  	function edit(){
+	  	if(confirm("문서를 수정하실건가요?")){
+		
+	  	}	  
+  	}
+  
+  	function del(){
+	  	if(confirm("문서를 휴지통으로 보낼까요?")){
+		  
+	  	}
+  	}
+  //빈공간 클릭시 draft or version sidebar 비활성화 스크립트
+	$(document).ready(function() {
+	  $(document).click(function(event) {
+	    if (!$(event.target).closest('#draftButton, #draftPopup').length) {
+	      $('#draftPopup').hide();
+	    }
+	  });
+	  $(document).click(function(event) {
+	    if (!$(event.target).closest('#versionControlButton, #versionSidebar').length) {
+	      $('#versionSidebar').hide();
+	    }
+	  });
+	});
+</script>
+</body>
+</html>
