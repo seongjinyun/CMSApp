@@ -55,7 +55,8 @@
                     </div>
                   </div>
                 
-                  <input type="button" class="btn btn-default btn-sm" value="삭제" id="delete">
+                  <input type="button" class="btn btn-success btn-sm mr-1 ml-1" value="복원" id="restore" onclick="restore()">
+                  <input type="button" class="btn btn-danger btn-sm" value="삭제" id="delete" onclick="eliminate()">
                 </div>
                 
               </div>
@@ -174,6 +175,20 @@ $(function(){
 			});
 		});
 	  }
+  function restore(){
+	  if(confirm("선택된 문서를 복원하시겠습니까?")){
+		  let msg;
+		  Math.random > 0.5 ? msg = "복원 완료" : msg = "복원 실패";
+		  alert(msg);
+	  }
+  }
+  
+  function eliminate(){
+	  if(confirm("선택된 문서를 영구삭제하시겠습니까?")){
+		  alert("삭제완료");
+	  }
+  }
+  
   </script>
 </body>
 </html>
