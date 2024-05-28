@@ -1,4 +1,4 @@
-package com.sds.cmsapp.Controller;
+package com.sds.cmsapp.setting.controller;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
