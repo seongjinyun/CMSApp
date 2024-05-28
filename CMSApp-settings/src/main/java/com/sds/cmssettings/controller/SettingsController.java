@@ -4,7 +4,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 
 @Controller
-public class MainController {
+public class SettingsController {
 	
 	@GetMapping("/")
 	public String getMain() {
@@ -16,9 +16,9 @@ public class MainController {
 		return "settings/general";
 	}
 	
-	@GetMapping("/user")
-	public String getUser() {
-		return "settings/user";
+	@GetMapping("/log")
+	public String getLog() {
+		return "settings/log";
 	}
 	
 	@GetMapping("/access")
@@ -26,13 +26,18 @@ public class MainController {
 		return "settings/access";
 	}
 	
+	@GetMapping("/mypage")
+	public String getMyInfo() {
+		return "settings/mypage";
+	}
+	
+	@GetMapping("/user")
+	public String getUserInfo() {
+		return "settings/user";
+	}
+	
 	@GetMapping("/role")
 	public String getRole() {
 		return "settings/role";
-	}
-	
-	@GetMapping("/log")
-	public String getLog() {
-		return "settings/log";
 	}
 }

@@ -29,7 +29,7 @@
 	      <div class="container-fluid">
 	        <div class="row mb-2">
 	          <div class="col-sm-6">
-	            <h1>OO프로젝트</h1>
+	            <h1>프로젝트 목록</h1>
 	          </div>
 	          <div class="col-sm-6">
 	            <ol class="breadcrumb float-sm-right">
@@ -54,8 +54,7 @@
                       <i class="fas fa-search"></i>
                     </div>
                   </div>
-                  <input type="button" class="btn btn-default btn-sm ml-1 mr-1" value="필터" id="filterButton">
-                  <input type="button" class="btn btn-default btn-sm" value="글 작성" id="write">
+                  <input type="button" class="btn btn-default btn-sm" value="필터" id="filterButton">
                 </div>
                 
                 <!-- Select box hidden by default -->
@@ -114,7 +113,7 @@
                     <td>이름</td>
                     <td></td>
                     <td>업데이트 날짜</td>
-                    <td>파일 유형</td>
+                    <td>부서 명</td>
                   </tr>
                   <!-- ./소제목 -->
                   <tbody>
@@ -126,10 +125,10 @@
                       </div>
                     </td>
                     <td class="mailbox-star"><a href="#"><i class="fa fa-star-o" aria-hidden="true"></i></a></td>
-                    <td class="mailbox-subject"><a href="/document_list">개발</a></td>
+                    <td class="mailbox-subject"><a href="/document_folder_list">A프로젝트</a></td>
                     <td class="mailbox-name"></td>
                     <td class="mailbox-date">2024.05.23 16:44</td>
-                    <td class="mailbox-attachment">폴더</td>
+                    <td class="mailbox-attachment">AA부서</td>
                   </tr>
                   <tr>
                     <td>
@@ -139,10 +138,10 @@
                       </div>
                     </td>
                     <td class="mailbox-star"><a href="#"><i class="fas fa-star-o text-warning"></i></a></td>
-                    <td class="mailbox-subject"><a href="/document_list">기획</a></td>
+                    <td class="mailbox-subject"><a href="/document_folder_list">B프로젝트</a></td>
                     <td class="mailbox-name"></td>
                     <td class="mailbox-date">2024.05.21 16:44</td>
-                    <td class="mailbox-attachment">폴더</td>
+                    <td class="mailbox-attachment">OO부서</td>
                   </tr>
                  </tbody>
                 </table>
@@ -176,7 +175,6 @@
 <script>
 $(function(){
 	checkBoxAll();
-	write();
 	filterFile();
 	searchFile();
   });
@@ -191,12 +189,6 @@ $(function(){
 	 });
   }
   
-  function write(){
-	  $("#write").click(function() {
-			//글쓰기 폼 요청
-			location.href="/document";
-		});
-  }
   
   function filterFile(){
 	 $('#filterButton').click(function(){

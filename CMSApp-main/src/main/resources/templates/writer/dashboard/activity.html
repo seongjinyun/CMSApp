@@ -26,7 +26,7 @@ a.show_list {
 		<!-- /.navbar -->
 
 		<!-- Main Sidebar Container -->
-		<th:block th:replace="~{fragments/admin_sidebar :: admin_sidebar}" />
+		<th:block th:replace="~{fragments/writer_sidebar :: writer_sidebar}" />
 
 		<!-- /.sidebar -->
 
@@ -65,9 +65,7 @@ a.show_list {
 								<li class="nav-item"><a class="nav-link active"
 									data-toggle="tab" href="#summary">요약 </a></li>
 								<li class="nav-item"><a class="nav-link" data-toggle="tab"
-									href="#publish-list">배포 목록</a></li>
-								<li class="nav-item"><a class="nav-link" data-toggle="tab"
-									href="#review-list">리뷰 목록</a></li>
+									href="#draft-list">초안 목록</a></li>
 							</ul>
 						</div>
 					</div>
@@ -105,7 +103,7 @@ a.show_list {
 											<!-- row -->
 											<div class="row">
 												<!-- col -->
-												<div class="col-md-6">
+												<div class="col-md-12">
 													<!-- Card -->
 													<div class="card">
 														<div class="card-header border-transparent">
@@ -119,7 +117,7 @@ a.show_list {
 																	<div class="small-box bg-success">
 																		<div class="inner">
 																			<h3>7</h3>
-																			<a class="show_list" href="#">리뷰 대기 문서 <i
+																			<a class="show_list" href="#">초안 작성 문서 <i
 																				class="fas fa-arrow-circle-right"></i>
 																			</a>
 																		</div>
@@ -129,7 +127,7 @@ a.show_list {
 																	<div class="small-box bg-info">
 																		<div class="inner">
 																			<h3>35</h3>
-																			<a class="show_list" href="#">배포 대기 문서 <i
+																			<a class="show_list" href="#">리뷰 요청 문서 <i
 																				class="fas fa-arrow-circle-right"></i>
 																			</a>
 																		</div>
@@ -141,68 +139,9 @@ a.show_list {
 													</div>
 													<!-- Card End -->
 												</div>
-												<!-- col end -->
-
-												<!-- col -->
-												<div class="col-md-6">
-													<!-- Card -->
-													<div class="card">
-														<div class="card-header border-transparent">
-															<h3 class="card-title">나의 기여</h3>
-														</div>
-														<div class="card-body">
-															<!-- Row -->
-															<div class="row">
-																<div class="col-lg-3 col-6">
-																	<div class="small-box bg-warning">
-																		<div class="inner">
-																			<h3>25</h3>
-																			<a class="show_list" href="#">수정 <i
-																				class="fas fa-arrow-circle-right"></i>
-																			</a>
-																		</div>
-																	</div>
-																</div>
-																<div class="col-lg-3 col-6">
-																	<div class="small-box bg-success">
-																		<div class="inner">
-																			<h3>2</h3>
-																			<a class="show_list" href="#">리뷰 <i
-																				class="fas fa-arrow-circle-right"></i>
-																			</a>
-																		</div>
-																	</div>
-																</div>
-																<div class="col-lg-3 col-6">
-																	<div class="small-box bg-info">
-																		<div class="inner">
-																			<h3>5</h3>
-																			<a class="show_list" href="#">배포 <i
-																				class="fas fa-arrow-circle-right"></i>
-																			</a>
-																		</div>
-																	</div>
-																</div>
-																<div class="col-lg-3 col-6">
-																	<div class="small-box bg-danger">
-																		<div class="inner">
-																			<h3>5</h3>
-																			<a class="show_list" href="#">반려 <i
-																				class="fas fa-arrow-circle-right"></i>
-																			</a>
-																		</div>
-																	</div>
-																</div>
-															</div>
-															<!-- Row End -->
-														</div>
-														<!-- Card body End -->
-													</div>
-													<!-- card end -->
-												</div>
-											</div>
-											<!-- row end -->
+												<!-- col end -->		
 										</div>
+                                        </div>
 										<!-- card-body end -->
 									</div>
 									<!-- card end-->
@@ -217,7 +156,7 @@ a.show_list {
 									<!-- Card -->
 									<div class="card mt-3">
 										<div class="card-header border-transparent">
-											<h3 class="card-title">예) 배포 목록 미리보기 (위에서 '버튼' 클릭 시 비동기
+											<h3 class="card-title">예)리뷰 요청 목록 미리보기 (위에서 '버튼' 클릭 시 비동기
 												통신으로 목록이 조회되는 영역)</h3>
 											<div class="card-tools">
 												<a href="javascript:void(0)"
@@ -232,11 +171,11 @@ a.show_list {
 															<th>No.</th>
 															<th>제목</th>
 															<th>버전</th>
-															<th>검토 사원</th>
 															<th>초안 작성 사원</th>
+															<th>검토 사원</th>
 															<th>결재 상태</th>
 															<th>코멘트</th>
-															<th>검토일자</th>
+															<th>배포일자</th>
 														</tr>
 													</thead>
 													<tbody>
@@ -246,7 +185,7 @@ a.show_list {
 															<td>5</td>
 															<td>박진영</td>
 															<td>장원영</td>
-															<td><span class="badge badge-success">리뷰 완료</span></td>
+															<td><span class="badge badge-success">최종 배포</span></td>
 															<td><a href="#" title="" data-toggle="popover"
 																data-trigger="hover" data-content="오타가 있어 수정했습니다.">
 																	<span class="info-box-icon"> <i
@@ -263,7 +202,7 @@ a.show_list {
 															<td>5</td>
 															<td>박진영</td>
 															<td>장원영</td>
-															<td><span class="badge badge-success">리뷰 완료</span></td>
+															<td><span class="badge badge-success">최종 배포</span></td>
 															<td><span class="info-box-icon"><i
 																	class="fas fa-comments"></i></span></td>
 															<td>2024-05-20 14:00</td>
@@ -274,7 +213,7 @@ a.show_list {
 															<td>5</td>
 															<td>박진영</td>
 															<td>장원영</td>
-															<td><span class="badge badge-success">리뷰 완료</span></td>
+															<td><span class="badge badge-success">최종 배포</span></td>
 															<td><span class="info-box-icon"><i
 																	class="fas fa-comments"></i></span></td>
 															<td>2024-05-20 14:00</td>
@@ -293,7 +232,7 @@ a.show_list {
 						<!-- Tab End -->
 
 						<!-- Tab -->
-						<div class="tab-pane container-fluid fade" id="publish-list">
+						<div class="tab-pane container-fluid fade" id="draft-list">
 							<!-- Row -->
 							<div class="row">
 								<div class="col-md-12">
@@ -354,8 +293,7 @@ a.show_list {
 													<div class="form-group clearfix">
 														<div class="icheck-primary d-inline">
 															<input type="radio" id="radioPrimary2" name="r2"
-																checked=""> <label for="radioPrimary2">배포
-																대기 문서 </label>
+																checked=""> <label for="radioPrimary2">리뷰 요청 문서 </label>
 														</div>
 													</div>
 												</div>
@@ -363,7 +301,8 @@ a.show_list {
 													<div class="form-group clearfix">
 														<div class="icheck-primary d-inline">
 															<input type="radio" id="radioPrimary2" name="r2"
-																checked=""> <label for="radioPrimary2">배포
+																checked=""> <label for="radioPrimary2">리뷰
+                                                            
 																완료 문서 </label>
 														</div>
 													</div>

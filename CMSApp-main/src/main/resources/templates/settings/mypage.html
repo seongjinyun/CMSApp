@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html lang="zxx" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>AdminLTE 3 | Dashboard</title>
+
+	<th:block th:replace="~{fragments/header_link :: header_link}"/>
+	<th:block th:replace="~{elements/datatables_header_link :: datatables_header_link}"/>
+	<th:block th:replace="~{elements/advanced_forms_header_link :: advanced_forms_header_link}"/>
+	
+	 <style>
+        .addImage {
+            width: 45%;
+            height: 45%;
+            background-color: lightgray;
+            border-radius: 20px 20px / 20px 20px;
+            overflow: hidden;
+        }
+    </style>
+	 
+	 <script>
+	 	// 이미지 로드용
+        function loadFile(input) {
+            let file = input.files[0]; // 선택파일 가져오기
+
+            let newImage = document.createElement("img"); // 새 이미지 태그 생성
+
+            //이미지 source 가져오기
+            newImage.src = URL.createObjectURL(file);
+            newImage.style.width = "100%"; 		// div에 꽉차게 넣기
+            newImage.style.height = "100%";
+            newImage.style.objectFit = "cover"; // div에 넘치지 않고 들어가게
+
+            // 이미지를 image-show div에 추가
+            let container = document.getElementById('image-show');
+            container.appendChild(newImage);
+        }
+	</script>
+
+</head>
+<body class="hold-transition sidebar-mini layout-fixed">
+<div class="wrapper">
+
+  <!-- Preloader -->
+  <th:block th:replace="~{fragments/preloader :: preloader}"/>
+	
+  <!-- Navbar -->
+	<th:block th:replace="~{fragments/navi :: navi}"/>
+  <!-- /.navbar -->
+
+  <!-- Main Sidebar Container -->
+  <th:block th:replace="~{fragments/sidebar :: sidebar}"/>
+  <!-- /.sidebar -->
+
+  <!-- Content Wrapper. Contains page content -->
+  <div class="content-wrapper">
+    <!-- Content Header (Page header) -->
+    <div class="content-header">
+      <div class="container-fluid">
+        <div class="row mb-2">
+          <div class="col-sm-6">
+            <h1 class="m-0" style="font-weight: bold;">계정 정보 변경</h1>
+          </div><!-- /.col -->
+          <div class="col-sm-6">
+            <ol class="breadcrumb float-sm-right">
+              <li class="breadcrumb-item"><a th:href="@{general}">Settings</a></li>
+              <li class="breadcrumb-item active">User</li>
+            </ol>
+          </div><!-- /.col -->
+        </div><!-- /.row -->
+      </div><!-- /.container-fluid -->
+    </div>
+    <!-- /.content-header -->
+
+    <!-- Main content -->
+    <h6 style="color: gray; margin-left: 50px; margin-bottom: 20px;">나의 정보를 변경할 수 있습니다.</h6>
+    <section class="content">
+      	<div class="container-fluid">
+    		<div class="row">
+    			<div class="col-md-12">
+				    <div class="card">
+				        <div class="card-header p-2">
+				            <ul class="nav nav-pills">
+				                <li class="nav-item"><a class="nav-link active" href="#settings" data-toggle="tab">Settings</a></li>
+				                <li class="nav-item"><a class="nav-link" href="#timeline" data-toggle="tab">Timeline</a></li>
+				            </ul>
+				        </div>
+				        <div class="card-body">
+				            <div class="tab-content">
+				
+				                <div class="tab-pane" id="timeline">
+				
+				                    <div class="timeline timeline-inverse">
+				
+				                        <div class="time-label">
+				                            <span class="bg-danger">
+				                                10 Feb. 2014
+				                            </span>
+				                        </div>
+				
+				
+				                        <div>
+				                            <i class="fas fa-envelope bg-primary"></i>
+				                            <div class="timeline-item">
+				                                <span class="time"><i class="far fa-clock"></i> 12:05</span>
+				                                <h3 class="timeline-header"><a href="#">Support Team</a> sent you an email</h3>
+				                                <div class="timeline-body">
+				                                    Etsy doostang zoodles disqus groupon greplin oooj voxy zoodles,
+				                                    weebly ning heekya handango imeem plugg dopplr jibjab, movity
+				                                    jajah plickers sifteo edmodo ifttt zimbra. Babblely odeo kaboodle
+				                                    quora plaxo ideeli hulu weebly balihoo...
+				                                </div>
+				                                <div class="timeline-footer">
+				                                    <a href="#" class="btn btn-primary btn-sm">Read more</a>
+				                                    <a href="#" class="btn btn-danger btn-sm">Delete</a>
+				                                </div>
+				                            </div>
+				                        </div>
+				
+				
+				                        <div>
+				                            <i class="fas fa-user bg-info"></i>
+				                            <div class="timeline-item">
+				                                <span class="time"><i class="far fa-clock"></i> 5 mins ago</span>
+				                                <h3 class="timeline-header border-0"><a href="#">Sarah Young</a> accepted your friend
+				                                    request
+				                                </h3>
+				                            </div>
+				                        </div>
+				
+				
+				                        <div>
+				                            <i class="fas fa-comments bg-warning"></i>
+				                            <div class="timeline-item">
+				                                <span class="time"><i class="far fa-clock"></i> 27 mins ago</span>
+				                                <h3 class="timeline-header"><a href="#">Jay White</a> commented on your post</h3>
+				                                <div class="timeline-body">
+				                                    Take me to your leader!
+				                                    Switzerland is small and neutral!
+				                                    We are more like Germany, ambitious and misunderstood!
+				                                </div>
+				                                <div class="timeline-footer">
+				                                    <a href="#" class="btn btn-warning btn-flat btn-sm">View comment</a>
+				                                </div>
+				                            </div>
+				                        </div>
+				
+				
+				                        <div class="time-label">
+				                            <span class="bg-success">
+				                                3 Jan. 2014
+				                            </span>
+				                        </div>
+				
+				
+				                        <div>
+				                            <i class="fas fa-camera bg-purple"></i>
+				                            <div class="timeline-item">
+				                                <span class="time"><i class="far fa-clock"></i> 2 days ago</span>
+				                                <h3 class="timeline-header"><a href="#">Mina Lee</a> uploaded new photos</h3>
+				                                <div class="timeline-body">
+				                                    <img src="https://placehold.it/150x100" alt="...">
+				                                    <img src="https://placehold.it/150x100" alt="...">
+				                                    <img src="https://placehold.it/150x100" alt="...">
+				                                    <img src="https://placehold.it/150x100" alt="...">
+				                                </div>
+				                            </div>
+				                        </div>
+				
+				                        <div>
+				                            <i class="far fa-clock bg-gray"></i>
+				                        </div>
+				                    </div>
+				                </div>
+				
+				                <div class="tab-pane active" id="settings">
+				                    <form class="form-horizontal">
+				                        <div class="form-group row">
+				                            <label for="inputName" class="col-sm-2 col-form-label">Name</label>
+				                            <div class="col-sm-10">
+				                                <input type="text" class="form-control" id="inputName" placeholder="Name">
+				                            </div>
+				                        </div>
+				                        <div class="form-group row">
+				                            <label for="inputID" class="col-sm-2 col-form-label">ID</label>
+				                            <div class="col-sm-10">
+				                                <input type="text" class="form-control" id="inputID" placeholder="ID">
+				                            </div>
+				                        </div>
+				                        <div class="form-group row">
+				                            <label for="inputPW" class="col-sm-2 col-form-label">PW</label>
+				                            <div class="col-sm-10">
+				                                <input type="password" class="form-control" id="inputPW" placeholder="PW">
+				                            </div>
+				                        </div>
+				                        <div class="form-group row">
+				                            <label for="inputDepartment" class="col-sm-2 col-form-label">Department</label>
+				                            <div class="col-sm-10">
+				                                <div class="form-group">
+													<select class="select1 form-control" data-placeholder="Department" style="width: 100%;">
+														<option>1팀</option>
+														<option>2팀</option>
+														<option>3팀</option>
+														<option>4팀</option>
+														<option>5팀</option>
+													</select>
+										        </div>
+				                            </div>
+				                        </div>
+				                        <div class="form-group row">
+				                            <label for="inputRole" class="col-sm-2 col-form-label">Role</label>
+				                            <div class="col-sm-10">
+				                                <div class="row">
+											        <div class="col">
+											            <div class="form-group">
+											                <select class="select1 form-control" data-placeholder="역할 선택" style="width: 100%;">
+																<option>Draft Writer</option>
+																<option>Editor</option>
+																<option>Admin</option>
+															</select>
+											            </div>
+											        </div> 
+												</div>
+				                            </div>
+				                        </div>
+				                        <div class="form-group row">
+							                <label for="inputImage" class="col-sm-4 col-form-label">Profile Image</label>
+						                	<div class="col-sm-8 row">
+									        	<div class="col">
+										            <div class="form-group">
+								    					<div class="addImage" id="image-show" 
+										                	 style="display: block; width: 45%; height: 45%; background-color: lightgray;  overflow: hidden;">
+										                 	<!-- 이미지 띄울 공간 -->
+										                </div>
+														<input type="file" accept="image/*" onchange="loadFile(this)" style="margin-top: 15px; display: block;">        
+					                				</div>
+					                			</div>
+						                	</div>
+							            </div>
+				                        <div class="form-group">
+			                                <input type="submit" value="Save Changes" class="btn btn-success float-right" style="height: 38px">
+				                        </div>
+				                    </form>
+				                </div>
+				
+				            </div>
+				
+				        </div>
+				    </div>
+				
+				</div>
+    		</div>
+   		</div>  	
+  	</section>
+  <!-- /.content -->
+  </div>
+  <!-- /.content-wrapper -->
+  
+  <th:block th:replace="~{fragments/footer :: footer}"/>
+
+  <!-- Control Sidebar -->
+  <aside class="control-sidebar control-sidebar-dark">
+    <!-- Control sidebar content goes here -->
+  </aside>
+  <!-- /.control-sidebar -->
+</div>
+<!-- ./wrapper -->
+	
+  <th:block th:replace="~{fragments/footer_link :: footer_link}"/>
+  <th:block th:replace="~{elements/datatables_footer_link :: datatables_footer_link}"/>
+  <th:block th:replace="~{elements/advanced_forms_footer_link :: advanced_forms_footer_link}"/>
+
+</body>
+</html>

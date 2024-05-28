@@ -109,7 +109,7 @@
               <div class="table-responsive mailbox-messages">
                 <table class="table table-hover table-striped">
                   <!-- 소제목 -->
-                  <tr>
+                  <tr class="subtitle">
                     <td>
                       <div class="icheck-primary">
                         <input type="checkbox" value="" id="checkall">
@@ -143,9 +143,9 @@
                         <input type="checkbox" value="" id="check2">
                         <label for="check2"></label>
                       </div>
-                    </td>
+                   </td>
                     <td class="mailbox-star"><a href="#"><i class="fas fa-star-o text-warning"></i></a></td>
-                    <td class="mailbox-subject"><a href="/document">튜토리얼</a></td>
+                    <td class="mailbox-subject"><a href="/document">시작</a></td>
                     <td class="mailbox-name">v1.1</td>
                     <td class="mailbox-date">2024.05.21 16:44</td>
                     <td class="mailbox-attachment">배포</td>
@@ -251,7 +251,7 @@ $(function(){
 	  function searchFile(){
 		 $('#searchFileInput').on('keyup', function(){
 			 var value = $(this).val().toLowerCase();
-			 $("tbody tr").filter(function() {
+			 $("tbody tr:not(.subtitle)").filter(function() {
 			 	$(this).toggle($(this).find(".mailbox-subject").text().toLowerCase().indexOf(value) > -1)
 			});
 		});

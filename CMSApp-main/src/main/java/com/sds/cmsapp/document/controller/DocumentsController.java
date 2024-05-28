@@ -1,4 +1,4 @@
-package com.sds.cmsapp.controller;
+package com.sds.cmsapp.document.controller;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -34,5 +34,10 @@ public class DocumentsController {
 	@GetMapping("/document_bookmark")
 	public String getBookmark() {
 		return "documents/document_bookmark";
+	} 
+	//전체보기 (프로젝트 목록)
+	@GetMapping("/document_project_list")
+	public String getProjectList() {
+		return "documents/document_project_list";
 	} 
 }
