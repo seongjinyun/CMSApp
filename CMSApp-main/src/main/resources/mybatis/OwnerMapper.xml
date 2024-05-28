@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "mybatis-3-mapper.dtd">
-<mapper namespace="com.sds.cmsapp.model.emp.OwnerDAO">
+<mapper namespace="com.sds.cmsapp.model.owner.OwnerDAO">
 
 	<!-- Owner 계정 정보 변경 -->
 	<update id="update" parameterType="Owner">

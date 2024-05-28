@@ -1,4 +1,4 @@
-package com.sds.cmsapp.model.emp;
+package com.sds.cmsapp.model.owner;
 
 import com.sds.cmsapp.domain.Owner;
 

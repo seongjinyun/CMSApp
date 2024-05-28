@@ -14,17 +14,27 @@
 	</insert>
 	
 	<!-- Mybatis 객체 간 Association -->
-	<!-- emp_detail 내 상세 정보 입력 -->
 	<resultMap type="Emp" id="EmpMap">
 		<id column="emp_idx" property="emp_idx" />
 		<result column="emp_name" property="emp_name" />
 		
 		<association column="dept_idx" property="dept" javaType="Dept" select="com.sds.cmsapp.model.emp.DeptDAO.select" />
 		<association column="role_idx" property="role" javaType="Role" select="com.sds.cmsapp.model.emp.RoleDAO.select" />
+		<association column="emp_idx" property="empDetail" javaType="EmpDetail" select="com.sds.cmsapp.model.emp.empDetailDAO.selectByEmpIdx" />
 		
 	</resultMap>
+		
+	<!-- Index로 사원 조회 -->
+	<select id="selectEmpByIdx" parameterMap="EmpMap">
+		select emp_idx, emp_name, dept_idx, role_idx
+		from emp where emp_idx=#{emp_idx}
+	</select>
 	
-	<!-- 사원 조회 -->
+	<!-- 사원 정보 변경 -->
+	<update id="update" parameterMap="EmpMap">
+		update emp
+		set emp_name=#{emp_name}, dept_idx=#{dept.dept_idx}, role_idx=#{role.role_idx}
+		where emp_idx=#{emp_idx}		
+	</update>
 	
-
 </mapper>

@@ -1,4 +1,4 @@
-package com.sds.cmsapp.model.emp;
+package com.sds.cmsapp.model.owner;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
