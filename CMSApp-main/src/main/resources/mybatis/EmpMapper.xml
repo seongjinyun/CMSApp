@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "mybatis-3-mapper.dtd">
+<mapper namespace="com.sds.cmsapp.model.emp.EmpDAO">
+
+	<!-- 사원 추가 -->
+	<insert id="insert" parameterType="Emp">
+		insert into emp(emp_name, dept_idx, role_code)
+		values(#{emp_name}, #{dept.dept_idx}, #{role.role_code})
+		
+		<!-- emp_detail에 상세 정보를 insert 하기 위해 부모테이블 emp의 index 값 추출 -->
+		<selectKey keyColumn="emp_idx" keyProperty="emp_idx" resultType="int" order="AFTER">
+			select last_insert_idx() as emp_idx
+		</selectKey>
+	</insert>
+	
+	<!-- Mybatis 객체 간 Association -->
+	<!-- emp_detail 내 상세 정보 입력 -->
+	<resultMap type="Emp" id="EmpMap">
+		<id column="emp_idx" property="emp_idx" />
+		<result column="emp_name" property="emp_name" />
+		
+		<association column="dept_idx" property="dept" javaType="Dept" select="com.sds.cmsapp.model.emp.DeptDAO.select" />
+		<association column="role_idx" property="role" javaType="Role" select="com.sds.cmsapp.model.emp.RoleDAO.select" />
+		
+	</resultMap>
+	
+	<!-- 사원 조회 -->
+	
+
+</mapper>
