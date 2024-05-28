@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "mybatis-3-mapper.dtd">
+<mapper namespace="com.sds.cmsapp.model.document.DocumentDAO">
+
+	<select id="selectCount" resultType="int">
+		select count(*) from
+		document
+	</select>
+
+	<select id="selectAll" parameterType="java.util.Map"
+		resultType="Document">
+		select * from document limit #{startIndex} , #{rowCount}
+	</select>
+
+	<select id="select" parameterType="int"
+		resultType="Document">
+		select * from document where document_idx=#{document_idx}
+	</select>
+
+
+
+</mapper>	
