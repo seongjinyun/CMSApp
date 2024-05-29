@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "mybatis-3-mapper.dtd">
+<mapper namespace="com.sds.cmsapp.model.document.BookmarkDAO">
+	
+	<insert id="insert" parameterType="Bookmark">
+		insert into bookmark(emp_idx, document_idx)
+		values(#{emp_idx}, #{document_idx})
+	</insert>
+	
+	<delete id="delete" parameterType="Bookmark">
+		delete from bookmark
+		where emp_idx = #{emp_idx}
+		and document_idx = #{document_idx}
+	</delete>
+	
+	<delete id="deleteByBookmarkIdx" parameterType="int">
+		delete from bookmark
+		where bookmark_idx = #{bookmark_idx}
+	</delete>
+	
+	<select id="selectByEmpIdx" parameterType="int" resultType="Bookmark">
+		select * from bookmark
+		where emp_idx = #{emp_idx}
+		limit #{startIndex}, #{rowCount}
+	</select>
+	
+	<select id="selectCountByEmpIdx" parameterType="int" resultType="int">
+		select Count(*) from bookmark
+		where emp_idx = #{emp_idx}
+	</select>
+	
+	<select id="selectCountByDocument_idx" parameterType="int" resultType="int">
+		select Count(*) from bookmark
+		where document_idx = #{document_idx}
+	</select>
+	
+	<select id="inBookmark" parameterType="Bookmark" resultType="Bookmark">
+		select * from bookmark
+		where emp_idx = #{emp_idx}
+		and document_idx = #{document_idx}
+	</select>
+	
+	
+</mapper>
