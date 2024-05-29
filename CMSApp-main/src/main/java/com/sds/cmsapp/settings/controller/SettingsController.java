@@ -1,18 +1,20 @@
 package com.sds.cmsapp.settings.controller;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
 
-import com.sds.cmsapp.domain.Owner;
-import com.sds.cmsapp.model.owner.OwnerService;
+import com.sds.cmsapp.domain.Emp;
+import com.sds.cmsapp.model.emp.EmpService;
 
 @Controller
 public class SettingsController {	
 	
 	@Autowired
-	private OwnerService ownerService;
+	private EmpService empService;
 	
 	@GetMapping("/settings/general")
 	public String getGeneral() {
@@ -25,7 +27,10 @@ public class SettingsController {
 	}
 	
 	@GetMapping("/settings/access")
-	public String getAccess() {
+	public String getAccess(Model model) {
+		// 사원 이름과 index 가져오기
+		List<Emp> empList = empService.selectAllEmpName();
+		model.addAttribute("empList", empList);
 		return "settings/access";
 	}
 	
@@ -43,11 +48,4 @@ public class SettingsController {
 	public String getRole() {
 		return "settings/role";
 	}
-	
-	@PostMapping("/settings/owner/update")
-	public String regist(Owner owner) {	
-		ownerService.update(owner);
-		return "redirect:/settings/general";
-	}
-	
 }

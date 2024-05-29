@@ -6,7 +6,6 @@
 	<insert id="insert" parameterType="Emp">
 		insert into emp(emp_name, dept_idx, role_code)
 		values(#{emp_name}, #{dept.dept_idx}, #{role.role_code})
-		
 		<!-- emp_detail에 상세 정보를 insert 하기 위해 부모테이블 emp의 index 값 추출 -->
 		<selectKey keyColumn="emp_idx" keyProperty="emp_idx" resultType="int" order="AFTER">
 			select last_insert_idx() as emp_idx
@@ -17,23 +16,31 @@
 	<resultMap type="Emp" id="EmpMap">
 		<id column="emp_idx" property="emp_idx" />
 		<result column="emp_name" property="emp_name" />
-		
 		<association column="dept_idx" property="dept" javaType="Dept" select="com.sds.cmsapp.model.emp.DeptDAO.select" />
 		<association column="role_idx" property="role" javaType="Role" select="com.sds.cmsapp.model.emp.RoleDAO.select" />
-		<association column="emp_idx" property="empDetail" javaType="EmpDetail" select="com.sds.cmsapp.model.emp.empDetailDAO.selectByEmpIdx" />
-		
 	</resultMap>
 		
-	<!-- Index로 사원 조회 -->
-	<select id="selectEmpByIdx" parameterMap="EmpMap">
-		select emp_idx, emp_name, dept_idx, role_idx
-		from emp where emp_idx=#{emp_idx}
+	<!-- 사원 이름 전체 출력 -->
+	<select id="selectAllEmpName" resultType="Emp">
+		select emp_idx, emp_name from emp
+	</select>
+		
+	<!-- emp_idx가 가리키는 사원 조회 -->
+	<select id="selectByEmpIdx" parameterType="int" resultMap="EmpMap">
+		select * from emp where emp_idx=#{emp_idx}
 	</select>
 	
-	<!-- 사원 정보 변경 -->
-	<update id="update" parameterMap="EmpMap">
+	<!-- emp_idx가 가리키는 사원 정보의 변경 -->
+	<update id="update" parameterType="Emp">
 		update emp
 		set emp_name=#{emp_name}, dept_idx=#{dept.dept_idx}, role_idx=#{role.role_idx}
+		where emp_idx=#{emp_idx}		
+	</update>
+	
+	<!-- emp_idx가 가리키는 사원의 부서 변경 -->
+	<update id="updateDept" parameterType="Emp">
+		update emp
+		set dept_idx=#{dept.dept_idx}
 		where emp_idx=#{emp_idx}		
 	</update>
 	

@@ -81,7 +81,7 @@
 				    		<input type="text" id="owner_id" name="owner_id" class="form-control" placeholder="ID 입력">
 				    		<input type="password" id="owner_pw" name="owner_pw" class="form-control" placeholder="PW 입력">
 						</div>
-						<button type="button" id="change_owner_account" class="col-sm-1 btn btn-success float-right" style="height: 38px">Save Changes</button>
+						<button type="button" id="update_owner_account" class="col-sm-1 btn btn-success float-right" style="height: 38px">Save Changes</button>
 				    </div>
 				</div>
 			</form>
@@ -172,7 +172,7 @@
 </html>
 <script type="text/javascript">
 
-	function changeOwnerAccount() {
+	function updateOwnerAccount() {
 		$("#owner_account").attr({
 			action:"/settings/owner/update",
 			method:"post"
@@ -181,8 +181,8 @@
 	}
 	
 	$(function(){
-		$("#change_owner_account").click(function(){
-			changeOwnerAccount();
+		$("#update_owner_account").click(function(){
+			updateOwnerAccount();
 		});		
 	});
 	

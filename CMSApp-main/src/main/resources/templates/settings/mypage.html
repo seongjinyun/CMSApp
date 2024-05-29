@@ -173,32 +173,32 @@
 				                        </div>
 				                    </div>
 				                </div>
-				
+								
 				                <div class="tab-pane active" id="settings">
-				                    <form class="form-horizontal">
+				                    <form class="form-horizontal" id="emp_account">
 				                        <div class="form-group row">
 				                            <label for="inputName" class="col-sm-2 col-form-label">Name</label>
 				                            <div class="col-sm-10">
-				                                <input type="text" class="form-control" id="inputName" placeholder="Name">
+				                                <input type="text" class="form-control" id="emp_name" placeholder="Name">
 				                            </div>
 				                        </div>
 				                        <div class="form-group row">
 				                            <label for="inputID" class="col-sm-2 col-form-label">ID</label>
 				                            <div class="col-sm-10">
-				                                <input type="text" class="form-control" id="inputID" placeholder="ID">
+				                                <input type="text" class="form-control" id="empDetail.emp_id" placeholder="ID">
 				                            </div>
 				                        </div>
 				                        <div class="form-group row">
 				                            <label for="inputPW" class="col-sm-2 col-form-label">PW</label>
 				                            <div class="col-sm-10">
-				                                <input type="password" class="form-control" id="inputPW" placeholder="PW">
+				                                <input type="password" class="form-control" id="empDetail.emp_pw" placeholder="PW">
 				                            </div>
 				                        </div>
 				                        <div class="form-group row">
 				                            <label for="inputDepartment" class="col-sm-2 col-form-label">Department</label>
 				                            <div class="col-sm-10">
 				                                <div class="form-group">
-													<select class="select1 form-control" data-placeholder="Department" style="width: 100%;">
+													<select class="select1 form-control" id="dept.dept_name" data-placeholder="Department" style="width: 100%;">
 														<option>1팀</option>
 														<option>2팀</option>
 														<option>3팀</option>
@@ -214,7 +214,7 @@
 				                                <div class="row">
 											        <div class="col">
 											            <div class="form-group">
-											                <select class="select1 form-control" data-placeholder="역할 선택" style="width: 100%;">
+											                <select class="select1 form-control" id="role.role_name" data-placeholder="역할 선택" style="width: 100%;">
 																<option>Draft Writer</option>
 																<option>Editor</option>
 																<option>Admin</option>
@@ -233,13 +233,13 @@
 										                	 style="display: block; width: 45%; height: 45%; background-color: lightgray;  overflow: hidden;">
 										                 	<!-- 이미지 띄울 공간 -->
 										                </div>
-														<input type="file" accept="image/*" onchange="loadFile(this)" style="margin-top: 15px; display: block;">        
+														<input type="file" accept="image/*" id="empDetail.emp_profile_url" onchange="loadFile(this)" style="margin-top: 15px; display: block;">        
 					                				</div>
 					                			</div>
 						                	</div>
 							            </div>
 				                        <div class="form-group">
-			                                <input type="submit" value="Save Changes" class="btn btn-success float-right" style="height: 38px">
+			                                <button type="button" id="update_emp_account" class="btn btn-success float-right" style="height: 38px">Save Changes</button>
 				                        </div>
 				                    </form>
 				                </div>
@@ -273,3 +273,20 @@
 
 </body>
 </html>
+<script type="text/javascript">
+
+	function updateEmpAccount() {
+		$("#emp_account").attr({
+			action:"/settings/emp/update",
+			method:"post"
+		});
+		$("#emp_account").submit();
+	}
+	
+	$(function(){
+		$("#update_emp_account").click(function(){
+			updateEmpAccount();
+		});		
+	});
+	
+</script>
