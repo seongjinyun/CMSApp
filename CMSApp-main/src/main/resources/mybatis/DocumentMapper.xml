@@ -17,6 +17,14 @@
 		select * from document where document_idx=#{document_idx}
 	</select>
 
+	<insert id="insert" parameterType="VersionLog">
+<!-- 	INSERT INTO version_log(branched_version_log_idx, emp_idx, project_idx, folder_idx, document_idx, version, title, content, comments) 
+	VALUES (#{branched_version_log_idx},#{emp_idx},#{project_idx},#{folder_idx},#{document_idx},#{version}, #{title}, #{content}, #{comments});
+	 -->
+	INSERT INTO version_log(branched_version_log_idx,emp_idx,project_idx,folder_idx,document_idx,version,title,content,comments) 
+	VALUES (NULL,7,1,NULL,1,1,#{title}, #{content},'초안');
 
+	
+	</insert>
 
 </mapper>	

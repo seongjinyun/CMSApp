@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Map;
 
 import com.sds.cmsapp.domain.Document;
+import com.sds.cmsapp.domain.VersionLog;
 
 public interface DocumentService {
 
@@ -15,4 +16,7 @@ public interface DocumentService {
 	
 	// 선택 문서 조회
 	public Document select(int document_idx);
+	
+	//글 작성 폼
+	public void insert(VersionLog versionLog);
 }

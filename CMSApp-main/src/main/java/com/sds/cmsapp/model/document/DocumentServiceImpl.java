@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.sds.cmsapp.domain.Document;
+import com.sds.cmsapp.domain.VersionLog;
 
 @Service
 public class DocumentServiceImpl implements DocumentService {
@@ -30,6 +31,10 @@ public class DocumentServiceImpl implements DocumentService {
 	public Document select(int document_idx) {
 		Document document = documentDAO.select(document_idx);
 		return document;
+	}
+	
+	public void insert(VersionLog versionLog) {
+		documentDAO.insert(versionLog);
 	}
 
 }
