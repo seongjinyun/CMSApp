@@ -1,10 +1,21 @@
-package com.sds.cmsapp.controller;
+package com.sds.cmsapp.settings.controller;
 
+import java.util.List;
+
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+
+import com.sds.cmsapp.domain.Emp;
+import com.sds.cmsapp.model.emp.EmpService;
 
 @Controller
 public class SettingsController {	
+	
+	@Autowired
+	private EmpService empService;
+	
 	@GetMapping("/settings/general")
 	public String getGeneral() {
 		return "settings/general";
@@ -16,7 +27,10 @@ public class SettingsController {
 	}
 	
 	@GetMapping("/settings/access")
-	public String getAccess() {
+	public String getAccess(Model model) {
+		// 사원 이름과 index 가져오기
+		List<Emp> empList = empService.selectAllEmpName();
+		model.addAttribute("empList", empList);
 		return "settings/access";
 	}
 	

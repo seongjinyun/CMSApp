@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "mybatis-3-mapper.dtd">
+<mapper namespace="com.sds.cmsapp.model.emp.EmpDetailDAO">
+
+	<!-- emp_idx가 가리키는 사원의 상세 정보 추가 -->
+	<insert id="insert" parameterType="EmpDetail">
+		insert into emp_detail(emp_idx, emp_id, emp_pw, emp_profile_url)
+		values(#{emp.emp_idx}, #{emp_id}, #{emp_pw}, #{emp_profile_url})
+	</insert>
+	
+	<resultMap type="EmpDetail" id="EmpDetailMap">
+		<id column="emp_detail_idx" property="emp_detail_idx"/>
+		<id column="emp_id" property="emp_id"/>
+		<id column="emp_pw" property="emp_pw"/>
+		<id column="emp_profile_url" property="emp_profile_url"/>
+		<association column="emp_idx" property="emp" javaType="Emp" select="com.sds.cmsapp.model.emp.EmpDAO.selectByEmpIdx"/>
+	</resultMap>
+		
+	<!-- emp_idx가 가리키는 사원의 상세정보 가져오기  -->
+	<select id="selectByEmpIdx" parameterType="int" resultMap="EmpDetailMap">
+		select * from emp_detail where emp_idx=#{emp_idx}
+	</select>
+	
+	<!-- emp_idx가 가리키는 사원의 상세 정보 변경 -->
+	<update id="update" parameterType="EmpDetail">
+		update emp_detail
+		set emp_id=#{emp_id}, emp_pw=#{emp_pw}, emp_profile_url=#{emp_profile_url}
+		where emp_idx=#{emp.emp_idx} 
+	</update>
+	
+</mapper>

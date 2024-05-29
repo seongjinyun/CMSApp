@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "mybatis-3-mapper.dtd">
+<mapper namespace="com.sds.cmsapp.model.role.RoleDAO">
+
+	<!-- 부서 추가 -->
+	<insert id="insert" parameterType="Role">
+		insert into role(role_name)
+		values(#{role_name});
+	</insert>
+	
+	<!-- role_idx가 가리키는 부서 조회 -->
+	<select id="selectByRoleIdx" parameterType="int" resultType="Role">
+		select * from role where role_idx=#{role_idx}
+	</select>
+	
+</mapper>

@@ -22,25 +22,33 @@ repositories {
 }
 
 dependencies {
-	implementation 'org.springframework.boot:spring-boot-starter-security'
+
 	implementation 'org.springframework.boot:spring-boot-starter-thymeleaf'
 	implementation 'org.springframework.boot:spring-boot-starter-web'
-	implementation 'org.thymeleaf.extras:thymeleaf-extras-springsecurity6'
+
 	compileOnly 'org.projectlombok:lombok'
 	developmentOnly 'org.springframework.boot:spring-boot-devtools'
 	annotationProcessor 'org.projectlombok:lombok'
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
-	testImplementation 'org.springframework.security:spring-security-test'
+
 	testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
 	
-	//mysql driver 
+	/////////////////////////////////////////////////////////////////////////////////////////////////////
+	
+	// MySQL Driver
+	// https://mvnrepository.com/artifact/com.mysql/mysql-connector-j
 	implementation 'com.mysql:mysql-connector-j:8.4.0'
 	
-	//spring jdbc(스프링 부트에서 데이터 베이스 연동을 위해 사용 필수 jar)
-	implementation 'org.springframework.boot:spring-boot-starter-jdbc:3.2.4'
+	// Spring Boot Starter JDBC
+	// https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-starter-jdbc
+	implementation 'org.springframework.boot:spring-boot-starter-jdbc:3.3.0'
 	
-	//mybatis spring 버전 좀 높은거... @Mapper가 지원 
+	// mybatis Spring 버전 높은 것: @Mapper 지원을 위함
+	// https://mvnrepository.com/artifact/org.mybatis.spring.boot/mybatis-spring-boot-starter
 	implementation 'org.mybatis.spring.boot:mybatis-spring-boot-starter:3.0.3'
+	
+	/////////////////////////////////////////////////////////////////////////////////////////////////////
+	
 	
 }
 
