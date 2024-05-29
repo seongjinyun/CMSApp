@@ -29,11 +29,11 @@
 	      <div class="container-fluid">
 	        <div class="row mb-2">
 	          <div class="col-sm-6">
-	            <h1>휴지통</h1>
+	            <h1>프로젝트 목록</h1>
 	          </div>
 	          <div class="col-sm-6">
 	            <ol class="breadcrumb float-sm-right">
-	              <li class="breadcrumb-item"><a href="#">휴지통</a></li>
+	              <li class="breadcrumb-item"><a href="#">OO프로젝트</a></li>
 	            </ol>
 	          </div>
 	        </div>
@@ -48,23 +48,42 @@
 
               <div class="card-tools">
                 <div class="input-group input-group-sm">
-                <input type="text" class="form-control" id="searchFileInput" placeholder="Search File">
+                  <input type="text" class="form-control" id="searchFileInput" placeholder="Search File">
                   <div class="input-group-append">
                     <div class="btn btn-primary">
                       <i class="fas fa-search"></i>
                     </div>
                   </div>
-                
-                  <input type="button" class="btn btn-success btn-sm mr-1 ml-1" value="복원" id="restore" onclick="restore()">
-                  <input type="button" class="btn btn-danger btn-sm" value="삭제" id="delete" onclick="eliminate()">
+                  <input type="button" class="btn btn-default btn-sm" value="필터" id="filterButton">
                 </div>
                 
+                <!-- Select box hidden by default -->
+				<div id="filterOptions" style="display:none;">
+				    <label><input type="checkbox" name="option1" value="option1"> Option 1</label><br>
+				    <label><input type="checkbox" name="option2" value="option2"> Option 2</label><br>
+				    <label><input type="checkbox" name="option3" value="option3"> Option 3</label>
+				  </div>
               </div>
               <!-- /.card-tools -->
             </div>
             <!-- /.card-header -->
             <div class="card-body p-0">
-                 <div class="mailbox-controls">
+              <div class="mailbox-controls">
+                <div class="btn-group">
+                  <button type="button" class="btn btn-default btn-sm">
+                    <i class="far fa-trash-alt"></i>
+                  </button>
+                  <button type="button" class="btn btn-default btn-sm">
+                    <i class="fas fa-reply"></i>
+                  </button>
+                  <button type="button" class="btn btn-default btn-sm">
+                    <i class="fas fa-share"></i>
+                  </button>
+                </div>
+                <!-- /.btn-group -->
+                <button type="button" class="btn btn-default btn-sm">
+                  <i class="fas fa-sync-alt"></i>
+                </button>
                 <div class="float-right">
                   1-50/200
                   <div class="btn-group">
@@ -75,13 +94,15 @@
                       <i class="fas fa-chevron-right"></i>
                     </button>
                   </div>
+                  <!-- /.btn-group -->
                 </div>
                 <!-- /.float-right -->
               </div>
+              
               <div class="table-responsive mailbox-messages">
                 <table class="table table-hover table-striped">
                   <!-- 소제목 -->
-                  <tr>
+                  <tr class="subtitle">
                     <th>
                       <div class="icheck-primary">
                         <input type="checkbox" value="" id="checkall">
@@ -89,10 +110,10 @@
                       </div>
                     </th>
                     <th class="mailbox-star"><a href="#"></a></th>
-                    <th>제목</th>
-                    <th>문서 버전</th>
-                    <th>삭제된 날짜</th>
-                    <th>상태</th>
+                    <th>이름</th>
+                    <th></th>
+                    <th>업데이트 날짜</th>
+                    <th>부서 명</th>
                   </tr>
                   <!-- ./소제목 -->
                   <tbody>
@@ -104,10 +125,10 @@
                       </div>
                     </td>
                     <td class="mailbox-star"><a href="#"><i class="fa fa-star-o" aria-hidden="true"></i></a></td>
-                    <td class="mailbox-subject"><a href="/document">튜토리얼</a></td>
-                    <td class="mailbox-name">v2.1</td>
+                    <td class="mailbox-subject"><a href="/document/folder_list">A프로젝트</a></td>
+                    <td class="mailbox-name"></td>
                     <td class="mailbox-date">2024.05.23 16:44</td>
-                    <td class="mailbox-attachment">리뷰 중</td>
+                    <td class="mailbox-attachment">AA부서</td>
                   </tr>
                   <tr>
                     <td>
@@ -117,10 +138,10 @@
                       </div>
                     </td>
                     <td class="mailbox-star"><a href="#"><i class="fas fa-star-o text-warning"></i></a></td>
-                    <td class="mailbox-subject"><a href="/document">튜토리얼</a></td>
-                    <td class="mailbox-name">v1.1</td>
+                    <td class="mailbox-subject"><a href="/document/folder_list">B프로젝트</a></td>
+                    <td class="mailbox-name"></td>
                     <td class="mailbox-date">2024.05.21 16:44</td>
-                    <td class="mailbox-attachment">배포</td>
+                    <td class="mailbox-attachment">OO부서</td>
                   </tr>
                  </tbody>
                 </table>
@@ -154,41 +175,36 @@
 <script>
 $(function(){
 	checkBoxAll();
+	filterFile();
 	searchFile();
   });
   
   function checkBoxAll(){
-	  $("#checkall").click(function(){
-	      if($("#checkall").prop("checked")) {
-	        $("input[type=checkbox]").prop("checked",true);
-	      } else {
-	        $("input[type=checkbox]").prop("checked",false);
-	      }
-	    });
+	$("#checkall").click(function(){
+	     if($("#checkall").prop("checked")) {
+	     $("input[type=checkbox]").prop("checked",true);
+	     } else {
+	     $("input[type=checkbox]").prop("checked",false);
+	   }
+	 });
+  }
+  
+  
+  function filterFile(){
+	 $('#filterButton').click(function(){
+		$('#filterOptions').toggle();
+	});
   }
   
   function searchFile(){
-		 $('#searchFileInput').on('keyup', function(){
-			   var value = $(this).val().toLowerCase();
-			   $("tbody tr").filter(function() {
-			  	 $(this).toggle($(this).find(".mailbox-subject").text().toLowerCase().indexOf(value) > -1)
+	  $('#searchFileInput').on('keyup', function(){
+			 var value = $(this).val().toLowerCase();
+			 $("tbody tr:not(.subtitle)").filter(function() {
+			 	$(this).toggle($(this).find(".mailbox-subject").text().toLowerCase().indexOf(value) > -1)
 			});
 		});
-	  }
-  function restore(){
-	  if(confirm("선택된 문서를 복원하시겠습니까?")){
-		  let msg;
-		  Math.random > 0.5 ? msg = "복원 완료" : msg = "복원 실패";
-		  alert(msg);
-	  }
   }
-  
-  function eliminate(){
-	  if(confirm("선택된 문서를 영구삭제하시겠습니까?")){
-		  alert("삭제완료");
-	  }
-  }
-  
+
   </script>
 </body>
 </html>

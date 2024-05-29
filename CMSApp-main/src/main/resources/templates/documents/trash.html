@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="zxx" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>AdminLTE 3 | Dashboard</title>
+
+	<th:block th:replace="~{fragments/header_link :: header_link}"/>
+	
+</head>
+<body class="hold-transition sidebar-mini layout-fixed">
+<div class="wrapper">
+
+	<!-- Preloader -->
+	<th:block th:replace="~{fragments/preloader :: preloader}"/>
+	
+  <!-- Navbar -->
+	<th:block th:replace="~{fragments/navi :: navi}"/>
+  <!-- /.navbar -->
+
+  <!-- Main Sidebar Container -->
+	<th:block th:replace="~{fragments/sidebar :: sidebar}"/>
+  
+  <!-- /.sidebar -->
+
+  <!-- Content Wrapper. Contains page content -->
+  <div class="content-wrapper">
+	  <section class="content-header">
+	      <div class="container-fluid">
+	        <div class="row mb-2">
+	          <div class="col-sm-6">
+	            <h1>휴지통</h1>
+	          </div>
+	          <div class="col-sm-6">
+	            <ol class="breadcrumb float-sm-right">
+	              <li class="breadcrumb-item"><a href="#">휴지통</a></li>
+	            </ol>
+	          </div>
+	        </div>
+	      </div><!-- /.container-fluid -->
+	    </section>
+	  <section class="content">
+      <div class="row">
+        <div class="col-md-12">
+          <div class="card card-primary card-outline">
+            <div class="card-header">
+              <h3 class="card-title"></h3>
+
+              <div class="card-tools">
+                <div class="input-group input-group-sm">
+                <input type="text" class="form-control" id="searchFileInput" placeholder="Search File">
+                  <div class="input-group-append">
+                    <div class="btn btn-primary">
+                      <i class="fas fa-search"></i>
+                    </div>
+                  </div>
+                
+                  <input type="button" class="btn btn-success btn-sm mr-1 ml-1" value="복원" id="restore" onclick="restore()">
+                  <input type="button" class="btn btn-danger btn-sm" value="삭제" id="delete" onclick="eliminate()">
+                </div>
+                
+              </div>
+              <!-- /.card-tools -->
+            </div>
+            <!-- /.card-header -->
+            <div class="card-body p-0">
+                 <div class="mailbox-controls">
+                <div class="float-right">
+                  1-50/200
+                  <div class="btn-group">
+                    <button type="button" class="btn btn-default btn-sm">
+                      <i class="fas fa-chevron-left"></i>
+                    </button>
+                    <button type="button" class="btn btn-default btn-sm">
+                      <i class="fas fa-chevron-right"></i>
+                    </button>
+                  </div>
+                </div>
+                <!-- /.float-right -->
+              </div>
+              <div class="table-responsive mailbox-messages">
+                <table class="table table-hover table-striped">
+                  <!-- 소제목 -->
+                  <tr>
+                    <th>
+                      <div class="icheck-primary">
+                        <input type="checkbox" value="" id="checkall">
+                        <label for="checkall"></label>
+                      </div>
+                    </th>
+                    <th class="mailbox-star"><a href="#"></a></th>
+                    <th>제목</th>
+                    <th>문서 버전</th>
+                    <th>삭제된 날짜</th>
+                    <th>상태</th>
+                  </tr>
+                  <!-- ./소제목 -->
+                  <tbody>
+                  <tr>
+                    <td>
+                      <div class="icheck-primary">
+                        <input type="checkbox" value="" id="check1">
+                        <label for="check1"></label>
+                      </div>
+                    </td>
+                    <td class="mailbox-star"><a href="#"><i class="fa fa-star-o" aria-hidden="true"></i></a></td>
+                    <td class="mailbox-subject"><a href="/document/detail">튜토리얼</a></td>
+                    <td class="mailbox-name">v2.1</td>
+                    <td class="mailbox-date">2024.05.23 16:44</td>
+                    <td class="mailbox-attachment">리뷰 중</td>
+                  </tr>
+                  <tr>
+                    <td>
+                      <div class="icheck-primary">
+                        <input type="checkbox" value="" id="check2">
+                        <label for="check2"></label>
+                      </div>
+                    </td>
+                    <td class="mailbox-star"><a href="#"><i class="fas fa-star-o text-warning"></i></a></td>
+                    <td class="mailbox-subject"><a href="/document/detail">튜토리얼</a></td>
+                    <td class="mailbox-name">v1.1</td>
+                    <td class="mailbox-date">2024.05.21 16:44</td>
+                    <td class="mailbox-attachment">배포</td>
+                  </tr>
+                 </tbody>
+                </table>
+                <!-- /.table -->
+              </div>
+              <!-- /.mail-box-messages -->
+            </div>
+            <!-- /.card-body -->
+           </div>
+          <!-- /.card -->
+        </div>
+        <!-- /.col -->
+      </div>
+      <!-- /.row -->
+    </section>
+  </div>
+  <!-- /.content-wrapper -->
+  
+	<th:block th:replace="~{fragments/footer :: footer}"/>
+
+  <!-- Control Sidebar -->
+  <aside class="control-sidebar control-sidebar-dark">
+    <!-- Control sidebar content goes here -->
+  </aside>
+  <!-- /.control-sidebar -->
+</div>
+<!-- ./wrapper -->
+	
+	<th:block th:replace="~{fragments/footer_link :: footer_link}"/>
+
+<script>
+$(function(){
+	checkBoxAll();
+	searchFile();
+  });
+  
+  function checkBoxAll(){
+	  $("#checkall").click(function(){
+	      if($("#checkall").prop("checked")) {
+	        $("input[type=checkbox]").prop("checked",true);
+	      } else {
+	        $("input[type=checkbox]").prop("checked",false);
+	      }
+	    });
+  }
+  
+  function searchFile(){
+		 $('#searchFileInput').on('keyup', function(){
+			   var value = $(this).val().toLowerCase();
+			   $("tbody tr").filter(function() {
+			  	 $(this).toggle($(this).find(".mailbox-subject").text().toLowerCase().indexOf(value) > -1)
+			});
+		});
+	  }
+  function restore(){
+	  if(confirm("선택된 문서를 복원하시겠습니까?")){
+		  let msg;
+		  Math.random > 0.5 ? msg = "복원 완료" : msg = "복원 실패";
+		  alert(msg);
+	  }
+  }
+  
+  function eliminate(){
+	  if(confirm("선택된 문서를 영구삭제하시겠습니까?")){
+		  alert("삭제완료");
+	  }
+  }
+  
+  </script>
+</body>
+</html>
