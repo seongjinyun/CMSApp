@@ -4,9 +4,17 @@
 
 	<!-- 부서 추가 -->
 	<insert id="insert" parameterType="Dept">
-		insert into dept(dept_name)
-		values(#{dept_name});
+	    insert into dept(dept_name)
+	    values(#{dept_name});
+	    <selectKey keyColumn="dept_idx" keyProperty="dept_idx" resultType="int" order="AFTER">
+	        select last_insert_id() as dept_idx
+	    </selectKey>
 	</insert>
+	
+	<!-- 부서 이름 전체 출력 -->
+	<select id="selectAllDeptName" resultType="Dept">
+		select dept_idx, dept_name from dept
+	</select>
 	
 	<!-- dept_idx가 가리키는 부서 조회 -->
 	<select id="selectByDeptIdx" parameterType="int" resultType="Dept">
