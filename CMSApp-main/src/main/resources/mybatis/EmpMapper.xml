@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "mybatis-3-mapper.dtd">
+<mapper namespace="com.sds.cmsapp.model.emp.EmpDAO">
+
+	<!-- 사원 추가 -->
+	<insert id="insert" parameterType="Emp">
+		insert into emp(emp_name, dept_idx, role_code)
+		values(#{emp_name}, #{dept.dept_idx}, #{role.role_code})
+		<!-- emp_detail에 상세 정보를 insert 하기 위해 부모테이블 emp의 index 값 추출 -->
+		<selectKey keyColumn="emp_idx" keyProperty="emp_idx" resultType="int" order="AFTER">
+			select last_insert_idx() as emp_idx
+		</selectKey>
+	</insert>
+	
+	<!-- Mybatis 객체 간 Association -->
+	<resultMap type="Emp" id="EmpMap">
+		<id column="emp_idx" property="emp_idx" />
+		<result column="emp_name" property="emp_name" />
+		<association column="dept_idx" property="dept" javaType="Dept" select="com.sds.cmsapp.model.emp.DeptDAO.select" />
+		<association column="role_idx" property="role" javaType="Role" select="com.sds.cmsapp.model.emp.RoleDAO.select" />
+	</resultMap>
+		
+	<!-- 사원 이름 전체 출력 -->
+	<select id="selectAllEmpName" resultType="Emp">
+		select emp_idx, emp_name from emp
+	</select>
+		
+	<!-- emp_idx가 가리키는 사원 조회 -->
+	<select id="selectByEmpIdx" parameterType="int" resultMap="EmpMap">
+		select * from emp where emp_idx=#{emp_idx}
+	</select>
+	
+	<!-- emp_idx가 가리키는 사원 정보의 변경 -->
+	<update id="update" parameterType="Emp">
+		update emp
+		set emp_name=#{emp_name}, dept_idx=#{dept.dept_idx}, role_idx=#{role.role_idx}
+		where emp_idx=#{emp_idx}		
+	</update>
+	
+	<!-- emp_idx가 가리키는 사원의 부서 변경 -->
+	<update id="updateDept" parameterType="Emp">
+		update emp
+		set dept_idx=#{dept.dept_idx}
+		where emp_idx=#{emp_idx}		
+	</update>
+	
+</mapper>
