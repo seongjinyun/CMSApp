@@ -7,6 +7,12 @@
 <title>AdminLTE 3 | Dashboard</title>
 
 <th:block th:replace="~{fragments/header_link :: header_link}" />
+<link rel="stylesheet"
+	href="/admin/plugins/datatables-bs4/css/dataTables.bootstrap4.min.css">
+<link rel="stylesheet"
+	href="/admin/plugins/datatables-responsive/css/responsive.bootstrap4.min.css">
+<link rel="stylesheet"
+	href="/admin/plugins/datatables-buttons/css/buttons.bootstrap4.min.css">
 
 <style>
 a.show_list {
@@ -72,11 +78,11 @@ a.show_list {
 						</div>
 					</div>
 					<!-- Nav Tabs End -->
+
 					<!-- Tab panes -->
 					<div class="tab-content mt-3">
 						<!-- Tab -->
-						<div class="tab-pane container-fluid active" id="summary">
-
+						<div class="tab-pane container-fluid active" id="summary">						
 							<div class="row">
 								<div class="col-md-12">
 									<!-- Card -->
@@ -102,6 +108,7 @@ a.show_list {
 										</div>
 										<!-- card-header end -->
 										<div class="card-body">
+
 											<!-- row -->
 											<div class="row">
 												<!-- col -->
@@ -289,8 +296,10 @@ a.show_list {
 								<!-- Col End -->
 							</div>
 							<!-- Row End -->
+
 						</div>
 						<!-- Tab End -->
+
 
 						<!-- Tab -->
 						<div class="tab-pane container-fluid fade" id="publish-list">
@@ -302,7 +311,7 @@ a.show_list {
 									<div class="card">
 										<div class="card-header">
 											<h3 class="card-title">필터</h3>
-																						<div class="card-tools">
+											<div class="card-tools">
 												<button class="btn btn-primary">조회하기</button>
 
 											</div>
@@ -373,6 +382,81 @@ a.show_list {
 										</div>
 									</div>
 									<!-- Card End -->
+
+									<div class="card">
+										<div class="card-header">
+											<h3 class="card-title">배포 목록</h3>
+											<div class="card-tools">
+												<button class="btn btn-primary">배포하기</button>
+											</div>
+										</div>
+
+										<div class="card-body">
+											<div id="publish-table_wrapper"
+												class="dataTables_wrapper dt-bootstrap4">
+
+												<div class="row">
+													<div class="col-sm-12">
+														<table id="publish_table"
+															class="table table-hover table-bordered dataTable dtr-inline">
+															<thead>
+																<tr>
+																	<th>선택</th>
+																	<th>No.</th>
+																	<th>제목</th>
+																	<th>버전</th>
+																	<th>검토자</th>
+																	<th>배포자</th>
+																	<th>결재 상태</th>
+																	<th>코멘트</th>
+																	<th>배포일자</th>
+
+																</tr>
+															</thead>
+															<tbody>
+																<tr class="odd">
+																	<td><input type="checkbox"></td>
+																	<td>1</td>
+																	<td>캐릭터 소개</td>
+																	<td>3</td>
+																	<td>장원영</td>
+																	<td>박진영</td>
+																	<td>published</td>
+																	<td>코멘트</td>
+																	<td>2024/03/01</td>
+																</tr>
+																<tr class="odd">
+																	<td><input type="checkbox"></td>
+																	<td class="dtr-control sorting_1">1</td>
+																	<td>맵 소개</td>
+																	<td>3</td>
+																	<td>안유진</td>
+																	<td>박진영</td>
+																	<td>in review</td>
+																	<td>코멘트</td>
+																	<td>2024/03/02</td>
+																</tr>
+																<tr class="odd">
+																	<td><input type="checkbox"></td>
+																	<td class="dtr-control sorting_1">1</td>
+																	<td>캐릭터 소개</td>
+																	<td>3</td>
+																	<td>장원영</td>
+																	<td>이수만</td>
+																	<td>published</td>
+																	<td>코멘트</td>
+																	<td>2024/04/02</td>
+																</tr>
+
+															</tbody>
+														</table>
+													</div>
+												</div>
+
+											</div>
+										</div>
+
+									</div>
 
 								</div>
 							</div>
@@ -438,448 +522,17 @@ a.show_list {
 
 								</div>
 							</div>
-							
-							
-							<div class="row">
-								<div class="col-lg-12">
-									<!-- Card -->
-									<div class="card mt-3">
-										<div class="card-header border-transparent">
-											<h3 class="card-title">예) 배포 목록 (위에서 '버튼' 클릭 시 비동기
-												통신으로 목록이 조회되는 영역)</h3>
-											<div class="card-tools">
-												<button class="btn btn-primary">배포하기</button>
 
-											</div>
-										</div>
-										<div class="card-body p-0">
-											<div class="table-responsive">
-											
-												<table id="example1"
-										class="table table-hover table-bordered table-striped dataTable dtr-inline"
-										aria-describedby="example1_info">
-										<thead>
-											<tr>
-												<th>선택</th>
-												<th>No.</th>
-												<th class="sorting sorting_asc" tabindex="0"
-													aria-controls="example1" rowspan="1" colspan="1"
-													aria-label="Browser: activate to sort column descending"
-													aria-sort="ascending">제목</th>
-												<th class="sorting" tabindex="0" aria-controls="example1"
-													rowspan="1" colspan="1"
-													aria-label="Platform(s): activate to sort column ascending"
-													style="">버전</th>
-												<th class="sorting" tabindex="0" aria-controls="example1"
-													rowspan="1" colspan="1"
-													aria-label="Engine version: activate to sort column ascending">
-													배포 사원</th>
-												<th class="sorting" tabindex="0" aria-controls="example1"
-													rowspan="1" colspan="1"
-													aria-label="CSS grade: activate to sort column ascending">
-													검토 사원</th>
-												<th class="sorting" tabindex="0" aria-controls="example1"
-													rowspan="1" colspan="1"
-													aria-label="CSS grade: activate to sort column ascending">
-													결재 상태</th>
-												<th class="sorting" tabindex="0" aria-controls="example1"
-													rowspan="1" colspan="1"
-													aria-label="CSS grade: activate to sort column ascending">
-													코멘트</th>
-												<th class="sorting" tabindex="0" aria-controls="example1"
-													rowspan="1" colspan="1"
-													aria-label="CSS grade: activate to sort column ascending">
-													배포일자</th>
-											</tr>
-										</thead>
-										<tbody>
-											<tr>
-												<td><input type="checkbox"></td>
-												<td>1</td>
-												<td class="dtr-control sorting_1"><a href="#">제목 없음</a></td>
-												<td>5</td>
-												<td>박진영</td>
-												<td>장원영</td>
-												<td><span class="badge badge-success">최종 배포</span></td>
-												<td><a href="#" title="" data-toggle="popover"
-													data-trigger="hover" data-content="오타가 있어 수정했습니다."> <span
-														class="info-box-icon"> <i class="fas fa-comments"></i>
-													</span>
-												</a></td>
-												<td>2024-05-20 14:00</td>
-											</tr>
-											<tr>
-												<td><input type="checkbox"></td>
-												<td>1</td>
-												<td class="dtr-control sorting_1"><a href="#">제목 없음</a></td>
-												<td>5</td>
-												<td>박진영</td>
-												<td>장원영</td>
-												<td><span class="badge badge-success">최종 배포</span></td>
-												<td><span class="info-box-icon"><i
-														class="fas fa-comments"></i></span></td>
-												<td>2024-05-20 14:00</td>
-											</tr>
-											<tr>
-												<td><input type="checkbox"></td>
-												<td>1</td>
-												<td class="dtr-control sorting_1"><a href="#">제목 없음</a></td>
-												<td>5</td>
-												<td>박진영</td>
-												<td>장원영</td>
-												<td><span class="badge badge-success">최종 배포</span></td>
-												<td><span class="info-box-icon"><i
-														class="fas fa-comments"></i></span></td>
-												<td>2024-05-20 14:00</td>
-											</tr>
-										</tbody>
 
-									</table>
-											</div>
-										</div>
-									</div>
-								
-									
-								</div>
-							</div>
-							
-							
-							<div class="row">
-								<div class="col-sm-12 col-md-5">
-									<div class="dataTables_info" id="example1_info" role="status"
-										aria-live="polite">Showing 1 to 10 of 57 entries</div>
-								</div>
-								<div class="col-sm-12 col-md-7">
-									<div class="dataTables_paginate paging_simple_numbers"
-										id="example1_paginate">
-										<ul class="pagination">
-											<li class="paginate_button page-item previous disabled"
-												id="example1_previous"><a href="#"
-												aria-controls="example1" data-dt-idx="0" tabindex="0"
-												class="page-link">Previous</a></li>
-											<li class="paginate_button page-item active"><a href="#"
-												aria-controls="example1" data-dt-idx="1" tabindex="0"
-												class="page-link">1</a></li>
-											<li class="paginate_button page-item "><a href="#"
-												aria-controls="example1" data-dt-idx="2" tabindex="0"
-												class="page-link">2</a></li>
-											<li class="paginate_button page-item "><a href="#"
-												aria-controls="example1" data-dt-idx="3" tabindex="0"
-												class="page-link">3</a></li>
-											<li class="paginate_button page-item "><a href="#"
-												aria-controls="example1" data-dt-idx="4" tabindex="0"
-												class="page-link">4</a></li>
-											<li class="paginate_button page-item "><a href="#"
-												aria-controls="example1" data-dt-idx="5" tabindex="0"
-												class="page-link">5</a></li>
-											<li class="paginate_button page-item "><a href="#"
-												aria-controls="example1" data-dt-idx="6" tabindex="0"
-												class="page-link">6</a></li>
-											<li class="paginate_button page-item next" id="example1_next"><a
-												href="#" aria-controls="example1" data-dt-idx="7"
-												tabindex="0" class="page-link">Next</a></li>
-										</ul>
-									</div>
-								</div>
-							</div>
+
 						</div>
 						<!-- Tab End -->
 
-						
+
 						<!-- Tab -->
 						<div class="tab-pane container-fluid fade" id="review-list">
-							<!-- Row -->
-							<div class="row">
-								<div class="col-md-12">
-
-									<!-- Card -->
-									<div class="card">
-										<div class="card-header">
-											<h3 class="card-title">필터</h3>
-																						<div class="card-tools">
-												<button class="btn btn-primary">조회하기</button>
-
-											</div>
-										</div>
-										<div class="card-body">
-
-											<div class="row">
-												<div class="col-sm-4">조건 1</div>
-												<div class="col-sm-8">
-													<div class="form-group mb-0">
-														<div class="input-group">
-															<button type="button" class="btn btn-default float-right"
-																id="daterange-btn2">
-																<i class="far fa-calendar-alt"></i> 날짜 선택: <i
-																	class="fas fa-caret-down"></i>
-															</button>
-														</div>
-													</div>
-												</div>
-											</div>
-
-											<div class="row">
-												<div class="col-sm-4">조건 2</div>
-
-												<div class="col-sm-4">
-													<div class="form-group clearfix">
-														<div class="icheck-primary d-inline">
-															<input type="radio" id="radioPrimary1" name="r1"
-																checked=""> <label for="radioPrimary1">나의
-																활동만 보기 </label>
-														</div>
-													</div>
-												</div>
-												<div class="col-sm-4">
-													<div class="form-group clearfix">
-														<div class="icheck-primary d-inline">
-															<input type="radio" id="radioPrimary1" name="r1"
-																checked=""> <label for="radioPrimary1">나의
-																부서 활동 전체 보기 </label>
-														</div>
-													</div>
-												</div>
-											</div>
-
-											<div class="row">
-												<div class="col-sm-4">조건 3</div>
-
-												<div class="col-sm-4">
-													<div class="form-group clearfix">
-														<div class="icheck-primary d-inline">
-															<input type="radio" id="radioPrimary2" name="r2"
-																checked=""> <label for="radioPrimary2">리뷰
-																대기 문서 </label>
-														</div>
-													</div>
-												</div>
-												<div class="col-sm-4">
-													<div class="form-group clearfix">
-														<div class="icheck-primary d-inline">
-															<input type="radio" id="radioPrimary2" name="r2"
-																checked=""> <label for="radioPrimary2">리뷰
-																완료 문서 </label>
-														</div>
-													</div>
-												</div>
-											</div>
-
-										</div>
-									</div>
-									<!-- Card End -->
-
-								</div>
-							</div>
-							<!-- Row End -->
-
-							<div class="row">
-								<div class="col-md-12">
-									<div class="card">
-										<div class="card-header">시각화 보드</div>
-										<div class="card-body">
-											<div class="row">
-												<div class="col-md-6">
-													<div class="card card-row card-secondary">
-														<div class="card-header">
-															<h3 class="card-title">리뷰 대기</h3>
-														</div>
-														<div class="card-body">
-
-															<div class="card card-light card-outline">
-																<div class="card-header">
-																	<h5 class="card-title">캐릭터 소개 (1)</h5>
-																	<div class="card-tools">
-																		<a href="#" class="btn btn-tool btn-link">#7</a> <a
-																			href="#" class="btn btn-tool"> <i
-																			class="fas fa-pen"></i>
-																		</a>
-																	</div>
-																</div>
-															</div>
-														</div>
-													</div>
-													<!-- card end -->
-												</div>
-
-												<div class="col-md-6">
-													<div class="card card-row card-info">
-														<div class="card-header">
-															<h3 class="card-title">리뷰 완료</h3>
-														</div>
-														<div class="card-body">
-
-															<div class="card card-light card-outline">
-																<div class="card-header">
-																	<h5 class="card-title">오류 해결 (1)</h5>
-																	<div class="card-tools">
-																		<a href="#" class="btn btn-tool btn-link">#7</a> <a
-																			href="#" class="btn btn-tool"> <i
-																			class="fas fa-pen"></i>
-																		</a>
-																	</div>
-																</div>
-															</div>
-														</div>
-													</div>
-													<!-- card end -->
-												</div>
-
-											</div>
-
-										</div>
-
-									</div>
-
-								</div>
-							</div>
-							
-							
-							<div class="row">
-								<div class="col-lg-12">
-									<!-- Card -->
-									<div class="card mt-3">
-										<div class="card-header border-transparent">
-											<h3 class="card-title">예) 리뷰 목록 (위에서 '버튼' 클릭 시 비동기
-												통신으로 목록이 조회되는 영역)</h3>
-											<div class="card-tools">
-												<button class="btn btn-primary">배포하기</button>
-
-											</div>
-										</div>
-										<div class="card-body p-0">
-											<div class="table-responsive">
-											
-												<table id="example1"
-										class="table table-hover table-bordered table-striped dataTable dtr-inline"
-										aria-describedby="example1_info">
-										<thead>
-											<tr>
-												<th>선택</th>
-												<th>No.</th>
-												<th class="sorting sorting_asc" tabindex="0"
-													aria-controls="example1" rowspan="1" colspan="1"
-													aria-label="Browser: activate to sort column descending"
-													aria-sort="ascending">제목</th>
-												<th class="sorting" tabindex="0" aria-controls="example1"
-													rowspan="1" colspan="1"
-													aria-label="Platform(s): activate to sort column ascending"
-													style="">버전</th>
-												<th class="sorting" tabindex="0" aria-controls="example1"
-													rowspan="1" colspan="1"
-													aria-label="Engine version: activate to sort column ascending">
-													배포 사원</th>
-												<th class="sorting" tabindex="0" aria-controls="example1"
-													rowspan="1" colspan="1"
-													aria-label="CSS grade: activate to sort column ascending">
-													검토 사원</th>
-												<th class="sorting" tabindex="0" aria-controls="example1"
-													rowspan="1" colspan="1"
-													aria-label="CSS grade: activate to sort column ascending">
-													결재 상태</th>
-												<th class="sorting" tabindex="0" aria-controls="example1"
-													rowspan="1" colspan="1"
-													aria-label="CSS grade: activate to sort column ascending">
-													코멘트</th>
-												<th class="sorting" tabindex="0" aria-controls="example1"
-													rowspan="1" colspan="1"
-													aria-label="CSS grade: activate to sort column ascending">
-													배포일자</th>
-											</tr>
-										</thead>
-										<tbody>
-											<tr>
-												<td><input type="checkbox"></td>
-												<td>1</td>
-												<td class="dtr-control sorting_1"><a href="#">제목 없음</a></td>
-												<td>5</td>
-												<td>박진영</td>
-												<td>장원영</td>
-												<td><span class="badge badge-success">최종 배포</span></td>
-												<td><a href="#" title="" data-toggle="popover"
-													data-trigger="hover" data-content="오타가 있어 수정했습니다."> <span
-														class="info-box-icon"> <i class="fas fa-comments"></i>
-													</span>
-												</a></td>
-												<td>2024-05-20 14:00</td>
-											</tr>
-											<tr>
-												<td><input type="checkbox"></td>
-												<td>1</td>
-												<td class="dtr-control sorting_1"><a href="#">제목 없음</a></td>
-												<td>5</td>
-												<td>박진영</td>
-												<td>장원영</td>
-												<td><span class="badge badge-success">최종 배포</span></td>
-												<td><span class="info-box-icon"><i
-														class="fas fa-comments"></i></span></td>
-												<td>2024-05-20 14:00</td>
-											</tr>
-											<tr>
-												<td><input type="checkbox"></td>
-												<td>1</td>
-												<td class="dtr-control sorting_1"><a href="#">제목 없음</a></td>
-												<td>5</td>
-												<td>박진영</td>
-												<td>장원영</td>
-												<td><span class="badge badge-success">최종 배포</span></td>
-												<td><span class="info-box-icon"><i
-														class="fas fa-comments"></i></span></td>
-												<td>2024-05-20 14:00</td>
-											</tr>
-										</tbody>
-
-									</table>
-											</div>
-										</div>
-									</div>
-								
-									
-								</div>
-							</div>
-							
-							
-							<div class="row">
-								<div class="col-sm-12 col-md-5">
-									<div class="dataTables_info" id="example1_info" role="status"
-										aria-live="polite">Showing 1 to 10 of 57 entries</div>
-								</div>
-								<div class="col-sm-12 col-md-7">
-									<div class="dataTables_paginate paging_simple_numbers"
-										id="example1_paginate">
-										<ul class="pagination">
-											<li class="paginate_button page-item previous disabled"
-												id="example1_previous"><a href="#"
-												aria-controls="example1" data-dt-idx="0" tabindex="0"
-												class="page-link">Previous</a></li>
-											<li class="paginate_button page-item active"><a href="#"
-												aria-controls="example1" data-dt-idx="1" tabindex="0"
-												class="page-link">1</a></li>
-											<li class="paginate_button page-item "><a href="#"
-												aria-controls="example1" data-dt-idx="2" tabindex="0"
-												class="page-link">2</a></li>
-											<li class="paginate_button page-item "><a href="#"
-												aria-controls="example1" data-dt-idx="3" tabindex="0"
-												class="page-link">3</a></li>
-											<li class="paginate_button page-item "><a href="#"
-												aria-controls="example1" data-dt-idx="4" tabindex="0"
-												class="page-link">4</a></li>
-											<li class="paginate_button page-item "><a href="#"
-												aria-controls="example1" data-dt-idx="5" tabindex="0"
-												class="page-link">5</a></li>
-											<li class="paginate_button page-item "><a href="#"
-												aria-controls="example1" data-dt-idx="6" tabindex="0"
-												class="page-link">6</a></li>
-											<li class="paginate_button page-item next" id="example1_next"><a
-												href="#" aria-controls="example1" data-dt-idx="7"
-												tabindex="0" class="page-link">Next</a></li>
-										</ul>
-									</div>
-								</div>
-							</div>
 						</div>
 						<!-- Tab End -->
-						
-
 					</div>
 					<!-- Tab panes End -->
 				</div>
@@ -900,86 +553,101 @@ a.show_list {
 	<!-- ./wrapper -->
 
 	<th:block th:replace="~{fragments/footer_link :: footer_link}" />
+
+	<!-- data-table js 파일 -->
+	<script src="/admin/plugins/datatables/jquery.dataTables.min.js"></script>
+	<script
+		src="/admin/plugins/datatables-bs4/js/dataTables.bootstrap4.min.js"></script>
+	<script
+		src="/admin/plugins/datatables-responsive/js/dataTables.responsive.min.js"></script>
+	<script
+		src="/admin/plugins/datatables-responsive/js/responsive.bootstrap4.min.js"></script>
+	<script
+		src="/admin/plugins/datatables-buttons/js/dataTables.buttons.min.js"></script>
+	<script
+		src="/admin/plugins/datatables-buttons/js/buttons.bootstrap4.min.js"></script>
+	<script src="/admin/plugins/jszip/jszip.min.js"></script>
+	<script src="/admin/plugins/pdfmake/pdfmake.min.js"></script>
+	<script src="/admin/plugins/pdfmake/vfs_fonts.js"></script>
+	<script src="/admin/plugins/datatables-buttons/js/buttons.html5.min.js"></script>
+	<script src="/admin/plugins/datatables-buttons/js/buttons.print.min.js"></script>
+	<script
+		src="/admin/plugins/datatables-buttons/js/buttons.colVis.min.js"></script>
+
+
+
+
 	<script>
-        $(function () {
+		$(function() {
 
-        	// 코멘트 툴팁 보기
-            $('[data-toggle="popover"]').popover();
+			$("#publish_table").DataTable({
 
-        	// 날짜 선택: 디폴트로 "오늘" 표시
-        	$('#daterange-btn span').html("오늘");
-        	
-            // 요약 탭 - Date range button
-            $('#daterange-btn')
-                .daterangepicker(
-                    {
-                        // 초기화
-                        startDate: moment(),
-                        endDate: moment(),
+				ordering: true,
+				serverSide: false
+			});
 
-                        // 라벨 설정
-                        ranges: {
-                            '오늘': [moment(), moment()],
-                            '어제': [moment().subtract(1, 'days'),
-                            moment().subtract(1, 'days')],
-                            '지난 7일': [moment().subtract(6, 'days'),
-                            moment()],
-                            '지난 30일': [moment().subtract(29, 'days'),
-                            moment()]
-                        },
+			
+			
+			
 
-                        // [취소], [적용] 버튼 없음
-                        autoApply: true
-                    },
-                    function (start, end) {
-                    	if (this.chosenLabel == "오늘") {
-                    		$('#daterange-btn span').html("오늘");
-                    	} else if (this.chosenLabel == "어제") {
-                    		$('#daterange-btn span').html("어제");
-                    	} else {
-	                        $('#daterange-btn span').html(
-	                        		start.format('YYYY/MM/DD') + ' - '
-	                                + end.format('YYYY/MM/DD')
-	                        );
-                    	}
+			// 코멘트 툴팁 보기
+			$('[data-toggle="popover"]').popover();
 
-                        $.ajax({
-                            type: 'GET',
-                            url: '/test/daterange',
-                            data: {
-                                startDate: start.format('YYYY/MM/DD'),
-                                endDate: end.format('YYYY/MM/DD')
-                            },
-                            success: function (result, status, xhr) {
-                                alert("성공");
-                            },
-                            error: function (xhr, status, err) {
-                                alert("실패");
-                            }
+			// 날짜 선택: 디폴트로 "오늘" 표시
+			$('#daterange-btn span').html("오늘");
 
-                        });
-                    });
-            
-          
-          			// 검색 기능
-                    $("#example1").DataTable({
-                        "responsive": true, "lengthChange": false, "autoWidth": false,
-                        "buttons": ["copy", "csv", "excel", "pdf", "print", "colvis"]
-                    }).buttons().container().appendTo('#example1_wrapper .col-md-6:eq(0)');
-                
-                    $('#example2').DataTable({
-                        "paging": true,
-                        "lengthChange": false,
-                        "searching": false,
-                        "ordering": true,
-                        "info": true,
-                        "autoWidth": false,
-                        "responsive": true,
-                    });
+			// 요약 탭 - Date range button
+			$('#daterange-btn')
+					.daterangepicker(
+							{
+								// 초기화
+								startDate : moment(),
+								endDate : moment(),
 
+								// 라벨 설정
+								ranges : {
+									'오늘' : [ moment(), moment() ],
+									'어제' : [ moment().subtract(1, 'days'),
+											moment().subtract(1, 'days') ],
+									'지난 7일' : [ moment().subtract(6, 'days'),
+											moment() ],
+									'지난 30일' : [ moment().subtract(29, 'days'),
+											moment() ]
+								},
 
-        });
-    </script>
+								// [취소], [적용] 버튼 없음
+								autoApply : true
+							},
+							function(start, end) {
+								if (this.chosenLabel == "오늘") {
+									$('#daterange-btn span').html("오늘");
+								} else if (this.chosenLabel == "어제") {
+									$('#daterange-btn span').html("어제");
+								} else {
+									$('#daterange-btn span').html(
+											start.format('YYYY/MM/DD') + ' - '
+													+ end.format('YYYY/MM/DD'));
+								}
+
+								$.ajax({
+									type : 'GET',
+									url : '/test/daterange',
+									data : {
+										startDate : start.format('YYYY/MM/DD'),
+										endDate : end.format('YYYY/MM/DD')
+									},
+									success : function(result, status, xhr) {
+										alert("성공");
+									},
+									error : function(xhr, status, err) {
+										alert("실패");
+									}
+
+								});
+							});
+
+		});
+	</script>
 
 </body>
 
