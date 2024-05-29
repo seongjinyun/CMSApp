@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "mybatis-3-mapper.dtd">
+<mapper namespace="com.sds.cmsapp.model.relationship.DeptProjectDAO">
+
+	<!-- 프로젝트 - 부서 연결 -->
+	<insert id="insert" parameterType="DeptProject">
+		insert into dept_project(dept_idx, project_idx)
+		values(#{dept.dept_idx}, #{project.project_idx})
+	</insert>
+	
+</mapper>

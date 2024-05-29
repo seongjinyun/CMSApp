@@ -66,14 +66,11 @@
 					            	<input type="text" id="dept_name" name="dept_name" class="form-control" placeholder="부서명 입력">
 					        	</div>
 					        	<div>
-					            	<label for="emp_name" class="col-form-label">부서 사원 추가</label>
-									<select id="emp_name" name="emp_name" class="select2 form-control" multiple="multiple" data-placeholder="(다중)선택" style=" width: 100%;">
+					            	<label for="emp_idx" class="col-form-label">부서 사원 추가</label>
+									<select id="emp_idx" name="emp_idx" class="select2 form-control" multiple="multiple" data-placeholder="(다중)선택" style="width: 100%;">
 										<option th:each="emp : ${empList}" th:value="${emp.emp_idx}" th:text="${emp.emp_name}"></option>
 									</select>
 					        	</div>
-					        </form>
-					        <form class="form-horizontal" id="update_emp_dept">
-					        	
 					        </form>
 					        <button type="button" id="btn_add_dept" class="col btn btn-success float-right" style="height: 38px; margin-top: 20px;">Add Department</button>
 					    </div>
@@ -87,25 +84,21 @@
 					            </button>
 					        </div>
 					    </div>
-					    <form class="form-horizontal" id="add_project">
-						    <div class="card-body">
+					    <div class="card-body">
+						    <form class="form-horizontal" id="add_project">
 						        <div class="form-group">
 						            <label for="project_name">프로젝트명</label>
-						            <input type="text" id="project_name" class="form-control">
+						            <input type="text" id="project_name" name="project_name" class="form-control" placeholder="프로젝트명 입력">
 						        </div>
-						        <div class="form-group">
-						            <label for="dept_name">담당 부서 추가</label>
-									<select class="select2 form-control" multiple="multiple" data-placeholder="(다중)선택" style="width: 100%;">
-										<option>1팀</option>
-										<option>2팀</option>
-										<option>3팀</option>
-										<option>4팀</option>
-										<option>5팀</option>
+						        <div>
+						            <label for="dept_idx">담당 부서 추가</label>
+									<select id="dept_idx" name="dept_idx" class="select2 form-control" multiple="multiple" data-placeholder="(다중)선택" style="width: 100%;">
+										<option th:each="dept : ${deptList}" th:value="${dept.dept_idx}" th:text="${dept.dept_name}"></option>
 									</select>
 						        </div>
-						        <button type="button" id="btn_add_project" class="col btn btn-success float-right" style="height: 38px; margin-top: 20px;">Add Project</button>
-						    </div>
-					    </form>
+						    </form>
+					        <button type="button" id="btn_add_project" class="col btn btn-success float-right" style="height: 38px; margin-top: 20px;">Add Project</button>
+					    </div>
 					</div>
     			</div>
     			<div class="col-md-7">
@@ -195,10 +188,21 @@
 		$("#add_dept").submit();
 	}
 	
+	function addProject() {
+		$("#add_project").attr({
+			action:"/settings/project/insert",
+			method:"post"
+		});
+		$("#add_project").submit();
+	}
+	
 	$(function(){
 		$("#btn_add_dept").click(function(){
 			addDepartment();
-		});		
+		});	
+		$("#btn_add_project").click(function(){
+			addProject();
+		});	
 	});
 	
 </script>

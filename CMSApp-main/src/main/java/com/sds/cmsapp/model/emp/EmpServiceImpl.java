@@ -56,4 +56,10 @@ public class EmpServiceImpl implements EmpService {
 		
 		empDAO.update(emp);
 	}
+
+	@Override
+	public void updateDept(Emp emp) {
+		// TODO Auto-generated method stub
+		empDAO.updateDept(emp);
+	}
 }
