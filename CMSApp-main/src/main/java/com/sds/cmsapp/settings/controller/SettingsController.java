@@ -31,7 +31,7 @@ public class SettingsController {
 		return "settings/log";
 	}
 	
-	@GetMapping("/settings/access")
+	@GetMapping("/settings/dept_project")
 	public String getAccess(Model model) {
 		// 사원 이름과 index 가져오기
 		List<Emp> empList = empService.selectAllEmpName();
@@ -40,8 +40,8 @@ public class SettingsController {
 		// 부서 이름과 index 가져오기
 		List deptList = deptService.selectAllDeptName();
 		model.addAttribute("deptList", deptList);
-		
-		return "settings/access";
+				
+		return "settings/dept_project";
 	}
 	
 	@GetMapping("/settings/mypage")
