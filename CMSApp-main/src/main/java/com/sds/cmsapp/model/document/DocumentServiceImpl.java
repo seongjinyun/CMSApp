@@ -12,26 +12,26 @@ import com.sds.cmsapp.domain.VersionLog;
 
 @Service
 public class DocumentServiceImpl implements DocumentService {
-
+	
 	@Autowired
 	private DocumentDAO documentDAO;
-
-	@Override
-	public int selectCount() {
-		// TODO Auto-generated method stub
-		return 0;
-	}
-
-	@Override
+	
+	// 모든 문서 조회
 	public List selectAll(Map map) {
-		// TODO Auto-generated method stub
 		return null;
-	}
+	};
 
-	@Override
+	// 선택 문서 조회
+	
+	// returnType="Document"
+	public Document select(int document_idx) {
+		return documentDAO.select(document_idx);
+	}; 
+	
+	// returnMap="DocumentMap"
 	public Document selectByDocumentIdx(int document_idx) {
 		return documentDAO.selectByDocumentIdx(document_idx);
-	}
+	}; 
 	
 	@Transactional
     public void documentInsert(Document document, VersionLog versionLog) {
@@ -44,5 +44,11 @@ public class DocumentServiceImpl implements DocumentService {
         
         System.out.println(versionLog.getContent());
     }
+
+	@Override
+	public void insert(VersionLog versionLog) {
+		// TODO Auto-generated method stub
+		
+	}
 
 }

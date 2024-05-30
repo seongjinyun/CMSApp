@@ -5,6 +5,11 @@ import lombok.Data;
 @Data
 public class DocumentVersion {
 	private int document_version_idx;
+
+	// 식별 관계
 	private Document document;
-	private VersionLog version_log;
+
+	// 부모 테이블
+	private VersionLog versionLog;
+
 }

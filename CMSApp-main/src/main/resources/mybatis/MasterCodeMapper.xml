@@ -1,23 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "mybatis-3-mapper.dtd">
-<mapper namespace="com.sds.cmsapp.model.status.MasterCodeDAO">
+<mapper namespace="com.sds.cmsapp.model.mastercode.MasterCodeDAO">
 	
-	<resultMap type="MasterCode" id="MasterCodeMap">
-		<id column="mastercode_idx" 	property="mastercode_idx"/>
-		<result 	column="status_name" 			property="status_name"/>
-		<collection 
-			column="status_code" 
-			property="statusLogList" 
-			javaType="java.util.List"
-			ofType="StatusLog"
-			select="com.sds.cmsapp.model.status.StatusLogDAO.selectAllByStatusCode"/>
-	</resultMap>
-	
-	
-
 	<!-- master_code 한 개 조회 -->
-	<select id="selectByStatusCode" parameterType="int" resultMap="MasterCodeMap">
-		select * from master_code where status_code=#{master_code}
+	<!-- returnType="MasterCode" -->
+	<select id="select" parameterType="int" resultType="MasterCode">
+		select * from mastercode where status_code=#{status_code}
 	</select>
 
 

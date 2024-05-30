@@ -8,17 +8,18 @@ import com.sds.cmsapp.domain.VersionLog;
 
 public interface DocumentService {
 
-	// 전체 문서 수 조회
-	public int selectCount();
-
 	// 모든 문서 조회
 	public List selectAll(Map map);
 
 	// 선택 문서 조회
-	public Document selectByDocumentIdx(int document_idx);
-	
-	//문서생성 + 버전
-	public void documentInsert(Document document, VersionLog versionLog);
-	
-}
+	public Document select(int document_idx); // returnType="Document"
 
+	public Document selectByDocumentIdx(int document_idx); // returnMap="DocumentMap"
+
+	// 문서 작성 폼
+	public void insert(VersionLog versionLog);
+
+	// 문서생성 + 버전
+	public void documentInsert(Document document, VersionLog versionLog);
+
+}
