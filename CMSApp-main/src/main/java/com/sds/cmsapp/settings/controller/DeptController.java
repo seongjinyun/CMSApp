@@ -28,10 +28,8 @@ public class DeptController {
 		int dept_idx = deptService.insert(dept);
 		
 		// 사원들의 부서를 추가한 부서로 설정
-<<<<<<< HEAD
 		//empService.update(emp);
 		
-=======
 	    Dept deptWithIdx = deptService.selectByDeptIdx(dept_idx); // 추가된 부서 객체 조회
 	    for(int empId : empIds) {
 	        Emp emp = new Emp();
@@ -39,8 +37,6 @@ public class DeptController {
 	        emp.setDept(deptWithIdx);
 	        empService.updateDept(emp);
 	    }
-	    
->>>>>>> d5b96bd4a6b5c749a560c335aff1aad77a1210a1
 		return "redirect:/settings/access";
 	}
 }
