@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "mybatis-3-mapper.dtd">
+<mapper namespace="com.sds.cmsapp.model.status.StatusLogDAO">
+
+	<!-- 로그 필터 기능 -->
+
+	<!--여러 개 조회 by document_idx(document 테이블) -->
+	<select id="selectAllByDocumentIdx" parameterType="int"
+		resultType="StatusLog">
+		select * from status_log where
+		document_idx=#{document_idx};
+	</select>
+	
+	<!-- 여러 개 조회 by status_code(mastercode 테이블) -->
+	<select id="selectAllByStatusCode" parameterType="int"
+		resultType="StatusLog">
+		select * from status_log where status_code=#{status_code};
+	</select>
+	
+	<!-- 한 개 조회 -->
+	
+	<!-- 한 개 조회 by status_log_idx -->
+	<select id="selectByStatusLogIdx" parameterType="int"
+		resultType="StatusLog">
+		select * from status_log where
+		status_log_idx=#{status_log_idx}
+	</select>
+
+	<!-- 한 개 조회 by document_idx(document 테이블) 가장 최근에 추가된 로그 -->
+	<select id="selectLatestChangedByDocumentIdx"
+		parameterType="int" resultType="StatusLog">
+		select * from status_log where
+		document_idx=#{document_idx}
+		order by status_log_idx desc
+		limit 1
+	</select>
+
+
+
+</mapper>

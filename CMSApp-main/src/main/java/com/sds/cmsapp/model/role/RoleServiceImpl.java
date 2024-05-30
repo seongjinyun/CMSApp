@@ -22,4 +22,9 @@ public class RoleServiceImpl implements RoleService {
 		// TODO Auto-generated method stub
 		return roleDAO.selectByRoleIdx(role_idx);
 	}
+
+	@Override
+	public Role selectByRoleCode(int role_code) {
+		return roleDAO.selectByRoleCode(role_code);
+	}
 }

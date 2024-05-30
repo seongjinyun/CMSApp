@@ -13,4 +13,9 @@
 		select * from role where role_idx=#{role_idx}
 	</select>
 	
+		<!-- role_code가 가리키는 부서 조회 -->
+	<select id="selectByRoleCode" parameterType="int" resultType="Role">
+		select * from role where role_code=#{role_code}
+	</select>
+	
 </mapper>
