@@ -1,5 +1,7 @@
 package com.sds.cmsapp.domain;
 
+import java.sql.Timestamp;
+
 import lombok.Data;
 
 @Data
@@ -14,5 +16,5 @@ public class VersionLog {
 	private String title;
 	private String content;
 	private String comments;
-	private String regdate;
+	private Timestamp regdate;
 }
