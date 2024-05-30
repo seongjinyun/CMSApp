@@ -22,7 +22,7 @@ public class DeptController {
 	private EmpService empService;
 	
 	@PostMapping("/settings/dept/insert")
-	public String insertDept(Dept dept, @RequestParam("emp_idx") List empIds) {	
+	public String insertDept(Dept dept, @RequestParam("emp_idx") List<Integer> empIds) {	
 
 		// 부서 추가
 		int dept_idx = deptService.insert(dept);
@@ -31,7 +31,6 @@ public class DeptController {
 		//empService.update(emp);
 		
 	    Dept deptWithIdx = deptService.selectByDeptIdx(dept_idx); // 추가된 부서 객체 조회
-<<<<<<< Updated upstream
 	    for(int empId : empIds) {
 	        Emp emp = new Emp();
 	        emp.setEmp_idx(empId);
@@ -40,14 +39,5 @@ public class DeptController {
 	    }
 	    
 		return "redirect:/settings/dept_project";
-=======
-//	    for(int empId : empIds) {
-//	        Emp emp = new Emp();
-//	        emp.setEmp_idx(empId);
-//	        emp.setDept(deptWithIdx);
-//	        empService.updateDept(emp);
-//	    }
-		return "redirect:/settings/access";
->>>>>>> Stashed changes
 	}
 }
