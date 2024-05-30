@@ -4,12 +4,27 @@
 	
 	<insert id="insert" parameterType="Trash">
 		insert into trash(emp_idx, document_idx)
-		values(#{emp_idx}, #{document_idx})
+		values(#{emp.emp_idx}, #{document.document_idx})
+		<selectKey keyColumn="trash_idx" keyProperty="trash_idx" resultType="int" order="AFTER">
+			select last_insert_id() as trash_idx
+		</selectKey>
+		<selectKey keyColumn="trash_idx" keyProperty="trash_idx" resultType="int" order="AFTER">
+			select last_insert_id() as trash_idx
+		</selectKey>
 	</insert>
+	
+	<resultMap type="Trash" id="TrashMap">
+		
+	</resultMap>
 	
 	<delete id="delete" parameterType="int">
 		delete from trash where trash_idx = #{trash_idx}	
 	</delete>
+	
+	<select id="select" parameterType="int" resultType="Trash">
+		select * from trash
+		where trash_idx = #{trash_idx}
+	</select>
 	
 	<select id="selectCount" resultType="int">
 		select count(*) from document

@@ -15,6 +15,9 @@ public interface BookmarkDAO {
 	// 북마크에서 한건 제거
 	public int delete(Bookmark bookmark);
 	
+	// 북마크 한건 조회
+	public Bookmark select(int bookmark_idx);
+	
 	// 북마크 페이지에서 한건 제거 (북마크번호로)
 	public int deleteByBookmarkIdx(int bookmark_idx);
 	
@@ -29,5 +32,4 @@ public interface BookmarkDAO {
 	
 	// 북마크인지 조회
 	public Bookmark isBookmark(Bookmark bookmark);
-	
 }

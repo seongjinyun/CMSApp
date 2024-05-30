@@ -15,12 +15,22 @@ public interface FolderDAO {
 	// 폴더 제거
 	public int delete();
 	
-	// 부모가 누구야 (없으면 null)
+	// 폴더 수정
+	public int update();
+	
+	// 폴더 한건 조회
+	public Folder select(int folder_idx);
+	
+	// 모든폴더 조회
+	public List<Folder> selectAll();
+	
+	// 하위폴더 조회
+	public List<Folder> selectSub(int folder_idx);
+		
+	// 상위폴더 조회
 	public Folder selectParent(int folder_idx);
 	
-	// 자식이 누구야 
-	public List selectChildren(int folder_idx);
-	
-	
+	// 깊이 구하기 -> 다른계층에서 구현 시도
+	//public int selectDepth(int folder_idx);
 	
 }

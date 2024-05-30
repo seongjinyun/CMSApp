@@ -2,4 +2,56 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "mybatis-3-mapper.dtd">
 <mapper namespace="com.sds.cmsapp.model.version.FolderDAO">
 
+	<insert id="insert">
+		insert into folder (parent_folder_idx, folder_name, project_idx)
+		values (#{parent_folder.parent_folder_idx}, #{folder_name}, #{project.project_idx})
+		<selectKey keyColumn="folder_idx" keyProperty="folder_idx" resultType="int" order="AFTER">
+			select last_insert_id() as folder_idx
+		</selectKey>
+	</insert>
+	<delete id="delete"></delete>
+	<update id="update"></update>
+	<select id="select"></select>
+	<select id="selectAll"></select>
+	<select id="selectSub"></select>
+	<select id="selectParent"></select>
+	<select id="selectDepth"></select>
+	
+	<!-- 회원가입 -->
+	<insert id="insert" parameterType="Member">
+		insert into member(uid, nickname, email, sns_idx)
+		values(#{uid}, #{nickname}, #{email}, #{sns.sns_idx})
+					<!-- alias로 만든 컬럼명 --> <!-- 멤버변수명 -->
+		<selectKey keyColumn="member_idx" keyProperty="member_idx" order="AFTER" resultType="int">
+			select last_insert_id() as member_idx <!-- DTO에 idx 채우기 -->
+		</selectKey>
+	</insert>
+	
+	<!-- 로그인 인증 
+	Mybatis는 SQL Mapper라고 한다.
+	즉 SQL문과 자바 객체와의 매핑
+	아래의 쿼리문의 경우, 두 테이블을 조인한 결과인 컬럼명들과 MemberDTO의
+	멤버변수명 간에 이름이 다르므로, 자동매핑이 불가능하다
+	해결책) 수동 매핑으로 처리하자 -> resultMap 이용하자
+	
+	Member DTO에 담을 수 있는 그대로 담고, 외부 테이블에 대해서는 select문으로 매핑시키자
+	-->
+	<resultMap type="Member" id="MemberMap">
+		<id 	column="member_idx" property="member_idx"/>
+		<result column="uid" 		property="uid"/>
+		<result column="nickname" 	property="nickname"/>
+		<result column="email" 		property="email"/>
+		<!-- SNS 정보를 association으로 가져오자 -->
+		<association column="sns_idx" property="sns" javaType="SnS" select="SnS.select"/>
+			
+		<!-- MemberDetail 정보를 association으로 가져와 memberDetail 멤버변수에 채워넣자 -->
+		<association column="member_idx" property="memberDetail" javaType="MemberDetail" select="MemberDetail.select"/>
+	</resultMap>
+	
+	<select id="login" parameterType="Member" resultMap="MemberMap">
+		select m.member_idx as member_idx, uid, nickname, email, sns_idx
+		from member m, member_detail d
+		where m.member_idx = d.member_idx
+		and uid = #{uid} and password = #{memberDetail.password}
+	</select>
 </mapper>
