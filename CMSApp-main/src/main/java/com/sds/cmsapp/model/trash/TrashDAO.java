@@ -16,20 +16,22 @@ public interface TrashDAO {
 	// 휴지통에서 제거 (복원, 영구삭제)
 	public int delete(int trash_idx);
 	
+	// 휴지통 비우기
+	public int deleteAll();
+	
 	// 휴지통 한건 조회
 	public Trash select(int trash_idx);
 	
 	// 휴지통 문서 수 조회
 	public int selectCount();
 	
+	// 휴지통 내 문서 전체조회
+	public int selectAll();
+	
 	// 휴지통 내 문서 리스트 조회
-	public List selectAll(Map map);
+	public List<Trash> selectAllWithRange(Map map);
 	
-	// 휴지통 비우기
-	public int deleteAll();
-	
-	// 문서로 휴지통에 있는 문서인지 조회(있다면 Trash 반환)
-	public Trash isTrash(int document_idx);
-
+	// 문서번호로 휴지통 한건 조회
+	public Trash selectByDocumentIdx(int document_idx);
 
 }
