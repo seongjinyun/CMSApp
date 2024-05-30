@@ -11,6 +11,7 @@ import com.sds.cmsapp.domain.Dept;
 import com.sds.cmsapp.domain.Emp;
 import com.sds.cmsapp.model.dept.DeptService;
 import com.sds.cmsapp.model.emp.EmpService;
+import com.sds.cmsapp.model.role.RoleService;
 
 @Controller
 public class SettingsController {	
@@ -20,6 +21,9 @@ public class SettingsController {
 	
 	@Autowired
 	private DeptService deptService;
+	
+	@Autowired
+	private RoleService roleService;
 	
 	@GetMapping("/settings/general")
 	public String getGeneral() {
@@ -50,7 +54,19 @@ public class SettingsController {
 	}
 	
 	@GetMapping("/settings/user")
-	public String getUserInfo() {
+	public String getUserInfo(Model model) {
+		// 사원 이름과 index 가져오기
+		List<Emp> empList = empService.selectAllEmpName();
+		model.addAttribute("empList", empList);
+		
+		// 부서 이름과 index 가져오기
+		List deptList = deptService.selectAllDeptName();
+		model.addAttribute("deptList", deptList);
+		
+		// 역할 이름과 index 가져오기
+		List roleList = roleService.selectAll();
+		model.addAttribute("roleList", roleList);
+		
 		return "settings/user";
 	}
 	

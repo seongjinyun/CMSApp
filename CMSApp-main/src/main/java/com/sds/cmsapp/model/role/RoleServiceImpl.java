@@ -1,5 +1,7 @@
 package com.sds.cmsapp.model.role;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -26,5 +28,11 @@ public class RoleServiceImpl implements RoleService {
 	@Override
 	public Role selectByRoleCode(int role_code) {
 		return roleDAO.selectByRoleCode(role_code);
+	}
+
+	@Override
+	public List selectAll() {
+		// TODO Auto-generated method stub
+		return roleDAO.selectAll();
 	}
 }
