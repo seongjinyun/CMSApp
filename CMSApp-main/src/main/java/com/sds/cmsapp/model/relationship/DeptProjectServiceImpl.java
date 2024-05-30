@@ -20,13 +20,13 @@ public class DeptProjectServiceImpl implements DeptProjectService {
 	}
 
 	@Override
-	public List selectByDeptIdx(Integer dept_idx) {
+	public List selectByDeptIdx(int dept_idx) {
 		// TODO Auto-generated method stub
 		return deptProjectDAO.selectByDeptIdx(dept_idx);
 	}
 
 	@Override
-	public List selectOtherByDeptIdx(Integer dept_idx) {
+	public List selectOtherByDeptIdx(int dept_idx) {
 		// TODO Auto-generated method stub
 		return deptProjectDAO.selectOtherByDeptIdx(dept_idx);
 	}
