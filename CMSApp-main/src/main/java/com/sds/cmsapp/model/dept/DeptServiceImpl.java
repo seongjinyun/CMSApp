@@ -13,13 +13,11 @@ public class DeptServiceImpl implements DeptService {
 	
 	@Override
 	public void insert(Dept dept) {
-		// TODO Auto-generated method stub
 		deptDAO.insert(dept);
 	}
 
 	@Override
 	public Dept selectByDeptIdx(int dept_idx) {
-		// TODO Auto-generated method stub
 		return deptDAO.selectByDeptIdx(dept_idx);
 	}
 }

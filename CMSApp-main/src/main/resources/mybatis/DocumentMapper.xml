@@ -2,21 +2,34 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "mybatis-3-mapper.dtd">
 <mapper namespace="com.sds.cmsapp.model.document.DocumentDAO">
 
-	<select id="selectCount" resultType="int">
-		select count(*) from
-		document
+	<!-- DocumentMap -->
+	<resultMap type="Document" id="DocumentMap">
+		<id column="document_idx" property="document_idx" />
+		<result column="hit" property="hit" />
+
+		<!-- emp 테이블과 조인 -->
+		<association property="emp" resultMap="com.sds.cmsapp.model.emp.EmpDAO.EmpMap" />
+		
+		<!-- status_log 테이블과 조인 -->
+		<collection
+			property="statusLogList" 
+			column="document_idx" 
+			javaType="java.util.List"
+			ofType="statusLog"
+			select="com.sds.cmsapp.model.status.StatusLogDAO.selectAllByDocumentIdx"/>
+		
+	</resultMap>
+
+
+	<!-- 쿼리 -->
+
+	<!-- 문서 한 개 조회 -->
+	<select id="selectByDocumentIdx" parameterType="int" resultMap="DocumentMap">
+		select * from
+		document where document_idx=#{document_idx}
 	</select>
 
-	<select id="selectAll" parameterType="java.util.Map"
-		resultType="Document">
-		select * from document limit #{startIndex} , #{rowCount}
-	</select>
-
-	<select id="select" parameterType="int"
-		resultType="Document">
-		select * from document where document_idx=#{document_idx}
-	</select>
 
 
 
-</mapper>	
+</mapper>

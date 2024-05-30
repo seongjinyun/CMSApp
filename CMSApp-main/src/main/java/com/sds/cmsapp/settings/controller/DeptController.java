@@ -20,7 +20,7 @@ public class DeptController {
 		deptService.insert(dept);
 		
 		// 사원들의 부서를 추가한 부서로 설정
-		empService.update(emp);
+		//empService.update(emp);
 		
 		return "redirect:/settings/access";
 	}

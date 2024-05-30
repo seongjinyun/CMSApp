@@ -28,7 +28,6 @@ public class EmpServiceImpl implements EmpService {
 	
 	@Override
 	public Emp selectByEmpIdx(int emp_idx) {
-		// TODO Auto-generated method stub
 		return empDAO.selectByEmpIdx(emp_idx);
 	}
 	
