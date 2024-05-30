@@ -37,6 +37,7 @@ public class DeptController {
 	        emp.setDept(deptWithIdx);
 	        empService.updateDept(emp);
 	    }
-		return "redirect:/settings/access";
+	    
+		return "redirect:/settings/dept_project";
 	}
 }

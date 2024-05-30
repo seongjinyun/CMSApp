@@ -31,12 +31,12 @@
       <div class="container-fluid">
         <div class="row mb-2">
           <div class="col-sm-6">
-            <h1 class="m-0" style="font-weight: bold;">부서 권한 설정</h1>
+            <h1 class="m-0" style="font-weight: bold;">부서 및 프로젝트 설정</h1>
           </div><!-- /.col -->
           <div class="col-sm-6">
             <ol class="breadcrumb float-sm-right">
               <li class="breadcrumb-item"><a th:href="@{general}">Settings</a></li>
-              <li class="breadcrumb-item active">Access</li>
+              <li class="breadcrumb-item active">Department/Project</li>
             </ol>
           </div><!-- /.col -->
         </div><!-- /.row -->
@@ -52,7 +52,7 @@
 	    		<div class="col-md-5">
     				<div class="card">
 					    <div class="card-header">
-					        <h3 class="card-title" style="font-weight: bold;">부서 추가</h3>
+					        <h3 class="card-title" style="font-weight: bold;">새 부서 추가</h3>
 					        <div class="card-tools">
 					            <button type="button" class="btn btn-tool" data-card-widget="collapse" title="Collapse">
 					                <i class="fas fa-minus"></i>
@@ -77,7 +77,7 @@
 					</div>
 					<div class="card">
 					    <div class="card-header">
-					        <h3 class="card-title" style="font-weight: bold;">프로젝트 추가</h3>
+					        <h3 class="card-title" style="font-weight: bold;">새 프로젝트 추가</h3>
 					        <div class="card-tools">
 					            <button type="button" class="btn btn-tool" data-card-widget="collapse" title="Collapse">
 					                <i class="fas fa-minus"></i>
@@ -104,54 +104,36 @@
     			<div class="col-md-7">
     				<div class="card">
 					    <div class="card-header">
-					        <h3 class="card-title" style="font-weight: bold;">접근 부서 설정</h3>
+					        <h3 class="card-title" style="font-weight: bold;">부서 프로젝트 제거</h3>
 					    </div>
-						<div class="card-body">
-					        <table id="example2" class="table table-bordered table-striped">
-					            <thead>
-					                <tr>
-					                    <th><input type='checkbox' name='chkAll' onclick='chkChange(this);'></th>
-					                    <th>부서</th>
-					                    <th>프로젝트</th>
-					                </tr>
-					            </thead>
-					            <tbody>
-					                <tr>
-					                    <td><input type='checkbox' name='chkProc' value=''/> </td>
-					                    <td>개발</td>
-					                    <td>
-						                    <div class="form-group">
-												<label>Select Multiple</label>
-												<select class="select2 form-control" multiple="multiple" data-placeholder="Select a State" style="width: 100%;">
-													<option>option 1</option>
-													<option>option 2</option>
-													<option>option 3</option>
-													<option>option 4</option>
-													<option>option 5</option>
-												</select>
-											</div>
-										</td>
-					                </tr>
-					                <tr>
-					                    <td><input type='checkbox' name='chkProc' value=''/> </td>
-					                    <td>개발</td>
-					                    <td>
-						                    <div class="form-group">
-												<label>Select Multiple</label>
-												<select class="select2 form-control" multiple="multiple" data-placeholder="Select a State" style="width: 100%;">
-													<option>option 1</option>
-													<option>option 2</option>
-													<option>option 3</option>
-													<option>option 4</option>
-													<option>option 5</option>
-												</select>
-											</div>
-										</td>
-					                </tr>
-					            </tbody>    
-					        </table>
-					        <button type="submit" class="btn btn-primary float-right" style="margin-top: 30px;">Submit</button>
-					    </div>
+					    <form class="form-horizontal" id="update_dept_project">
+							<div class="card-body">
+						        <table id="example2" class="table table-bordered table-striped">
+						            <thead>
+						                <tr>
+						                    <th><input type='checkbox' name='chkAll' onclick='chkChange(this);'></th>
+						                    <th>부서</th>
+						                    <th>프로젝트</th>
+						                </tr>
+						            </thead>
+						            <tbody>
+						                <tr th:each="dept : ${deptList}">
+						                    <td><input type='checkbox' name='chkProc' value='${dept.dept_idx}'/> </td>
+						                    <td th:text="${dept.dept_name}" th:value="${dept.dept_idx}"></td>
+						                    <td>
+							                    <div class="form-group">
+													<label>프로젝트 선택</label>
+													<select th:id="'project_name_' + ${dept.dept_idx}" name="project_name" class="select2 form-control select_project" multiple="multiple" data-placeholder="(다중)선택" style="width: 100%;">
+														<!-- <option th:each="project : ${projectList}" th:value="${project.project_idx}" th:text="${project.project_name}"></option> -->
+													</select>
+												</div>
+											</td>
+						                </tr>
+						            </tbody>    
+						        </table>
+						        <button type="submit" class="btn btn-primary float-right" style="margin-top: 30px;">Submit</button>
+						    </div>
+					    </form>
 			  		</div>
     			</div>
     		</div>    				
@@ -196,14 +178,39 @@
 		$("#add_project").submit();
 	}
 	
+	function loadProjects(dept_idx) {
+	    $.ajax({
+	        url: '/settings/project/selectByDeptIdx',
+	        type: 'GET',
+	        data: { dept_idx: dept_idx },
+	        success: function(response) {
+	            const selectElement = $('#project_name_' + dept_idx); // 선택된 select box
+	            selectElement.empty();  // 기존 옵션 제거
+	            response.projects.forEach(function(project) {
+	                const option = $('<option></option>').val(project.project_idx).text(project.project_name); // option 태그 추가
+	                selectElement.append(option);
+	            });
+	        },
+	        error: function(xhr, status, error) {
+	            console.log("부서 내 프로젝트들을 조회하는 데 실패하였습니다.");
+	        }
+	    });
+	}
+	
 	$(function(){
+	    $(".select_project").each(function() { // 페이지가 로드되었을 때 각 부서에 대해 프로젝트 로드
+	        const deptIdx = $(this).attr('id').split('_')[2]; // ID에서 dept_idx 추출
+	        loadProjects(deptIdx);
+	    });
 		$("#btn_add_dept").click(function(){
 			addDepartment();
 		});	
 		$("#btn_add_project").click(function(){
 			addProject();
-		});	
+		});
 	});
+	
+	
 	
 </script>
 <

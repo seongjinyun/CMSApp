@@ -1,0 +1,288 @@
+<!DOCTYPE html>
+<html lang="zxx" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>AdminLTE 3 | Dashboard</title>
+
+	<th:block th:replace="~{fragments/header_link :: header_link}"/>
+	<th:block th:replace="~{elements/datatables_header_link :: datatables_header_link}"/>
+	<th:block th:replace="~{elements/advanced_forms_header_link :: advanced_forms_header_link}"/>
+	
+</head>
+<body class="hold-transition sidebar-mini layout-fixed">
+<div class="wrapper">
+
+  <!-- Preloader -->
+  <th:block th:replace="~{fragments/preloader :: preloader}"/>
+	
+  <!-- Navbar -->
+	<th:block th:replace="~{fragments/navi :: navi}"/>
+  <!-- /.navbar -->
+
+  <!-- Main Sidebar Container -->
+  <th:block th:replace="~{fragments/sidebar :: sidebar}"/>
+  <!-- /.sidebar -->
+
+  <!-- Content Wrapper. Contains page content -->
+  <div class="content-wrapper">
+  
+  	<!-- 알림 메시지 표시 -->
+	<div th:if="${message}" class="alert alert-success" role="alert">
+	    <span th:text="${message}"></span>
+	</div>
+	<div th:if="${error}" class="alert alert-danger" role="alert">
+	    <span th:text="${error}"></span>
+	</div>
+  
+    <!-- Content Header (Page header) -->
+    <div class="content-header">
+      <div class="container-fluid">
+        <div class="row mb-2">
+          <div class="col-sm-6">
+            <h1 class="m-0" style="font-weight: bold;">부서 및 프로젝트 설정</h1>
+          </div><!-- /.col -->
+          <div class="col-sm-6">
+            <ol class="breadcrumb float-sm-right">
+              <li class="breadcrumb-item"><a th:href="@{general}">Settings</a></li>
+              <li class="breadcrumb-item active">Access</li>
+            </ol>
+          </div><!-- /.col -->
+        </div><!-- /.row -->
+      </div><!-- /.container-fluid -->
+    </div>
+    <!-- /.content-header -->
+
+    <!-- Main content -->
+    <h6 style="color: gray; margin-left: 50px; margin-bottom: 20px;">프로젝트에 대한 부서의 접근 권한을 관리합니다.</h6>
+    <section class="content">
+    	<div class="container-fluid">
+    		<div class="row">
+    			<div class="col-md-5">
+    				<!-- 새 부서 추가 폼 -->
+    				<div class="card">
+					    <div class="card-header">
+					        <h3 class="card-title" style="font-weight: bold;">새 부서 추가</h3>
+					        <div class="card-tools">
+					            <button type="button" class="btn btn-tool" data-card-widget="collapse" title="Collapse">
+					                <i class="fas fa-minus"></i>
+					            </button>
+					        </div>
+					    </div>
+					    <div class="card-body">
+						    <form class="form-horizontal" id="add_new_dept">
+					        	<div class="form-group">
+					            	<label for="dept_name" class="col-form-label">부서명</label>
+					            	<input type="text" id="dept_name" name="dept_name" class="form-control" placeholder="부서명 입력">
+					        	</div>
+					        	<div>
+					            	<label for="emp_idx" class="col-form-label">부서 사원 추가</label>
+									<select id="emp_idx" name="emp_idx" class="select2 form-control" multiple="multiple" data-placeholder="(다중)선택" style="width: 100%;">
+										<option th:each="emp : ${empList}" th:value="${emp.emp_idx}" th:text="${emp.emp_name}"></option>
+									</select>
+					        	</div>
+					        </form>
+					        <button type="button" id="btn_add_new_dept" class="col btn btn-success float-right" style="height: 38px; margin-top: 20px;">Add New Department</button>
+					    </div>
+					</div>
+    				<!-- 새 프로젝트 추가 폼 -->
+					<div class="card">
+					    <div class="card-header">
+					        <h3 class="card-title" style="font-weight: bold;">새 프로젝트 추가</h3>
+					        <div class="card-tools">
+					            <button type="button" class="btn btn-tool" data-card-widget="collapse" title="Collapse">
+					                <i class="fas fa-minus"></i>
+					            </button>
+					        </div>
+					    </div>
+					    <div class="card-body">
+						    <form class="form-horizontal" id="add_new_project">
+						        <div class="form-group">
+						            <label for="project_name">프로젝트명</label>
+						            <input type="text" id="project_name" name="project_name" class="form-control" placeholder="프로젝트명 입력">
+						        </div>
+						        <div>
+						            <label for="dept_idx">담당 부서 추가</label>
+									<select id="dept_idx" name="dept_idx" class="select2 form-control" multiple="multiple" data-placeholder="(다중)선택" style="width: 100%;">
+										<option th:each="dept : ${deptList}" th:value="${dept.dept_idx}" th:text="${dept.dept_name}"></option>
+									</select>
+						        </div>
+						    </form>
+					        <button type="button" id="btn_add_new_project" class="col btn btn-success float-right" style="height: 38px; margin-top: 20px;">Add New Project</button>
+					    </div>
+					</div>
+    			</div>
+    			<div class="col-md-7">
+    				<!-- 추가 폼 -->
+				    <div class="card">
+				        <div class="card-header">
+				            <h3 class="card-title" style="font-weight: bold;">부서에 프로젝트 추가</h3>
+				        </div>
+				        <div class="card-body">
+				            <form class="form-horizontal" id="add_dept_project">
+				                <div class="form-group">
+				                    <select id="dept_name_add" name="dept_idx" class="select2 form-control" data-placeholder="부서 선택" style="width: 100%;">
+				                        <option th:each="dept : ${deptList}" th:value="${dept.dept_idx}" th:text="${dept.dept_name}"></option>
+				                    </select>
+				                    <br>
+				                    <select id="project_name_add" name="projectIds" class="select2 form-control" multiple="multiple" data-placeholder="추가할 프로젝트 (다중)선택" style="width: 100%;" disabled>
+				                        <!-- 프로젝트는 부서를 선택한 후 JavaScript로 동적으로 로딩 -->
+				                    </select>
+				                </div>
+				            </form>                                
+				            <button type="button" id="btn_add_dept_project" class="col btn btn-success float-right" style="height: 38px; margin-top: 20px;">Add Project</button>
+				        </div>
+				    </div>
+					<!-- 삭제 폼 -->	
+				    <div class="card">
+				        <div class="card-header">
+				            <h3 class="card-title" style="font-weight: bold;">부서에서 프로젝트 제거</h3>
+				        </div>
+				        <div class="card-body">
+				            <form class="form-horizontal" id="delete_dept_project">
+				                <div class="form-group">
+				                    <select id="dept_name_delete" name="dept_idx" class="select2 form-control" data-placeholder="부서 선택" style="width: 100%;">
+				                        <option th:each="dept : ${deptList}" th:value="${dept.dept_idx}" th:text="${dept.dept_name}"></option>
+				                    </select>
+				                    <br>
+				                    <select id="project_name_delete" name="projectIds" class="select2 form-control" multiple="multiple" data-placeholder="삭제할 프로젝트 (다중)선택" style="width: 100%;" disabled>
+				                        <!-- 프로젝트는 부서를 선택한 후 JavaScript로 동적으로 로딩 -->
+				                    </select>
+				                </div>
+				            </form>                                
+				            <button type="button" id="btn_delete_dept_project" class="col btn btn-success float-right" style="height: 38px; margin-top: 20px;">Delete Project</button>
+				        </div>
+				    </div>
+    			</div>
+    		</div>    				
+    	</div>
+  	</section>
+  <!-- /.content -->
+  </div>
+  <!-- /.content-wrapper -->
+  
+  <th:block th:replace="~{fragments/footer :: footer}"/>
+
+  <!-- Control Sidebar -->
+  <aside class="control-sidebar control-sidebar-dark">
+  <!-- Control sidebar content goes here -->
+  </aside>
+  <!-- /.control-sidebar -->
+</div>
+<!-- ./wrapper -->
+	
+  <th:block th:replace="~{fragments/footer_link :: footer_link}"/>
+  <th:block th:replace="~{elements/datatables_footer_link :: datatables_footer_link}"/>
+  <th:block th:replace="~{elements/advanced_forms_footer_link :: advanced_forms_footer_link}"/>
+
+</body>
+</html>
+<script type="text/javascript">
+
+	// 추가 form에 보여질 프로젝트 option 태그 채우기
+	function loadOtherProjects(dept_idx) {
+		$.ajax({
+	        type: "GET",
+	        url: "/settings/deptProject/getOtherProjectsByDeptIdx/" + dept_idx, // 프로젝트를 가져올 엔드포인트 URL
+	        success: function(response) {
+	            // 서버로부터 받은 JSON 데이터를 파싱하여 옵션으로 추가
+	            $('#project_name_add').empty(); // 기존 옵션들을 모두 지우기
+	            $.each(response, function(index, project) {
+	                $('#project_name_add').append('<option value="' + project.project_idx + '">' + project.project_name + '</option>');
+	            });
+	            $('#project_name_add').prop('disabled', false);
+	        },
+	        error: function(xhr, status, error) {
+	            console.error("Failed to load projects: " + error);
+	            // 에러 처리를 추가하려면 여기에 코드를 작성하세요
+	        }
+	    });
+	}
+	
+	// 삭제 form에 보여질 프로젝트 option 태그 채우기
+	function loadCurrentProjects(dept_idx) {
+		$.ajax({
+	        type: "GET",
+	        url: "/settings/deptProject/getProjectsByDeptIdx/" + dept_idx, // 프로젝트를 가져올 엔드포인트 URL
+	        success: function(response) {
+	            // 서버로부터 받은 JSON 데이터를 파싱하여 옵션으로 추가
+	            $('#project_name_delete').empty(); // 기존 옵션들을 모두 지우기
+	            $.each(response, function(index, project) {
+	                $('#project_name_delete').append('<option value="' + project.project_idx + '">' + project.project_name + '</option>');
+	            });
+	            $('#project_name_delete').prop('disabled', false);
+	        },
+	        error: function(xhr, status, error) {
+	            console.error("Failed to load projects: " + error);
+	            // 에러 처리를 추가하려면 여기에 코드를 작성하세요
+	        }
+	    });
+	}
+
+	// 새 부서 추가
+	function addNewDepartment() {
+		$("#add_new_dept").attr({
+			action:"/settings/dept/insert",
+			method:"post"
+		});
+		$("#add_new_dept").submit();
+	}
+	
+	// 새 프로젝트 추가
+	function addNewProject() {
+		$("#add_new_project").attr({
+			action:"/settings/project/insert",
+			method:"post"
+		});
+		$("#add_new_project").submit();
+	}
+	
+	// 기존 부서에 프로젝트 추가
+	function addProject() {
+		$("#add_dept_project").attr({
+			action:"/settings/deptProject/insert",
+			method:"post"
+		});
+		$("#add_dept_project").submit();
+	}
+	
+	// 기존 부서에 프로젝트 제거
+	function deleteProject() {
+		$("#delete_dept_project").attr({
+			action:"/settings/deptProject/delete",
+			method:"post"
+		});
+		$("#delete_dept_project").submit();
+	}
+	
+	$(function(){
+		$("#btn_add_new_dept").click(function(){
+			addNewDepartment();
+		});	
+		$("#btn_add_new_project").click(function(){
+			addNewProject();
+		});
+	    $("#btn_add_dept_project").click(function(){
+			addProject();
+		});
+	    $("#btn_delete_dept_project").click(function(){
+			deleteProject();
+		});
+	    
+		// 추가할 부서 선택 시 해당 부서가 보유하지 않은 프로젝트를 동적으로 로딩
+	    $('#dept_name_add').change(function() {
+	    	// console.log($(this).val()); 부서 idx
+	    	loadOtherProjects($(this).val());
+	    });
+		
+	 	// 삭제할 부서 선택 시 해당 부서가 보유한 프로젝트를 동적으로 로딩
+	    $('#dept_name_delete').change(function() {
+	    	// console.log($(this).val()); 부서 idx
+	    	loadCurrentProjects($(this).val());
+	    });
+	});
+	
+	
+	
+</script>
+<
