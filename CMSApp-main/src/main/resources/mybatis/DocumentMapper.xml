@@ -17,7 +17,14 @@
 		select * from document where document_idx=#{document_idx}
 	</select>
 
-	<insert id="insert" parameterType="VersionLog">
+    <!-- 문서 삽입 -->
+    <insert id="documentInsert" useGeneratedKeys="true" keyProperty="document_idx">
+        INSERT INTO document (emp_idx)
+        VALUES (1)
+    </insert>
+
+	<!-- 버전로그 삽입 -->
+	<insert id="versionInsert" parameterType="VersionLog">
 <!-- 	INSERT INTO version_log(branched_version_log_idx, emp_idx, project_idx, folder_idx, document_idx, version, title, content, comments) 
 	VALUES (#{branched_version_log_idx},#{emp_idx},#{project_idx},#{folder_idx},#{document_idx},#{version}, #{title}, #{content}, #{comments});
 	 -->

@@ -18,5 +18,5 @@ public interface DocumentService {
 	public Document select(int document_idx);
 	
 	//글 작성 폼
-	public void insert(VersionLog versionLog);
+	public void versionInsert(VersionLog versionLog);
 }

@@ -21,5 +21,5 @@ public interface DocumentDAO {
 	public Document select(int document_idx);
 	
 	// 문서 작성 폼
-	public void insert(VersionLog versionLog);
+	public void versionInsert(VersionLog versionLog);
 }

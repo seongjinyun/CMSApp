@@ -33,8 +33,8 @@ public class DocumentServiceImpl implements DocumentService {
 		return document;
 	}
 	
-	public void insert(VersionLog versionLog) {
-		documentDAO.insert(versionLog);
+	public void versionInsert(VersionLog versionLog) {
+		documentDAO.versionInsert(versionLog);
 	}
 
 }
