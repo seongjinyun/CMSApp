@@ -2,6 +2,7 @@ package com.sds.cmsapp.model.document;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.sds.cmsapp.domain.Document;
 import com.sds.cmsapp.domain.VersionLog;
@@ -22,8 +23,16 @@ public class DocumentServiceImpl implements DocumentService {
 		return documentDAO.selectByDocumentIdx(document_idx);
 	}
 	
-	public void insert(VersionLog versionLog) {
-		documentDAO.insert(versionLog);
-	}
+	@Transactional
+    public void documentInsert(Document document, VersionLog versionLog) {
+        // 문서 삽입
+		documentDAO.documentInsert(document);
+        // versionLog에 document 설정
+        versionLog.setDocument(document);
+        // 버전 로그 삽입
+        documentDAO.versionInsert(versionLog);
+        
+        System.out.println(versionLog.getContent());
+    }
 
 }

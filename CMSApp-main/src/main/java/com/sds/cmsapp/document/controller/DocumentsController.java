@@ -1,12 +1,15 @@
 package com.sds.cmsapp.document.controller;
 
+import java.util.HashMap;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 
 import com.sds.cmsapp.domain.Document;
 import com.sds.cmsapp.domain.VersionLog;
@@ -24,27 +27,21 @@ public class DocumentsController {
 
 		return "documents/writeform";
 	} 
-	
-	//작성한 글 요청
-	@PostMapping("/document/save")
-	public String edit(VersionLog versionLog) {
-		System.out.println(versionLog.getTitle());
-		System.out.println(versionLog.getContent());
-		
-		documentService.insert(versionLog);
-		
-		return "redirect:/document/writeform";
-	}
 
 	//프로젝트 목록
 	@GetMapping("/document/folder_list")
 	public String getDocumentFolderList() {
+		
 		return "documents/folder_list";
 	} 
 	
 	//파일목록
 	@GetMapping("/document/list")
 	public String getDocumentList(Model model) {
+		HashMap map = new HashMap();
+		
+		List documentVersionList = documentService.selectAll(map);//3단계 일시키기
+		model.addAttribute("documentVersionList",documentVersionList);//4단계 결과 저장
 		
 		return "documents/list";
 	} 

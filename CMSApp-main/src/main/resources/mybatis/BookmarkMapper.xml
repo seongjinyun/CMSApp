@@ -4,8 +4,20 @@
 	
 	<insert id="insert" parameterType="Bookmark">
 		insert into bookmark(emp_idx, document_idx)
-		values(#{emp_idx}, #{document_idx})
+		values(#{emp.emp_idx}, #{document.document_idx})
+		<selectKey keyColumn="bookmark_idx" keyProperty="bookmark_idx" resultType="int" order="AFTER">
+			select last_insert_id() as bookmark_idx
+		</selectKey>
 	</insert>
+	
+	<resultMap type="Bookmark" id="BookmarkMap">
+		<id 	column="bookmark_idx" 	property="bookmark_idx"/>
+		<result	column="regdate" 		property="regdate"/>		
+		<association column="emp_idx" property="emp" javaType="Emp" 
+			select="com.sds.cmsapp.model.emp.EmpDAO.select"/>
+		<association column="document_idx" property="document" javaType="Document" 
+			select="com.sds.cmsapp.model.document.DocumentDAO.select"/>
+	</resultMap>
 	
 	<delete id="delete" parameterType="Bookmark">
 		delete from bookmark
@@ -18,7 +30,12 @@
 		where bookmark_idx = #{bookmark_idx}
 	</delete>
 	
-	<select id="selectByEmpIdx" parameterType="int" resultType="Bookmark">
+	<select id="select" parameterType="int" resultMap="BookmarkMap">
+		select * from bookmark
+		where bookmark_idx = #{bookmark_idx}
+	</select>
+	
+	<select id="selectByEmpIdx" parameterType="int" resultMap="BookmarkMap">
 		select * from bookmark
 		where emp_idx = #{emp_idx}
 		limit #{startIndex}, #{rowCount}
@@ -34,7 +51,7 @@
 		where document_idx = #{document_idx}
 	</select>
 	
-	<select id="inBookmark" parameterType="Bookmark" resultType="Bookmark">
+	<select id="isBookmark" parameterType="Bookmark" resultMap="BookmarkMap">
 		select * from bookmark
 		where emp_idx = #{emp_idx}
 		and document_idx = #{document_idx}

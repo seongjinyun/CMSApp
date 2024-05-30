@@ -8,38 +8,7 @@
 	<th:block th:replace="~{fragments/header_link :: header_link}"/>
 	<th:block th:replace="~{elements/datatables_header_link :: datatables_header_link}"/>
 	<th:block th:replace="~{elements/advanced_forms_header_link :: advanced_forms_header_link}"/>
-	<!-- 
-	<script>
-        function getSelectedUsers() {
-            let selectedUsers = [];
-            let rows = document.querySelectorAll("table tbody tr");
-            rows.forEach(function(row) {
-                let checkbox = row.querySelector('input[type="checkbox"]');
-                if (checkbox.checked) {
-                    let userId = row.getAttribute('data-user-id');
-                    let select = row.querySelector('select');
-                    selectedUsers.push({id: userId, status: select.value});
-                }
-            });
-            return selectedUsers;
-        }
-
-        function submitSelectedUsers() {
-            let selectedUsers = getSelectedUsers();
-            let xhr = new XMLHttpRequest();
-            xhr.open("POST", "/updateUsers", true);
-            xhr.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
-            xhr.onreadystatechange = function () {
-                if (xhr.readyState === 4 && xhr.status === 200) {
-                    alert("Users updated successfully!");
-                    window.location.reload();
-                }
-            };
-            xhr.send(JSON.stringify(selectedUsers));
-        }
-    </script>
-	 --> 
-	 
+	
 	 <style>
         .addImage {
             width: 45%;
@@ -120,27 +89,25 @@
 					        </div>
 					    </div>
 						<div class="card-body">
-					        <form class="inputImg" enctype="multipart/form-data">
+					        <form class="inputImg" enctype="multipart/form-data" id="add_new_emp">
 							    <div class="form-group">
-					                <label>사용자명</label>
-					                <input type="text" class="form-control" placeholder="Enter ...">
+					                <label>사원명</label>
+					                <input type="text" id="" name="" class="form-control" placeholder="사원명 입력">
 					            </div>
 					            <div class="form-group">
 					                <label>ID</label>
-					                <input type="text" class="form-control" placeholder="Enter ...">
+					                <input type="text" id="" name="" class="form-control" placeholder="ID 입력">
 					            </div>
 					            <div class="form-group">
 					                <label>PW</label>
-					                <input type="password" class="form-control" placeholder="Enter ...">
+					                <input type="password" id="" name="" class="form-control" placeholder="PW 입력">
 					            </div>
 							    <div class="row">
 							        <div class="col">
 							            <div class="form-group">
 							            	<label>Role</label>
-							                <select class="select1 form-control" data-placeholder="역할 선택" style="width: 100%;">
-												<option>Draft Writer</option>
-												<option>Editor</option>
-												<option>Admin</option>
+							                <select id="role_code" name="role_code" class="select1 form-control" data-placeholder="역할 선택" style="width: 100%;">
+												<option th:each="role : ${roleList}" th:value="${role.role_code}" th:text="${role.role_name}"></option>
 											</select>
 							            </div>
 							        </div> 
@@ -149,10 +116,8 @@
 							        <div class="col">
 							            <div class="form-group">
 							            	<label>Department</label>
-							                <select class="select1 form-control" data-placeholder="부서 선택" style="width: 100%;">
-												<option>기획 1팀</option>
-												<option>개발 1팀</option>
-												<option>영업 1팀</option>
+							                <select id="dept_idx" name="dept_idx" class="select1 form-control" data-placeholder="부서 선택" style="width: 100%;">
+												<option th:each="dept : ${deptList}" th:value="${dept.dept_idx}" th:text="${dept.dept_name}"></option>
 											</select>
 							            </div>
 							        </div> 
@@ -165,8 +130,7 @@
 					                </div>
 									<input type="file" accept="image/*" onchange="loadFile(this)" style="margin: auto; margin-top: 15px; display: block;">
 					            </div>
-					            
-								<input type="submit" value="Save Changes" class="btn btn-success float-right" style="height: 38px;">
+					            <button type="button" id="btn_add_new_emp" class="col btn btn-success float-right" style="height: 38px; margin-top: 20px;">Add new Employee</button>
 							</form>
 					    </div>
 			 		</div>
@@ -174,7 +138,7 @@
     			<div class="col-md-8">
     				<div class="card">
 					    <div class="card-header">
-					        <h5 class="card-title" style="font-weight: bold;">사용자 역할 설정</h5>
+					        <h5 class="card-title" style="font-weight: bold;">사원 역할 설정</h5>
 			       		        <div class="card-tools">
 					            <button type="button" class="btn btn-tool" data-card-widget="collapse" title="Collapse">
 					                <i class="fas fa-minus"></i>
@@ -182,58 +146,34 @@
 					        </div>
 					    </div>
 						<div class="card-body">
-					        <table id="emp" class="table table-bordered table-striped">
-					            <thead>
-					                <tr>
-					                    <th><input type='checkbox' name='chkAll' onclick='chkChange(this);'></th>
-					                    <th>사용자명</th>
-					                    <th>역할</th>
-					                    <th>부서</th>
-					                    <th>마지막 활동</th>
-					                </tr>
-					            </thead>
-					            <tbody>
-					                <tr id="tr1">
-					                <!-- <tr th:each="user, iterStat : ${users}"> -->
-					                    <td><input type='checkbox' name='chk' value=''/> </td>
-					                    <td>장원영</td>
-					                    <td>
-					                    	<select class="select1 form-control" data-placeholder="역할 선택" style="width: 100%;">
-												<option>Draft Writer</option>
-												<option>Editor</option>
-												<option>Admin</option>
-											</select>
-					                    </td>
-					                    <td>
-											<select class="select1 form-control" data-placeholder="부서 선택" style="width: 100%;">
-												<option>기획 1팀</option>
-												<option>개발 1팀</option>
-												<option>영업 1팀</option>
-											</select>
-										</td>
-					                    <td>2024-05-23</td>
-					                </tr>
-					                <tr id="tr2">
-					                    <td><input type='checkbox' name='chk' value=''/> </td>
-					                    <td>안유진</td>
-					                    <td>
-											<select class="select1 form-control" data-placeholder="역할 선택" style="width: 100%;">
-												<option>Draft Writer</option>
-												<option>Editor</option>
-												<option>Admin</option>
-											</select>
-										</td>
-					                    <td>
-											<select class="select1 form-control" data-placeholder="부서 선택" style="width: 100%;">
-												<option>기획 1팀</option>
-												<option>개발 1팀</option>
-												<option>영업 1팀</option>
-											</select>
-										</td>
-					                    <td>2024-05-22</td>
-					                </tr>
-					            </tbody>    
-					        </table>
+							<form class="form-horizontal" id="update_emps">
+						        <table id="emp" class="table table-bordered table-striped">
+						            <thead>
+						                <tr>
+						                    <th>사원명</th>
+						                    <th>역할</th>
+						                    <th>부서</th>
+						                    <!-- <th>마지막 활동</th> -->
+						                </tr>
+						            </thead>
+						            <tbody>
+						                <tr th:each="emp : ${empList}">
+						                    <td th:text="${emp.emp_name}" id="emp_name"></td>
+						                    <td>
+						                    	<select id="role_code" name="role_code" class="select1 form-control" data-placeholder="역할 선택" style="width: 100%;">
+													<option th:each="role : ${roleList}" th:value="${role.role_code}" th:text="${role.role_name}"></option>
+												</select>
+						                    </td>
+						                    <td>
+												<select id="dept_idx" name="dept_idx" class="select1 form-control" data-placeholder="부서 선택" style="width: 100%;">
+													<option th:each="dept : ${deptList}" th:value="${dept.dept_idx}" th:text="${dept.dept_name}"></option>
+												</select>
+											</td>
+						                    <!-- <td value="사원의 마지막 활동 기록"></td> -->
+						                </tr>
+						            </tbody>    
+						        </table>
+						    </form>>
 					        <input type="submit" value="Save Changes" class="btn btn-success float-right" style="height: 38px; margin-top: 20px;">
 					    </div>
 			  		</div>
@@ -261,3 +201,6 @@
 
 </body>
 </html>
+<script type="text/javascript">
+    
+</script>

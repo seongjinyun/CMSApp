@@ -126,12 +126,12 @@
 						<form id="form1">
 							<div class="card-header">
 								<div class="col-sm-12">
-									<input type="text" name="title" class="form-control" id="" placeholder="제목...">
+									<input type="text" name="versionLog.title" class="form-control" id="" placeholder="제목...">
 								</div>
 							</div>
 							<!-- /.card-header -->
 							<div class="card-body">
-								<textarea name="content" id="summernote" rows="6">
+								<textarea name="versionLog.content" id="summernote" rows="6">
 					             </textarea>
 							</div>
 							</form>
@@ -168,6 +168,13 @@
   })
   
   function edit(){
+	// 서머노트의 현재 내용을 HTML 형식으로 가져옴
+	    var htmlContent = $('#summernote').summernote('code');
+	    
+	    // 가져온 HTML 내용을 해당 폼의 textarea에 설정.
+	    // 폼 데이터에 서머노트의 내용이 HTML 형식으로 포함됨
+	    $('textarea[name="versionLog.content"]').html(htmlContent);
+
 	  $("#form1").attr({
 			action:"/document/save",
 			method:"post"
