@@ -31,7 +31,7 @@ public class DocumentsController {
 		System.out.println(versionLog.getTitle());
 		System.out.println(versionLog.getContent());
 		
-		documentService.insert(versionLog);
+		documentService.versionInsert(versionLog);
 		
 		return "redirect:/document/writeform";
 	}

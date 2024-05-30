@@ -1,5 +1,52 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "mybatis-3-mapper.dtd">
-<mapper namespace="com.sds.cmsapp.model.version.FolderDAO">
+<mapper namespace="com.sds.cmsapp.model.folder.FolderDAO">
+
+	<insert id="insert" parameterType="Folder">
+		insert into folder (parent_folder_idx, folder_name, project_idx)
+		values (#{parent_folder.parent_folder_idx}, #{folder_name}, #{project.project_idx})
+		<selectKey keyColumn="folder_idx" keyProperty="folder_idx" resultType="int" order="AFTER">
+			select last_insert_id() as folder_idx
+		</selectKey>
+	</insert>
+	
+	<delete id="delete" parameterType="int">
+		delete from folder where folder_idx = #{folder_idx}
+	</delete>
+	
+	<update id="update" parameterType="Folder">
+		update folder
+		set parent_folder_idx = #{parent_folder.folder_idx},
+			folder_name = #{folder_name},
+			project_idx = #{project.project_idx}
+		where folder_idx = #{folder_idx}
+	</update>
+	
+	<resultMap type="Folder" id="FolderMap">
+		<id 	column="folder_idx"	property="folder_idx"/>
+		<result	column="regdate"	property="regdate"/>
+		<association column="parent_folder_idx" property="parent_folder" javaType="Folder"
+			select="com.sds.cmsapp.model.folder.FolderDAO.select"/>
+	</resultMap>
+	
+	<select id="select" parameterType="int" resultMap="FolderMap">
+		select * from folder
+		where folder_idx = #{folder_idx}
+	</select>
+	
+	<select id="selectAll" resultMap="FolderMap">
+		select * from folder
+	</select>
+	
+	<select id="selectSub" parameterType="int" resultMap="FolderMap">
+		select * from folder
+		where parent_folder_idx = #{parent_folder_idx}
+	</select>
+	
+	<select id="selectParent" parameterType="Folder" resultMap="FolderMap">
+		select * from folder
+		where folder_idx = #{parent_folder.folder_idx}
+	</select>
+	
 
 </mapper>
