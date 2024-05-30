@@ -8,12 +8,13 @@
 		<selectKey keyColumn="trash_idx" keyProperty="trash_idx" resultType="int" order="AFTER">
 			select last_insert_id() as trash_idx
 		</selectKey>
-		<selectKey keyColumn="trash_idx" keyProperty="trash_idx" resultType="int" order="AFTER">
-			select last_insert_id() as trash_idx
+		<selectKey keyColumn="regdate" keyProperty="regdate" resultType="java.sql.Timestamp" order="AFTER">
+			select regdate from trash where trash_idx = #{trash_idx}
 		</selectKey>
 	</insert>
 	
 	<resultMap type="Trash" id="TrashMap">
+		<id column="trash_idx" property="trash_idx"/>
 		
 	</resultMap>
 	

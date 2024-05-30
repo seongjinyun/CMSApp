@@ -13,10 +13,10 @@ public interface FolderDAO {
 	public int insert(Folder folder);
 	
 	// 폴더 제거
-	public int delete();
+	public int delete(int folder_idx);
 	
 	// 폴더 수정
-	public int update();
+	public int update(Folder folder);
 	
 	// 폴더 한건 조회
 	public Folder select(int folder_idx);
@@ -28,9 +28,7 @@ public interface FolderDAO {
 	public List<Folder> selectSub(int folder_idx);
 		
 	// 상위폴더 조회
-	public Folder selectParent(int folder_idx);
+	public Folder selectParent(Folder folder);
 	
-	// 깊이 구하기 -> 다른계층에서 구현 시도
-	//public int selectDepth(int folder_idx);
 	
 }
