@@ -1,5 +1,7 @@
 package com.sds.cmsapp.domain;
 
+import java.sql.Timestamp;
+
 import lombok.Data;
 
 @Data
@@ -9,5 +11,5 @@ public class StatusLog {
 	private Document document;
 	private MasterCode masterCode;
 	private String comments;
-	private String regdate;
+	private Timestamp regdate;
 }

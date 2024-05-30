@@ -21,10 +21,9 @@ public interface DocumentDAO {
 	public Document selectByDocumentIdx(int document_idx);
 	
 	// 문서 작성 폼
-<<<<<<< HEAD
+
 	public void versionInsert(VersionLog versionLog);
-}
-=======
+
 	public void insert(VersionLog versionLog);
 }
->>>>>>> 6896369092883c476576c2aebe26cdf5bde5fb6b
+

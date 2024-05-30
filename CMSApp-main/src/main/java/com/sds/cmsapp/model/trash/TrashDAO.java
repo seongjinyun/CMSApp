@@ -16,6 +16,9 @@ public interface TrashDAO {
 	// 휴지통에서 제거 (복원, 영구삭제)
 	public int delete(int trash_idx);
 	
+	// 휴지통 한건 조회
+	public Trash select(int trash_idx);
+	
 	// 휴지통 문서 수 조회
 	public int selectCount();
 	

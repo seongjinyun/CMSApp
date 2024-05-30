@@ -92,13 +92,13 @@ public class DocumentController {
 			
 		int statusLog_idx = statusLog.getStatus_log_idx();
 		String statusLog_comments = statusLog.getComments();
-		String statusLog_regDate = statusLog.getRegdate();
+		//String statusLog_regDate = statusLog.getRegdate();
 		//int statusLog_statusChangerEmpIdx = statusLog.getEmp().getEmp_idx();
 		//int statusLog_ChangedStatusCode = statusLog.getMasterCode().getStatus_code();
 		
 		System.out.println("이 문서의 결재 상태가 가장 마지막에 변경되었을 때의 상태 로그_idx: " + statusLog_idx);
 		System.out.println("이 문서의 결재 상태가 가장 마지막에 변경되었을 때의 상태 로그의 코멘트: " + statusLog_comments);
-		System.out.println("이 문서의 결재 상태가 가장 마지막에 변경되었을 때의 상태 로그의 일시: " + statusLog_regDate);
+		//System.out.println("이 문서의 결재 상태가 가장 마지막에 변경되었을 때의 상태 로그의 일시: " + statusLog_regDate);
 //		
 //		// emp 테이블 정보 (상태 변경)
 //		Emp statusChangerEmp = empService.selectByEmpIdx(statusLog_statusChangerEmpIdx);
