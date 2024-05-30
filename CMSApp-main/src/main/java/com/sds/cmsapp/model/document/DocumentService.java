@@ -17,7 +17,8 @@ public interface DocumentService {
 	// 선택 문서 조회
 	public Document selectByDocumentIdx(int document_idx);
 	
-	//글 작성 폼
-	public void versionInsert(VersionLog versionLog);
+	//문서생성 + 버전
+	public void documentInsert(Document document, VersionLog versionLog);
+	
 }
 

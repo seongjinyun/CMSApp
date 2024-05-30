@@ -20,10 +20,18 @@ public interface DocumentDAO {
 	// 선택 문서 조회
 	public Document selectByDocumentIdx(int document_idx);
 	
+<<<<<<< Updated upstream
 	// 문서 작성 폼
 
 	public void versionInsert(VersionLog versionLog);
 
 	public void insert(VersionLog versionLog);
+=======
+	//문서 생성
+	public void documentInsert(Document document);
+	
+	//버전 생성
+	public void versionInsert(VersionLog versionLog);
+>>>>>>> Stashed changes
 }
 
