@@ -9,7 +9,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import com.sds.cmsapp.domain.Dept;
 import com.sds.cmsapp.domain.DeptProject;
-import com.sds.cmsapp.domain.Emp;
 import com.sds.cmsapp.domain.Project;
 import com.sds.cmsapp.model.dept.DeptService;
 import com.sds.cmsapp.model.project.ProjectService;
@@ -47,6 +46,7 @@ public class ProjectController {
 			deptProjectService.insert(deptProject);
 		}
 	    
-		return "redirect:/settings/access";
+		return "redirect:/settings/dept_project";
 	}
+	
 }

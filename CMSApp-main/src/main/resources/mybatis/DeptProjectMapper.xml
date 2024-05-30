@@ -7,5 +7,28 @@
 		insert into dept_project(dept_idx, project_idx)
 		values(#{dept.dept_idx}, #{project.project_idx})
 	</insert>
+		
+	<!-- dept_idx로 할당된 project_idx 가져오기 -->
+	<select id="selectByDeptIdx" parameterType="int" resultType="Project">
+	    SELECT p.*
+	    FROM project p
+	    JOIN dept_project dp ON p.project_idx = dp.project_idx
+	    WHERE dp.dept_idx=#{dept_idx}
+  	</select>
+  	
+  	<!-- dept_idx로 할당되지 않은 나머지 project_idx 가져오기 -->
+    <select id="selectOtherByDeptIdx" parameterType="int" resultType="Project">
+        SELECT p.*
+        FROM project p
+        LEFT JOIN dept_project dp ON p.project_idx = dp.project_idx AND dp.dept_idx = #{dept_idx}
+        WHERE dp.project_idx IS NULL
+    </select>
+  	
+  	<!-- 부서에서 프로젝트 삭제 -->
+  	<delete id="delete" parameterType="DeptProject">
+  		delete
+  		from dept_project
+  		where dept_idx=#{dept.dept_idx} and project_idx=#{project.project_idx} 
+  	</delete>
 	
 </mapper>
