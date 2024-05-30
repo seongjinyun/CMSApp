@@ -10,5 +10,6 @@ public interface EmpService {
 	public List selectAllEmpName();
 	public Emp selectByEmpIdx(int emp_idx);
 	public void update(Emp emp);
+	public void updateDept(Emp emp);
 	
 }

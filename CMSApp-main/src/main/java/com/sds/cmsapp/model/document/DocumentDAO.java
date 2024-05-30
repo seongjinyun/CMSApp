@@ -6,6 +6,7 @@ import java.util.Map;
 import org.apache.ibatis.annotations.Mapper;
 
 import com.sds.cmsapp.domain.Document;
+import com.sds.cmsapp.domain.VersionLog;
 
 @Mapper
 public interface DocumentDAO {
@@ -17,5 +18,13 @@ public interface DocumentDAO {
 	public List selectAll();
 
 	// 선택 문서 조회
+<<<<<<< HEAD
 	public Document selectByDocumentIdx(int document_idx);
 }
+=======
+	public Document select(int document_idx);
+	
+	// 문서 작성 폼
+	public void insert(VersionLog versionLog);
+}
+>>>>>>> d5b96bd4a6b5c749a560c335aff1aad77a1210a1
