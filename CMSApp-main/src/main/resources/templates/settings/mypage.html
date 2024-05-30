@@ -65,7 +65,7 @@
           <div class="col-sm-6">
             <ol class="breadcrumb float-sm-right">
               <li class="breadcrumb-item"><a th:href="@{general}">Settings</a></li>
-              <li class="breadcrumb-item active">User</li>
+              <li class="breadcrumb-item active">Mypage</li>
             </ol>
           </div><!-- /.col -->
         </div><!-- /.row -->
@@ -179,19 +179,19 @@
 				                        <div class="form-group row">
 				                            <label for="inputName" class="col-sm-2 col-form-label">Name</label>
 				                            <div class="col-sm-10">
-				                                <input type="text" class="form-control" id="emp_name" placeholder="Name">
+				                                <input type="text" class="form-control" id="emp_name" placeholder="th:value=">
 				                            </div>
 				                        </div>
 				                        <div class="form-group row">
 				                            <label for="inputID" class="col-sm-2 col-form-label">ID</label>
 				                            <div class="col-sm-10">
-				                                <input type="text" class="form-control" id="empDetail.emp_id" placeholder="ID">
+				                                <input type="text" class="form-control" id="empDetail.emp_id" placeholder="th:value=">
 				                            </div>
 				                        </div>
 				                        <div class="form-group row">
 				                            <label for="inputPW" class="col-sm-2 col-form-label">PW</label>
 				                            <div class="col-sm-10">
-				                                <input type="password" class="form-control" id="empDetail.emp_pw" placeholder="PW">
+				                                <input type="password" class="form-control" id="empDetail.emp_pw" placeholder="th:value=">
 				                            </div>
 				                        </div>
 				                        <div class="form-group row">
@@ -199,11 +199,8 @@
 				                            <div class="col-sm-10">
 				                                <div class="form-group">
 													<select class="select1 form-control" id="dept.dept_name" data-placeholder="Department" style="width: 100%;">
-														<option>1팀</option>
-														<option>2팀</option>
-														<option>3팀</option>
-														<option>4팀</option>
-														<option>5팀</option>
+														<!-- 부서는 페이지 로드 시 동적으로 로딩. 현재 부서를 제외하고 이동 가능 -->
+														<!-- 부서 이동 권한은 사용자에게는 없고, 관리자에게만 출력 (disabled) -->
 													</select>
 										        </div>
 				                            </div>
@@ -211,17 +208,15 @@
 				                        <div class="form-group row">
 				                            <label for="inputRole" class="col-sm-2 col-form-label">Role</label>
 				                            <div class="col-sm-10">
-				                                <div class="row">
-											        <div class="col">
-											            <div class="form-group">
-											                <select class="select1 form-control" id="role.role_name" data-placeholder="역할 선택" style="width: 100%;">
-																<option>Draft Writer</option>
-																<option>Editor</option>
-																<option>Admin</option>
-															</select>
-											            </div>
-											        </div> 
-												</div>
+									            <div class="form-group">
+									                <select class="select1 form-control" id="role.role_name" data-placeholder="역할 선택" style="width: 100%;">
+														<!-- 역할은 페이지 로드 시 동적으로 로딩. 현재 역할을 제외하고 이동 가능 -->
+														<!-- 역할 이동 권한은 사용자에게는 없고, 관리자에게만 출력 (disabled) -->
+														<option>Draft Writer</option>
+														<option>Editor</option>
+														<option>Admin</option>
+													</select>
+									            </div> 
 				                            </div>
 				                        </div>
 				                        <div class="form-group row">

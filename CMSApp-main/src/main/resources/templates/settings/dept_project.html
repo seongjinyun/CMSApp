@@ -60,7 +60,7 @@
             <section class="content">
                 <div class="container-fluid">
                     <div class="row">
-                        <div class="col-md-5">
+                        <div class="col-md-6">
                             <!-- 새 부서 추가 폼 -->
                             <div class="card">
                                 <div class="card-header">
@@ -78,7 +78,7 @@
                                             <input type="text" id="dept_name" name="dept_name" class="form-control" placeholder="부서명 입력">
                                         </div>
                                         <div>
-                                            <label for="emp_idx" class="col-form-label">부서 사원 추가</label>
+                                            <label for="emp_idx" class="col-form-label">부서 사원 추가/이동</label>
                                             <select id="emp_idx" name="emp_idx" class="select2 form-control" multiple="multiple" data-placeholder="(다중)선택" style="width: 100%;">
                                                 <option th:each="emp : ${empList}" th:value="${emp.emp_idx}" th:text="${emp.emp_name}"></option>
                                             </select>
@@ -114,7 +114,7 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="col-md-7">
+                        <div class="col-md-6">
                             <!-- 추가 폼 -->
                             <div class="card">
                                 <div class="card-header">
@@ -157,6 +157,7 @@
                             </div>
 
                             <!-- 프로젝트를 보유하지 않은 부서 삭제 -->
+                            
                             <!-- 어느 부서에도 해당되지 않은 프로젝트 삭제 -->
 
                         </div>
