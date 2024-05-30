@@ -7,9 +7,9 @@ import lombok.Data;
 @Data
 public class Emp {
 	private int emp_idx;
-	private Dept dept;
 	private String emp_name;
-	private Role role;
 	
-	private List<StatusLog> statusLogList;
+	// 부모 테이블
+	private Dept dept;
+	private Role role;
 }

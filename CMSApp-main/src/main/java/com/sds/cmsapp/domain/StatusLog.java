@@ -5,9 +5,11 @@ import lombok.Data;
 @Data
 public class StatusLog {
 	private int status_log_idx;
-	private Emp emp;
-	private Document document;
-	private MasterCode masterCode;
 	private String comments;
 	private String regdate;
+	
+	// 부모 테이블
+	private Emp emp;
+	private MasterCode masterCode;
+	private Document document;
 }

@@ -8,39 +8,39 @@
 		values(#{emp_name},
 		#{dept.dept_idx}, #{role.role_code})
 		<!-- emp_detail에 상세 정보를 insert 하기 위해 부모테이블 emp의 index 값 추출 -->
-		<selectKey keyColumn="emp_idx" keyProperty="emp_idx" resultType="int" order="AFTER">
+		<selectKey keyColumn="emp_idx" keyProperty="emp_idx"
+			resultType="int" order="AFTER">
 			select last_insert_id() as emp_idx
 		</selectKey>
 	</insert>
-
-	<!-- 문서 조회 시 사원 정보 조인을 위한 select문 -->
-	<select id="select" parameterType="int" resultType="Emp">
-		select * from
-		emp where emp_idx=#{emp_idx}
-	</select>
 
 	<!-- Mybatis 객체 간 Association -->
 	<resultMap type="Emp" id="EmpMap">
 		<id column="emp_idx" property="emp_idx" />
 		<result column="emp_name" property="emp_name" />
+
+		<!-- 외래키: dept_idx -->
 		<association column="dept_idx" property="dept"
 			javaType="Dept"
 			select="com.sds.cmsapp.model.dept.DeptDAO.selectByDeptIdx" />
+
+		<!-- 외래키: role_code -->
 		<association column="role_code" property="role"
 			javaType="Role"
 			select="com.sds.cmsapp.model.role.RoleDAO.selectByRoleCode" />
-	</resultMap>
 
-	<!-- 사원 이름 전체 출력 -->
-	<select id="selectAllEmpName" resultType="Emp">
-		select emp_idx,
-		emp_name from emp
-	</select>
+	</resultMap>
 
 	<!-- emp_idx가 가리키는 사원 조회 -->
 	<select id="selectByEmpIdx" parameterType="int"
 		resultMap="EmpMap">
 		select * from emp where emp_idx=#{emp_idx}
+	</select>
+	
+	<!-- 사원 이름 전체 출력 -->
+	<select id="selectAllEmpName" resultType="Emp">
+		select emp_idx,
+		emp_name from emp
 	</select>
 
 	<!-- emp_idx가 가리키는 사원 정보의 변경 -->

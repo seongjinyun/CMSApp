@@ -1,4 +1,4 @@
-package com.sds.cmsapp.model.status;
+package com.sds.cmsapp.model.mastercode;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -13,7 +13,7 @@ public class MasterCodeServiceImpl implements MasterCodeService {
 
 	@Override
 	public MasterCode select(int status_code) {
-		return masterCodeDAO.select(status_code);
+		return masterCodeDAO.select(status_code); //returnType="MasterCode"
 	}
 		
 }
