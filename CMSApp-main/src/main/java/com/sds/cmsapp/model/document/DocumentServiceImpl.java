@@ -11,7 +11,7 @@ import com.sds.cmsapp.domain.VersionLog;
 
 @Service
 public class DocumentServiceImpl implements DocumentService {
-	
+
 	@Autowired
 	private DocumentDAO documentDAO;
 
@@ -28,9 +28,8 @@ public class DocumentServiceImpl implements DocumentService {
 	}
 
 	@Override
-	public Document select(int document_idx) {
-		Document document = documentDAO.select(document_idx);
-		return document;
+	public Document selectByDocumentIdx(int document_idx) {
+		return documentDAO.selectByDocumentIdx(document_idx);
 	}
 	
 	public void insert(VersionLog versionLog) {

@@ -28,7 +28,6 @@ public class DeptServiceImpl implements DeptService {
 	
 	@Override
 	public Dept selectByDeptIdx(int dept_idx) {
-		// TODO Auto-generated method stub
 		return deptDAO.selectByDeptIdx(dept_idx);
 	}
 }

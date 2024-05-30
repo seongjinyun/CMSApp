@@ -9,5 +9,6 @@ public interface RoleDAO {
 
 	public void insert(Role role);
 	public Role selectByRoleIdx(int role_idx);
+	public Role selectByRoleCode(int role_code);
 	
 }
