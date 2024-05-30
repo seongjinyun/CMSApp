@@ -19,33 +19,6 @@
 			select="com.sds.cmsapp.model.statuslog.StatusLogDAO.selectLatestRegisteredStatusLogByDocumentIdx"/> 
 		
 	</resultMap>
-<<<<<<< HEAD
-=======
-
-
-	<!-- 쿼리 -->
-
-	<!-- 문서 한 개 조회 -->
-	<select id="selectByDocumentIdx" parameterType="int" resultMap="DocumentMap">
-		select * from
-		document where document_idx=#{document_idx}
-	</select>
-
-    <!-- 문서 삽입 -->
-    <insert id="documentInsert" parameterType="Document" >
-        INSERT INTO document (emp_idx)
-        VALUES (1)
-    </insert>
-
-	<!-- 버전로그 삽입 -->
-	<insert id="versionInsert" parameterType="VersionLog">
-<!-- 	INSERT INTO version_log(branched_version_log_idx, emp_idx, project_idx, folder_idx, document_idx, version, title, content, comments) 
-	VALUES (#{branched_version_log_idx},#{emp_idx},#{project_idx},#{folder_idx},#{document_idx},#{version}, #{title}, #{content}, #{comments});
-	 -->
-	INSERT INTO version_log(branched_version_log_idx,emp_idx,project_idx,folder_idx,document_idx,version,title,content,comments) 
-	VALUES (NULL,7,1,NULL,1,1,#{title}, #{content},'초안')
-
->>>>>>> 823e578f7f4529bfe40446c5334af12b2758ef90
 	
 	<!-- resultMap="DocumentMap" -->
 	<select id="selectByDocumentIdx" parameterType="int" resultMap="DocumentMap">

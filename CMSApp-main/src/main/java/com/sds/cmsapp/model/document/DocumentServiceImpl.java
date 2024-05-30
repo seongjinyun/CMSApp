@@ -1,5 +1,8 @@
 package com.sds.cmsapp.model.document;
 
+import java.util.List;
+import java.util.Map;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -12,16 +15,23 @@ public class DocumentServiceImpl implements DocumentService {
 	
 	@Autowired
 	private DocumentDAO documentDAO;
+	
+	// 모든 문서 조회
+	public List selectAll(Map map) {
+		return null;
+	};
 
+	// 선택 문서 조회
+	
 	// returnType="Document"
 	public Document select(int document_idx) {
 		return documentDAO.select(document_idx);
-	}
-
+	}; 
+	
 	// returnMap="DocumentMap"
 	public Document selectByDocumentIdx(int document_idx) {
 		return documentDAO.selectByDocumentIdx(document_idx);
-	}
+	}; 
 	
 	@Transactional
     public void documentInsert(Document document, VersionLog versionLog) {
@@ -34,5 +44,11 @@ public class DocumentServiceImpl implements DocumentService {
         
         System.out.println(versionLog.getContent());
     }
+
+	@Override
+	public void insert(VersionLog versionLog) {
+		// TODO Auto-generated method stub
+		
+	}
 
 }
