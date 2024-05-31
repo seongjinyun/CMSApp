@@ -9,6 +9,4 @@ public class MasterCode {
 	private int mastercode_idx;
 	private String status_name;
 	private int status_code;
-	
-	private List<StatusLog> statusLogList;
 }
