@@ -6,6 +6,7 @@ import lombok.Data;
 public class Document {
 	private int document_idx;
 	private int hit;
+	private Folder folder;
 	
 //	// 부모 테이블 (외래키)
 //	private Emp emp;
