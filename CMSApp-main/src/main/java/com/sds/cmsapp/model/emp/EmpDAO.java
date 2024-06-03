@@ -11,6 +11,7 @@ public interface EmpDAO {
 	
 	public void insert(Emp emp);
 	public List selectAllEmpName();
+	public List selectAll();
 
 	// EmpMap 반환
 	public Emp selectByEmpIdx(int emp_idx);

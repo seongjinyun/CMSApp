@@ -11,6 +11,7 @@ public interface DeptDAO {
 	
 	public int insert(Dept dept);
 	public List selectAllDeptName();
+	public List selectAll();
 	public Dept selectByDeptIdx(int dept_idx);
 	
 }
