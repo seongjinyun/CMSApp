@@ -16,6 +16,10 @@
 		select dept_idx, dept_name from dept
 	</select>
 	
+	<select id="selectAll" resultType="Dept">
+		select * from dept
+	</select>
+	
 	<!-- dept_idx가 가리키는 부서 조회 -->
 	<select id="selectByDeptIdx" parameterType="int" resultType="Dept">
 		select * from dept where dept_idx=#{dept_idx}

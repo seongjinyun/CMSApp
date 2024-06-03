@@ -28,6 +28,12 @@ public class EmpServiceImpl implements EmpService {
 	
 	// EmpMap 반환
 	@Override
+	public List selectAll() {
+		// TODO Auto-generated method stub
+		return empDAO.selectAll();
+	}
+	
+	@Override
 	public Emp selectByEmpIdx(int emp_idx) {
 		return empDAO.selectByEmpIdx(emp_idx);
 	}
@@ -62,5 +68,4 @@ public class EmpServiceImpl implements EmpService {
 		// TODO Auto-generated method stub
 		empDAO.updateDept(emp);
 	}
-
 }
