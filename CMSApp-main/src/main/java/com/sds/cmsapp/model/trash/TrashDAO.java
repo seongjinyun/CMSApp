@@ -14,13 +14,13 @@ public interface TrashDAO {
 	public int insert(Trash trash);
 	
 	// 휴지통에서 제거 (복원, 영구삭제)
-	public int delete(int trash_idx);
+	public int delete(Integer trash_idx);
 	
 	// 휴지통 비우기
 	public int deleteAll();
 	
 	// 휴지통 한건 조회
-	public Trash select(int trash_idx);
+	public Trash select(Integer trash_idx);
 	
 	// 휴지통 문서 수 조회
 	public int selectCount();

@@ -4,22 +4,28 @@ import java.util.HashMap;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestParam;
 
-import com.sds.cmsapp.domain.Document;
-import com.sds.cmsapp.domain.VersionLog;
+import com.sds.cmsapp.common.Pager;
+import com.sds.cmsapp.domain.Trash;
 import com.sds.cmsapp.model.document.DocumentService;
+import com.sds.cmsapp.model.trash.TrashService;
 
 @Controller
 public class DocumentsController {
+	
+	@Autowired
+	Pager pager;
 
 	@Autowired
 	private DocumentService documentService;
+	
+	@Autowired
+	private TrashService trashService;
+
 	
 	//글 작성 폼
 	@GetMapping("/document/writeform")
@@ -45,10 +51,15 @@ public class DocumentsController {
 		
 		return "documents/list";
 	} 
-	
 	//휴지통
 	@GetMapping("/document/trash")
-	public String getRecycleBin() {
+	public String getTrash(Model model, @RequestParam(value="currentPage", defaultValue="1") int currentPage) {
+		pager.init(trashService.selectCount(), currentPage);
+		HashMap<String, Integer> map=new HashMap();
+		map.put("startIndex", pager.getStartIndex());
+		map.put("rowCount", pager.getPageSize());
+		List<Trash> trashList = trashService.selectAllWithRange(map);
+		model.addAttribute(trashList);
 		return "documents/trash";
 	} 
 	
