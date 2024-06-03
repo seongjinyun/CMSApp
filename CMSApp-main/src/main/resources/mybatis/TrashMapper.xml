@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "mybatis-3-mapper.dtd">
-<mapper namespace="com.sds.cmsapp.model.document.TrashDAO">
+<mapper namespace="com.sds.cmsapp.model.trash.TrashDAO">
 	
 	<insert id="insert" parameterType="Trash">
 		insert into trash(emp_idx, document_idx)
@@ -11,33 +11,41 @@
 	</insert>
 	
 	<resultMap type="Trash" id="TrashMap">
-		<id column="trash_idx" property="trash_idx"/>
-		
+		<id 	column="trash_idx" 	property="trash_idx"/>
+		<result	column="regdate" 		property="regdate"/>		
+		<association column="emp_idx" property="emp" javaType="Emp" 
+			select="com.sds.cmsapp.model.emp.EmpDAO.select"/>
+		<association column="document_idx" property="document" javaType="Document" 
+			select="com.sds.cmsapp.model.document.DocumentDAO.selectByDocumentIdx"/>
 	</resultMap>
 	
 	<delete id="delete" parameterType="int">
 		delete from trash where trash_idx = #{trash_idx}	
 	</delete>
 	
-	<select id="select" parameterType="int" resultType="Trash">
+	<select id="select" parameterType="int" resultMap="TrashMap">
 		select * from trash
 		where trash_idx = #{trash_idx}
 	</select>
 	
 	<select id="selectCount" resultType="int">
-		select count(*) from document
+		select count(*) from trash
 	</select>
 	
-	<select id="selectAll" parameterType="java.util.Map" resultType="Trash">
-		select * from movie limit  #{startIndex} , #{rowCount}
+	<select id="selectAll">
+		select * from trash
+	</select>
+	
+	<select id="selectByDocumentIdx" parameterType="int" resultMap="TrashMap">
+		select * from trash where document_idx = #{document_idx}
+	</select>
+	
+	<select id="selectAllWithRange" parameterType="java.util.Map" resultMap="TrashMap">
+		select * from trash limit  #{startIndex} , #{rowCount}
 	</select>
 	
 	<delete id="deleteAll">
 		delete from trash
 	</delete>
 	
-	<select id="isTrash" parameterType="int" resultType="Trash">
-		select * from trash where document_idx = #{document_idx}
-	</select>
-
 </mapper>

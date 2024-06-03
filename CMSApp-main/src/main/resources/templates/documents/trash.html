@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>AdminLTE 3 | Dashboard</title>
+  <title>CMSApp</title>
 
 	<th:block th:replace="~{fragments/header_link :: header_link}"/>
 	
@@ -54,9 +54,9 @@
                       <i class="fas fa-search"></i>
                     </div>
                   </div>
-                
                   <input type="button" class="btn btn-success btn-sm mr-1 ml-1" value="복원" id="restore" onclick="restore()">
-                  <input type="button" class="btn btn-danger btn-sm" value="삭제" id="delete" onclick="eliminate()">
+                  <input type="button" class="btn btn-danger btn-sm mr-1" value="삭제" id="delete" onclick="deleteTrash()">
+                  <input type="button" class="btn btn-secondary btn-sm pull-left" value="휴지통비우기" id="deleteAll" onclick="emptyTrash();">                
                 </div>
                 
               </div>
@@ -96,31 +96,18 @@
                   </tr>
                   <!-- ./소제목 -->
                   <tbody>
-                  <tr>
+                  <tr th:each="trash : ${trashList}">
                     <td>
                       <div class="icheck-primary">
-                        <input type="checkbox" value="" id="check1">
+                        <input type="checkbox" name="document_idx" th:value="${trash.document.document_idx}" id="check1">
                         <label for="check1"></label>
                       </div>
                     </td>
-                    <td class="mailbox-star"><a href="#"><i class="fa fa-star-o" aria-hidden="true"></i></a></td>
-                    <td class="mailbox-subject"><a href="/document/detail">튜토리얼</a></td>
-                    <td class="mailbox-name">v2.1</td>
-                    <td class="mailbox-date">2024.05.23 16:44</td>
-                    <td class="mailbox-attachment">리뷰 중</td>
-                  </tr>
-                  <tr>
-                    <td>
-                      <div class="icheck-primary">
-                        <input type="checkbox" value="" id="check2">
-                        <label for="check2"></label>
-                      </div>
-                    </td>
-                    <td class="mailbox-star"><a href="#"><i class="fas fa-star-o text-warning"></i></a></td>
-                    <td class="mailbox-subject"><a href="/document/detail">튜토리얼</a></td>
-                    <td class="mailbox-name">v1.1</td>
-                    <td class="mailbox-date">2024.05.21 16:44</td>
-                    <td class="mailbox-attachment">배포</td>
+                    <td class="mailbox-star"><a href="#"><i class="fas fa-star-o" aria-hidden="true"></i></a></td>
+                    <td class="mailbox-subject" th:text="${trash.versionLog.title}"><a href="/document/detail"></a></td>
+                    <td class="mailbox-name" th:text="${trash.versionLog.version}"></td>
+                    <td class="mailbox-date" th:text="${trash.regdate}"></td>
+                    <td class="mailbox-attachment" th:text="${trash.document.latestRegisteredStatusLog}"></td>
                   </tr>
                  </tbody>
                 </table>
@@ -151,7 +138,7 @@
 	
 	<th:block th:replace="~{fragments/footer_link :: footer_link}"/>
 
-<script>
+<script th:inline="javascript">
 $(function(){
 	checkBoxAll();
 	searchFile();
@@ -177,15 +164,71 @@ $(function(){
 	  }
   function restore(){
 	  if(confirm("선택된 문서를 복원하시겠습니까?")){
-		  let msg;
-		  Math.random > 0.5 ? msg = "복원 완료" : msg = "복원 실패";
-		  alert(msg);
+		  let selectedDocument_idx = [];
+          $('input[name="document_idx"]:checked').each(function() {
+              selectedDocument_idx.push($(this).val());
+          });
+          if (selectedDocument_idx.length < 1){
+        	  alert("하나 이상의 문서를 선택해주세요");
+        	  return;
+          }
+
+          $.ajax({
+              type: 'POST',
+              url: '/documents/trash/restore',
+              contentType: 'application/json',
+              data: JSON.stringify(selectedDocument_idx),
+              success: function(result, status, xhr) {
+                  alert('복원에 성공했어요');
+                  // 페이지 리로드 또는 다른 동작 수행
+              },
+              error: function(status, xhr, err) {
+                  alert('복원에 실패했어요');
+              }
+          });
+	  }
+  }
+
+  
+  function deleteTrash(){
+	  if(confirm("선택된 문서를 영구삭제하시겠습니까?")){
+		  let selectedDocument_idx = [];
+          $('input[name="document_idx"]:checked').each(function() {
+              selectedDocument_idx.push($(this).val());
+          });
+          if (selectedDocument_idx.length < 1){
+        	  alert("하나 이상의 문서를 선택해주세요");
+        	  return;
+          }
+
+          $.ajax({
+              type: 'POST',
+              url: '/document/trash/delete',
+              contentType: 'application/json',
+              data: JSON.stringify(selectedDocument_idx),
+              success: function(result, status, xhr) {
+                  alert('문서가 삭제됐어요');
+              },
+              error: function(status, xhr, err) {
+                  alert('문서 삭제에 실패했어요');
+              }
+          });
 	  }
   }
   
-  function eliminate(){
-	  if(confirm("선택된 문서를 영구삭제하시겠습니까?")){
-		  alert("삭제완료");
+  function emptyTrash(){
+	  if(confirm("휴지통을 비우시겠어요?")){
+		  $.ajax({
+              type: 'POST',
+              url: '/document/trash/empty',
+              contentType: 'application/json',
+              success: function(result, status, xhr) {
+                  alert('휴지통을 성공적으로 비웠어요');
+              },
+              error: function(status, xhr, err) {
+                  alert('휴지통을 비우는데 실패했어요');
+              }
+          });
 	  }
   }
   

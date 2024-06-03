@@ -28,7 +28,7 @@ public interface FolderDAO {
 	public List<Folder> selectSub(int folder_idx);
 		
 	// 상위폴더 조회
-	public Folder selectParent(Folder folder);
+	public Folder selectParent(int folder_idx);
 	
 	
 }

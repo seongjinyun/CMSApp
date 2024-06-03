@@ -16,7 +16,7 @@
 		<association column="emp_idx" property="emp" javaType="Emp" 
 			select="com.sds.cmsapp.model.emp.EmpDAO.select"/>
 		<association column="document_idx" property="document" javaType="Document" 
-			select="com.sds.cmsapp.model.document.DocumentDAO.select"/>
+			select="com.sds.cmsapp.model.document.DocumentDAO.selectByDocumentIdx"/>
 	</resultMap>
 	
 	<delete id="delete" parameterType="Bookmark">
