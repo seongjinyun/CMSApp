@@ -45,7 +45,12 @@
 	<!-- join하여 versionLog 가져올 예정
 		상태 불러오는 masterCode도 join -->
 	
-
+	<!-- 문서 목록 조회 -->
+    <select id="documentListSelect" resultType="Document">
+        SELECT document_idx 
+        FROM document 
+        WHERE folder_idx = #{folder.folder_idx}
+    </select>
     
     <!-- 0603-4 추가 -->
 	<resultMap type="Document" id="DocumentMapForDashboard">
