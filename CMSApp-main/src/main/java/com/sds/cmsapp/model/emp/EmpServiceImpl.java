@@ -1,6 +1,7 @@
 package com.sds.cmsapp.model.emp;
 
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -31,6 +32,19 @@ public class EmpServiceImpl implements EmpService {
 	public List selectAll() {
 		// TODO Auto-generated method stub
 		return empDAO.selectAll();
+	}
+	
+	// pager에 이용할 전체 사원 수 가져오기
+	@Override
+	public int getTotalCount() {
+		// TODO Auto-generated method stub
+		return empDAO.getTotalCount();
+	}
+
+	@Override
+	public List selectEmpPage(Map map) {
+		// TODO Auto-generated method stub
+		return empDAO.selectEmpPage(map);
 	}
 	
 	@Override

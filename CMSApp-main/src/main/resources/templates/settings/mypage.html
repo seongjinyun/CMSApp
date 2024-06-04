@@ -21,10 +21,11 @@
 	        align-items: center; /* 수직 가운데 정렬 */
         }
         .addImage img {
-	        width: auto; /* 이미지 크기를 자동으로 조절 */
-	        height: auto;
+        	width: 100%;
+        	height: 100%;	        
 	        max-width: 100%; /* 이미지가 부모 요소를 넘지 않도록 최대 크기 지정 */
 	        max-height: 100%;
+	        object-fit: cover;
 	    }
     </style>
 	 
@@ -227,14 +228,14 @@
 				                            </div>
 				                        </div>
 				                        <div class="form-group row">
-							                <label for="inputImage" class="col-sm-4 col-form-label">Profile Image</label>
+							                <label for="inputImage" class="col-sm-2 col-form-label">Profile Image</label>
 						                	<div class="col-sm-8 row">
 									        	<div class="col">
 										            <div class="form-group">
-										            <div class="addImage" id="image-show" >
-									                 	<img th:src="@{${profile_img_url}}" alt="Profile Image" id="profileImg">
-									                </div>
-													<input type="file" name="file" id="file" accept="image/*" onchange="loadFile(this)" style="margin: auto; margin-top: 15px; display: block;">
+											            <div class="addImage" id="image-show" style="width: 200px; height: 200px;">
+										                 	<img th:src="@{${profile_img_url}}" alt="Profile Image" id="profileImg">
+										                </div>
+														<input type="file" name="file" id="file" accept="image/*" onchange="loadFile(this)" style="margin-top: 15px; display: block;">
 					                				</div>
 					                			</div>
 						                	</div>
