@@ -25,18 +25,29 @@
 		select * from document where document_idx=#{document_idx}
 	</select>
 	
+    <!-- 문서 삽입 -->
+    <insert id="documentInsert" parameterType="Document">
+        INSERT INTO document (emp_idx, folder_idx) VALUES (#{emp.emp_idx}, #{folder.folder_idx})
+        <selectKey keyColumn="document_idx" keyProperty="document_idx" resultType="int" order="AFTER">
+			select last_insert_id() as document_idx
+		</selectKey>
+    </insert>
+    
+    <!-- 버전로그 삽입 -->
+    <insert id="versionInsert" parameterType="VersionLog">
+<!--     INSERT INTO version_log(branched_version_log_idx, emp_idx, project_idx, folder_idx, document_idx, version, title, content, comments) 
+    VALUES (#{branched_version_log_idx},#{emp_idx},#{project_idx},#{folder_idx},#{document_idx},#{version}, #{title}, #{content}, #{comments});
+     -->
+    INSERT INTO version_log(branched_version_log_idx,emp_idx,document_idx,version,title,content,comments) 
+    VALUES (NULL,7,#{document.document_idx}, 1,#{title}, #{content},'초안')
+    </insert>
 	
-	<insert id="insert" parameterType="VersionLog">
-		<!-- INSERT INTO version_log(branched_version_log_idx, emp_idx, project_idx, 
-			folder_idx, document_idx, version, title, content, comments) VALUES (#{branched_version_log_idx},#{emp_idx},#{project_idx},#{folder_idx},#{document_idx},#{version}, 
-			#{title}, #{content}, #{comments}); -->
-		INSERT INTO
-		version_log(branched_version_log_idx,emp_idx,project_idx,folder_idx,document_idx,version,title,content,comments)
-		VALUES (NULL,7,1,NULL,1,1,#{title}, #{content},'초안');
-	</insert>
+	<!-- join하여 versionLog 가져올 예정
+		상태 불러오는 masterCode도 join -->
 	
-	
-	<!-- 0603 추가 -->
+
+    
+    <!-- 0603-4 추가 -->
 	<resultMap type="Document" id="DocumentMapForDashboard">
 		<id 			column="document_idx" 	property="document_idx"/>
 			
@@ -136,5 +147,5 @@
         having status_code=#{status_code};
         
 	</select>
-	
+    
 </mapper>

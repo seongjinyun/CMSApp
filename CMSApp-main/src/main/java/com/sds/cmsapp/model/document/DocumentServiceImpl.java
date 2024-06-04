@@ -9,7 +9,11 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.sds.cmsapp.domain.Document;
 import com.sds.cmsapp.domain.VersionLog;
+import com.sds.cmsapp.exception.DocumentException;
+import com.sds.cmsapp.exception.VersionLogException;
 
+import lombok.extern.slf4j.Slf4j;
+@Slf4j
 @Service
 public class DocumentServiceImpl implements DocumentService {
 	
@@ -43,21 +47,27 @@ public class DocumentServiceImpl implements DocumentService {
 	}; 
 	
 	@Transactional
-    public void documentInsert(Document document, VersionLog versionLog) {
+    public void documentInsert(VersionLog versionLog) throws DocumentException, VersionLogException {
         // 문서 삽입
-		documentDAO.documentInsert(document);
-        // versionLog에 document 설정
-        versionLog.setDocument(document);
-        // 버전 로그 삽입
-        documentDAO.versionInsert(versionLog);
+		int result = documentDAO.documentInsert(versionLog.getDocument());
+		log.debug("document reuslt is "+result);
+		if(result < 1) {
+			throw new DocumentException("문서 insert 실패 ");
+		}
+		
+        result = documentDAO.versionInsert(versionLog);
+        log.debug("versionLog reuslt is "+result);
         
-        System.out.println(versionLog.getContent());
+        log.debug("document _idx is "+versionLog.getDocument().getDocument_idx());
+        
+		if(result < 1) {
+			throw new VersionLogException("문서 버전 로그 등록실패 ");
+		}
     }
 
 	@Override
-	public void insert(VersionLog versionLog) {
-		// TODO Auto-generated method stub
+	public List documentListSelect(Map map) {
 		
+		return documentDAO.documentListSelect(map);
 	}
-
 }

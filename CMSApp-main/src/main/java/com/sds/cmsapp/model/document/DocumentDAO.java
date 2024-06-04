@@ -22,11 +22,16 @@ public interface DocumentDAO {
 	// 선택 문서 조회
 	public Document select(int document_idx); // returnType="Document"
 	public Document selectByDocumentIdx(int document_idx); // returnMap="DocumentMap"
+	public List<Document> selectByFolderIdx(int folder_idx); // mybatis 연결 부탁드려요~ (박준형)
 
-	// 문서 작성 폼	
-	public void insert(VersionLog versionLog);
 	
-	public void documentInsert(Document document);
+	public int documentInsert(Document document);
 	//버전 생성
-	public void versionInsert(VersionLog versionLog);
+	public int versionInsert(VersionLog versionLog);
+	
+	//파일 리스트 조회
+	public List documentListSelect(Map map);
+	
+	// 문서 수정
+	public int update(Document document);
 }

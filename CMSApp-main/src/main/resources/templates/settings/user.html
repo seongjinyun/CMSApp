@@ -16,7 +16,17 @@
             background-color: lightgray;
             border-radius: 20px 20px / 20px 20px;
             overflow: hidden;
+            display: flex;
+	        justify-content: center; /* 수평 가운데 정렬 */
+	        align-items: center; /* 수직 가운데 정렬 */
         }
+        .addImage img {
+        	width: 100%;
+        	height: 100%;	        
+	        max-width: 100%; /* 이미지가 부모 요소를 넘지 않도록 최대 크기 지정 */
+	        max-height: 100%;
+	        object-fit: cover;
+	    }        
     </style>
 	 
 	 <script>
@@ -34,6 +44,7 @@
 
             // 이미지를 image-show div에 추가
             let container = document.getElementById('image-show');
+            container.innerHTML = ''; // 기존 이미지를 제거
             container.appendChild(newImage);
         }
 	</script>
@@ -92,21 +103,21 @@
 					        <form class="inputImg" enctype="multipart/form-data" id="add_new_emp">
 							    <div class="form-group">
 					                <label>사원명</label>
-					                <input type="text" id="" name="" class="form-control" placeholder="사원명 입력">
+					                <input type="text" name="emp_name" class="form-control" placeholder="사원명 입력">
 					            </div>
 					            <div class="form-group">
 					                <label>ID</label>
-					                <input type="text" id="" name="" class="form-control" placeholder="ID 입력">
+					                <input type="text" name="emp_id" class="form-control" placeholder="ID 입력">
 					            </div>
 					            <div class="form-group">
 					                <label>PW</label>
-					                <input type="password" id="" name="" class="form-control" placeholder="PW 입력">
+					                <input type="password" name="emp_pw" class="form-control" placeholder="PW 입력">
 					            </div>
 							    <div class="row">
 							        <div class="col">
 							            <div class="form-group">
 							            	<label>Role</label>
-							                <select id="role_code" name="role_code" class="select1 form-control" data-placeholder="역할 선택" style="width: 100%;">
+							                <select id="input_role_code" name="role_code" class="select1 form-control" data-placeholder="역할 선택" style="width: 100%;">
 												<option th:each="role : ${roleList}" th:value="${role.role_code}" th:text="${role.role_name}"></option>
 											</select>
 							            </div>
@@ -116,7 +127,7 @@
 							        <div class="col">
 							            <div class="form-group">
 							            	<label>Department</label>
-							                <select id="dept_idx" name="dept_idx" class="select1 form-control" data-placeholder="부서 선택" style="width: 100%;">
+							                <select id="input_dept_idx" name="dept_idx" class="select1 form-control" data-placeholder="부서 선택" style="width: 100%;">
 												<option th:each="dept : ${deptList}" th:value="${dept.dept_idx}" th:text="${dept.dept_name}"></option>
 											</select>
 							            </div>
@@ -124,11 +135,10 @@
 								</div>
 								<div class="form-group">
 					                <label>Profile Image</label>
-					                <div class="addImage" id="image-show" 
-					                	 style="margin: auto; display: block; width: 45%; height: 45%; background-color: lightgray; border-radius: 20px 20px / 20px 20px; overflow: hidden;">
+					                <div class="addImage" id="image-show" style="width: 200px; height: 200px; margin: auto;">
 					                 	<!-- 이미지 띄울 공간 -->
+										<input type="file" name="file" id="file" accept="image/*" onchange="loadFile(this)" style="margin: auto; align-self: center; display: block;">
 					                </div>
-									<input type="file" accept="image/*" onchange="loadFile(this)" style="margin: auto; margin-top: 15px; display: block;">
 					            </div>
 					            <button type="button" id="btn_add_new_emp" class="col btn btn-success float-right" style="height: 38px; margin-top: 20px;">Add new Employee</button>
 							</form>
@@ -153,28 +163,56 @@
 						                    <th>사원명</th>
 						                    <th>역할</th>
 						                    <th>부서</th>
-						                    <!-- <th>마지막 활동</th> -->
 						                </tr>
 						            </thead>
 						            <tbody>
 						                <tr th:each="emp : ${empList}">
-						                    <td th:text="${emp.emp_name}" id="emp_name"></td>
-						                    <td>
-						                    	<select id="role_code" name="role_code" class="select1 form-control" data-placeholder="역할 선택" style="width: 100%;">
-													<option th:each="role : ${roleList}" th:value="${role.role_code}" th:text="${role.role_name}"></option>
-												</select>
-						                    </td>
-						                    <td>
-												<select id="dept_idx" name="dept_idx" class="select1 form-control" data-placeholder="부서 선택" style="width: 100%;">
-													<option th:each="dept : ${deptList}" th:value="${dept.dept_idx}" th:text="${dept.dept_name}"></option>
-												</select>
-											</td>
-						                    <!-- <td value="사원의 마지막 활동 기록"></td> -->
-						                </tr>
+						                	<input type="hidden" id="emp_idx" name="emp_idx" th:value="${emp.emp_idx}">
+							                <td th:text="${emp.emp_name}" id="emp_name"></td>
+							                <td>
+							                    <select name="role_code" class="select1 form-control" data-placeholder="역할 선택" style="width: 100%;">
+							                        <option th:each="role : ${roleList}" th:selected="${role}==${emp.role}" th:value="${role.role_code}" th:text="${role.role_name}"></option>
+							                    </select>
+							                </td>
+							                <td>
+							                    <select name="dept_idx" class="select1 form-control" data-placeholder="부서 선택" style="width: 100%;">
+							                        <option th:each="dept : ${deptList}" th:selected="${dept}==${emp.dept}" th:value="${dept.dept_idx}" th:text="${dept.dept_name}"></option>
+							                    </select>
+							                </td>
+							            </tr>
 						            </tbody>    
 						        </table>
-						    </form>>
-					        <input type="submit" value="Save Changes" class="btn btn-success float-right" style="height: 38px; margin-top: 20px;">
+						        <div class="d-flex justify-content-between">
+						        	<div class="col-md-2"></div>
+						        	<div>
+						        		<div class="dataTables_paginate paging_simple_numbers" id="example1_paginate">
+						        			<ul class="pagination">
+						        				<li class="paginate_button page-item previous" id="example1_previous" th:classappend="${pager.currentPage == 1} ? 'disabled'">
+						        					<a th:href="@{/settings/user(page=${pager.currentPage - 1})}" aria-controls="example1" class="page-link">Previous</a>
+						        				</li>
+						        				<li class="paginate_button page-item" th:each="i : ${#numbers.sequence(pager.firstPage , pager.lastPage)}" th:classappend="${pager.currentPage == i} ? 'active'">
+						        					<a th:href="@{/settings/user(currentPage=${i})}" aria-controls="example1" th:text="${i}" tabindex="0" class="page-link" th:classappend="${pager.currentPage==i ? 'current-page':'' }">1</a>
+						        				</li>
+						        				<li class="paginate_button page-item next" id="example1_next" th:classappend="${pager.currentPage == pager.totalPage} ? 'disabled'">
+						        					<a th:href="@{/settings/user(page=${pager.currentPage + 1})}" aria-controls="example1" class="page-link">Next</a>
+						        				</li>
+						        			</ul>
+						        		</div>
+						        	</div>
+						        	<div class="col-md-2">
+						        		<div class="dataTables_info" id="example1_info" role="status" aria-live="polite">
+							        		Showing 
+										    <span th:text="${pager.startIndex + 1}"></span>
+										    to 
+										    <span th:text="${pager.lastIndex}"></span>
+										    of 
+										    <span th:text="${pager.totalRecord}"></span>
+										    entries
+						        		</div>
+						        	</div>
+						        </div>
+						    </form>
+						    <button type="button" id="btn_update_emps" class="col btn btn-success float-right" style="height: 38px; margin-top: 20px;">Save Changes</button>
 					    </div>
 			  		</div>
     			</div>
@@ -202,5 +240,42 @@
 </body>
 </html>
 <script type="text/javascript">
-    
+
+	function registEmp() { // 회원 등록 정보 전송
+		$("form.inputImg").attr({
+			action:"/emp/regist",
+			method:"POST",
+			// 텍스트 데이터와 바이너리 데이터가 섞여 있는 복합 데이터 전송: enctype multipart/form-data
+			enctype:"multipart/form-data"
+		});
+		$("form.inputImg").submit();
+	}
+	
+	function updateEmps() { // 회원 정보 변경 전송
+		var formData = $("#update_emps").serialize();
+		 $.ajax({
+			url: '/emp/update',
+	        type: 'POST',
+	        data: formData,
+	        success: function(response) {
+	            alert("Employees updated successfully");
+	            window.location.href = '/settings/user';
+	        },
+	        error: function(jqXHR, textStatus, errorThrown) {
+	            alert("Failed to update employees: " + textStatus);
+	        }
+		});
+		 
+		$("form.update_emps").submit();
+	}
+	
+	$(function(){
+		$("#btn_add_new_emp").click(function(){
+			registEmp();
+		});
+		$("#btn_update_emps").click(function(){
+			updateEmps();
+		});
+	});
+	
 </script>

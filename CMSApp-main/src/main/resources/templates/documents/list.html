@@ -57,6 +57,7 @@
                   </div>
                   <input type="button" class="btn btn-default btn-sm ml-1 mr-1" value="필터" id="filterButton">
                   <input type="button" class="btn btn-default btn-sm" value="글 작성" id="write">
+                  <input type="hidden" name="folder_idx" th:value="${folder_idx}">
                 </div>
                 
                 <!-- Select box hidden by default -->
@@ -89,6 +90,9 @@
    					<i class="fas fa-folder"></i>
 				  </button>
                   <!-- /.디렉토리 변경 버튼 -->
+                  <button type="button" class="btn btn-default btn-sm">
+   					새 폴더
+				  </button>
                 </div>
                 <!-- /.btn-group -->
                 <div class="float-right">
@@ -124,22 +128,22 @@
                   </tr>
                   <!-- ./소제목 -->
                   <tbody>
-<!--                   <tr th:each="document_version, i:${documentVersionList}">
- -->              
- 					<tr>     
-					<td>
-                      <div class="icheck-primary">
-                        <input type="checkbox" value="" id="check1">
-                        <label for="check1"></label>
-                      </div>
-                    </td>
-                    <td class="mailbox-star"><a href="#"><i class="fa fa-star" aria-hidden="true"></i></a></td>
-                    <td class="mailbox-subject"><a href="/document/detail">튜토리얼</a></td>
-                    <td class="mailbox-name">v2.1</td>
-                    <td class="mailbox-date">2024.05.23 16:44</td>
-                    <td class="mailbox-attachment">리뷰 중</td>
-                  </tr>
-                 </tbody>
+    <tr th:each="document, i : ${documentListSelect}">
+        <td>
+            <div class="icheck-primary">
+                <input type="checkbox" value="" id="check1" th:id="'check' + ${i}">
+                <label th:for="'check' + ${i}"></label>
+            </div>
+        </td>
+        <td class="mailbox-star"><a href="#"><i class="fa fa-star" aria-hidden="true"></i></a></td>
+        <!-- title, 업데이트 날짜, document가 아닌 versionLog에서 가져와야함.\ -->
+        <td><a th:href="@{/document/detail(document_idx=${document.document_idx})}">튜토리얼</a></td>
+        <td>v2.1</td>
+        <td th:text="${document.date}">2024.05.23 16:44</td>
+        <!-- 상태는 masterCode 에서 가져와야함  -->
+        <td th:text="${document.status}">리뷰 중</td>
+    </tr>
+</tbody>
                 </table>
                 <!-- /.table -->
               </div>
@@ -228,7 +232,7 @@ $(function(){
   function write(){
 	  $("#write").click(function() {
 			//글쓰기 폼 요청
-			location.href="/document/writeform";
+			location.href="/document/writeform?folder_idx="+$("input[name='folder_idx']").val();
 		});
   }
 	function filterFile(){
@@ -262,7 +266,7 @@ $(function(){
 		    $('#jstree_demo_div').jstree({
 		        'core' : {
 		        	'data': [
-		                {"text": "프로젝트A", "icon": "fa fa-box", "children": [
+		                {"text": "프로젝트aA", "icon": "fa fa-box", "children": [
 		                    {"text": "폴더 1", "icon": "fa fa-folder", "children": [
 		                        {"text": "파일 1-1", "icon": "fa fa-file"},
 		                        {"text": "파일 1-2", "icon": "fa fa-file"}

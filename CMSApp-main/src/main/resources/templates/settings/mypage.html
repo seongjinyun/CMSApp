@@ -16,7 +16,17 @@
             background-color: lightgray;
             border-radius: 20px 20px / 20px 20px;
             overflow: hidden;
+            display: flex;
+	        justify-content: center; /* 수평 가운데 정렬 */
+	        align-items: center; /* 수직 가운데 정렬 */
         }
+        .addImage img {
+        	width: 100%;
+        	height: 100%;	        
+	        max-width: 100%; /* 이미지가 부모 요소를 넘지 않도록 최대 크기 지정 */
+	        max-height: 100%;
+	        object-fit: cover;
+	    }
     </style>
 	 
 	 <script>
@@ -24,7 +34,7 @@
         function loadFile(input) {
             let file = input.files[0]; // 선택파일 가져오기
 
-            let newImage = document.createElement("img"); // 새 이미지 태그 생성
+            let newImage = document.getElementById("profileImg"); // 기존 이미지 태그 가져오기
 
             //이미지 source 가져오기
             newImage.src = URL.createObjectURL(file);
@@ -33,8 +43,8 @@
             newImage.style.objectFit = "cover"; // div에 넘치지 않고 들어가게
 
             // 이미지를 image-show div에 추가
-            let container = document.getElementById('image-show');
-            container.appendChild(newImage);
+            // let container = document.getElementById('image-show');
+            // container.appendChild(newImage);
         }
 	</script>
 
@@ -176,31 +186,32 @@
 								
 				                <div class="tab-pane active" id="settings">
 				                    <form class="form-horizontal" id="emp_account">
+				                    	<input type="hidden" id="emp_idx" name="emp_idx" th:value="${emp.emp_idx}">
 				                        <div class="form-group row">
 				                            <label for="inputName" class="col-sm-2 col-form-label">Name</label>
 				                            <div class="col-sm-10">
-				                                <input type="text" class="form-control" id="emp_name" placeholder="th:value=">
+				                                <input type="text" th:value="${emp.getEmp_name}" class="form-control" id="emp_name">
 				                            </div>
 				                        </div>
 				                        <div class="form-group row">
 				                            <label for="inputID" class="col-sm-2 col-form-label">ID</label>
 				                            <div class="col-sm-10">
-				                                <input type="text" class="form-control" id="empDetail.emp_id" placeholder="th:value=">
+				                                <input type="text" th:value="${empDetail.getEmp_id}" class="form-control" id="empDetail.emp_id">
 				                            </div>
 				                        </div>
 				                        <div class="form-group row">
 				                            <label for="inputPW" class="col-sm-2 col-form-label">PW</label>
 				                            <div class="col-sm-10">
-				                                <input type="password" class="form-control" id="empDetail.emp_pw" placeholder="th:value=">
+				                                <input type="password" th:value="${empDetail.getEmp_pw}" class="form-control" id="empDetail.emp_pw">
 				                            </div>
 				                        </div>
 				                        <div class="form-group row">
 				                            <label for="inputDepartment" class="col-sm-2 col-form-label">Department</label>
 				                            <div class="col-sm-10">
 				                                <div class="form-group">
-													<select class="select1 form-control" id="dept.dept_name" data-placeholder="Department" style="width: 100%;">
-														<!-- 부서는 페이지 로드 시 동적으로 로딩. 현재 부서를 제외하고 이동 가능 -->
+													<select class="select1 form-control" id="dept.dept_name" data-placeholder="Department" style="width: 100%;" disabled="disabled">
 														<!-- 부서 이동 권한은 사용자에게는 없고, 관리자에게만 출력 (disabled) -->
+														<option th:each="role : ${roleList}" th:selected="${role}==${emp.role}" th:value="${role.role_code}" th:text="${role.role_name}"></option>
 													</select>
 										        </div>
 				                            </div>
@@ -209,26 +220,22 @@
 				                            <label for="inputRole" class="col-sm-2 col-form-label">Role</label>
 				                            <div class="col-sm-10">
 									            <div class="form-group">
-									                <select class="select1 form-control" id="role.role_name" data-placeholder="역할 선택" style="width: 100%;">
-														<!-- 역할은 페이지 로드 시 동적으로 로딩. 현재 역할을 제외하고 이동 가능 -->
-														<!-- 역할 이동 권한은 사용자에게는 없고, 관리자에게만 출력 (disabled) -->
-														<option>Draft Writer</option>
-														<option>Editor</option>
-														<option>Admin</option>
+									                <select id="input_dept_idx" name="dept_idx" class="select1 form-control" data-placeholder="부서 선택" style="width: 100%;" disabled="disabled">
+														<!-- 부서 이동 권한은 사용자에게는 없고, 관리자에게만 출력 (disabled) -->
+														<option th:each="dept : ${deptList}" th:selected="${dept}==${emp.dept}" th:value="${dept.dept_idx}" th:text="${dept.dept_name}"></option>
 													</select>
 									            </div> 
 				                            </div>
 				                        </div>
 				                        <div class="form-group row">
-							                <label for="inputImage" class="col-sm-4 col-form-label">Profile Image</label>
+							                <label for="inputImage" class="col-sm-2 col-form-label">Profile Image</label>
 						                	<div class="col-sm-8 row">
 									        	<div class="col">
 										            <div class="form-group">
-								    					<div class="addImage" id="image-show" 
-										                	 style="display: block; width: 45%; height: 45%; background-color: lightgray;  overflow: hidden;">
-										                 	<!-- 이미지 띄울 공간 -->
+											            <div class="addImage" id="image-show" style="width: 200px; height: 200px;">
+										                 	<img th:src="@{${profile_img_url}}" alt="Profile Image" id="profileImg">
 										                </div>
-														<input type="file" accept="image/*" id="empDetail.emp_profile_url" onchange="loadFile(this)" style="margin-top: 15px; display: block;">        
+														<input type="file" name="file" id="file" accept="image/*" onchange="loadFile(this)" style="margin-top: 15px; display: block;">
 					                				</div>
 					                			</div>
 						                	</div>

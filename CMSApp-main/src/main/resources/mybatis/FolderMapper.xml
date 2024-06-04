@@ -16,9 +16,17 @@
 	
 	<update id="update" parameterType="Folder">
 		update folder
-		set parent_folder_idx = #{parent_folder.folder_idx},
-			folder_name = #{folder_name},
-			project_idx = #{project.project_idx}
+			<set>
+				<if test="parent_folder_idx != null"> 
+					parent_folder_idx = #{parent_folder.folder_idx},
+				</if>
+				<if test="folder_name != null">
+					folder_name = #{folder_name},
+				</if>
+				<if test="project_idx != null">
+					project_idx = #{project.project_idx}
+				</if>
+			</set>
 		where folder_idx = #{folder_idx}
 	</update>
 	
