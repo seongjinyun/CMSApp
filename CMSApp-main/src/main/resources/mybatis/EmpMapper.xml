@@ -43,8 +43,18 @@
 		emp_name from emp
 	</select>
 	
-	<select id="selectAll" resultMap="EmpMap">
+	<select id="selectAll" resultType="Emp">
 		select * from emp
+	</select>
+	
+	<!-- 사원 수 -->
+	<select id="getTotalCount" resultType="int">
+        select count(*) from emp
+    </select>
+    
+    <!-- pagination이 적용된 사원 리스트를 조회 -->
+    <select id="selectEmpPage" parameterType="java.util.Map" resultMap="EmpMap">
+		select * from emp limit #{startIndex}, #{rowCount}
 	</select>
 
 	<!-- emp_idx가 가리키는 사원 정보의 변경 -->
