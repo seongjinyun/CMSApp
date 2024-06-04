@@ -19,7 +19,7 @@
 	</resultMap>
 
 	<!-- 한 개 조회 by document_idx(document 테이블) -->
-	<select id="selectLatestRegisteredStatusLogByDocumentIdx"
+ 	<select id="selectLatestRegisteredStatusLogByDocumentIdx"
 		parameterType="int" resultMap="StatusLogMap">
 		select * from status_log where
 		document_idx=#{document_idx}

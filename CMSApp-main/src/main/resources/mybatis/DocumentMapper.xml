@@ -65,9 +65,9 @@
 
 	</resultMap>
 	
-	
+	<!-- 대시보드 메뉴를 위한 문서 목록 -->
 	<select id="selectAllForDashboard" resultMap="DocumentMapForDashboard" parameterType="java.util.Map">
-		select d.document_idx, v.title, v.version, s.comments, s.regdate, m.status_name, s.emp_idx, e.emp_name
+		select d.document_idx, v.title, v.version, s.comments, s.regdate, m.status_name, m.status_code, s.emp_idx, e.emp_name
 		from document_version dv
 		
 		left join version_log v
@@ -99,7 +99,7 @@
 		on s.status_code = m.status_code
 		
 		<where>
-		<if test="status_code != null">
+		<if test="status_code != 900">
 			s.status_code=#{status_code}
 		</if>
 		
@@ -111,8 +111,30 @@
 			and s.regdate <![CDATA[>=]]> #{start_date}
 		</if>
 		</where>
+	</select>
+	
+	
+	<select id="countForDashboard" resultType="int" parameterType="int">
 		
+        select count(d.document_idx), status_code
+        from document d
 		
+		left join
+        
+		(select *
+		from status_log
+		where (document_idx, status_log_idx)
+		in ( 
+		select document_idx, max(status_log_idx) as lastest_status_log_idx
+		from status_log
+		group by document_idx)
+        ) s
+        
+		on d.document_idx = s.document_idx
+        
+        group by status_code
+        having status_code=#{status_code};
+        
 	</select>
 	
 </mapper>

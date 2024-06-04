@@ -21,6 +21,8 @@ public class DashboardDocument {
 	private String role_name;
 	private String regdate;
 	private String comments;
+	
+	private int status_code;
 	private String status_name;
 	
 	// 프로젝트 이름을 담을 변수 추가 예정
