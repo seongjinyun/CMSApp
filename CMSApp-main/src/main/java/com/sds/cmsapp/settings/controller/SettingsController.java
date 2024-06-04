@@ -1,14 +1,15 @@
 package com.sds.cmsapp.settings.controller;
 
-import java.io.File;
+import java.util.HashMap;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
+import com.sds.cmsapp.common.Pager;
 import com.sds.cmsapp.domain.Emp;
 import com.sds.cmsapp.domain.EmpDetail;
 import com.sds.cmsapp.model.dept.DeptService;
@@ -18,6 +19,9 @@ import com.sds.cmsapp.model.role.RoleService;
 
 @Controller
 public class SettingsController {	
+	
+	@Autowired
+	private Pager pager;
 	
 	@Autowired
 	private EmpService empService;
@@ -80,10 +84,22 @@ public class SettingsController {
 	}
 	
 	@GetMapping("/settings/user")
-	public String getUserInfo(Model model) {
+	public String getUserInfo(@RequestParam(value="currentPage", defaultValue="1") int currentPage, Model model) {
+		
+		int totalRecord = empService.getTotalCount();
+        pager.init(totalRecord, currentPage);
+		
 		// 사원 이름과 index 가져오기
-		List empList = empService.selectAll();
+		// List empList = empService.selectAll();
+        
+        // pager가 적용된 사원 목록 가져오기
+        HashMap map = new HashMap();
+		map.put("startIndex", pager.getStartIndex());
+		map.put("rowCount", pager.getPageSize());
+		List empList = empService.selectEmpPage(map);
+        // List empList = empService.selectPage(pager.getStartIndex(), pager.getPageSize());
 		model.addAttribute("empList", empList);
+		model.addAttribute("pager", pager);
 		
 		// 부서 이름과 index 가져오기
 		List deptList = deptService.selectAll();
