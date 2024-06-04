@@ -16,10 +16,8 @@ public interface DocumentService {
 
 	public Document selectByDocumentIdx(int document_idx); // returnMap="DocumentMap"
 
-	// 문서 작성 폼
-	public void insert(VersionLog versionLog);
-
 	// 문서생성 + 버전
-	public void documentInsert(Document document, VersionLog versionLog);
+	public void documentInsert(VersionLog versionLog);
 
+	public List documentListSelect(Map map);
 }

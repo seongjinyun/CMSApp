@@ -29,8 +29,9 @@ public class DocumentsController {
 	
 	//글 작성 폼
 	@GetMapping("/document/writeform")
-	public String getDocument() {
-
+	public String getDocument(Model model,@RequestParam(value="folder_idx") int folder_idx) {
+		
+		model.addAttribute("folder_idx", folder_idx);
 		return "documents/writeform";
 	} 
 
@@ -43,11 +44,16 @@ public class DocumentsController {
 	
 	//파일목록
 	@GetMapping("/document/list")
-	public String getDocumentList(Model model) {
+	public String getDocumentList(Model model, @RequestParam(value="folder_idx") int folder_idx) {
 		HashMap map = new HashMap();
 		
 		List documentVersionList = documentService.selectAll(map);//3단계 일시키기
+		//폴더 -> 파일 리스트
+		List documentListSelect = documentService.documentListSelect(map);
+		model.addAttribute("documentListSelect", documentListSelect);
+		
 		model.addAttribute("documentVersionList",documentVersionList);//4단계 결과 저장
+		model.addAttribute("folder_idx", folder_idx);
 		
 		return "documents/list";
 	} 
