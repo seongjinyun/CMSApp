@@ -1,0 +1,76 @@
+<th:block th:fragment="folder_modal_script">
+	<script>
+	  // 파일탐색기(모달) 관련
+	  $(document).ready(function() {
+		    initializeModal();
+		    initializeDirectoryTree();
+		});
+
+		function initializeModal() {
+		    $('#directoryModal').on('shown.bs.modal', function () {
+		        initializeDirectoryTree();
+		    });
+		}
+
+		// data 안에 배열로 자식구조를 구현합니다(jsTree)
+		function initializeDirectoryTree() {
+		    $('#jstree_demo_div').jstree({
+		        'core' : {
+		        	'data': [
+		                {"text": "프로젝트aA", "icon": "fa fa-box", "children": [
+		                    {"text": "폴더 1", "icon": "fa fa-folder", "children": [
+		                        {"text": "파일 1-1", "icon": "fa fa-file"},
+		                        {"text": "파일 1-2", "icon": "fa fa-file"}
+		                    ]},
+		                    {"text": "폴더 2", "icon": "fa fa-folder", "children": [
+		                        {"text": "파일 2-1", "icon": "fa fa-file"},
+		                        {"text": "파일 2-2", "icon": "fa fa-file"}
+		                    ]}
+		                ]},
+		                {"text": "프로젝트B", "icon": "fa fa-box", "childern": [
+		                	{"text": "폴더 3", "icon": "fa fa-folder", "children": [
+		                        {"text": "파일 3-1", "icon": "fa fa-file"},
+		                        {"text": "파일 3-2", "icon": "fa fa-file"}
+		                    ]},
+		                    {"text": "폴더 4", "icon": "fa fa-folder", "children": [
+		                        {"text": "파일 4-1", "icon": "fa fa-file"},
+		                        {"text": "파일 4-2", "icon": "fa fa-file"}
+		                    ]}
+		                ]}
+		            ]
+		        }
+		    });
+
+		    $('#jstree_demo_div').on('changed.jstree', function (e, data) {
+		        if (data.selected.length > 0) {
+		            updateBreadcrumb(data.instance.get_path(data.selected[0]));
+		        }
+		    });
+		}
+
+		function updateBreadcrumb(path) {
+		    const breadcrumb = $('#breadcrumb');
+		    breadcrumb.empty();
+		    path.forEach((segment, index) => {
+		        if (index === path.length - 1) {
+		            breadcrumb.append(`<li class="breadcrumb-item active" aria-current="page">${segment}</li>`);
+		        } else {
+		            breadcrumb.append(`<li class="breadcrumb-item">${segment}</li>`);
+		        }
+		    });
+		}
+
+		function selectDirectory() {
+			
+		    var selectedNode = $('#jstree_demo_div').jstree("get_selected", true);
+		    if (selectedNode.length > 0) {
+		        var selectedPath = $('#jstree_demo_div').jstree().get_path(selectedNode[0], '/');
+		        console.log('Selected Directory:', selectedPath);
+		    } else {
+		        console.log('No directory selected.');
+		    }
+		    $('#directoryModal').modal('hide');
+		}
+		// 파일탐색기 관련 end
+	</script>
+</th:block>
