@@ -20,6 +20,10 @@ public class DocumentServiceImpl implements DocumentService {
 	public List selectAll(Map map) {
 		return null;
 	};
+	
+	public List selectAllForDashboard(Map map) {
+		return documentDAO.selectAllForDashboard(map);
+	};
 
 	// 선택 문서 조회
 	

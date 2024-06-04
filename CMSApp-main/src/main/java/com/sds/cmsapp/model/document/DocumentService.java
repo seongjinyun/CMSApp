@@ -10,6 +10,8 @@ public interface DocumentService {
 
 	// 모든 문서 조회
 	public List selectAll(Map map);
+	
+	public List selectAllForDashboard(Map map);
 
 	// 선택 문서 조회
 	public Document select(int document_idx); // returnType="Document"

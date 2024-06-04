@@ -14,6 +14,8 @@
 		<association column="emp_idx" property="emp"
 			javaType="Emp"
 			select="com.sds.cmsapp.model.emp.EmpDAO.selectByEmpIdx" />
+			
+		
 	</resultMap>
 
 	<!-- 한 개 조회 by document_idx(document 테이블) -->
@@ -24,5 +26,33 @@
 		order by status_log_idx desc
 		limit 1
 	</select>
+	
+	<!-- 0603 추가 -->
+		<resultMap type="StatusLog" id="StatusLogMapForDashboard">
+		<id column="status_log_idx" property="status_log_idx" />
+		<result column="comments" property="comments" />
+		<result column="regdate" property="regdate" />
+
+		<!-- status_code -->
+		<association column="status_code" property="masterCode"
+			javaType="MasterCode"
+			select="com.sds.cmsapp.model.mastercode.MasterCodeDAO.select" />
+
+		<!-- emp -->
+		<association column="emp_idx" property="emp"
+			javaType="Emp"
+			select="com.sds.cmsapp.model.emp.EmpDAO.selectByEmpIdx" />
+			
+		<!-- document --> <!-- 없어도 동작함 -->
+<!-- 		<association property="document"  javaType="Document">
+			<id column="document_idx" property="document_idx"/>
+		</association> -->
+		
+	</resultMap>
+	
+	<select id="select" parameterType="int" resultMap="StatusLogMapForDashboard">
+		select * from status_log where document_idx=#{document_idx}
+	</select>
+	
 
 </mapper>
