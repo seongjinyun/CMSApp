@@ -24,6 +24,15 @@ public class DocumentServiceImpl implements DocumentService {
 	public List selectAll(Map map) {
 		return null;
 	};
+	
+	public List selectAllForDashboard(Map map) {
+		return documentDAO.selectAllForDashboard(map);
+	};
+	
+	// 결재 상태별 문서 수
+	public int countForDashboard(int status_code) {
+		return documentDAO.countForDashboard(status_code);
+	};
 
 	// 선택 문서 조회
 	
