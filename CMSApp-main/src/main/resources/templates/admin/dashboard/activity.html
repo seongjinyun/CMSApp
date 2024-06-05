@@ -435,7 +435,7 @@ button.show_list:hover {
 		function getSummaryCount(status_code) {
 			$.ajax({
 				type:"GET",  //전송타입
-				url:"/dashboard/summary/count?status_code=" + status_code,
+				url:"/dashboard/list/count?status_code=" + status_code,
 				success: function (result, status, xhr) {
 					
 					if (status_code == 200) {
@@ -460,7 +460,7 @@ button.show_list:hover {
 		function getSummaryData(status_code) {
 			$.ajax({
 				type:"GET",  //전송타입
-				url:"/dashboard/summary/list?status_code=" + status_code,
+				url:"/dashboard/list?status_code=" + status_code,
 				success: function (result, status, xhr) {
 					
 					alert('문서 불러오기 성공');
@@ -517,7 +517,7 @@ button.show_list:hover {
 		function getFilteredData(status_code, startDate, endDate, emp_idx, dept_idx, project_idx) {
 			$.ajax({
 				type:"GET",  //전송타입
-				url:"/dashboard/entire/list?status_code=" + status_code 
+				url:"/dashboard/list?status_code=" + status_code 
 						+ "&startDate=" + startDate + "&endDate=" + endDate 
 						+ "&emp_idx=" + emp_idx + "&dept_idx=" + dept_idx
 						+ "&project_idx=" + project_idx,
@@ -555,7 +555,7 @@ button.show_list:hover {
 							<tr>
 							<td><input type="checkbox" name="checked-documenet"></td>
 							<td>${i+1}</td>
-							<td><a href="#">${result[i].title}</a></td>
+							<td><a href="#">${result[i].document_idx}, ${result[i].title}</a></td>
 							<td>${result[i].version}</td>
 							<td>${result[i].dept_name}</td>
 							<td>${result[i].emp_name}</td>
