@@ -53,6 +53,7 @@ public class RestDocumentController {
 	@GetMapping("document/folder/list")
 	private ResponseEntity getFolderList() {
 		List<Folder> folderList = folderService.selectAll();
-		return null;
+		System.out.println("FolderList 는 "+ folderList);
+		return new ResponseEntity<>(folderList, HttpStatus.OK);
 	}
 }

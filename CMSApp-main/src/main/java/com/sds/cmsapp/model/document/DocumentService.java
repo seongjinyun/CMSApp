@@ -21,5 +21,8 @@ public interface DocumentService {
 
 	// 문서생성 + 버전
 	public void documentInsert(Document document, VersionLog versionLog);
+	
+	// 문서 삭제 
+	public int delete(int document_idx);
 
 }

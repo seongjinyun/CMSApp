@@ -168,19 +168,19 @@ $(function(){
           $('input[name="document_idx"]:checked').each(function() {
               selectedDocument_idx.push($(this).val());
           });
+          
           if (selectedDocument_idx.length < 1){
         	  alert("하나 이상의 문서를 선택해주세요");
         	  return;
           }
-
+         
           $.ajax({
               type: 'POST',
-              url: '/documents/trash/restore',
+              url: '/document/trash/test2',
               contentType: 'application/json',
               data: JSON.stringify(selectedDocument_idx),
               success: function(result, status, xhr) {
                   alert('복원에 성공했어요');
-                  // 페이지 리로드 또는 다른 동작 수행
               },
               error: function(status, xhr, err) {
                   alert('복원에 실패했어요');
@@ -192,18 +192,20 @@ $(function(){
   
   function deleteTrash(){
 	  if(confirm("선택된 문서를 영구삭제하시겠습니까?")){
+		  
 		  let selectedDocument_idx = [];
           $('input[name="document_idx"]:checked').each(function() {
               selectedDocument_idx.push($(this).val());
           });
+          
           if (selectedDocument_idx.length < 1){
         	  alert("하나 이상의 문서를 선택해주세요");
         	  return;
           }
-
+          
           $.ajax({
-              type: 'POST',
-              url: '/document/trash/delete',
+              type: 'DELETE',
+              url: '/document/trash/test1',
               contentType: 'application/json',
               data: JSON.stringify(selectedDocument_idx),
               success: function(result, status, xhr) {
@@ -219,8 +221,8 @@ $(function(){
   function emptyTrash(){
 	  if(confirm("휴지통을 비우시겠어요?")){
 		  $.ajax({
-              type: 'POST',
-              url: '/document/trash/empty',
+              type: 'DELETE',
+              url: '/document/trash/list',
               contentType: 'application/json',
               success: function(result, status, xhr) {
                   alert('휴지통을 성공적으로 비웠어요');
@@ -231,6 +233,7 @@ $(function(){
           });
 	  }
   }
+  
   
   </script>
 </body>
