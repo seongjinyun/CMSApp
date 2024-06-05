@@ -70,4 +70,11 @@ public class DocumentServiceImpl implements DocumentService {
 		
 		return documentDAO.documentListSelect(map);
 	}
+	
+	@Override // 임시로 만들어뒀습니다 -박준형
+	public int delete(int document_idx) {
+		return documentDAO.delete(document_idx);
+	}
+
+
 }

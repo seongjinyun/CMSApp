@@ -84,4 +84,10 @@ public class DocumentsController {
 	public String getDetail() {
 		return "documents/detail";
 	}
+	
+	// 테스트. 지울것
+	@GetMapping("/document/test2")
+	public String getTest() {
+		return "documents/test2";
+	}
 }
