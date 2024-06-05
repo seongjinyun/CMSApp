@@ -56,5 +56,10 @@
 		where folder_idx = #{parent_folder.folder_idx}
 	</select>
 	
+	<select id="selectTopFolder" resultMap="FolderMap">
+		select * from folder
+		where parent_folder_idx is null
+	</select>
+	
 
 </mapper>

@@ -14,6 +14,11 @@ public interface DocumentDAO {
 
 	// 모든 문서 조회
 	public List selectAll(Map map);
+	
+	public List selectAllForDashboard(Map map);
+	
+	// 결재 상태별 문서 수
+	public int countForDashboard(int status_code);
 
 	// 선택 문서 조회
 	public Document select(int document_idx); // returnType="Document"
@@ -33,4 +38,7 @@ public interface DocumentDAO {
 	
 	// 문서 수정
 	public int update(Document document);
+	
+	// 문서 삭제 (임시로 만들어뒀습니다 -박준형)
+	public int delete(int document_idx);
 }

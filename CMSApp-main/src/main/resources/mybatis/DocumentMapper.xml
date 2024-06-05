@@ -25,8 +25,6 @@
 		select * from document where document_idx=#{document_idx}
 	</select>
 	
-	
-	
     <!-- 문서 삽입 -->
     <insert id="documentInsert" parameterType="Document">
         INSERT INTO document (emp_idx, folder_idx) VALUES (#{emp.emp_idx}, #{folder.folder_idx})
@@ -66,5 +64,106 @@
         FROM document 
         WHERE folder_idx = #{folder.folder_idx}
     </select>
+    
+    <!-- 0603-4 추가 -->
+	<resultMap type="Document" id="DocumentMapForDashboard">
+		<id 			column="document_idx" 	property="document_idx"/>
+			
+			<!-- status_log -->
+	 		<association property="latestRegisteredStatusLog" javaType="StatusLog">
+				 <id property="status_log_idx" column="status_log_idx"/>
+				<result property="comments" column="comments"/>
+				<result property="regdate" column="regdate"/>
+				
+				<!-- mastercode -->
+				<association property="masterCode" javaType="MasterCode">
+					<id property="status_code" column="status_code"/>
+					<result property="status_name" column="status_name"/>
+				</association>
+				
+				<!-- emp (Map) -->
+				<association property="emp" javaType="Emp" column="emp_idx" select="com.sds.cmsapp.model.emp.EmpDAO.selectByEmpIdx"/>
+				 
+			</association> 
+			
+			<!-- document_version (Map) --> <!-- version_log(Type)을 association으로 가지고 있음 -> 제목 얻어오기 -->
+			<association
+				property="documentVersion" 
+				javaType="DocumentVersion" column="document_idx" select="com.sds.cmsapp.model.document.DocumentVersionDAO.selectByDocumentIdx">
+			</association> 
+
+	</resultMap>
+	
+	<!-- 대시보드 메뉴를 위한 문서 목록 -->
+	<select id="selectAllForDashboard" resultMap="DocumentMapForDashboard" parameterType="java.util.Map">
+		select d.document_idx, v.title, v.version, s.comments, s.regdate, m.status_name, m.status_code, s.emp_idx, e.emp_name
+		from document_version dv
+		
+		left join version_log v
+		on dv.version_log_idx = v.version_log_idx
+
+		left join document d
+		on dv.document_idx = d.document_idx
+
+		left join
+		(select *
+		from status_log
+		where (document_idx, status_log_idx)
+		in ( 
+		select document_idx, max(status_log_idx) as lastest_status_log_idx
+		from status_log
+		group by document_idx)) s
+		on dv.document_idx = s.document_idx
+
+		left join emp e
+		on s.emp_idx = e.emp_idx
+		
+		left join dept de
+		on e.dept_idx = de.dept_idx
+		
+		left join role r
+		on e.role_code = r.role_code
+
+		left join mastercode m
+		on s.status_code = m.status_code
+		
+		<where>
+		<if test="status_code != 900">
+			s.status_code=#{status_code}
+		</if>
+		
+		<if test="end_date != null">
+			and s.regdate <![CDATA[<=]]> #{end_date}
+		</if>
+		
+		<if test="start_date != null">
+			and s.regdate <![CDATA[>=]]> #{start_date}
+		</if>
+		</where>
+	</select>
+	
+	
+	<select id="countForDashboard" resultType="int" parameterType="int">
+		
+        select count(d.document_idx), status_code
+        from document d
+		
+		left join
+        
+		(select *
+		from status_log
+		where (document_idx, status_log_idx)
+		in ( 
+		select document_idx, max(status_log_idx) as lastest_status_log_idx
+		from status_log
+		group by document_idx)
+        ) s
+        
+		on d.document_idx = s.document_idx
+        
+        group by status_code
+        having status_code=#{status_code};
+        
+	</select>
     
 </mapper>

@@ -25,6 +25,15 @@ public class DocumentServiceImpl implements DocumentService {
 	public List selectAll(Map map) {
 		return null;
 	};
+	
+	public List selectAllForDashboard(Map map) {
+		return documentDAO.selectAllForDashboard(map);
+	};
+	
+	// 결재 상태별 문서 수
+	public int countForDashboard(int status_code) {
+		return documentDAO.countForDashboard(status_code);
+	};
 
 	// 선택 문서 조회
 	
@@ -76,4 +85,11 @@ public class DocumentServiceImpl implements DocumentService {
 		
 		return documentDAO.documentListSelect(map);
 	}
+	
+	@Override // 임시로 만들어뒀습니다 -박준형
+	public int delete(int document_idx) {
+		return documentDAO.delete(document_idx);
+	}
+
+
 }

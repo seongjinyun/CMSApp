@@ -16,4 +16,11 @@ public class Document {
 //	private List<VersionLog> versionLogList; // 버전 로그
 	
 	private StatusLog latestRegisteredStatusLog;
+	
+	// 0603 추가
+	private DocumentVersion documentVersion; // documentVersion이 version_log_idx를 가지고 있음...
+//	private VersionLog versionLog;
+//	private Emp statusChangerEmp;
+//	private MasterCode masterCode;
+	
 }

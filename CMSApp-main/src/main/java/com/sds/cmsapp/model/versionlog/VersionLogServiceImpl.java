@@ -18,5 +18,10 @@ public class VersionLogServiceImpl implements VersionLogService {
 	public VersionLog selectByVersionLogIdx(int version_log_idx) {
 		return versionLogDAO.selectByVersionLogIdx(version_log_idx);
 	}
+	
+	// 0603 추가
+	public VersionLog select(int version_log_idx) {
+		return versionLogDAO.select(version_log_idx);
+	};
 
 }

@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+	<meta charset="UTF-8">
+	<title>Insert title here</title>
+	<th:block th:replace="~{fragments/header_link :: header_link}" />
+
+</head>
+
+<body>
+	<input type="button" value="button" onclick="testFunction();">
+
+	<button type="button" class="btn btn-default btn-sm" data-toggle="modal" data-target="#moveDirectory">
+		<i class="fas fa-folder"></i>
+	</button>
+
+	<div class="modal fade" id="moveDirectory" tabindex="-1" role="dialog" aria-labelledby="directoryModalLabel"
+		aria-hidden="true">
+		<div class="modal-dialog" role="document">
+			<div class="modal-content">
+				<!-- Modal Header -->
+				<div class="modal-header">
+					<h5 class="modal-title" id="directoryModalLabel">파일 이동</h5>
+					<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+						<span aria-hidden="true">&times;</span>
+					</button>
+				</div>
+				<!-- Modal Body -->
+				<div class="modal-body">
+					<h6>파일이 옮겨질 디렉토리를 선택하세요</h6>
+					<div id="jstree_demo_div">
+						<!-- The tree will be appended here -->
+					</div>
+				</div>
+
+				<!-- Breadcrumb -->
+				<div class="modal-body">
+					<nav aria-label="breadcrumb">
+						<ol class="breadcrumb" id="breadcrumb">
+							<li class="breadcrumb-item active" aria-current="page">현재 디렉토리</li>
+						</ol>
+					</nav>
+				</div>
+
+				<!-- Modal Footer -->
+				<div class="modal-footer">
+					<button type="button" class="btn btn-secondary" data-dismiss="modal">닫기</button>
+					<button type="button" class="btn btn-primary" onclick="selectDirectory()">이동</button>
+				</div>
+			</div>
+		</div>
+	</div>
+</body>
+
+<th:block th:replace="~{fragments/footer_link :: footer_link}" />
+<script type="text/javascript">
+	let jsonData;
+	let jsTreeData;
+	function getFolderJson() {
+		$.ajax({
+			method: "GET",
+			url: "/document/folder/list",
+			contentType: "application/json",
+			success: function (result, status, xhr) {
+				jsonData = JSON.stringify(result);
+				console.log("jsonData : ");
+				console.log(jsonData);
+			},
+			error: function (status, xhr, err) {
+				alert("실패~");
+			}
+		});
+	}
+
+	function convertToJsTree(folderDTO) {
+		return {
+			id: folderDTO.folder_idx,
+			text: folderDTO.folder_name,
+			icon: "folder",
+			children: folderDTO.childFolderList.map(convertToJsTree),
+			data: {
+				project: folderDTO.project,
+				regdate: folderDTO.regdate,
+				parent_folder: folderDTO.parent_folder
+			}
+		};
+
+	}
+	jsTreeData = jsonData.map(convertToJsTree);
+
+	// 파일탐색기(모달) 관련
+	$(document).ready(function () {
+		initializeModal();
+		initializeDirectoryTree();
+	});
+
+	function initializeModal() {
+		$('#directoryModal').on('shown.bs.modal', function () {
+			initializeDirectoryTree();
+		});
+	}
+
+	// data 안에 배열로 자식구조를 구현합니다(jsTree)
+	function initializeDirectoryTree() {
+		getFolderJson();
+		console.log("jsTreeData:");
+		console.log(jsTreeData);
+		$('#jstree_demo_div').jstree({
+			'core' : {
+		        	'data': jsTreeData	            
+		        }
+		});
+
+		$('#jstree_demo_div').on('changed.jstree', function (e, data) {
+			if (data.selected.length > 0) {
+				updateBreadcrumb(data.instance.get_path(data.selected[0]));
+			}
+		});
+	}
+
+	function updateBreadcrumb(path) {
+		const breadcrumb = $('#breadcrumb');
+		breadcrumb.empty();
+		path.forEach((segment, index) => {
+			if (index === path.length - 1) {
+				breadcrumb.append(`<li class="breadcrumb-item active" aria-current="page">${segment}</li>`);
+			} else {
+				breadcrumb.append(`<li class="breadcrumb-item">${segment}</li>`);
+			}
+		});
+	}
+
+	function selectDirectory() {
+
+		var selectedNode = $('#jstree_demo_div').jstree("get_selected", true);
+		if (selectedNode.length > 0) {
+			var selectedPath = $('#jstree_demo_div').jstree().get_path(selectedNode[0], '/');
+			console.log('Selected Directory:', selectedPath);
+		} else {
+			console.log('No directory selected.');
+		}
+		$('#directoryModal').modal('hide');
+	}
+	// 파일탐색기 관련 end
+
+
+</script>
+
+</html>
