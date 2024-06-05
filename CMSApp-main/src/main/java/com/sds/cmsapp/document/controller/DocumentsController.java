@@ -14,6 +14,9 @@ import com.sds.cmsapp.domain.Trash;
 import com.sds.cmsapp.model.document.DocumentService;
 import com.sds.cmsapp.model.trash.TrashService;
 
+import lombok.extern.slf4j.Slf4j;
+
+@Slf4j
 @Controller
 public class DocumentsController {
 	
@@ -50,7 +53,9 @@ public class DocumentsController {
 		List documentVersionList = documentService.selectAll(map);//3단계 일시키기
 		//폴더 -> 파일 리스트
 		List documentListSelect = documentService.documentListSelect(map);
+		
 		model.addAttribute("documentListSelect", documentListSelect);
+		log.debug("model= " + model);
 		
 		model.addAttribute("documentVersionList",documentVersionList);//4단계 결과 저장
 		model.addAttribute("folder_idx", folder_idx);

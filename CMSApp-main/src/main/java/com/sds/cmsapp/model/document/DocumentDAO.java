@@ -6,6 +6,7 @@ import java.util.Map;
 import org.apache.ibatis.annotations.Mapper;
 
 import com.sds.cmsapp.domain.Document;
+import com.sds.cmsapp.domain.DocumentVersion;
 import com.sds.cmsapp.domain.VersionLog;
 
 @Mapper
@@ -23,6 +24,9 @@ public interface DocumentDAO {
 	public int documentInsert(Document document);
 	//버전 생성
 	public int versionInsert(VersionLog versionLog);
+
+	//문서 현재 버전 테이블 
+	public int documentVersionInsert(DocumentVersion documentVersion);
 	
 	//파일 리스트 조회
 	public List documentListSelect(Map map);

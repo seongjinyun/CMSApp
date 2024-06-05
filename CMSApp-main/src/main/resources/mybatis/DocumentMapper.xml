@@ -42,10 +42,23 @@
      -->
     INSERT INTO version_log(branched_version_log_idx,emp_idx,document_idx,version,title,content,comments) 
     VALUES (NULL,7,#{document.document_idx}, 1,#{title}, #{content},'초안')
+    
+        <selectKey keyColumn="version_log_idx" keyProperty="version_log_idx" resultType="int" order="AFTER">
+			select last_insert_id() as version_log_idx
+		</selectKey>
+    </insert>
+    
+    <insert id="documentVersionInsert" parameterType="DocumentVersion">
+    	insert into document_version (document_idx, version_log_idx)
+    	values (#{document.document_idx}, #{versionLog.version_log_idx})
     </insert>
 	
-	<!-- join하여 versionLog 가져올 예정
-		상태 불러오는 masterCode도 join -->
+	<!-- folder_idx, version_log_idx -> 뷰페이지  -->
+	<resultMap type="Document" id="DocumentListMap">
+		<id column="document_idx" property="document_idx"/>
+		<result column="folder_idx" property="folder_idx"/>
+	</resultMap>
+	
 	
 	<!-- 문서 목록 조회 -->
     <select id="documentListSelect" resultType="Document">
