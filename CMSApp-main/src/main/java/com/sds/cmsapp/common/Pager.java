@@ -7,15 +7,16 @@ import lombok.Data;
 @Component
 @Data
 public class Pager {
-	private int totalRecord; 		//총 레코드 수 
-	private int pageSize=10; 		//페이지당 보여질 레코드 수 
-	private int totalPage; 			//총 페이지 수 
-	private int blockSize=10; 		//블럭당 보여질 페이지 수 
-	private int currentPage=1; 	//사용자가 현재 보는 페이지
-	private int firstPage; 			//블럭당 반복문의 시작 값 
-	private int lastPage;  			//블럭당 반복문의 끝값 
-	private int startIndex; 			// mysql의 limit 첫번째 요소값(페이지당 시작 index) ex) 1page = 0 , 2page =10....
-	private int num; 					//페이지당 시작 번호 (게시물수를 알 수 있다)
+	private int totalRecord; 		// 총 레코드 수 
+	private int pageSize=10; 		// 페이지당 보여질 레코드 수 
+	private int totalPage; 			// 총 페이지 수 
+	private int blockSize=10; 		// 블럭당 보여질 페이지 수 
+	private int currentPage=1; 		// 사용자가 현재 보는 페이지
+	private int firstPage; 			// 블럭당 반복문의 시작 값 
+	private int lastPage;  			// 블럭당 반복문의 끝값 
+	private int startIndex; 		// mysql의 limit 첫번째 요소값(페이지당 시작 index) ex) 1page = 0 , 2page =10....
+	private int lastIndex;			// 현재 페이지의 마지막 요소값
+	private int num; 				// 페이지당 시작 번호 (게시물수를 알 수 있다)
 	
 	public void init(int totalRecord, int currentPage) {
 		this.totalRecord = totalRecord;
@@ -29,5 +30,11 @@ public class Pager {
 		}
 		this.startIndex = (this.currentPage-1)*this.pageSize;
 		this.num = this.totalRecord - this.startIndex;
+		
+		if(this.currentPage == this.lastPage) {
+			this.lastIndex = this.totalRecord;
+		} else {
+			this.lastIndex = this.startIndex + this.pageSize;
+		}
 	}
 }
