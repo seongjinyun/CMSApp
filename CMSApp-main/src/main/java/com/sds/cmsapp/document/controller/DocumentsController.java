@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import com.sds.cmsapp.common.Pager;
+import com.sds.cmsapp.domain.DocumentVersion;
 import com.sds.cmsapp.domain.Trash;
 import com.sds.cmsapp.model.document.DocumentService;
 import com.sds.cmsapp.model.trash.TrashService;
@@ -47,7 +48,7 @@ public class DocumentsController {
 	
 	//파일목록
 	@GetMapping("/document/list")
-	public String getDocumentList(Model model, @RequestParam(value="folder_idx") int folder_idx) {
+	public String getDocumentList(Model model, DocumentVersion documentVersion, @RequestParam(value="folder_idx") int folder_idx) {
 		HashMap map = new HashMap();
 		
 		List documentVersionList = documentService.selectAll(map);//3단계 일시키기

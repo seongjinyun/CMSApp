@@ -128,20 +128,20 @@
                   </tr>
                   <!-- ./소제목 -->
                   <tbody>
-				    <tr th:each="document, i : ${documentListSelect}">
+				    <tr th:each="documentVersion, i : ${documentListSelect}">
 				        <td>
-				            <div class="icheck-primary">
-				                <input type="checkbox" value="" id="check1" th:id="'check' + ${i}">
-				                <label th:for="'check' + ${i}"></label>
-				            </div>
+					        <div class="icheck-primary">
+		                        <input type="checkbox" value="" id="check1">
+		                        <label for="check1"></label>
+                     		</div>
 				        </td>
 				        <td class="mailbox-star"><a href="#"><i class="fa fa-star" aria-hidden="true"></i></a></td>
 				        <!-- title, 업데이트 날짜, document가 아닌 versionLog에서 가져와야함.\ -->
-				        <td><a th:href="@{/document/detail(document_idx=${document.document_idx})}">튜토리얼</a></td>
-				        <td>v2.1</td>
-				        <td th:text="${document.date}">2024.05.23 16:44</td>
+				        <td><a th:href="@{/document/detail(document_idx=${documentVersion.document.document_idx})}" th:text="${documentVersion.versionLog.title}">튜토리얼</a></td>
+				        <td th:text="${documentVersion.versionLog.version}">v2.1</td>
+				        <td th:text="${documentVersion.versionLog.regdate}">2024.05.23 16:44</td>
 				        <!-- 상태는 masterCode 에서 가져와야함  -->
-				        <td th:text="${document.status}">리뷰 중</td>
+				        <td>리뷰 중</td>
 				    </tr>
 				</tbody>
                 </table>
