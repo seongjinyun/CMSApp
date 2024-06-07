@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.sds.cmsapp.domain.DashboardDocument;
 import com.sds.cmsapp.domain.Document;
 import com.sds.cmsapp.model.document.DocumentService;
+import com.sds.cmsapp.model.project.ProjectService;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -26,26 +27,35 @@ public class RestDocumentListController {
 
 	@Autowired
 	private DocumentService documentService;
+	
+	@Autowired
+	private ProjectService projectService;
 
 	/*-------------------------------------
 	 * [요약] 탭 - 결재 상태별 문서 수 집계
 	 -------------------------------------*/
 	@GetMapping("/dashboard/list/count")
-	public int getSummaryCount(@RequestParam(value = "status_code", required = false) int status_code) {
-		return documentService.countForDashboard(status_code);
+	public Map getDocumentCountByStatus() {
+		Map map = new HashMap();
+		
+		map.put(200, documentService.countForDashboard(200));
+		map.put(300, documentService.countForDashboard(300));
+		map.put(500, documentService.countForDashboard(500));
+		
+		return map; // Spring boot가 Map을 JSON으로 자동 변환
 	}
 
 	/*-------------------------------------
-	 *  [요약], [전체보기] 탭 - 목록
+	 *  [요약], [전체보기] 탭 - 목록 불러오기
 	-------------------------------------*/
 	@GetMapping("/dashboard/list")
-	public List<DashboardDocument> getSummaryList(
-			@RequestParam(value = "startDate", required = false) String startDate,
-			@RequestParam(value = "endDate", required = false) String endDate,
+	public List<DashboardDocument> getDocumentListByFilter(
 			@RequestParam(value = "status_code", required = false) String status_code
-	// ,
-	// @RequestParam(value="emp_idx", required=false) int emp_idx,
-	// @RequestParam(value="dept_idx", required=false) int dept_idx
+			, @RequestParam(value = "startDate", required = false) String startDate
+			, @RequestParam(value = "endDate", required = false) String endDate
+			, @RequestParam(value = "projectIds", required = false) List<Integer> projectIds
+	// , @RequestParam(value="emp_idx", required=false) int emp_idx,
+	// , @RequestParam(value="dept_idx", required=false) int dept_idx
 	) {
 		
 		// 모델에 보낼 map 만들기
@@ -67,14 +77,24 @@ public class RestDocumentListController {
 			map.put("end_date", null); 
 		}
 		
+		// 프로젝트
+		if (projectIds != null && projectIds.size() > 0 && projectIds.get(0) != 900) {
+			List projects = new ArrayList();
+			for (int p : projectIds) {
+				System.out.println(p);
+				projects.add(p);
+			}
+			map.put("projects", projects);				
+		}
+		
 		// map.put("emp_idx", emp_idx);
 		// map.put("dept_idx", dept_idx);
 
 		// 모델 일 시키기
 		List<Document> documentList = documentService.selectAllForDashboard(map);
-		System.out.println("조회된 문서 수: " + documentList.size());
+		log.debug("조회된 문서 수: " + documentList.size());
 
-		// 브라우저에 보낼 정보를 DashboardDocument DTO에 
+		// 모델에게 받은 정보를 DashboardDocument DTO에 담기
 		List<DashboardDocument> dashboardDocumentList = new ArrayList();
 
 		for (Document d : documentList) {
@@ -83,27 +103,34 @@ public class RestDocumentListController {
 			Date date = new Date();
 			date.setTime(d.getLatestRegisteredStatusLog().getRegdate().getTime());
 			String regdate = new SimpleDateFormat("yyyy-MM-dd hh:mm").format(date);
-			// 이것도 쓸 수 있음. DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+			// DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
 
 			log.debug("문서 번호: " + d.getDocument_idx());
 			log.debug("상태 변경일: " + regdate);
 			log.debug("현 상태: " + d.getLatestRegisteredStatusLog().getMasterCode().getStatus_name());
 			
 			DashboardDocument dd = new DashboardDocument();
-			dd.setDocument_idx(d.getDocument_idx());
-			dd.setVersion(d.getDocumentVersion().getVersionLog().getVersion());
-			dd.setTitle(d.getDocumentVersion().getVersionLog().getTitle());
-			dd.setComments(d.getLatestRegisteredStatusLog().getComments());
-			dd.setEmp_name(d.getLatestRegisteredStatusLog().getEmp().getEmp_name());
-			dd.setDept_name(d.getLatestRegisteredStatusLog().getEmp().getDept().getDept_name());
-			dd.setRole_name(d.getLatestRegisteredStatusLog().getEmp().getRole().getRole_name());
-			dd.setStatus_name(d.getLatestRegisteredStatusLog().getMasterCode().getStatus_name());
-			dd.setRegdate(regdate);
+			dd.setRegdate(regdate); // 문서 상태 변경일자
+			dd.setDocument_idx(d.getDocument_idx()); // 문서 번호
+			dd.setVersion(d.getDocumentVersion().getVersionLog().getVersion()); // 버전
+			dd.setTitle(d.getDocumentVersion().getVersionLog().getTitle()); // 제목
+			dd.setComments(d.getLatestRegisteredStatusLog().getComments()); // 상태 변경 코멘트
+			dd.setEmp_name(d.getLatestRegisteredStatusLog().getEmp().getEmp_name()); // 사원 이름
+			dd.setDept_name(d.getLatestRegisteredStatusLog().getEmp().getDept().getDept_name()); // 부서 이름
+			dd.setRole_name(d.getLatestRegisteredStatusLog().getEmp().getRole().getRole_name()); // 역할 이름
+			dd.setStatus_name(d.getLatestRegisteredStatusLog().getMasterCode().getStatus_name()); // 상태 이름
+			dd.setStatus_code(d.getLatestRegisteredStatusLog().getMasterCode().getStatus_code()); // 상태 이름
+			dd.setProject_name(d.getFolder().getProject().getProject_name()); // 프로젝트 이름
 
 			dashboardDocumentList.add(dd);
 		}
 
-		return dashboardDocumentList;
+		return dashboardDocumentList; // Spring boot가 List를 JSON으로 자동 변환
+	}
+	
+	@GetMapping("/admin/project/list")
+	public List getProjectList() {
+		return projectService.selectAll();
 	}
 
 }

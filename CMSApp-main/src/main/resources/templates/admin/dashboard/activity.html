@@ -6,13 +6,15 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>AdminLTE 3 | Dashboard</title>
 
+<!-- data-table css -->
+<link rel="stylesheet" href="/admin/plugins/datatables-bs4/css/dataTables.bootstrap4.min.css">
+<link rel="stylesheet" href="/admin/plugins/datatables-responsive/css/responsive.bootstrap4.min.css">
+<link rel="stylesheet" href="/admin/plugins/datatables-buttons/css/buttons.bootstrap4.min.css">
+<!-- select2 css -->	
+<link rel="stylesheet" href="/admin/plugins/select2/css/select2.min.css">
+<link rel="stylesheet" href="/admin/plugins/select2-bootstrap4-theme/select2-bootstrap4.min.css">
+
 <th:block th:replace="~{fragments/header_link :: header_link}" />
-<link rel="stylesheet"
-	href="/admin/plugins/datatables-bs4/css/dataTables.bootstrap4.min.css">
-<link rel="stylesheet"
-	href="/admin/plugins/datatables-responsive/css/responsive.bootstrap4.min.css">
-<link rel="stylesheet"
-	href="/admin/plugins/datatables-buttons/css/buttons.bootstrap4.min.css">
 
 <style>
 button.show_list {
@@ -89,7 +91,6 @@ button.show_list:hover {
 
 						<!-- Tab -->
 						<div class="tab-pane container-fluid active" id="summary">
-
 							<!-- Row -->
 							<div class="row">
 								<div class="col-lg-4 col-12">
@@ -102,7 +103,6 @@ button.show_list:hover {
 										</div>
 									</div>
 								</div>
-
 								<div class="col-lg-4 col-12">
 									<div id="box-complete-review" class="small-box bg-info">
 										<div class="inner">
@@ -113,7 +113,6 @@ button.show_list:hover {
 										</div>
 									</div>
 								</div>
-
 								<div class="col-lg-4 col-12">
 									<div id="box-rejected" class="small-box bg-danger">
 										<div class="inner">
@@ -124,7 +123,6 @@ button.show_list:hover {
 										</div>
 									</div>
 								</div>
-
 							</div>
 							<!-- Row end -->
 
@@ -135,7 +133,6 @@ button.show_list:hover {
 									<div class="card mt-3">
 										<div class="card-header border-transparent">
 											<h3 class="card-title">목록</h3>
-
 										</div>
 										<div class="card-body p-0">
 											<div class="table-responsive">
@@ -162,7 +159,6 @@ button.show_list:hover {
 								<!-- Col End -->
 							</div>
 							<!-- Row End -->
-
 						</div>
 						<!-- Tab End -->
 
@@ -171,7 +167,6 @@ button.show_list:hover {
 							<!-- Row -->
 							<div class="row">
 								<div class="col-md-12">
-
 									<!-- Card -->
 									<div class="card">
 										<div class="card-header">
@@ -180,30 +175,51 @@ button.show_list:hover {
 												<button id="btn-filtered" class="btn btn-primary">조회하기</button>
 											</div>
 										</div>
-
 										<div class="card-body">
-
 											<div class="row">
 												<div class="col-sm-3">날짜</div>
 												<div class="col-sm-3">
 													<div class="icheck-primary d-inline">
 														<input type="radio" id="radio-date-all" name="date-filter"
-															value="radio-date-all" checked=""> <label
+															value="radio-date-all" checked> <label
 															for="radio-date-all">전체 보기 </label>
 													</div>
 												</div>
 												<div class="col-sm-6">
 													<div class="icheck-primary d-inline">
 														<input type="radio" id="radio-date-custom"
-															name="date-filter" value="radio-date-select" checked="">
+															name="date-filter" value="radio-date-select" >
 														<label for="radio-date-custom">날짜 선택 </label>
 													</div>
 													<!-- button -->
-													<button type="button" class="btn btn-default"
-														id="daterange-btn">
-														<i class="far fa-calendar-alt"></i> 날짜 선택: <span></span> <i
-															class="fas fa-caret-down"></i>
+													<button type="button" class="btn btn-default" id="daterange-btn">
+														<i class="far fa-calendar-alt"></i> 
+														날짜 선택: <span></span> 
+														<i class="fas fa-caret-down"></i>
 													</button>
+												</div>
+											</div>
+											<div class="row">
+												<div class="col-sm-3">프로젝트</div>
+												<div class="col-sm-3">
+													<div class="icheck-primary d-inline">
+														<input type="radio" id="radio-project-all"
+															name="project-filter" value="radio-project-all" checked> <label
+															for="radio-project-all">전체 보기 </label>
+													</div>
+												</div>
+												<div class="col-sm-6">
+													<div class="icheck-primary d-inline">
+														<input type="radio" id="radio-project-select"
+															name="project-filter" value="radio-project-select" > <label
+															for="radio-project-select">프로젝트 선택</label>
+													</div>
+			                                        <div class="form-group">
+			                                            <select id="project-tag" name="project-tag" 
+			                                            	class="select2 form-control" multiple="multiple" data-placeholder="추가할 프로젝트 (다중)선택" 
+			                                            	style="width: 100%;">
+			                                            </select>
+			                                        </div>
 												</div>
 											</div>
 
@@ -244,28 +260,26 @@ button.show_list:hover {
 												<div class="col-sm-3">
 													<div class="icheck-primary d-inline">
 														<input type="radio" id="radio-status-waiting"
-															name="status-filter" value="200" checked=""> <label
+															name="status-filter" value="200" > <label
 															for="radio-status-waiting">리뷰 대기 문서 </label>
 													</div>
 												</div>
 												<div class="col-sm-3">
 													<div class="icheck-primary d-inline">
 														<input type="radio" id="radio-status-complete"
-															name="status-filter" value="300" checked=""> <label
+															name="status-filter" value="300"> <label
 															for="radio-status-complete">리뷰 완료 문서 </label>
 													</div>
 												</div>
 											</div>
-
 										</div>
 										<!-- card-body end -->
 									</div>
 									<!-- Card End -->
 
-									<!-- trable wrapper -->
+									<!-- table wrapper -->
 									<div id="publish-table_wrapper"
 										class="dataTables_wrapper dt-bootstrap4">
-
 										<div class="row">
 											<div class="col-sm-12">
 												<table id="table-filtered"
@@ -280,7 +294,7 @@ button.show_list:hover {
 															<th>사원</th>
 															<th>결재 상태</th>
 															<th>코멘트</th>
-															<th>배포일자</th>
+															<th>일자</th>
 														</tr>
 													</thead>
 													<tbody>
@@ -291,74 +305,10 @@ button.show_list:hover {
 										</div>
 									</div>
 									<!-- table wrapper end -->
-
 								</div>
 								<!-- col end -->
 							</div>
-							<!-- Row End -->
-
-							<!-- <div class="row">
-								<div class="col-md-12">
-									<div class="card">
-										<div class="card-header">시각화 보드</div>
-										<div class="card-body">
-											<div class="row">
-												<div class="col-md-6">
-													<div class="card card-row card-secondary">
-														<div class="card-header">
-															<h3 class="card-title">배포 대기</h3>
-														</div>
-														<div class="card-body">
-
-															<div class="card card-light card-outline">
-																<div class="card-header">
-																	<h5 class="card-title">캐릭터 소개 (1)</h5>
-																	<div class="card-tools">
-																		<a href="#" class="btn btn-tool btn-link">#7</a> <a
-																			href="#" class="btn btn-tool"> <i
-																			class="fas fa-pen"></i>
-																		</a>
-																	</div>
-																</div>
-															</div>
-														</div>
-													</div>
-													card end
-												</div>
-
-												<div class="col-md-6">
-													<div class="card card-row card-info">
-														<div class="card-header">
-															<h3 class="card-title">배포 완료</h3>
-														</div>
-														<div class="card-body">
-
-															<div class="card card-light card-outline">
-																<div class="card-header">
-																	<h5 class="card-title">오류 해결 (1)</h5>
-																	<div class="card-tools">
-																		<a href="#" class="btn btn-tool btn-link">#7</a> <a
-																			href="#" class="btn btn-tool"> <i
-																			class="fas fa-pen"></i>
-																		</a>
-																	</div>
-																</div>
-															</div>
-														</div>
-													</div>
-													card end
-												</div>
-
-											</div>
-
-										</div>
-
-									</div>
-
-								</div>
-							</div> -->
-
-
+							<!-- Row end -->
 						</div>
 						<!-- Tab End -->
 
@@ -383,77 +333,63 @@ button.show_list:hover {
 
 	<th:block th:replace="~{fragments/footer_link :: footer_link}" />
 
-	<!-- data-table js 파일 -->
+	<!-- select2 js 파일 -->
+    <script src="/admin/plugins/select2/js/select2.full.min.js"></script>
+	<!-- datatables js 파일 -->
 	<script src="/admin/plugins/datatables/jquery.dataTables.min.js"></script>
-	<script
-		src="/admin/plugins/datatables-bs4/js/dataTables.bootstrap4.min.js"></script>
-	<script
-		src="/admin/plugins/datatables-responsive/js/dataTables.responsive.min.js"></script>
-	<script
-		src="/admin/plugins/datatables-responsive/js/responsive.bootstrap4.min.js"></script>
-	<script
-		src="/admin/plugins/datatables-buttons/js/dataTables.buttons.min.js"></script>
-	<script
-		src="/admin/plugins/datatables-buttons/js/buttons.bootstrap4.min.js"></script>
+	<script src="/admin/plugins/datatables-bs4/js/dataTables.bootstrap4.min.js"></script>
+	<script src="/admin/plugins/datatables-responsive/js/dataTables.responsive.min.js"></script>
+	<script src="/admin/plugins/datatables-responsive/js/responsive.bootstrap4.min.js"></script>
+	<script src="/admin/plugins/datatables-buttons/js/dataTables.buttons.min.js"></script>
+	<script src="/admin/plugins/datatables-buttons/js/buttons.bootstrap4.min.js"></script>
 	<script src="/admin/plugins/jszip/jszip.min.js"></script>
 	<script src="/admin/plugins/pdfmake/pdfmake.min.js"></script>
 	<script src="/admin/plugins/pdfmake/vfs_fonts.js"></script>
 	<script src="/admin/plugins/datatables-buttons/js/buttons.html5.min.js"></script>
 	<script src="/admin/plugins/datatables-buttons/js/buttons.print.min.js"></script>
-	<script
-		src="/admin/plugins/datatables-buttons/js/buttons.colVis.min.js"></script>
-	<script>
+	<script src="/admin/plugins/datatables-buttons/js/buttons.colVis.min.js"></script>
 	
+	<script>
 		// 데이터테이블 한국어
-		
-    var datatable_ko = {        
-        "decimal" : "",       
-         "emptyTable" : "데이터가 없습니다.",        
-        "info" : "_START_ - _END_ (총 _TOTAL_ 개)",        
-        "infoEmpty" : "0개",        
-        "infoFiltered" : "(전체 _MAX_ 개 중 검색결과)",       
-         "infoPostFix" : "",        
-        "thousands" : ",",        
-        "lengthMenu" : "_MENU_ 개씩 보기",        
-        "loadingRecords" : "로딩중...",        
-        "processing" : "처리중...",        
-        "search" : "검색 : ",        
-        "zeroRecords" : "검색된 데이터가 없습니다.",        
-        "paginate" : {            
-            "first" : "첫 페이지",            
-            "last" : "마지막 페이지",            
-            "next" : "다음",            
-            "previous" : "이전"        
-        },        
-        "aria" : {           
-             "sortAscending" : " :  오름차순 정렬",            
-            "sortDescending" : " :  내림차순 정렬"        
-            }
-		};
+	    var datatable_ko = {        
+	        "decimal" : "",       
+	        "emptyTable" : "데이터가 없습니다.",        
+	        "info" : "_START_ - _END_ (총 _TOTAL_ 개)",        
+	        "infoEmpty" : "0개",        
+	        "infoFiltered" : "(전체 _MAX_ 개 중 검색결과)",       
+	        "infoPostFix" : "",        
+	        "thousands" : ",",        
+	        "lengthMenu" : "_MENU_ 개씩 보기",        
+	        "loadingRecords" : "로딩중...",        
+	        "processing" : "처리중...",        
+	        "search" : "검색 : ",        
+	        "zeroRecords" : "검색된 데이터가 없습니다.",        
+	        "paginate" : {            
+	            "first" : "첫 페이지",            
+	            "last" : "마지막 페이지",            
+	            "next" : "다음",            
+	            "previous" : "이전"        
+	        },        
+	        "aria" : {           
+	             "sortAscending" : " :  오름차순 정렬",            
+	            "sortDescending" : " :  내림차순 정렬"        
+	            }
+			};
 
 		// 요약 탭 -> 결재 상태에 따른 문서 개수만 가져오기
 		function getSummaryCount(status_code) {
 			$.ajax({
-				type:"GET",  //전송타입
-				url:"/dashboard/list/count?status_code=" + status_code,
-				success: function (result, status, xhr) {
-					
-					if (status_code == 200) {
-						let waiting_count = $("#box-waiting-review h3");
-						waiting_count.html(result); 
-					} else if (status_code == 300) {
-						let complete_count = $("#box-complete-review h3");
-						complete_count.html(result); 
-					} else if (status_code == 500) {
-						let rejected_count = $("#box-rejected h3");
-						rejected_count.html(result); 
-					}
-					
-				}, error: function (xhr, status, e) {
+				type:"GET"  //전송타입
+				, url:"/dashboard/list/count"
+				, success: function (result, status, xhr) {
+						$("#box-waiting-review h3").html(result["200"]); // 리뷰 대기 문서 수 표시
+						$("#box-complete-review h3").html(result["300"]); // 리뷰 완료 문서 수 표시
+						$("#box-rejected h3").html(result["500"]); // 반려 문서 수 표시
+					}, error: function (xhr, status, e) {
 					console.log("error", e);
 					console.log("status", status);
 				}
-				})
+			});
 		}
 		
 		// 요약 탭 -> 결재 상태에 따라 문서 목록 데이터 가져오기
@@ -462,38 +398,32 @@ button.show_list:hover {
 				type:"GET",  //전송타입
 				url:"/dashboard/list?status_code=" + status_code,
 				success: function (result, status, xhr) {
-					
 					alert('문서 불러오기 성공');
 					
-					let preview = $("#table-preview tbody");
-					preview.empty(); // 테이블 초기화
-					
+					// 테이블 초기화
+					let preview = $("#table-preview tbody");					
+					preview.empty(); 
 					let tr = "";
-					
 					if (result.length == 0) {
 						tr += "<tr><td colspan='6'>내용이 없습니다.</td></tr>";
 					}
 					
-					// 배지 색
+					// 배지 색 한번만 결정
 					let statusBadge = null;
-					
 					if (status_code == 200) {
 						statusBadge = "badge-success";
-						
 					} else if (status_code == 300) {
 						statusBadge = "badge-info";
-						
 					} else if (status_code == 500) {
 						statusBadge = "badge-danger";
 					}
 					
 					// 차후 10건까지만 보여주는 것으로 변경
 					for (let i = 0; i < result.length; i++) {
-						
 						tr += `
 							<tr>
 							<td>${i+1}</td>
-							<td><a href="#">${result[i].title}</a></td>
+							<td><a href="#">${result[i].document_idx}. ${result[i].title}, ${result[i].project_name}</a></td>
 							<td>${result[i].version}</td>
 							<td>${result[i].emp_name}<br>${result[i].dept_name}</td>
 							<td><span class="badge ${statusBadge}">${result[i].status_name}</span></td>
@@ -504,7 +434,6 @@ button.show_list:hover {
 						`;
 					}
 					preview.html(tr);
-					
 				},
 				error: function (xhr, status, e) {
 					console.log("error", e);
@@ -514,29 +443,21 @@ button.show_list:hover {
 		}
 		
 		// 전체 보기 탭 -> 필터에 따라 문서 목록 가져오기
-		function getFilteredData(status_code, startDate, endDate, emp_idx, dept_idx, project_idx) {
+		function getFilteredData(status_code, startDate, endDate, emp_idx, dept_idx, projectIds) {
 			$.ajax({
 				type:"GET",  //전송타입
 				url:"/dashboard/list?status_code=" + status_code 
 						+ "&startDate=" + startDate + "&endDate=" + endDate 
 						+ "&emp_idx=" + emp_idx + "&dept_idx=" + dept_idx
-						+ "&project_idx=" + project_idx,
-						
+						+ "&projectIds=" + projectIds,
 				success: function (result, status, xhr) {
-					
 					alert('문서 불러오기 성공');
 					
-					 // 테이블 초기화
-					 	$("#table-filtered").DataTable().destroy();
-						let preview = $("#table-filtered tbody");
-						preview.empty();
-						let tr = "";
-					
-/* 					if (result.length == 0) {
-						tr += "<tr><td colspan='6'>내용이 없습니다.</td></tr>";
-						preview.html(tr);
-					} else { */
-						
+					// 테이블 초기화
+				 	$("#table-filtered").DataTable().destroy();
+					let preview = $("#table-filtered tbody");
+					preview.empty();
+					let tr = "";
 					
 					for (let i = 0; i < result.length; i++) {
 						
@@ -555,7 +476,7 @@ button.show_list:hover {
 							<tr>
 							<td><input type="checkbox" name="checked-documenet"></td>
 							<td>${i+1}</td>
-							<td><a href="#">${result[i].document_idx}, ${result[i].title}</a></td>
+							<td><a href="#">${result[i].document_idx}. ${result[i].title}, ${result[i].project_name}</a></td>
 							<td>${result[i].version}</td>
 							<td>${result[i].dept_name}</td>
 							<td>${result[i].emp_name}</td>
@@ -574,27 +495,42 @@ button.show_list:hover {
 						serverSide: false,
 						language : datatable_ko
 					});
-					
 				},
 				error: function (xhr, status, e) {
 					console.log("error", e);
 					console.log("status", status);
 				}
 			});
-			
 		}
-	
-	
+
+		
+	   function loadProject() {
+	        $.ajax({
+	            type: "GET",
+	            url: "/admin/project/list",
+	            success: function(result) {
+	            	alert("loadProject 통신 성공");
+	                // 서버로부터 받은 JSON 데이터를 파싱하여 옵션으로 추가
+	                $('#project-tag').empty(); // 기존 옵션들을 모두 지우기
+	                	for (let i = 0; i < result.length; i++) {
+	                    	$('#project-tag').append('<option value="' + result[i].project_idx + '">' + result[i].project_name + '</option>');
+	                	}
+	                //$('#project-tag').prop('disabled', false);
+	            },
+	            error: function(xhr, status, error) {
+	                console.error("Failed to load projects: " + error);
+	            }
+	        });
+	    } 
+
 		$(function() {
-			
-			/*******************************
-				*[요약 탭] 
-			********************************/
+	
+			/*-----------------------------------
+				*[요약 탭] 초기화
+			-----------------------------------*/
 			
 			// 결재 상태별 문서 수 표시
-			getSummaryCount(200);
-			getSummaryCount(300);
-			getSummaryCount(500);
+			getSummaryCount();
 			
 			// 목록 초기화
 			let preview = $("#table-preview tbody");
@@ -616,72 +552,75 @@ button.show_list:hover {
 				getSummaryData(500);
 			});
 			
-			/*******************************
-				*[전체보기 탭]
-			********************************/
+			/*-----------------------------------
+				*[전체보기 탭] 초기화
+			-----------------------------------*/
+			
+			// 필터: 부서
+            $('#project-tag').select2(); // 태그 기능 활성화
+	        loadProject(); // 전체 부서 목록 불러오기
 
 			// 필터: 날짜
 			let filter_startDate = "";
 			let filter_endDate = "";		
 			
-			// 날짜 선택
+			// 날짜 선택 기능 활성화
 			$('#daterange-btn').daterangepicker({
+					language : "ko",
+		
+					// 라벨 설정
+					ranges : {
+						'오늘' : [ moment(), moment() ],
+						'어제' : [ moment().subtract(1, 'days'), moment().subtract(1, 'days') ],
+						'지난 7일' : [ moment().subtract(6, 'days'), moment() ],
+						'지난 30일' : [ moment().subtract(29, 'days'), moment() ],
+					},
+		
+					// [취소], [적용] 버튼 없음
+					autoApply : true
+				},
+				function(start, end) {
+					
+					alert(start.format("ll") + "-" + end.format("ll")); // 날짜 선택 확인용 메시지
 				
-								language : "ko",
+					filter_startDate = start.format("YYYY-MM-DD hh:mm:ss");
+					filter_endDate = end.format("YYYY-MM-DD hh:mm:ss");
+					
+					if (this.chosenLabel == "오늘") {
+						$('#daterange-btn span').html("오늘");
+					} else if (this.chosenLabel == "어제") {
+						$('#daterange-btn span').html("어제");
+					} else {
+						$('#daterange-btn span').html(start.format('YYYY/MM/DD') + ' - ' + end.format('YYYY/MM/DD'));
+					}
+				});
 			
-								// 라벨 설정
-								ranges : {
-									'오늘' : [ moment(), moment() ],
-									'어제' : [ moment().subtract(1, 'days'),
-											moment().subtract(1, 'days') ],
-									'지난 7일' : [ moment().subtract(6, 'days'),
-											moment() ],
-									'지난 30일' : [ moment().subtract(29, 'days'),
-											moment() ],
-								},
-
-								// [취소], [적용] 버튼 없음
-								autoApply : true
-							},
-							function(start, end) {
-								
-								alert(start.format("ll") + "-" + end.format("ll"));
-							
-								filter_startDate = start.format("YYYY-MM-DD hh:mm:ss");
-								filter_endDate = end.format("YYYY-MM-DD hh:mm:ss");
-								
-								if (this.chosenLabel == "오늘") {
-									$('#daterange-btn span').html("오늘");
-								} else if (this.chosenLabel == "어제") {
-									$('#daterange-btn span').html("어제");
-								} else {
-									$('#daterange-btn span').html(start.format('YYYY/MM/DD') + ' - ' + end.format('YYYY/MM/DD'));
-								}
-							});
-			
-			
-			// 조회 버튼 클릭 시 목록 가져오기
+			// 조회 버튼 클릭 이벤트
 			$('#btn-filtered').click(function(){
 				
-				// 필터: 결재 상태
+				// 결재 상태 정보 가져오기
 				let filter_statusCode = document.querySelector("input[name='status-filter']:checked").value;
 				
-				// 필터: 날짜
+				// 전체 보기 선택 시 날짜 선택 버튼 비활성화 필요함..
+				// 날짜 정보 가져오기
 				let filter_date = document.querySelector("input[name='date-filter']:checked").value;
-				
-				
 				if (filter_date == "radio-date-all") {
-					let all_startDate = "2000-01-01 00:00:00"
-					let all_endDate = moment().format("YYYY-MM-DD hh:mm:ss")
-					// 목록 가져오기
-					getFilteredData(filter_statusCode, all_startDate, all_endDate, 0, 0, 0); // status_code, startDate, endDate, emp_idx, dept_idx, project_idx
-				} else {
-					// 목록 가져오기
-					getFilteredData(filter_statusCode, filter_startDate, filter_endDate, 0, 0, 0); // status_code, startDate, endDate, emp_idx, dept_idx, project_idx
+					filter_startDate = "2000-01-01 00:00:00"
+					filter_endDate = moment().format("YYYY-MM-DD hh:mm:ss")
 				}
 				
+				// 전체 보기 선택 시 프로젝트 선택 버튼 비활성화 필요함..
+				// 프로젝트 정보 가져오기
+				let projectIds = 900;
+				let filter_project = document.querySelector("input[name='project-filter']:checked").value;
+				if (filter_project == "radio-project-select") {
+					projectIds = $('#project-tag').val();
+					alert(projectIds);
+				}
+				
+				// 목록 가져오기
+				getFilteredData(filter_statusCode, filter_startDate, filter_endDate, 0, 0, projectIds); 
 			});
-			
 		});
 	</script>
 
