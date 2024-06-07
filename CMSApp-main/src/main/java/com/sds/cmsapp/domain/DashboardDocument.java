@@ -25,6 +25,9 @@ public class DashboardDocument {
 	private int status_code;
 	private String status_name;
 	
-	// 프로젝트 이름을 담을 변수 추가 예정
+	private int folder_idx;
+	private String folder_name;
+	private int project_idx;
+	private String project_name;
 
 }

@@ -16,4 +16,9 @@
 		select * from project where project_idx=#{project_idx}
 	</select>
 	
+	<!-- admin dashboard의 프로젝트 필터를 위한 select -->
+	<select id="selectAll" resultType="Project">
+		select * from project
+	</select> 
+	
 </mapper>
