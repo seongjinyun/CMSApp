@@ -35,6 +35,8 @@
 		<result	column="regdate"	property="regdate"/>
 		<association column="parent_folder_idx" property="parent_folder" javaType="Folder"
 			select="com.sds.cmsapp.model.folder.FolderDAO.select"/>
+		<association column="project_idx" property="project" javaType="Project"
+			select="com.sds.cmsapp.model.project.ProjectDAO.selectByProjectIdx"/>
 	</resultMap>
 	
 	<select id="select" parameterType="int" resultMap="FolderMap">
