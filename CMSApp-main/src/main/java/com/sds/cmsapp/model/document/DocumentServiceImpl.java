@@ -82,8 +82,12 @@ public class DocumentServiceImpl implements DocumentService {
 
 	@Override
 	public List documentListSelect(Map map) {
-		
 		return documentDAO.documentListSelect(map);
+	}
+	
+	//document/detail 문서 상세보기 
+	public DocumentVersion documentDetailSelect(DocumentVersion documentVersion) {
+		return documentDAO.documentDetailSelect(documentVersion);
 	}
 	
 	@Override // 임시로 만들어뒀습니다 -박준형

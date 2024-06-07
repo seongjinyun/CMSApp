@@ -60,12 +60,6 @@
                   <input type="hidden" name="folder_idx" th:value="${folder_idx}">
                 </div>
                 
-                <!-- Select box hidden by default -->
-				<div id="filterOptions" style="display:none;">
-				    <label><input type="checkbox" name="option1" value="option1"> Option 1</label><br>
-				    <label><input type="checkbox" name="option2" value="option2"> Option 2</label><br>
-				    <label><input type="checkbox" name="option3" value="option3"> Option 3</label>
-				  </div>
               </div>
               <!-- /.card-tools -->
             </div>
@@ -137,7 +131,7 @@
 				        </td>
 				        <td class="mailbox-star"><a href="#"><i class="fa fa-star" aria-hidden="true"></i></a></td>
 				        <!-- title, 업데이트 날짜, document가 아닌 versionLog에서 가져와야함.\ -->
-				        <td><a th:href="@{/document/detail(document_idx=${documentVersion.document.document_idx})}" th:text="${documentVersion.versionLog.title}">튜토리얼</a></td>
+				        <td><a th:href="@{/document/detail(document_idx=${documentVersion.document.document_idx}, folder_idx=${documentVersion.document.folder.folder_idx})}" th:text="${documentVersion.versionLog.title}">튜토리얼</a></td>
 				        <td th:text="${documentVersion.versionLog.version}">v2.1</td>
 				        <td th:text="${documentVersion.versionLog.regdate}">2024.05.23 16:44</td>
 				        <!-- 상태는 masterCode 에서 가져와야함  -->
@@ -182,7 +176,6 @@
 $(function(){
 	checkBoxAll();
 	write();
-	filterFile();
 	searchFile();
   });
   
@@ -202,11 +195,6 @@ $(function(){
 			location.href="/document/writeform?folder_idx="+$("input[name='folder_idx']").val();
 		});
   }
-	function filterFile(){
-		$('#filterButton').click(function(){
-			$('#filterOptions').toggle();
-		});
-	}
 	  
 	  function searchFile(){
 		 $('#searchFileInput').on('keyup', function(){

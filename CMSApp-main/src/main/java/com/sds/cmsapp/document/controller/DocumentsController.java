@@ -50,15 +50,13 @@ public class DocumentsController {
 	@GetMapping("/document/list")
 	public String getDocumentList(Model model, DocumentVersion documentVersion, @RequestParam(value="folder_idx") int folder_idx) {
 		HashMap map = new HashMap();
-		
-		List documentVersionList = documentService.selectAll(map);//3단계 일시키기
+		map.put("folder_idx", folder_idx);	
 		//폴더 -> 파일 리스트
 		List documentListSelect = documentService.documentListSelect(map);
 		
 		model.addAttribute("documentListSelect", documentListSelect);
 		log.debug("model= " + model);
 		
-		model.addAttribute("documentVersionList",documentVersionList);//4단계 결과 저장
 		model.addAttribute("folder_idx", folder_idx);
 		
 		return "documents/list";
@@ -87,7 +85,11 @@ public class DocumentsController {
 	} 
 	// 글 상세보기
 	@GetMapping("/document/detail")
-	public String getDetail() {
+	public String getDetail(@RequestParam("document_idx") int documentIdx,
+							            @RequestParam("folder_idx") int folderIdx,
+							            Model model, DocumentVersion documentVersion) {
+		DocumentVersion documentDetail = documentService.documentDetailSelect(documentVersion);
+		model.addAttribute("documentDetail", documentDetail);
 		return "documents/detail";
 	}
 	
