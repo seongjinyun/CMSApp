@@ -128,22 +128,22 @@
                   </tr>
                   <!-- ./소제목 -->
                   <tbody>
-    <tr th:each="document, i : ${documentListSelect}">
-        <td>
-            <div class="icheck-primary">
-                <input type="checkbox" value="" id="check1" th:id="'check' + ${i}">
-                <label th:for="'check' + ${i}"></label>
-            </div>
-        </td>
-        <td class="mailbox-star"><a href="#"><i class="fa fa-star" aria-hidden="true"></i></a></td>
-        <!-- title, 업데이트 날짜, document가 아닌 versionLog에서 가져와야함.\ -->
-        <td><a th:href="@{/document/detail(document_idx=${document.document_idx})}">튜토리얼</a></td>
-        <td>v2.1</td>
-        <td th:text="${document.date}">2024.05.23 16:44</td>
-        <!-- 상태는 masterCode 에서 가져와야함  -->
-        <td th:text="${document.status}">리뷰 중</td>
-    </tr>
-</tbody>
+				    <tr th:each="documentVersion, i : ${documentListSelect}">
+				        <td>
+					        <div class="icheck-primary">
+		                        <input type="checkbox" value="" id="check1">
+		                        <label for="check1"></label>
+                     		</div>
+				        </td>
+				        <td class="mailbox-star"><a href="#"><i class="fa fa-star" aria-hidden="true"></i></a></td>
+				        <!-- title, 업데이트 날짜, document가 아닌 versionLog에서 가져와야함.\ -->
+				        <td><a th:href="@{/document/detail(document_idx=${documentVersion.document.document_idx})}" th:text="${documentVersion.versionLog.title}">튜토리얼</a></td>
+				        <td th:text="${documentVersion.versionLog.version}">v2.1</td>
+				        <td th:text="${documentVersion.versionLog.regdate}">2024.05.23 16:44</td>
+				        <!-- 상태는 masterCode 에서 가져와야함  -->
+				        <td>리뷰 중</td>
+				    </tr>
+				</tbody>
                 </table>
                 <!-- /.table -->
               </div>
@@ -173,44 +173,11 @@
 	<th:block th:replace="~{fragments/footer_link :: footer_link}"/>
 	
   	<!-- 디렉토리 변경 모달창 -->
-	<div class="modal fade" id="moveDirectory" tabindex="-1" role="dialog" aria-labelledby="directoryModalLabel" aria-hidden="true">
-        <div class="modal-dialog" role="document">
-            <div class="modal-content">
-                <!-- Modal Header -->
-                <div class="modal-header">
-                    <h5 class="modal-title" id="directoryModalLabel">파일 이동</h5>              
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>                    
-                </div>
-                <!-- Modal Body -->
-                <div class="modal-body">
-                	<h6>파일이 옮겨질 디렉토리를 선택하세요</h6>
-                    <div id="jstree_demo_div">
-                        <!-- The tree will be appended here -->
-                    </div>
-                </div>
-                
-                <!-- Breadcrumb -->
-                <div class="modal-body">
-                    <nav aria-label="breadcrumb">
-                        <ol class="breadcrumb" id="breadcrumb">
-                            <li class="breadcrumb-item active" aria-current="page">현재 디렉토리</li>
-                        </ol>
-                    </nav>
-                </div>
-
-                <!-- Modal Footer -->
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">닫기</button>
-                    <button type="button" class="btn btn-primary" onclick="selectDirectory()">이동</button>
-                </div>
-            </div>
-        </div>
-    </div>
+	<th:block th:replace="~{elements/folder_modal :: folder_modal}"/>
 	<!-- /.디렉토리 변경 모달창 -->
-  
-
+  	<!-- 디렉토리 변경 모달 스크립트 -->
+	<th:block th:replace="~{elements/folder_modal_script :: folder_modal_script}"/>
+	<!-- /.디렉토리 변경 모달 스크립트 -->
 <script>
 $(function(){
 	checkBoxAll();
@@ -249,84 +216,14 @@ $(function(){
 			});
 		});
 	  }
-	  // 파일탐색기(모달) 관련
-	  $(document).ready(function() {
-		    initializeModal();
-		    initializeDirectoryTree();
-		});
 
-		function initializeModal() {
-		    $('#directoryModal').on('shown.bs.modal', function () {
-		        initializeDirectoryTree();
-		    });
-		}
-
-		// data 안에 배열로 자식구조를 구현합니다(jsTree)
-		function initializeDirectoryTree() {
-		    $('#jstree_demo_div').jstree({
-		        'core' : {
-		        	'data': [
-		                {"text": "프로젝트aA", "icon": "fa fa-box", "children": [
-		                    {"text": "폴더 1", "icon": "fa fa-folder", "children": [
-		                        {"text": "파일 1-1", "icon": "fa fa-file"},
-		                        {"text": "파일 1-2", "icon": "fa fa-file"}
-		                    ]},
-		                    {"text": "폴더 2", "icon": "fa fa-folder", "children": [
-		                        {"text": "파일 2-1", "icon": "fa fa-file"},
-		                        {"text": "파일 2-2", "icon": "fa fa-file"}
-		                    ]}
-		                ]},
-		                {"text": "프로젝트B", "icon": "fa fa-box", "childern": [
-		                	{"text": "폴더 3", "icon": "fa fa-folder", "children": [
-		                        {"text": "파일 3-1", "icon": "fa fa-file"},
-		                        {"text": "파일 3-2", "icon": "fa fa-file"}
-		                    ]},
-		                    {"text": "폴더 4", "icon": "fa fa-folder", "children": [
-		                        {"text": "파일 4-1", "icon": "fa fa-file"},
-		                        {"text": "파일 4-2", "icon": "fa fa-file"}
-		                    ]}
-		                ]}
-		            ]
-		        }
-		    });
-
-		    $('#jstree_demo_div').on('changed.jstree', function (e, data) {
-		        if (data.selected.length > 0) {
-		            updateBreadcrumb(data.instance.get_path(data.selected[0]));
-		        }
-		    });
-		}
-
-		function updateBreadcrumb(path) {
-		    const breadcrumb = $('#breadcrumb');
-		    breadcrumb.empty();
-		    path.forEach((segment, index) => {
-		        if (index === path.length - 1) {
-		            breadcrumb.append(`<li class="breadcrumb-item active" aria-current="page">${segment}</li>`);
-		        } else {
-		            breadcrumb.append(`<li class="breadcrumb-item">${segment}</li>`);
-		        }
-		    });
-		}
-
-		function selectDirectory() {
-			
-		    var selectedNode = $('#jstree_demo_div').jstree("get_selected", true);
-		    if (selectedNode.length > 0) {
-		        var selectedPath = $('#jstree_demo_div').jstree().get_path(selectedNode[0], '/');
-		        console.log('Selected Directory:', selectedPath);
-		    } else {
-		        console.log('No directory selected.');
-		    }
-		    $('#directoryModal').modal('hide');
-		}
-		// 파일탐색기 관련 end
 		
 		function goToTrash(){
 			if(confirm("선택한 항목들을 휴지통으로 보낼까요?")){
 				alert("슛~");
 			}
 		}
+	
 
 
 </script>

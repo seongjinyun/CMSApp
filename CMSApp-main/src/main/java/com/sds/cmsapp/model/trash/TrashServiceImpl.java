@@ -5,6 +5,7 @@ import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.sds.cmsapp.domain.DocumentVersion;
 import com.sds.cmsapp.domain.Trash;
@@ -39,18 +40,18 @@ public class TrashServiceImpl implements TrashService{
 	}
 
 	@Override
+	@Transactional
 	public int delete(Integer trash_idx) {
 		Trash trash = trashDAO.select(trash_idx);
-		int document_idx = trash.getDocument().getDocument_idx();
-		trashDAO.delete(trash_idx);
+		documentDAO.delete(trash.getDocument().getDocument_idx());
+		int result = trashDAO.delete(trash_idx);
 		
-		return 0;
+		return result;
 	}
 
 	@Override
 	public int deleteAll() {
-		// TODO Auto-generated method stub
-		return 0;
+		return trashDAO.deleteAll();
 	}
 
 	@Override
@@ -67,8 +68,11 @@ public class TrashServiceImpl implements TrashService{
 
 	@Override
 	public boolean isTrash(Integer document_idx) {
-		
-		return false;
+		boolean flag = false;
+		if(trashDAO.selectByDocumentIdx(document_idx) != null) {
+			flag = true;
+		}
+		return flag;
 	}
 
 	@Override

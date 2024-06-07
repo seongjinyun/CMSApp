@@ -30,5 +30,7 @@ public interface FolderDAO {
 	// 상위폴더 조회
 	public Folder selectParent(int folder_idx);
 	
+	// 최상위 폴더 조회
+	public List<Folder> selectTopFolder();
 	
 }

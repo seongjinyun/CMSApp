@@ -40,16 +40,53 @@
      -->
     INSERT INTO version_log(branched_version_log_idx,emp_idx,document_idx,version,title,content,comments) 
     VALUES (NULL,7,#{document.document_idx}, 1,#{title}, #{content},'초안')
+    
+        <selectKey keyColumn="version_log_idx" keyProperty="version_log_idx" resultType="int" order="AFTER">
+			select last_insert_id() as version_log_idx
+		</selectKey>
+    </insert>
+    
+    <insert id="documentVersionInsert" parameterType="DocumentVersion">
+    	insert into document_version (document_idx, version_log_idx)
+    	values (#{document.document_idx}, #{versionLog.version_log_idx})
     </insert>
 	
-	<!-- join하여 versionLog 가져올 예정
-		상태 불러오는 masterCode도 join -->
+	<!-- 0606 -->
+	<resultMap type="DocumentVersion" id="DocumentListSelectMap">
+		<id column="document_version_idx" property="document_version_idx"/>
+		
+		<association property="document" javaType="Document">
+			<id property="document_idx" column="document_idx"/>
+			
+			<association property="folder" javaType="Folder">
+				<id property="folder_idx" column="folder_idx"/>
+			</association>
+		</association>
+		
+		<association property="versionLog" javaType="VersionLog">
+			<id property="version_log_idx" column="version_log_idx"/>
+			<result property="version" column="version"/>
+			<result property="title" column="title"/>
+			<result property="regdate" column="regdate"/>
+		</association>
+	</resultMap>
+	
 	
 	<!-- 문서 목록 조회 -->
-    <select id="documentListSelect" resultType="Document">
-        SELECT document_idx 
-        FROM document 
-        WHERE folder_idx = #{folder.folder_idx}
+    <select id="documentListSelect" resultMap="DocumentListSelectMap" parameterType="java.util.Map">
+        SELECT 
+	        dv.document_version_idx,
+	        d.document_idx,
+	        d.folder_idx,
+	        vl.version_log_idx,
+	        vl.version,
+	        vl.title,
+	        vl.regdate
+	    FROM Document_Version dv
+	    JOIN Document d ON dv.document_idx = d.document_idx
+	    JOIN Folder f ON d.folder_idx = f.folder_idx
+	    JOIN Version_Log vl ON dv.version_log_idx = vl.version_log_idx
+	    where d.folder_idx = #{folder_idx};
     </select>
     
     <!-- 0603-4 추가 -->
