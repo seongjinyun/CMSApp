@@ -13,6 +13,7 @@ import com.sds.cmsapp.domain.Folder;
 import com.sds.cmsapp.domain.Trash;
 import com.sds.cmsapp.exception.FolderException;
 import com.sds.cmsapp.model.document.DocumentDAO;
+import com.sds.cmsapp.model.document.DocumentVersionDAO;
 import com.sds.cmsapp.model.emp.EmpDAO;
 import com.sds.cmsapp.model.trash.TrashDAO;
 
@@ -35,11 +36,10 @@ public class FolderServiceImpl implements FolderService {
 	private EmpDAO empDAO;
 
 	@Override
-	public int moveFolder(int document_idx, int targetFolderIdx) {
+	public int moveDirectory(int document_idx, int targetFolderIdx) {
 		Document document = documentDAO.select(document_idx);
 		document.setFolder(folderDAO.select(targetFolderIdx));
 		return documentDAO.update(document);
-		
 	}
 
 	@Override
@@ -49,8 +49,7 @@ public class FolderServiceImpl implements FolderService {
 
 	@Override
 	@Transactional
-	public void deleteFolder(final int folder_idx, final int emp_idx) 
-	{
+	public void deleteFolder(int folder_idx, int emp_idx) {
 		List<Folder> childFolderList = folderDAO.selectSub(folder_idx);
 		List<Document> documentList = documentDAO.selectByFolderIdx(folder_idx);
 		if(documentList != null) {

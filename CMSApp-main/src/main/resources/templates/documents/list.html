@@ -1,158 +1,109 @@
 <!DOCTYPE html>
 <html lang="zxx" xmlns:th="http://www.thymeleaf.org">
-
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>AdminLTE 3 | Dashboard</title>
 
-  <th:block th:replace="~{fragments/header_link :: header_link}" />
-
+	<th:block th:replace="~{fragments/header_link :: header_link}"/>
+	
 </head>
+<body class="hold-transition sidebar-mini layout-fixed"> 
+<div class="wrapper">
 
-<body class="hold-transition sidebar-mini layout-fixed">
-  <div class="wrapper">
+	<!-- Preloader -->
+	<th:block th:replace="~{fragments/preloader :: preloader}"/>
+	
+  <!-- Navbar -->
+	<th:block th:replace="~{fragments/navi :: navi}"/>
+  <!-- /.navbar -->
 
-    <!-- Preloader -->
-    <th:block th:replace="~{fragments/preloader :: preloader}" />
+  <!-- Main Sidebar Container -->
+	<th:block th:replace="~{fragments/sidebar :: sidebar}"/>
+  
+  <!-- /.sidebar -->
 
-    <!-- Navbar -->
-    <th:block th:replace="~{fragments/navi :: navi}" />
-    <!-- /.navbar -->
+  <!-- Content Wrapper. Contains page content -->
+  <div class="content-wrapper">
+	  <section class="content-header">
+	      <div class="container-fluid">
+	        <div class="row mb-2">
+	          <div class="col-sm-6">
+	            <h1>폴더 명</h1>
+	          </div>
+	          <div class="col-sm-6">
+	            <ol class="breadcrumb float-sm-right">
+	              <li class="breadcrumb-item"><a href="#">폴더 명1</a></li>
+	              <li class="breadcrumb-item active">폴더 명2</li>
+	            </ol>
+	          </div>
+	        </div>
+	      </div><!-- /.container-fluid -->
+	    </section>
+	  <section class="content">
+      <div class="row">
+        <div class="col-md-12">
+          <div class="card card-primary card-outline">
+            <div class="card-header">
+              <h3 class="card-title"></h3>
 
-    <!-- Main Sidebar Container -->
-    <th:block th:replace="~{fragments/sidebar :: sidebar}" />
-
-    <!-- /.sidebar -->
-
-    <!-- Content Wrapper. Contains page content -->
-    <div class="content-wrapper">
-      <section class="content-header">
-        <div class="container-fluid">
-          <div class="row mb-2">
-            <div class="col-sm-6">
-              <h1>폴더 명</h1>
-            </div>
-            <div class="col-sm-6">
-              <ol class="breadcrumb float-sm-right">
-                <li class="breadcrumb-item"><a href="#">폴더 명1</a></li>
-                <li class="breadcrumb-item active">폴더 명2</li>
-              </ol>
-            </div>
-          </div>
-        </div><!-- /.container-fluid -->
-      </section>
-      <section class="content">
-        <div class="row">
-          <div class="col-md-12">
-            <div class="card card-primary card-outline">
-              <div class="card-header">
-                <h3 class="card-title"></h3>
-
-                <div class="card-tools">
-                  <div class="input-group input-group-sm">
-                    <input type="text" class="form-control" id="searchFileInput" placeholder="Search File">
-                    <div class="input-group-append">
-                      <div class="btn btn-primary">
-                        <i class="fas fa-search"></i>
-                      </div>
+              <div class="card-tools">
+                <div class="input-group input-group-sm">
+                  <input type="text" class="form-control" id="searchFileInput" placeholder="Search File">
+                  <div class="input-group-append">
+                    <div class="btn btn-primary">
+                      <i class="fas fa-search"></i>
                     </div>
-                    <input type="button" class="btn btn-default btn-sm ml-1 mr-1" value="필터" id="filterButton">
-                    <input type="button" class="btn btn-default btn-sm" value="글 작성" id="write">
-                    <input type="hidden" name="folder_idx" th:value="${folder_idx}">
                   </div>
-
-                  <!-- Select box hidden by default -->
-                  <div id="filterOptions" style="display:none;">
-                    <label><input type="checkbox" name="option1" value="option1"> Option 1</label><br>
-                    <label><input type="checkbox" name="option2" value="option2"> Option 2</label><br>
-                    <label><input type="checkbox" name="option3" value="option3"> Option 3</label>
-                  </div>
+                  <input type="button" class="btn btn-default btn-sm ml-1 mr-1" value="필터" id="filterButton">
+                  <input type="button" class="btn btn-default btn-sm" value="글 작성" id="write">
+                  <input type="hidden" name="folder_idx" th:value="${folder_idx}">
                 </div>
-                <!-- /.card-tools -->
+                
               </div>
-              <!-- /.card-header -->
-              <div class="card-body p-0">
-                <div class="mailbox-controls">
+              <!-- /.card-tools -->
+            </div>
+            <!-- /.card-header -->
+            <div class="card-body p-0">
+              <div class="mailbox-controls">
+                <div class="btn-group">
+                  <button type="button" class="btn btn-default btn-sm" onClick="goToTrash();">
+                    <i class="far fa-trash-alt"></i>
+                  </button>
+                  <button type="button" class="btn btn-default btn-sm">
+                    <i class="fas fa-reply"></i>
+                  </button>
+                  <button type="button" class="btn btn-default btn-sm">
+                    <i class="fas fa-share"></i>
+                  </button>
+	              <button type="button" class="btn btn-default btn-sm">
+	                <i class="fas fa-sync-alt"></i>
+	              </button>
+	              <!-- 디렉토리 변경 버튼 -->
+                  <button type="button" class="btn btn-default btn-sm" data-toggle="modal" data-target="#moveDirectory">
+   					<i class="fas fa-folder"></i>
+				  </button>
+                  <!-- /.디렉토리 변경 버튼 -->
+                  <button type="button" class="btn btn-default btn-sm">
+   					새 폴더
+				  </button>
+                </div>
+                <!-- /.btn-group -->
+                <div class="float-right">
+                  1-50/200
                   <div class="btn-group">
-                    <button type="button" class="btn btn-default btn-sm" id="trash_btn">
-                      <i class="far fa-trash-alt"></i>
+                    <button type="button" class="btn btn-default btn-sm">
+                      <i class="fas fa-chevron-left"></i>
                     </button>
                     <button type="button" class="btn btn-default btn-sm">
-                      <i class="fas fa-reply"></i>
-                    </button>
-                    <button type="button" class="btn btn-default btn-sm">
-                      <i class="fas fa-share"></i>
-                    </button>
-                    <button type="button" class="btn btn-default btn-sm">
-                      <i class="fas fa-sync-alt"></i>
-                    </button>
-                    <!-- 디렉토리 변경 버튼 -->
-                    <button type="button" class="btn btn-default btn-sm" id="openMoveDirectoryModalButton">
-                      <i class="fas fa-folder"></i>
-                    </button>
-                    <!-- /.디렉토리 변경 버튼 -->
-                    <button type="button" class="btn btn-default btn-sm">
-                      새 폴더
+                      <i class="fas fa-chevron-right"></i>
                     </button>
                   </div>
                   <!-- /.btn-group -->
-                  <div class="float-right">
-                    1-50/200
-                    <div class="btn-group">
-                      <button type="button" class="btn btn-default btn-sm">
-                        <i class="fas fa-chevron-left"></i>
-                      </button>
-                      <button type="button" class="btn btn-default btn-sm">
-                        <i class="fas fa-chevron-right"></i>
-                      </button>
-                    </div>
-                    <!-- /.btn-group -->
-                  </div>
-                  <!-- /.float-right -->
                 </div>
-
-                <div class="table-responsive mailbox-messages">
-                  <table class="table table-hover table-striped">
-                    <!-- 소제목 -->
-                    <tr class="subtitle">
-                      <th>
-                        <div class="icheck-primary">
-                          <input type="checkbox" value="" id="checkall">
-                          <label for="checkall"></label>
-                        </div>
-                      </th>
-                      <th class="mailbox-star"><a href="#"></a></th>
-                      <th>제목</th>
-                      <th>문서 버전</th>
-                      <th>업데이트 날짜</th>
-                      <th>상태</th>
-                    </tr>
-                    <!-- ./소제목 -->
-                    <tbody>
-                      <tr th:each="document, i : ${documentListSelect}">
-                        <td>
-                          <div class="icheck-primary">
-                            <input type="checkbox" th:value="${document.document_idx}" name="document_idx" id="check1"
-                              th:id="'check' + ${i}">
-                            <label th:for="'check' + ${i}"></label>
-                          </div>
-                        </td>
-                        <td class="mailbox-star"><a href="#"><i class="fa fa-star" aria-hidden="true"></i></a></td>
-                        <!-- title, 업데이트 날짜, document가 아닌 versionLog에서 가져와야함.\ -->
-                        <td><a th:href="@{/document/detail(document_idx=${document.document_idx})}">튜토리얼</a></td>
-                        <td>v2.1</td>
-                        <td th:text="${document.date}">2024.05.23 16:44</td>
-                        <!-- 상태는 masterCode 에서 가져와야함  -->
-                        <td th:text="${document.status}">리뷰 중</td>
-                      </tr>
-                    </tbody>
-                  </table>
-                  <!-- /.table -->
-                </div>
-                <!-- /.mail-box-messages -->
+                <!-- /.float-right -->
               </div>
-
+              
               <div class="table-responsive mailbox-messages">
                 <table class="table table-hover table-striped">
                   <!-- 소제목 -->
@@ -171,134 +122,128 @@
                   </tr>
                   <!-- ./소제목 -->
                   <tbody>
-                    <tr th:each="documentVersion, i : ${documentListSelect}">
-                      <td>
-                        <div class="icheck-primary">
-                          <input type="checkbox" value="" id="check1">
-                          <label for="check1"></label>
-                        </div>
-                      </td>
-                      <td class="mailbox-star"><a href="#"><i class="fa fa-star" aria-hidden="true"></i></a></td>
-                      <!-- title, 업데이트 날짜, document가 아닌 versionLog에서 가져와야함.\ -->
-                      <td><a
-                          th:href="@{/document/detail(document_idx=${documentVersion.document.document_idx}, folder_idx=${documentVersion.document.folder.folder_idx})}"
-                          th:text="${documentVersion.versionLog.title}">튜토리얼</a></td>
-                      <td th:text="${documentVersion.versionLog.version}">v2.1</td>
-                      <td th:text="${documentVersion.versionLog.regdate}">2024.05.23 16:44</td>
-                      <!-- 상태는 masterCode 에서 가져와야함  -->
-                      <td>리뷰 중</td>
-                    </tr>
-                  </tbody>
+				    <tr th:each="documentVersion, i : ${documentListSelect}">
+				        <td>
+					        <div class="icheck-primary">
+		                        <input type="checkbox" value="" id="check1">
+		                        <label for="check1"></label>
+                     		</div>
+				        </td>
+				        <td class="mailbox-star"><a href="#"><i class="fa fa-star" aria-hidden="true"></i></a></td>
+				        <!-- title, 업데이트 날짜, document가 아닌 versionLog에서 가져와야함.\ -->
+				        <td><a th:href="@{/document/detail(document_idx=${documentVersion.document.document_idx}, folder_idx=${documentVersion.document.folder.folder_idx})}" th:text="${documentVersion.versionLog.title}">튜토리얼</a></td>
+				        <td th:text="${documentVersion.versionLog.version}">v2.1</td>
+				        <td th:text="${documentVersion.versionLog.regdate}">2024.05.23 16:44</td>
+				        <!-- 상태는 masterCode 에서 가져와야함  -->
+				        <td>리뷰 중</td>
+				    </tr>
+				</tbody>
                 </table>
                 <!-- /.table -->
               </div>
               <!-- /.mail-box-messages -->
             </div>
             <!-- /.card-body -->
-          </div>
+           </div>
           <!-- /.card -->
         </div>
-        <!-- /.row -->
-      </section>
-    </div>
-    <!-- /.content-wrapper -->
-
-    <th:block th:replace="~{fragments/footer :: footer}" />
-
-    <!-- Control Sidebar -->
-    <aside class="control-sidebar control-sidebar-dark">
-      <!-- Control sidebar content goes here -->
-    </aside>
-    <!-- /.control-sidebar -->
+        <!-- /.col -->
+      </div>
+      <!-- /.row -->
+    </section>
   </div>
-  <!-- ./wrapper -->
+  <!-- /.content-wrapper -->
+  
+	<th:block th:replace="~{fragments/footer :: footer}"/>
 
   <!-- Control Sidebar -->
   <aside class="control-sidebar control-sidebar-dark">
     <!-- Control sidebar content goes here -->
   </aside>
   <!-- /.control-sidebar -->
-  </div>
-  <!-- ./wrapper -->
+</div>
+<!-- ./wrapper -->
+	
+	<th:block th:replace="~{fragments/footer_link :: footer_link}"/>
+	
+  	<!-- 디렉토리 변경 모달창 -->
+	<th:block th:replace="~{elements/folder_modal :: folder_modal}"/>
+	<!-- /.디렉토리 변경 모달창 -->
+  	<!-- 디렉토리 변경 모달 스크립트 -->
+	<th:block th:replace="~{elements/folder_modal_script :: folder_modal_script}"/>
+	<!-- /.디렉토리 변경 모달 스크립트 -->
+<script>
+$(function(){
+    checkBoxAll();
+    write();
+    filterFile();
+    searchFile();
+    initializeOpnMoveDirectoryModal();
+    goToTrash();
+  });
+  
+  function checkBoxAll(){
+	  $("#checkall").click(function(){
+	      if($("#checkall").prop("checked")) {
+	        $("input[type=checkbox]").prop("checked",true);
+	      } else {
+	        $("input[type=checkbox]").prop("checked",false);
+	      }
+	    });
+  }
+  
+  function write(){
+	  $("#write").click(function() {
+			//글쓰기 폼 요청
+			location.href="/document/writeform?folder_idx="+$("input[name='folder_idx']").val();
+		});
+  }
+	  
+	  function searchFile(){
+		 $('#searchFileInput').on('keyup', function(){
+			 var value = $(this).val().toLowerCase();
+			 $("tbody tr:not(.subtitle)").filter(function() {
+			 	$(this).toggle($(this).find(".mailbox-subject").text().toLowerCase().indexOf(value) > -1)
+			});
+		});
+	  }
 
-  <th:block th:replace="~{fragments/footer_link :: footer_link}" />
-
-  <!-- 디렉토리 변경 모달창 -->
-  <th:block th:replace="~{elements/folder_modal :: folder_modal}" />
-  <!-- /.디렉토리 변경 모달창 -->
-  <!-- 디렉토리 변경 모달 스크립트 -->
-  <th:block th:replace="~{elements/folder_modal_script :: folder_modal_script}" />
-  <!-- /.디렉토리 변경 모달 스크립트 -->
-  <script>
-    $(function () {
-      checkBoxAll();
-      write();
-      filterFile();
-      searchFile();
-      initializeOpenMoveDirectoryModal();
-      goToTrash();
-    });
-
-    function checkBoxAll() {
-      $("#checkall").click(function () {
-        if ($("#checkall").prop("checked")) {
-          $("input[type=checkbox]").prop("checked", true);
-        } else {
-          $("input[type=checkbox]").prop("checked", false);
-        }
-      });
-    }
-
-    function write() {
-      $("#write").click(function () {
-        //글쓰기 폼 요청
-        location.href = "/document/writeform?folder_idx=" + $("input[name='folder_idx']").val();
-      });
-    }
+////////////////////////////////////////////////////
+    
     function filterFile() {
       $('#filterButton').click(function () {
         $('#filterOptions').toggle();
       });
     }
 
-    function searchFile() {
-      $('#searchFileInput').on('keyup', function () {
-        var value = $(this).val().toLowerCase();
-        $("tbody tr:not(.subtitle)").filter(function () {
-          $(this).toggle($(this).find(".mailbox-subject").text().toLowerCase().indexOf(value) > -1)
-        });
-      });
-    }
-
-
     function goToTrash() {
-      $("#trash_btn").click(function () {
-        if (checkSelected()) {
-          if (confirm("선택한 항목들을 휴지통으로 보낼까요?")) {
-            let document_idxList = [];
-            $('input[name="document_idx"]:checked').each(function () {
-              document_idxList.push($(this).val());
-            });
-            $.ajax({
-              method: "POST",
-              url: "/document/list/trash",
-              data: {
-                document_idxList: document_idxList,
-                //emp_idx: emp_idx
-              },
-              success: function (result, status, xhr) {
-                alert("성공적으로 휴지통에 보냈습니다");
-              },
-              error: function (status, xhr, err) {
-                alert("휴지통에 보내는데 실패했어요.");
-              }
-            });
-          }
-        }
+      $("#trash_btn").click(function(){
+	      if (checkSelected()){
+	        if (confirm("선택한 항목들을 휴지통으로 보낼까요?")) {
+	          let document_idxList = [];
+	          $('input[name="document_idx"]:checked').each(function () {
+	            document_idxList.push($(this).val());
+	          });
+	          $.ajax({
+	            method: "POST",
+	            url: "/document/list/trash",
+	            data: {
+	              document_idxList: document_idxList,
+	              //emp_idx: emp_idx
+	            },
+	            success: function(result, status, xhr){
+	              alert("성공적으로 휴지통에 보냈습니다");
+	            },
+	            error: function(status, xhr, err){
+	              alert("휴지통에 보내는데 실패했어요.");
+	            }
+	          });
+	        }
+	      }  
       })
     }
 
-    function checkSelected() {
+    function checkSelected(){
       let selectedDocument_idx = [];
       $('input[name="document_idx"]:checked').each(function () {
         selectedDocument_idx.push($(this).val());
@@ -309,15 +254,15 @@
         event.stopImmediatePropagation();
         console.log("list.html 파일의 alert 호출");
         return false;
-      } else {
+      } else{
         return true;
       }
     }
 
     function openMoveDirectoryModal() {
       let selectedDocument_idx = [];
-      // if(checkSelected()){
-      $('#moveDirectory').modal('show');
+     // if(checkSelected()){
+        $('#moveDirectory').modal('show');
       //}
     }
 

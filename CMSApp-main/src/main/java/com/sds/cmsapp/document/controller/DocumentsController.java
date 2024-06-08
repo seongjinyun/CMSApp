@@ -10,10 +10,10 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import com.sds.cmsapp.common.Pager;
+import com.sds.cmsapp.domain.Document;
 import com.sds.cmsapp.domain.DocumentVersion;
 import com.sds.cmsapp.domain.Trash;
 import com.sds.cmsapp.model.document.DocumentService;
-import com.sds.cmsapp.model.folder.FolderService;
 import com.sds.cmsapp.model.trash.TrashService;
 
 import lombok.extern.slf4j.Slf4j;
@@ -23,7 +23,7 @@ import lombok.extern.slf4j.Slf4j;
 public class DocumentsController {
 	
 	@Autowired
-	Pager pager;
+	private Pager pager;
 
 	@Autowired
 	private DocumentService documentService;
@@ -50,18 +50,29 @@ public class DocumentsController {
 	
 	//파일목록
 	@GetMapping("/document/list")
-	public String getDocumentList(Model model, DocumentVersion documentVersion, @RequestParam(value="folder_idx") int folder_idx) {
-		HashMap map = new HashMap();
-		map.put("folder_idx", folder_idx);	
-		//폴더 -> 파일 리스트
-		List documentListSelect = documentService.documentListSelect(map);
-		
-		model.addAttribute("documentListSelect", documentListSelect);
-		log.debug("model= " + model);
-		
-		model.addAttribute("folder_idx", folder_idx);
-		
-		return "documents/list";
+
+	public String getDocumentList(Model model, DocumentVersion documentVersion, @RequestParam(value="folder_idx", defaultValue = "0") int folder_idx) {
+		if (folder_idx == 0) {
+			HashMap<String, Integer> map=new HashMap<String, Integer>();
+			map.put("startIndex", pager.getStartIndex());
+			map.put("rowCount", pager.getPageSize());
+			List<Document> documentList = documentService.selectAll(map);
+			model.addAttribute("documentListSelect", documentList);
+			model.addAttribute("folder_idx", folder_idx);
+			return "documents/list";
+		}else {
+			HashMap map = new HashMap();
+			map.put("folder_idx", folder_idx);	
+			//폴더 -> 파일 리스트
+			List documentListSelect = documentService.documentListSelect(map);
+			
+			model.addAttribute("documentListSelect", documentListSelect);
+			log.debug("model= " + model);
+			
+			model.addAttribute("folder_idx", folder_idx);
+			
+			return "documents/list";
+		}
 	} 
 	//휴지통
 	@GetMapping("/document/trash")

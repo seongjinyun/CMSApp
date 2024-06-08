@@ -30,10 +30,12 @@ public interface DocumentService {
 
 	//document/list 파일 조회
 	public List documentListSelect(Map map);
+	
 	// 폴더 안의 문서들을 조회합니다
 	public List<Document> selectByFolderIdx(int folder_idx); 
 	
 	//document/detail 문서 상세보기 
 	public DocumentVersion documentDetailSelect(DocumentVersion documentVersion);
 	
+
 }

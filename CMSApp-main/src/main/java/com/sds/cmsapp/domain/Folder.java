@@ -14,4 +14,5 @@ public class Folder {
 	private List<Folder> childFolderList;
 	private Integer depth;
 	private List<Document> documentList;
+
 }
