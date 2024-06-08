@@ -28,4 +28,6 @@ public interface DocumentService {
 	public int delete(int document_idx);
 
 	public List documentListSelect(Map map);
+	
+	public List<Document> selectByFolderIdx(int folder_idx); // 폴더 안의 문서들을 조회합니다
 }

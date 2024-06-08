@@ -152,5 +152,13 @@
         having status_code=#{status_code};
         
 	</select>
+	
+	<delete id="delete" parameterType="int">
+		delete from document where document_idx = #{document_idx}
+	</delete>
+	
+	<select id="selectByFolderIdx" parameterType="int" resultType="Document">
+		select * from document where folder_idx = #{folder_idx}
+	</select>
     
 </mapper>

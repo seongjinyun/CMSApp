@@ -9,5 +9,6 @@ public class Trash {
 	private Document document;
 	private String regdate;
 	
+	// 테이블에 없는것
 	private VersionLog versionLog;
 }

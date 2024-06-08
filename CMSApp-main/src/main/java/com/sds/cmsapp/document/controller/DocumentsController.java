@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import com.sds.cmsapp.common.Pager;
 import com.sds.cmsapp.domain.Trash;
 import com.sds.cmsapp.model.document.DocumentService;
+import com.sds.cmsapp.model.folder.FolderService;
 import com.sds.cmsapp.model.trash.TrashService;
 
 @Controller
@@ -25,6 +26,7 @@ public class DocumentsController {
 	
 	@Autowired
 	private TrashService trashService;
+	
 
 	
 	//글 작성 폼
@@ -44,7 +46,7 @@ public class DocumentsController {
 	
 	//파일목록
 	@GetMapping("/document/list")
-	public String getDocumentList(Model model, @RequestParam(value="folder_idx") int folder_idx) {
+	public String getDocumentList(Model model, @RequestParam(value="folder_idx", defaultValue="1") int folder_idx) {
 		HashMap map = new HashMap();
 		
 		List documentVersionList = documentService.selectAll(map);//3단계 일시키기
@@ -67,7 +69,7 @@ public class DocumentsController {
 		List<Trash> trashList = trashService.selectAllWithRange(map);
 		model.addAttribute(trashList);
 		return "documents/trash";
-	} 
+	}
 	
 	//즐겨찾기
 	@GetMapping("/document/bookmark")
@@ -85,9 +87,5 @@ public class DocumentsController {
 		return "documents/detail";
 	}
 	
-	// 테스트. 지울것
-	@GetMapping("/document/test2")
-	public String getTest() {
-		return "documents/test2";
-	}
+
 }
