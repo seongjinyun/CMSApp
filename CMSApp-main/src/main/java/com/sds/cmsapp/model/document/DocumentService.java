@@ -26,7 +26,7 @@ public interface DocumentService {
 	public void documentInsert(VersionLog versionLog);
 	
 	// 문서 삭제 
-	public int delete(int documentIidx);
+	public int delete(int documentIdx);
 
 	//document/list 파일 조회
 	public List documentListSelect(Map map);

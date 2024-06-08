@@ -33,9 +33,9 @@ public class DocumentsController {
 	
 	//글 작성 폼
 	@GetMapping("/document/writeform")
-	public String getDocument(Model model,@RequestParam(value="folder_idx") int folder_idx) {
+	public String getDocument(Model model,@RequestParam(value="folderIdx") int folderIdx) {
 		
-		model.addAttribute("folder_idx", folder_idx);
+		model.addAttribute("folderIdx", folderIdx);
 		return "documents/writeform";
 	} 
 
@@ -48,16 +48,16 @@ public class DocumentsController {
 	
 	//파일목록
 	@GetMapping("/document/list")
-	public String getDocumentList(Model model, DocumentVersion documentVersion, @RequestParam(value="folder_idx") int folder_idx) {
+	public String getDocumentList(Model model, DocumentVersion documentVersion, @RequestParam(value="folderIdx") int folderIdx) {
 		HashMap map = new HashMap();
-		map.put("folder_idx", folder_idx);	
+		map.put("folderIdx", folderIdx);	
 		//폴더 -> 파일 리스트
 		List documentListSelect = documentService.documentListSelect(map);
 		
 		model.addAttribute("documentListSelect", documentListSelect);
 		log.debug("model= " + model);
 		
-		model.addAttribute("folder_idx", folder_idx);
+		model.addAttribute("folderIdx", folderIdx);
 		
 		return "documents/list";
 	} 
@@ -85,8 +85,8 @@ public class DocumentsController {
 	} 
 	// 글 상세보기
 	@GetMapping("/document/detail")
-	public String getDetail(@RequestParam("document_idx") int documentIdx,
-							            @RequestParam("folder_idx") int folderIdx,
+	public String getDetail(@RequestParam("documentIdx") int documentIdx,
+							            @RequestParam("folderIdx") int folderIdx,
 							            Model model, DocumentVersion documentVersion) {
 		DocumentVersion documentDetail = documentService.documentDetailSelect(documentVersion);
 		model.addAttribute("documentDetail", documentDetail);
