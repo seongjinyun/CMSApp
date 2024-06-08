@@ -26,49 +26,47 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 @RestController
 public class RestDocumentController {
-	
+
 	@Autowired
 	private DocumentService documentService;
-	
+
 	@Autowired
 	private FolderService folderService;
-	
+
 	@PostMapping("/document/save")
 	public ResponseEntity createDocument(@ModelAttribute DocumentRequest documentRequest) {
-       Document document = documentRequest.getDocument(); 
-        VersionLog versionLog = documentRequest.getVersionLog();
-        
-        log.debug("document 안의 folder_idx "+document.getFolder().getFolder_idx());
-        log.debug("document 안의 emp_idx is "+document.getEmp().getEmp_idx());
-        log.debug("version log title is "+versionLog.getTitle());
-        log.debug("version log content is "+versionLog.getContent());
-        
-     
-        versionLog.setDocument(document);
+		Document document = documentRequest.getDocument();
+		VersionLog versionLog = documentRequest.getVersionLog();
 
-        documentService.documentInsert(versionLog);
-        
+		log.debug("document 안의 folder_idx " + document.getFolder().getFolder_idx());
+		log.debug("document 안의 emp_idx is " + document.getEmp().getEmp_idx());
+		log.debug("version log title is " + versionLog.getTitle());
+		log.debug("version log content is " + versionLog.getContent());
+
+		versionLog.setDocument(document);
+
+		documentService.documentInsert(versionLog);
+
 		ResponseEntity entity = ResponseEntity.ok("DB 입력 성공");
-		
+
 		return entity;
-     }
-	
-	@ExceptionHandler({DocumentException.class, VersionLogException.class})
+	}
+
+	@ExceptionHandler({ DocumentException.class, VersionLogException.class })
 	public ResponseEntity handle(DocumentException e, VersionLogException e2) {
 		e.printStackTrace();
 		e2.printStackTrace();
-		
+
 		ResponseEntity entity = ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
-        return entity;
-		
+		return entity;
+
 	}
-	
+
 	@GetMapping("document/folder/list")
 	private ResponseEntity getFolderList() {
 		List<Folder> folderList = folderService.selectAll();
-		System.out.println("FolderList 는 "+ folderList);
+		System.out.println("FolderList 는 " + folderList);
 		return new ResponseEntity<>(folderList, HttpStatus.OK);
 	}
-	
-}
 
+}
