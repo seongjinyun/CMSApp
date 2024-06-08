@@ -39,6 +39,9 @@ public interface DocumentDAO {
 	// 문서 수정
 	public int update(Document document);
 	
+	//document/detail 문서 상세보기 
+	public DocumentVersion documentDetailSelect(DocumentVersion documentVersion);
+	
 	// 문서 삭제 (임시로 만들어뒀습니다 -박준형)
 	public int delete(int document_idx);
 }

@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Map;
 
 import com.sds.cmsapp.domain.Document;
+import com.sds.cmsapp.domain.DocumentVersion;
 import com.sds.cmsapp.domain.VersionLog;
 
 public interface DocumentService {
@@ -27,5 +28,10 @@ public interface DocumentService {
 	// 문서 삭제 
 	public int delete(int document_idx);
 
+	//document/list 파일 조회
 	public List documentListSelect(Map map);
+	
+	//document/detail 문서 상세보기 
+	public DocumentVersion documentDetailSelect(DocumentVersion documentVersion);
+	
 }
