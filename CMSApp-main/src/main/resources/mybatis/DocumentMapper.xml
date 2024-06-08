@@ -38,8 +38,8 @@
 <!--     INSERT INTO version_log(branched_version_log_idx, emp_idx, project_idx, folder_idx, document_idx, version, title, content, comments) 
     VALUES (#{branched_version_log_idx},#{emp_idx},#{project_idx},#{folder_idx},#{document_idx},#{version}, #{title}, #{content}, #{comments});
      -->
-    INSERT INTO version_log(branched_version_log_idx,emp_idx,document_idx,version,title,content,comments) 
-    VALUES (NULL,7,#{document.document_idx}, 1,#{title}, #{content},#{comments})
+    INSERT INTO version_log(emp_idx,document_idx,version,title,content,comments) 
+    VALUES (7,#{document.document_idx}, 1,#{title}, #{content},#{comments})
     
         <selectKey keyColumn="version_log_idx" keyProperty="version_log_idx" resultType="int" order="AFTER">
 			select last_insert_id() as version_log_idx
@@ -47,8 +47,8 @@
     </insert>
     
     <insert id="documentVersionInsert" parameterType="DocumentVersion">
-    	insert into document_version (document_idx, version_log_idx)
-    	values (#{document.document_idx}, #{versionLog.version_log_idx})
+    	insert into document_version (document_idx, version_log_idx, status_code)
+    	values (#{document.document_idx}, #{versionLog.version_log_idx}, 200)
     </insert>
 	
 	<!-- document/list 문서 리스트 조회 -->

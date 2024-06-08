@@ -1,7 +1,5 @@
 package com.sds.cmsapp.domain;
 
-import java.util.List;
-
 import lombok.Data;
 
 @Data

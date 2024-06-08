@@ -41,7 +41,7 @@ public class FileManager {
 		String newName = createFilename(file.getOriginalFilename());
 		
 		try {
-			System.out.println(savePath);
+			System.out.println("Save Path: "+savePath);
 			Path path = Paths.get(savePath);
 			
 			// 저장 경로가 존재하지 않으면 생성
@@ -57,7 +57,9 @@ public class FileManager {
             // 파일에 접근할 URL 생성
             String fileUrl = newName;
             
+            System.out.println("DB에 입력되는 파일 url 값: "+fileUrl);
             return fileUrl;
+            
 		} catch (IOException e) {
             e.printStackTrace();
             throw new UploadException("파일 업로드 실패", e);
