@@ -21,7 +21,7 @@ public interface DocumentDAO {
 	public int countForDashboard(int statusCode);
 
 	// 선택 문서 조회
-	public Document select(int document_idx); // returnType="Document"
+	public Document select(int documentIdx); // returnType="Document"
 	public Document selectByDocumentIdx(int documentIdx); // returnMap="DocumentMap"
 	public List<Document> selectByFolderIdx(int folderIdx); // mybatis 연결 부탁드려요~ (박준형)
 
