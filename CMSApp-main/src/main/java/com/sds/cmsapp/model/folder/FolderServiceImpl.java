@@ -35,7 +35,7 @@ public class FolderServiceImpl implements FolderService {
 	private EmpDAO empDAO;
 
 	@Override
-	public int moveDirectory(int document_idx, int targetFolderIdx) {
+	public int moveFolder(int document_idx, int targetFolderIdx) {
 		Document document = documentDAO.select(document_idx);
 		document.setFolder(folderDAO.select(targetFolderIdx));
 		return documentDAO.update(document);
@@ -49,7 +49,8 @@ public class FolderServiceImpl implements FolderService {
 
 	@Override
 	@Transactional
-	public void deleteFolder(int folder_idx, int emp_idx) {
+	public void deleteFolder(final int folder_idx, final int emp_idx) 
+	{
 		List<Folder> childFolderList = folderDAO.selectSub(folder_idx);
 		List<Document> documentList = documentDAO.selectByFolderIdx(folder_idx);
 		if(documentList != null) {

@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.sds.cmsapp.domain.Document;
+import com.sds.cmsapp.domain.DocumentVersion;
 import com.sds.cmsapp.domain.VersionLog;
 import com.sds.cmsapp.exception.DocumentException;
 import com.sds.cmsapp.exception.VersionLogException;
@@ -50,25 +51,43 @@ public class DocumentServiceImpl implements DocumentService {
     public void documentInsert(VersionLog versionLog) throws DocumentException, VersionLogException {
         // 문서 삽입
 		int result = documentDAO.documentInsert(versionLog.getDocument());
+		
 		log.debug("document reuslt is "+result);
+		
 		if(result < 1) {
 			throw new DocumentException("문서 insert 실패 ");
 		}
 		
         result = documentDAO.versionInsert(versionLog);
-        log.debug("versionLog reuslt is "+result);
         
-        log.debug("document _idx is "+versionLog.getDocument().getDocument_idx());
+       // log.debug("versionLog reuslt is "+result);
+       // log.debug("document _idx is "+versionLog.getDocument().getDocument_idx());
         
 		if(result < 1) {
 			throw new VersionLogException("문서 버전 로그 등록실패 ");
+		}
+		
+		DocumentVersion documentVersion = new DocumentVersion();
+		documentVersion.setDocument(versionLog.getDocument());
+		documentVersion.setVersionLog(versionLog);
+		
+		//log.debug("document_version is " + documentVersion);
+		
+		result = documentDAO.documentVersionInsert(documentVersion);
+		
+		if(result < 1) {
+			throw new DocumentException("문서 현재 버전 insert 실패 ");
 		}
     }
 
 	@Override
 	public List documentListSelect(Map map) {
-		
 		return documentDAO.documentListSelect(map);
+	}
+	
+	//document/detail 문서 상세보기 
+	public DocumentVersion documentDetailSelect(DocumentVersion documentVersion) {
+		return documentDAO.documentDetailSelect(documentVersion);
 	}
 	
 	@Override // 임시로 만들어뒀습니다 -박준형

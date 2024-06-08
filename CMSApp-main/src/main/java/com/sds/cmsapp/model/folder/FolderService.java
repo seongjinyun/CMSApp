@@ -7,7 +7,7 @@ import com.sds.cmsapp.exception.FolderException;
 
 public interface FolderService {
 	
-	public int moveDirectory(int document_idx, int targetFolderIdx);
+	public int moveFolder(int document_idx, int targetFolderIdx);
 	
 	public int createFolder(Folder folder);
 	

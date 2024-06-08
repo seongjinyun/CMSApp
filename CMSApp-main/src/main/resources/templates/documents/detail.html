@@ -120,23 +120,26 @@
 							</div>
 						</div>
 					</div>
-					<div class="col-md-12">
-						<div class="card card-outline card-info">
-							<div class="card-header">
-								<div class="col-sm-12">
-									<h5 class="ml-2 mt-2">제목 들어올곳</h5>
-									<font size=1>작성자</font>
+					<form id="detailForm">
+						<div class="col-md-12">
+							<div class="card card-outline card-info">
+								<div class="card-header">
+									<div class="col-sm-12">
+										<h5 class="ml-2 mt-2" th:text="${documentDetail.versionLog.title}"></h5>
+										<font size=1>작성자</font>
+									</div>
+								</div>
+								<!-- /.card-header -->
+								<div class="card-body">
+									<p th:text="${documentDetail.versionLog.content}"></p>
 								</div>
 							</div>
-							<!-- /.card-header -->
-							<div class="card-body">
-								서머노트 내용 db에서 가져오기
-								<a class="dropdown-item" href="#">태그</a>
-     							<a class="dropdown-item" href="#">테스트</a>
-      							<a class="dropdown-item" href="#">지우고쓰세요</a>
-							</div>
 						</div>
-					</div>
+					</form>
+					<!-- list에서 넘어오는 값 -->
+					<input type="hidden" name="folder_idx" th:value="${folder_idx}">
+					<input type="hidden" name="document_idx" th:value="${document_idx}">
+					
 					<!-- /.col-->
 				</div>
 				<!-- ./row -->

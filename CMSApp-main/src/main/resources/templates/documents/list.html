@@ -20,6 +20,7 @@
     <th:block th:replace="~{fragments/navi :: navi}" />
     <!-- /.navbar -->
 
+<<<<<<< HEAD
     <!-- Main Sidebar Container -->
     <th:block th:replace="~{fragments/sidebar :: sidebar}" />
 
@@ -32,6 +33,23 @@
           <div class="row mb-2">
             <div class="col-sm-6">
               <h1>폴더 명</h1>
+=======
+              <div class="card-tools">
+                <div class="input-group input-group-sm">
+                  <input type="text" class="form-control" id="searchFileInput" placeholder="Search File">
+                  <div class="input-group-append">
+                    <div class="btn btn-primary">
+                      <i class="fas fa-search"></i>
+                    </div>
+                  </div>
+                  <input type="button" class="btn btn-default btn-sm ml-1 mr-1" value="필터" id="filterButton">
+                  <input type="button" class="btn btn-default btn-sm" value="글 작성" id="write">
+                  <input type="hidden" name="folder_idx" th:value="${folder_idx}">
+                </div>
+                
+              </div>
+              <!-- /.card-tools -->
+>>>>>>> upstream/main
             </div>
             <div class="col-sm-6">
               <ol class="breadcrumb float-sm-right">
@@ -152,11 +170,57 @@
                 </div>
                 <!-- /.mail-box-messages -->
               </div>
+<<<<<<< HEAD
               <!-- /.card-body -->
             </div>
             <!-- /.card -->
           </div>
           <!-- /.col -->
+=======
+              
+              <div class="table-responsive mailbox-messages">
+                <table class="table table-hover table-striped">
+                  <!-- 소제목 -->
+                  <tr class="subtitle">
+                    <th>
+                      <div class="icheck-primary">
+                        <input type="checkbox" value="" id="checkall">
+                        <label for="checkall"></label>
+                      </div>
+                    </th>
+                    <th class="mailbox-star"><a href="#"></a></th>
+                    <th>제목</th>
+                    <th>문서 버전</th>
+                    <th>업데이트 날짜</th>
+                    <th>상태</th>
+                  </tr>
+                  <!-- ./소제목 -->
+                  <tbody>
+				    <tr th:each="documentVersion, i : ${documentListSelect}">
+				        <td>
+					        <div class="icheck-primary">
+		                        <input type="checkbox" value="" id="check1">
+		                        <label for="check1"></label>
+                     		</div>
+				        </td>
+				        <td class="mailbox-star"><a href="#"><i class="fa fa-star" aria-hidden="true"></i></a></td>
+				        <!-- title, 업데이트 날짜, document가 아닌 versionLog에서 가져와야함.\ -->
+				        <td><a th:href="@{/document/detail(document_idx=${documentVersion.document.document_idx}, folder_idx=${documentVersion.document.folder.folder_idx})}" th:text="${documentVersion.versionLog.title}">튜토리얼</a></td>
+				        <td th:text="${documentVersion.versionLog.version}">v2.1</td>
+				        <td th:text="${documentVersion.versionLog.regdate}">2024.05.23 16:44</td>
+				        <!-- 상태는 masterCode 에서 가져와야함  -->
+				        <td>리뷰 중</td>
+				    </tr>
+				</tbody>
+                </table>
+                <!-- /.table -->
+              </div>
+              <!-- /.mail-box-messages -->
+            </div>
+            <!-- /.card-body -->
+           </div>
+          <!-- /.card -->
+>>>>>>> upstream/main
         </div>
         <!-- /.row -->
       </section>
@@ -173,7 +237,58 @@
   </div>
   <!-- ./wrapper -->
 
+<<<<<<< HEAD
   <th:block th:replace="~{fragments/footer_link :: footer_link}" />
+=======
+  <!-- Control Sidebar -->
+  <aside class="control-sidebar control-sidebar-dark">
+    <!-- Control sidebar content goes here -->
+  </aside>
+  <!-- /.control-sidebar -->
+</div>
+<!-- ./wrapper -->
+	
+	<th:block th:replace="~{fragments/footer_link :: footer_link}"/>
+	
+  	<!-- 디렉토리 변경 모달창 -->
+	<th:block th:replace="~{elements/folder_modal :: folder_modal}"/>
+	<!-- /.디렉토리 변경 모달창 -->
+  	<!-- 디렉토리 변경 모달 스크립트 -->
+	<th:block th:replace="~{elements/folder_modal_script :: folder_modal_script}"/>
+	<!-- /.디렉토리 변경 모달 스크립트 -->
+<script>
+$(function(){
+	checkBoxAll();
+	write();
+	searchFile();
+  });
+  
+  function checkBoxAll(){
+	  $("#checkall").click(function(){
+	      if($("#checkall").prop("checked")) {
+	        $("input[type=checkbox]").prop("checked",true);
+	      } else {
+	        $("input[type=checkbox]").prop("checked",false);
+	      }
+	    });
+  }
+  
+  function write(){
+	  $("#write").click(function() {
+			//글쓰기 폼 요청
+			location.href="/document/writeform?folder_idx="+$("input[name='folder_idx']").val();
+		});
+  }
+	  
+	  function searchFile(){
+		 $('#searchFileInput').on('keyup', function(){
+			 var value = $(this).val().toLowerCase();
+			 $("tbody tr:not(.subtitle)").filter(function() {
+			 	$(this).toggle($(this).find(".mailbox-subject").text().toLowerCase().indexOf(value) > -1)
+			});
+		});
+	  }
+>>>>>>> upstream/main
 
   <!-- 디렉토리 변경 모달창 -->
   <th:block th:replace="~{elements/folder_modal :: folder_modal}" />

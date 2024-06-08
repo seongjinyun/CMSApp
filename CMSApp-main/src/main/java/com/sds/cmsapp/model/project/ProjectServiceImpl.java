@@ -1,5 +1,7 @@
 package com.sds.cmsapp.model.project;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -22,5 +24,10 @@ public class ProjectServiceImpl implements ProjectService {
 	public Project selectByProjectIdx(int project_idx) {
 		// TODO Auto-generated method stub
 		return projectDAO.selectByProjectIdx(project_idx);
+	}
+
+	@Override
+	public List selectAll() {
+		return projectDAO.selectAll();
 	}
 }
