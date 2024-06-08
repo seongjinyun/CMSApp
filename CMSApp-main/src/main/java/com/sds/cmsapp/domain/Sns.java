@@ -4,7 +4,7 @@ import lombok.Data;
 
 @Data
 public class Sns {
-	private int sns_idx;
-	private String sns_name;
-	private int sns_code;
+	private int snsIdx;
+	private String snsName;
+	private int snsCode;
 }

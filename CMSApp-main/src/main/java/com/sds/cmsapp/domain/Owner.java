@@ -4,7 +4,7 @@ import lombok.Data;
 
 @Data
 public class Owner {
-	private int owner_idx;
-	private String owner_id;
-	private String owner_pw;
+	private int ownerIdx;
+	private String ownerId;
+	private String ownerPw;
 }

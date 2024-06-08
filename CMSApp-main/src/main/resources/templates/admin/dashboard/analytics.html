@@ -2,221 +2,310 @@
 <html lang="zxx" xmlns:th="http://www.thymeleaf.org">
 
 <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>AdminLTE 3 | Dashboard</title>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Dashboard | 문서 통계</title>
 
-    <th:block th:replace="~{fragments/header_link :: header_link}" />
+<!-- data-table css -->
+<link rel="stylesheet" href="/admin/plugins/datatables-bs4/css/dataTables.bootstrap4.min.css">
+<link rel="stylesheet" href="/admin/plugins/datatables-responsive/css/responsive.bootstrap4.min.css">
+<link rel="stylesheet" href="/admin/plugins/datatables-buttons/css/buttons.bootstrap4.min.css">
+<!-- select2 css -->	
+<link rel="stylesheet" href="/admin/plugins/select2/css/select2.min.css">
+<link rel="stylesheet" href="/admin/plugins/select2-bootstrap4-theme/select2-bootstrap4.min.css">
 
+<th:block th:replace="~{fragments/header_link :: header_link}" />
+
+<style>
+button.show_list {
+	border: 0;
+	background-color: transparent;
+	color: white;
+	cursor: pointer;
+}
+
+button.show_list:hover {
+	color: blue;
+}
+</style>
 </head>
 
 <body class="hold-transition sidebar-mini layout-fixed">
-    <div class="wrapper">
+	<div class="wrapper">
 
-        <!-- Preloader -->
-        <th:block th:replace="~{fragments/preloader :: preloader}" />
+		<!-- Preloader -->
+		<th:block th:replace="~{fragments/preloader :: preloader}" />
 
-        <!-- Navbar -->
-        <th:block th:replace="~{fragments/navi :: navi}" />
-        <!-- /.navbar -->
+		<!-- Navbar -->
+		<th:block th:replace="~{fragments/navi :: navi}" />
+		<!-- /.navbar -->
 
-        <!-- Main Sidebar Container -->
-        <th:block th:replace="~{fragments/admin_sidebar :: admin_sidebar}" />
+		<!-- Main Sidebar Container -->
+		<th:block th:replace="~{fragments/admin_sidebar :: admin_sidebar}" />
 
-        <!-- /.sidebar -->
+		<!-- /.sidebar -->
 
-        <!-- Content Wrapper. Contains page content -->
-        <div class="content-wrapper">
-            <!-- Content Header (Page header) -->
-            <div class="content-header">
-                <div class="container-fluid">
-                    <div class="row mb-2">
-                        <div class="col-sm-6">
-                            <h1 class="m-0">문서 통계</h1>
-                        </div>
-                        <!-- /.col -->
-                        <div class="col-sm-6">
-                            <ol class="breadcrumb float-sm-right">
-                                <li class="breadcrumb-item"><a href="#">Home</a></li>
-                                <li class="breadcrumb-item active">Dashboard</li>
-                                <li class="breadcrumb-item active">문서 통계</li>
-                            </ol>
-                        </div>
-                        <!-- /.col -->
-                    </div>
-                    <!-- /.row -->
-                </div>
-                <!-- /.container-fluid -->
-            </div>
-            <!-- /.content-header -->
+		<!-- Content Wrapper. Contains page content -->
+		<div class="content-wrapper">
+			<!-- Content Header (Page header) -->
+			<div class="content-header">
+				<div class="container-fluid">
+					<div class="row mb-2">
+						<div class="col-sm-6">
+							<h1 class="m-0">문서 통계</h1>
+						</div>
+						<!-- /.col -->
+						<div class="col-sm-6">
+							<ol class="breadcrumb float-sm-right">
+								<li class="breadcrumb-item"><a href="#">Home</a></li>
+								<li class="breadcrumb-item active">Dashboard</li>
+								<li class="breadcrumb-item active">문서 통계</li>
+							</ol>
+						</div>
+						<!-- /.col -->
+					</div>
+					<!-- /.row -->
+				</div>
+				<!-- /.container-fluid -->
+			</div>
+			<!-- /.content-header -->
 
-            <!-- Main content -->
-            <section class="content">
-                <div class="container-fluid">
-                
-                	<!-- Row -->
-							<div class="row">
-								<div class="col-md-12">
-
-									<!-- Card -->
-									<div class="card">
-										<div class="card-header">
-											<h3 class="card-title">필터</h3>
-																						<div class="card-tools">
-												<button class="btn btn-primary">조회하기</button>
-
-											</div>
-										</div>
-										<div class="card-body">
-
-											<div class="row">
-												<div class="col-sm-4">조건 1</div>
-												<div class="col-sm-8">
-													배포판 선택
-												</div>
-											</div>
-
-											<div class="row">
-												<div class="col-sm-4">조건 2</div>
-												<div class="col-sm-8">
-													프로젝트 선택
-												</div>
-												
-											</div>
-
-											<div class="row">
-												<div class="col-sm-4">조건 3</div>
-												<div class="col-sm-8">
-													정렬 방식 선택
-												</div>
-											</div>
-
-										</div>
+			<!-- Main content -->
+			<section class="content">
+				<div class="container-fluid">
+				
+					<!-- Row -->
+					<div class="row">
+						<div class="col-md-12">
+							<!-- Card -->
+							<div class="card">
+								<div class="card-header">
+									<h3 class="card-title">필터</h3>
+									<div class="card-tools">
+										<button id="btn-filtered" class="btn btn-primary">조회하기</button>
 									</div>
-									<!-- Card End -->
-
 								</div>
-							</div>
-							<div class="row">
-								<div class="col-lg-12">
-									<!-- Card -->
-									<div class="card mt-3">
-										<div class="card-header border-transparent">
-											<h3 class="card-title">예) 문서 목록 (위에서 '버튼' 클릭 시 비동기
-												통신으로 목록이 조회되는 영역)</h3>
-										</div>
-										<div class="card-body p-0">
-											<div class="table-responsive">
-											
-												<table id="example1"
-										class="table table-hover table-bordered table-striped dataTable dtr-inline"
-										aria-describedby="example1_info">
-										<thead>
-											<tr>
-												<th>No.</th>
-												<th class="sorting sorting_asc" tabindex="0"
-													aria-controls="example1" rowspan="1" colspan="1"
-													aria-label="Browser: activate to sort column descending"
-													aria-sort="ascending">제목</th>
-												<th class="sorting" tabindex="0" aria-controls="example1"
-													rowspan="1" colspan="1"
-													aria-label="CSS grade: activate to sort column ascending">
-													조회수</th>
-												<th class="sorting" tabindex="0" aria-controls="example1"
-													rowspan="1" colspan="1"
-													aria-label="CSS grade: activate to sort column ascending">
-													좋아요 수</th>
-											</tr>
-										</thead>
-										<tbody>
-											<tr>
-												<td>1</td>
-												<td class="dtr-control sorting_1"><a href="#">제목 없음</a></td>
-												<td>4</td>
-												<td>5</td>
-											</tr>
-																						<tr>
-												<td>1</td>
-												<td class="dtr-control sorting_1"><a href="#">제목 없음</a></td>
-												<td>4</td>
-												<td>5</td>
-											</tr>
-																						<tr>
-												<td>1</td>
-												<td class="dtr-control sorting_1"><a href="#">제목 없음</a></td>
-												<td>4</td>
-												<td>5</td>
-											</tr>
-											
-										</tbody>
-
-									</table>
+								<div class="card-body">
+									
+									<div class="row">
+										<div class="col-sm-3">프로젝트</div>
+										<div class="col-sm-3">
+											<div class="icheck-primary d-inline">
+												<input type="radio" id="radio-project-all"
+													name="project-filter" value="radio-project-all" checked> <label
+													for="radio-project-all">전체 보기 </label>
 											</div>
 										</div>
+										<div class="col-sm-6">
+											<div class="icheck-primary d-inline">
+												<input type="radio" id="radio-project-select"
+													name="project-filter" value="radio-project-select" > <label
+													for="radio-project-select">프로젝트 선택</label>
+											</div>
+	                                        <div class="form-group">
+	                                            <select id="project-tag" name="project-tag" 
+	                                            	class="select2 form-control" multiple="multiple" data-placeholder="추가할 프로젝트 (다중)선택" 
+	                                            	style="width: 100%;">
+	                                            </select>
+	                                        </div>
+										</div>
 									</div>
-								
 									
 								</div>
+								<!-- card-body end -->
 							</div>
-							
-							
-							<div class="row">
-								<div class="col-sm-12 col-md-5">
-									<div class="dataTables_info" id="example1_info" role="status"
-										aria-live="polite">Showing 1 to 10 of 57 entries</div>
-								</div>
-								<div class="col-sm-12 col-md-7">
-									<div class="dataTables_paginate paging_simple_numbers"
-										id="example1_paginate">
-										<ul class="pagination">
-											<li class="paginate_button page-item previous disabled"
-												id="example1_previous"><a href="#"
-												aria-controls="example1" data-dt-idx="0" tabindex="0"
-												class="page-link">Previous</a></li>
-											<li class="paginate_button page-item active"><a href="#"
-												aria-controls="example1" data-dt-idx="1" tabindex="0"
-												class="page-link">1</a></li>
-											<li class="paginate_button page-item "><a href="#"
-												aria-controls="example1" data-dt-idx="2" tabindex="0"
-												class="page-link">2</a></li>
-											<li class="paginate_button page-item "><a href="#"
-												aria-controls="example1" data-dt-idx="3" tabindex="0"
-												class="page-link">3</a></li>
-											<li class="paginate_button page-item "><a href="#"
-												aria-controls="example1" data-dt-idx="4" tabindex="0"
-												class="page-link">4</a></li>
-											<li class="paginate_button page-item "><a href="#"
-												aria-controls="example1" data-dt-idx="5" tabindex="0"
-												class="page-link">5</a></li>
-											<li class="paginate_button page-item "><a href="#"
-												aria-controls="example1" data-dt-idx="6" tabindex="0"
-												class="page-link">6</a></li>
-											<li class="paginate_button page-item next" id="example1_next"><a
-												href="#" aria-controls="example1" data-dt-idx="7"
-												tabindex="0" class="page-link">Next</a></li>
-										</ul>
+							<!-- Card End -->
+
+							<!-- table wrapper -->
+							<div id="publish-table_wrapper"
+								class="dataTables_wrapper dt-bootstrap4">
+								<div class="row">
+									<div class="col-sm-12">
+										<table id="table-filtered"
+											class="bg-white table table-hover table-bordered dataTable dtr-inline">
+											<thead>
+												<tr>
+													<th>No.</th>
+													<th>프로젝트</th>
+													<th>폴더</th>
+													<th>제목</th>
+													<th>버전</th>
+													<th>배포일자</th>
+												</tr>
+											</thead>
+											<tbody>
+											</tbody>
+										</table>
 									</div>
 								</div>
 							</div>
-                
-        		</div>
-        <!-- /.container-fluid -->
-        </section>
-        <!-- /.content -->
-    </div>
-    <!-- /.content-wrapper -->
+							<!-- table wrapper end -->
+						</div>
+						<!-- col end -->
+					</div>
+					<!-- Row end -->
+				
+				</div>
+				<!-- /.container-fluid -->
+			</section>
+			<!-- /.content -->
+		</div>
+		<!-- /.content-wrapper -->
 
-    <th:block th:replace="~{fragments/footer :: footer}" />
+		<th:block th:replace="~{fragments/footer :: footer}" />
 
-    <!-- Control Sidebar -->
-    <aside class="control-sidebar control-sidebar-dark">
-        <!-- Control sidebar content goes here -->
-    </aside>
-    <!-- /.control-sidebar -->
-    </div>
-    <!-- ./wrapper -->
+		<!-- Control Sidebar -->
+		<aside class="control-sidebar control-sidebar-dark">
+			<!-- Control sidebar content goes here -->
+		</aside>
+		<!-- /.control-sidebar -->
+	</div>
+	<!-- ./wrapper -->
 
-    <th:block th:replace="~{fragments/footer_link :: footer_link}" />
+	<th:block th:replace="~{fragments/footer_link :: footer_link}" />
+
+	<!-- select2 js 파일 -->
+    <script src="/admin/plugins/select2/js/select2.full.min.js"></script>
+	<!-- datatables js 파일 -->
+	<script src="/admin/plugins/datatables/jquery.dataTables.min.js"></script>
+	<script src="/admin/plugins/datatables-bs4/js/dataTables.bootstrap4.min.js"></script>
+	<script src="/admin/plugins/datatables-responsive/js/dataTables.responsive.min.js"></script>
+	<script src="/admin/plugins/datatables-responsive/js/responsive.bootstrap4.min.js"></script>
+	<script src="/admin/plugins/datatables-buttons/js/dataTables.buttons.min.js"></script>
+	<script src="/admin/plugins/datatables-buttons/js/buttons.bootstrap4.min.js"></script>
+	<script src="/admin/plugins/jszip/jszip.min.js"></script>
+	<script src="/admin/plugins/pdfmake/pdfmake.min.js"></script>
+	<script src="/admin/plugins/pdfmake/vfs_fonts.js"></script>
+	<script src="/admin/plugins/datatables-buttons/js/buttons.html5.min.js"></script>
+	<script src="/admin/plugins/datatables-buttons/js/buttons.print.min.js"></script>
+	<script src="/admin/plugins/datatables-buttons/js/buttons.colVis.min.js"></script>
+	
+	<script>
+		// 데이터테이블 한국어
+	    var datatable_ko = {        
+	        "decimal" : "",       
+	        "emptyTable" : "데이터가 없습니다.",        
+	        "info" : "_START_ - _END_ (총 _TOTAL_ 개)",        
+	        "infoEmpty" : "0개",        
+	        "infoFiltered" : "(전체 _MAX_ 개 중 검색결과)",       
+	        "infoPostFix" : "",        
+	        "thousands" : ",",        
+	        "lengthMenu" : "_MENU_ 개씩 보기",        
+	        "loadingRecords" : "로딩중...",        
+	        "processing" : "처리중...",        
+	        "search" : "검색 : ",        
+	        "zeroRecords" : "검색된 데이터가 없습니다.",        
+	        "paginate" : {            
+	            "first" : "첫 페이지",            
+	            "last" : "마지막 페이지",            
+	            "next" : "다음",            
+	            "previous" : "이전"        
+	        },        
+	        "aria" : {           
+	             "sortAscending" : " :  오름차순 정렬",            
+	            "sortDescending" : " :  내림차순 정렬"        
+	            }
+			};
+		
+		// 전체 보기 탭 -> 필터에 따라 문서 목록 가져오기
+		function getFilteredData(status_code, startDate, endDate, emp_idx, dept_idx, projectIds) {
+			$.ajax({
+				type:"GET",  //전송타입
+				url:"/dashboard/list?status_code=" + status_code 
+						+ "&startDate=" + startDate + "&endDate=" + endDate 
+						+ "&emp_idx=" + emp_idx + "&dept_idx=" + dept_idx
+						+ "&projectIds=" + projectIds,
+				success: function (result, status, xhr) {
+					alert('문서 불러오기 성공');
+					
+					// 테이블 초기화
+				 	$("#table-filtered").DataTable().destroy();
+					let preview = $("#table-filtered tbody");
+					preview.empty();
+					let tr = "";
+					
+					for (let i = 0; i < result.length; i++) {
+						
+						tr += `
+							<tr>
+							<td><input type="checkbox" name="checked-documenet"></td>
+							<td>${i+1}</td>
+							<td><a href="#">${result[i].document_idx}. ${result[i].title}, ${result[i].project_name}</a></td>
+							<td>${result[i].version}</td>
+							<td>${result[i].dept_name}</td>
+							<td>${result[i].emp_name}</td>
+							<td><span class="badge ${statusBadge}">${result[i].status_name}</span></td>
+							<td>${result[i].comments}
+							</td>
+							<td>${result[i].regdate}</td>
+						</tr>
+						`;
+					}
+					preview.html(tr); 
+					
+					// 데이터 테이블 적용
+					$("#table-filtered").DataTable({
+						ordering: true,
+						serverSide: false,
+						language : datatable_ko
+					});
+				},
+				error: function (xhr, status, e) {
+					console.log("error", e);
+					console.log("status", status);
+				}
+			});
+		}
+
+		
+	   function loadProject() {
+	        $.ajax({
+	            type: "GET",
+	            url: "/admin/project/list",
+	            success: function(result) {
+	            	alert("loadProject 통신 성공");
+	                // 서버로부터 받은 JSON 데이터를 파싱하여 옵션으로 추가
+	                $('#project-tag').empty(); // 기존 옵션들을 모두 지우기
+	                	for (let i = 0; i < result.length; i++) {
+	                    	$('#project-tag').append('<option value="' + result[i].project_idx + '">' + result[i].project_name + '</option>');
+	                	}
+	                //$('#project-tag').prop('disabled', false);
+	            },
+	            error: function(xhr, status, error) {
+	                console.error("Failed to load projects: " + error);
+	            }
+	        });
+	    } 
+
+		$(function() {
+	
+			// 전체 문서 수..?
+			
+			/*-----------------------------------
+				*[전체보기 탭] 초기화
+			-----------------------------------*/
+			
+			// 필터: 부서
+            $('#project-tag').select2(); // 태그 기능 활성화
+	        loadProject(); // 전체 부서 목록 불러오기
+
+			// 조회 버튼 클릭 이벤트
+			$('#btn-filtered').click(function(){
+				
+				// 전체 보기 선택 시 프로젝트 선택 버튼 비활성화 필요함..
+				// 프로젝트 정보 가져오기
+				let projectIds = 900;
+				let filter_project = document.querySelector("input[name='project-filter']:checked").value;
+				if (filter_project == "radio-project-select") {
+					projectIds = $('#project-tag').val();
+					alert(projectIds);
+				}
+				
+				// 목록 가져오기
+				getFilteredData(900, "2000-01-01 00:00:00", moment().format("YYYY-MM-DD hh:mm:ss"), 0, 0, projectIds); 
+			});
+		});
+	</script>
 
 </body>
 

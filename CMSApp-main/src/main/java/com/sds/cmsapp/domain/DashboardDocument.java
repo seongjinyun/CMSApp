@@ -13,21 +13,21 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class DashboardDocument {
 	
-	private int document_idx;
+	private int documentIdx;
 	private String version;
 	private String title;
-	private String emp_name;
-	private String dept_name;
-	private String role_name;
+	private String empName;
+	private String deptName;
+	private String roleName;
 	private String regdate;
 	private String comments;
 	
-	private int status_code;
-	private String status_name;
+	private int statusCode;
+	private String statusName;
 	
-	private int folder_idx;
-	private String folder_name;
-	private int project_idx;
-	private String project_name;
+	private int folderIdx;
+	private String folderName;
+	private int projectIdx;
+	private String projectName;
 
 }

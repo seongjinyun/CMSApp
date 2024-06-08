@@ -4,7 +4,7 @@ import lombok.Data;
 
 @Data
 public class DeptProject {
-	private int dept_project_idx;
+	private int deptProjectIdx;
 	private Dept dept;
 	private Project project;
 }

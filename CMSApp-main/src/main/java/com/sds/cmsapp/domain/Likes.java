@@ -6,7 +6,7 @@ import lombok.Data;
 
 @Data
 public class Likes {
-	private int likes_idx;
+	private int likesIdx;
 	private Member member;
 	private Document document;
 	private Timestamp regdate;
