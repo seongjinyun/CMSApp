@@ -6,9 +6,9 @@ import lombok.Data;
 
 @Data
 public class Folder {
-	private Integer folder_idx;
-	private Folder parent_folder;
-	private String folder_name;
+	private Integer folderIdx;
+	private Folder parentFolder;
+	private String folderName;
 	private Project project;
 	private String regdate;
 	private List<Folder> childFolderList;

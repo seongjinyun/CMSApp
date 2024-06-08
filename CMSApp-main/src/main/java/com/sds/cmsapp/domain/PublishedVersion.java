@@ -3,12 +3,9 @@ package com.sds.cmsapp.domain;
 import lombok.Data;
 
 @Data
-public class Trash {
-	private Integer trashIdx;
-	private Emp emp;
+public class PublishedVersion {
+	private int publishedVersionIdx;
 	private Document document;
-	private String regdate;
-	
-	// 테이블에 없는것
 	private VersionLog versionLog;
+	private PublishedVersionName publishedVersionName;
 }

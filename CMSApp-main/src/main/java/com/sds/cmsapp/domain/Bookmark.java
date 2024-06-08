@@ -6,7 +6,7 @@ import lombok.Data;
 
 @Data
 public class Bookmark {
-	private int bookmark_idx;
+	private int bookmarkIdx;
 	private Emp emp;
 	private Document document;
 	private Timestamp regdate;

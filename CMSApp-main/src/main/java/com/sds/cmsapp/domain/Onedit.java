@@ -6,7 +6,7 @@ import lombok.Data;
 
 @Data
 public class Onedit {
-	private int onedit_idx;
+	private int oneditIdx;
 	private Emp emp;
 	private Document document;
 	private Timestamp regdate;

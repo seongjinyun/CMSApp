@@ -4,7 +4,7 @@ import lombok.Data;
 
 @Data
 public class DocumentVersion {
-	private int document_version_idx;
+	private int documentVersionIdx;
 
 	// 식별 관계
 	private Document document;

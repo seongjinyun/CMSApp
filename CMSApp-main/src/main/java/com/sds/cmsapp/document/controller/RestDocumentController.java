@@ -45,8 +45,8 @@ public class RestDocumentController {
 		Document document = documentRequest.getDocument();
 		VersionLog versionLog = documentRequest.getVersionLog();
 
-		log.debug("document 안의 folder_idx " + document.getFolder().getFolder_idx());
-		log.debug("document 안의 emp_idx is " + document.getEmp().getEmp_idx());
+		log.debug("document 안의 folder_idx " + document.getFolder().getFolderIdx());
+		log.debug("document 안의 emp_idx is " + document.getEmp().getEmpIdx());
 		log.debug("version log title is " + versionLog.getTitle());
 		log.debug("version log content is " + versionLog.getContent());
 

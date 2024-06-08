@@ -4,7 +4,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>AdminLTE 3 | Dashboard</title>
+<title>Dashboard | 나의 활동</title>
 
 <!-- data-table css -->
 <link rel="stylesheet" href="/admin/plugins/datatables-bs4/css/dataTables.bootstrap4.min.css">
@@ -41,7 +41,7 @@ button.show_list:hover {
 		<!-- /.navbar -->
 
 		<!-- Main Sidebar Container -->
-		<th:block th:replace="~{fragments/admin_sidebar :: admin_sidebar}" />
+		<th:block th:replace="~{fragments/sidebar :: sidebar}" />
 
 		<!-- /.sidebar -->
 
@@ -509,7 +509,7 @@ button.show_list:hover {
 	            type: "GET",
 	            url: "/admin/project/list",
 	            success: function(result) {
-	            	alert("loadProject 통신 성공");
+	            	//alert("loadProject 통신 성공");
 	                // 서버로부터 받은 JSON 데이터를 파싱하여 옵션으로 추가
 	                $('#project-tag').empty(); // 기존 옵션들을 모두 지우기
 	                	for (let i = 0; i < result.length; i++) {

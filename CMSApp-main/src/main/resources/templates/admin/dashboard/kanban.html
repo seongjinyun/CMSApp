@@ -6,48 +6,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>AdminLTE 3 | Dashboard</title>
 
-<th:block th:replace="~{fragments/header_link :: header_link}" />
-
-<script>
-	
-		// 결재 상태에 따라 데이터를 보여주는 영역
-		function getData(status_code) {
-			$.ajax({
-				type:"get",  //전송타입
-				url:"/test?status_code=" + status_code,//서버요청대상파일
-				//async: false,
-				success: function (result) {
-					
-					alert('성공');
-					alert(result);
-					alert(JSON.stringify(result));
-					alert(JSON.parse(result));
-					alert(result.length);
-					alert(result[0].title);
-					
-					console.log(result[0].title);
-					
-					
-					
-				},
-				error: function (xhr, status, e) {
-					console.log("error", e);
-					console.log("status", status);
-				}
-			});
-		}
-	
-	
-		$(function() {
-			
-			// 배포 대기 문서 미리보기
-			$('#show-list-waiting-review').click(function(){
-				getData(200);
-			});
-		});
-		
-</script>
-			
+<th:block th:replace="~{fragments/header_link :: header_link}" />	
 
 </head>
 
@@ -76,7 +35,6 @@
 					<div class="row mb-2">
 						<div class="col-sm-6">
 							<h1 class="m-0">칸반 보드</h1>
-							<button id="show-list-waiting-review">버튼</button>
 						</div>
 						<!-- /.col -->
 						<div class="col-sm-6">
@@ -96,34 +54,6 @@
 
 			<!-- Main content -->
 			<section class="content pb-3">
-			
-			
-				<div class="container-fluid m-0">
-									<!-- row -->
-					<div class="row m-0">
-					
-					<div class="col-md-6">
-						<!-- from-group -->
-						<div class="form-group">
-							<!-- input-group -->
-							<div class="input-group">
-								<!-- button -->
-								<button type="button" class="btn btn-default float-right"
-									id="daterange-btn">
-									<i class="far fa-calendar-alt"></i> 날짜 선택: <span></span> <i
-										class="fas fa-caret-down"></i>
-								</button>
-							</div>
-						</div>
-						<!-- form-group end -->
-</div>
-					<div class="col-md-6">
-						<button class="btn btn-primary">전체 보기</button>
-</div>
-					</div>
-				</div>
-			
-			
 				<div class="container-fluid h-100">
 					
 					<div class="card card-row card-secondary">

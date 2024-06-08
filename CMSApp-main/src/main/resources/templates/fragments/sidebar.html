@@ -40,7 +40,7 @@
 				<!-- Add icons to the links using the .nav-icon class
                with font-awesome or any other icon font library -->
 				
-				<!-- 상품관리 메뉴 -->               
+				<!-- Dashboard 메뉴 -->               
 				<li class="nav-item menu-open">
 					<a href="#"class="nav-link"> 
 						<i class="nav-icon fas fa-tachometer-alt"></i>
@@ -48,24 +48,28 @@
 							Dashboard <i class="right fas fa-angle-left"></i>
 						</p>
 					</a>
-					<ul class="nav nav-treeview">
-						<li class="nav-item">
-							<a href="/movie/api/list" class="nav-link"> 
-								<i class="far fa-circle nav-icon"></i>
-								<p>AA</p>
-							</a>
-						</li>
-						<li class="nav-item">
-							<a href="/movie/site/list" class="nav-link"> 
-								<i class="far fa-circle nav-icon"></i>
-								<p>BB</p>
-							</a>
-						</li>
-						
-					</ul>
+						<ul class="nav nav-treeview">
+							<li class="nav-item"><a href="/admin/dashboard/activity"
+								class="nav-link"> <i class="far fa-circle nav-icon"></i>
+									<p>나의 활동</p>
+							</a></li>
+						<li class="nav-item"><a href="/admin/dashboard/publishing"
+								class="nav-link"> <i class="far fa-circle nav-icon"></i>
+									<p>배포 관리</p>
+							</a></li>
+							<li class="nav-item"><a href="/admin/dashboard/kanban"
+								class="nav-link"> <i class="far fa-circle nav-icon"></i>
+									<p>칸반 보드</p>
+							</a></li>
+							<li class="nav-item"><a href="/admin/dashboard/analytics"
+								class="nav-link"> <i class="far fa-circle nav-icon"></i>
+									<p>문서 통계</p>
+							</a></li>
+
+						</ul></li>
 				</li>
 			
-				<!-- 회원관리 메뉴 -->               
+				<!-- Document 메뉴 -->               
 				<li class="nav-item menu-open">
 					<a href="#"class="nav-link"> 
 						<i class="nav-icon fas fa-tachometer-alt"></i>
