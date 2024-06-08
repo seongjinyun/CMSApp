@@ -46,6 +46,9 @@ dependencies {
 	// https://mvnrepository.com/artifact/org.mybatis.spring.boot/mybatis-spring-boot-starter
 	implementation 'org.mybatis.spring.boot:mybatis-spring-boot-starter:3.0.3'
 	
+	//스프링 시큐리티 추가 spring boot starter security
+	implementation 'org.springframework.boot:spring-boot-starter-security:3.2.5'
+	
 	/////////////////////////////////////////////////////////////////////////////////////////////////////
 	
 	// Spring Security

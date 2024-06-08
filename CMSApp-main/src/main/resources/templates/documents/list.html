@@ -174,9 +174,12 @@
 	<!-- /.디렉토리 변경 모달 스크립트 -->
 <script>
 $(function(){
-	checkBoxAll();
-	write();
-	searchFile();
+    checkBoxAll();
+    write();
+    filterFile();
+    searchFile();
+    initializeOpnMoveDirectoryModal();
+    goToTrash();
   });
   
   function checkBoxAll(){
@@ -205,15 +208,72 @@ $(function(){
 		});
 	  }
 
-		
-		function goToTrash(){
-			if(confirm("선택한 항목들을 휴지통으로 보낼까요?")){
-				alert("슛~");
-			}
-		}
-	
+////////////////////////////////////////////////////
+    
+    function filterFile() {
+      $('#filterButton').click(function () {
+        $('#filterOptions').toggle();
+      });
+    }
+
+    function goToTrash() {
+      $("#trash_btn").click(function(){
+	      if (checkSelected()){
+	        if (confirm("선택한 항목들을 휴지통으로 보낼까요?")) {
+	          let document_idxList = [];
+	          $('input[name="document_idx"]:checked').each(function () {
+	            document_idxList.push($(this).val());
+	          });
+	          $.ajax({
+	            method: "POST",
+	            url: "/document/list/trash",
+	            data: {
+	              document_idxList: document_idxList,
+	              //emp_idx: emp_idx
+	            },
+	            success: function(result, status, xhr){
+	              alert("성공적으로 휴지통에 보냈습니다");
+	            },
+	            error: function(status, xhr, err){
+	              alert("휴지통에 보내는데 실패했어요.");
+	            }
+	          });
+	        }
+	      }  
+      })
+    }
+
+    function checkSelected(){
+      let selectedDocument_idx = [];
+      $('input[name="document_idx"]:checked').each(function () {
+        selectedDocument_idx.push($(this).val());
+      });
+
+      if (selectedDocument_idx.length < 1) {
+        alert("하나 이상의 문서를 선택해주세요");
+        event.stopImmediatePropagation();
+        console.log("list.html 파일의 alert 호출");
+        return false;
+      } else{
+        return true;
+      }
+    }
+
+    function openMoveDirectoryModal() {
+      let selectedDocument_idx = [];
+     // if(checkSelected()){
+        $('#moveDirectory').modal('show');
+      //}
+    }
+
+    function initializeOpenMoveDirectoryModal() {
+      $('#openMoveDirectoryModalButton').on('click', openMoveDirectoryModal);
+    }
 
 
-</script>
+
+
+  </script>
 </body>
+
 </html>

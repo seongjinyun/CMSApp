@@ -7,11 +7,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.sds.cmsapp.domain.Document;
 import com.sds.cmsapp.domain.DocumentVersion;
+import com.sds.cmsapp.domain.Emp;
 import com.sds.cmsapp.domain.Trash;
 import com.sds.cmsapp.domain.VersionLog;
 import com.sds.cmsapp.model.document.DocumentDAO;
 import com.sds.cmsapp.model.document.DocumentVersionDAO;
+import com.sds.cmsapp.model.emp.EmpDAO;
 import com.sds.cmsapp.model.versionlog.VersionLogDAO;
 
 @Service
@@ -28,9 +31,17 @@ public class TrashServiceImpl implements TrashService{
 	
 	@Autowired
 	VersionLogDAO versionLogDAO;
+	
+	@Autowired
+	EmpDAO empDAO;
 
 	@Override
-	public int insert(Trash trash) {
+	public int insert(Integer document_idx, Integer emp_idx) {
+		Document document = documentDAO.select(document_idx);
+		Emp emp = empDAO.selectByEmpIdx(emp_idx);
+		Trash trash = new Trash();
+		trash.setDocument(document);
+		trash.setEmp(emp);
 		return trashDAO.insert(trash);
 	}
 

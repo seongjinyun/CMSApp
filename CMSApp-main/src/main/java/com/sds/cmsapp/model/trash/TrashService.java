@@ -7,7 +7,7 @@ import com.sds.cmsapp.domain.Trash;
 
 public interface TrashService {
 	// 휴지통에 넣기
-	public int insert(Trash trash);
+	public int insert(Integer document_idx, Integer emp_idx);
 	
 	// 복원
 	public int restore(Integer trash_idx);
