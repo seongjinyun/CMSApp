@@ -10,9 +10,9 @@
 	
 	<resultMap type="EmpDetail" id="EmpDetailMap">
 		<id column="emp_detail_idx" property="emp_detail_idx"/>
-		<id column="emp_id" property="emp_id"/>
-		<id column="emp_pw" property="emp_pw"/>
-		<id column="emp_profile_url" property="emp_profile_url"/>
+		<result column="emp_id" property="emp_id"/>
+		<result column="emp_pw" property="emp_pw"/>
+		<result column="emp_profile_url" property="emp_profile_url"/>
 		<association column="emp_idx" property="emp" javaType="Emp" select="com.sds.cmsapp.model.emp.EmpDAO.selectByEmpIdx"/>
 	</resultMap>
 		

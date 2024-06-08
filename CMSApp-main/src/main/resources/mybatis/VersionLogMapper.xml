@@ -22,5 +22,18 @@
 	<select id="selectByVersionLogIdx" parameterType="int" resultMap="VersionLogMap">
 		select * from version_log where version_log_idx=#{version_log_idx}
 	</select>
+	
+	<!-- 사용자가 작업한 로그 조회 (마이페이지 내 타임라인) -->
+	<select id="selectByEmpIdx" parameterType="int" resultMap="VersionLogMap">
+		select * 
+		from version_log
+		where emp_idx=#{emp.emp_idx}
+	</select>
+	
+	<!-- 전체 조회(타임라인 로그) -->
+	<select id="selectAll" resultMap="VersionLogMap">
+		select *
+		from version_log
+	</select>
 
 </mapper>
