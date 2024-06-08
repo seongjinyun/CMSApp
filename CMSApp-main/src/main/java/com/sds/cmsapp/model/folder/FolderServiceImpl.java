@@ -16,6 +16,9 @@ import com.sds.cmsapp.model.document.DocumentDAO;
 import com.sds.cmsapp.model.emp.EmpDAO;
 import com.sds.cmsapp.model.trash.TrashDAO;
 
+import lombok.extern.slf4j.Slf4j;
+
+@Slf4j
 @Service
 public class FolderServiceImpl implements FolderService {
 	

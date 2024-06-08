@@ -1,11 +1,11 @@
 package com.sds.cmsapp.document.controller;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -17,7 +17,6 @@ import org.springframework.web.bind.annotation.RestController;
 import com.sds.cmsapp.domain.Document;
 import com.sds.cmsapp.domain.DocumentRequest;
 import com.sds.cmsapp.domain.Folder;
-import com.sds.cmsapp.domain.Trash;
 import com.sds.cmsapp.domain.VersionLog;
 import com.sds.cmsapp.exception.DocumentException;
 import com.sds.cmsapp.exception.FolderException;
@@ -64,10 +63,11 @@ public class RestDocumentController {
 	@GetMapping("document/folder/list")
 	public ResponseEntity getFolderList() throws FolderException {
 		List<Folder> folderList = folderService.selectTopFolder();
-		for(Folder folder : folderList) {
-			folderService.completeFolder(folder.getFolder_idx());
+		for(int i = 0; i < folderList.size(); i++) {
+			Folder folder = folderList.get(i);
+			folder = folderService.completeFolder(folder.getFolder_idx());
+			folderList.set(i, folder);
 		}
-		log.debug("FolderList 는 "+ folderList);
 		return new ResponseEntity<>(folderList, HttpStatus.OK);
 	}
 	
