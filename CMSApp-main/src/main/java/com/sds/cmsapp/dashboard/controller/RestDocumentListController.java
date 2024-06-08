@@ -115,7 +115,7 @@ public class RestDocumentListController {
 			dd.setVersion(d.getDocumentVersion().getVersionLog().getVersion()); // 버전
 			dd.setTitle(d.getDocumentVersion().getVersionLog().getTitle()); // 제목
 			dd.setComments(d.getLatestRegisteredStatusLog().getComments()); // 상태 변경 코멘트
-			dd.setEmpName(d.getLatestRegisteredStatusLog().getEmp().getEmp_name()); // 사원 이름
+			dd.setEmpName(d.getLatestRegisteredStatusLog().getEmp().getEmpName()); // 사원 이름
 			dd.setDeptName(d.getLatestRegisteredStatusLog().getEmp().getDept().getDeptName()); // 부서 이름
 			dd.setRoleName(d.getLatestRegisteredStatusLog().getEmp().getRole().getRoleName()); // 역할 이름
 			dd.setStatusName(d.getLatestRegisteredStatusLog().getMasterCode().getStatusName()); // 상태 이름
