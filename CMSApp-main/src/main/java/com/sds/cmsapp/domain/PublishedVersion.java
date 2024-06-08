@@ -3,13 +3,9 @@ package com.sds.cmsapp.domain;
 import lombok.Data;
 
 @Data
-public class DocumentVersion {
-	private int documentVersionIdx;
-
-	// 식별 관계
+public class PublishedVersion {
+	private int publishedVersionIdx;
 	private Document document;
-
-	// 부모 테이블
 	private VersionLog versionLog;
-
+	private PublishedVersionName publishedVersionName;
 }

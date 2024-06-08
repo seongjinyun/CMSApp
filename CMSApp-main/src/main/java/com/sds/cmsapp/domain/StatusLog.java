@@ -6,7 +6,7 @@ import lombok.Data;
 
 @Data
 public class StatusLog {
-	private int status_log_idx;
+	private int statusLogIdx;
 	private String comments;
 	private Timestamp regdate;
 	
