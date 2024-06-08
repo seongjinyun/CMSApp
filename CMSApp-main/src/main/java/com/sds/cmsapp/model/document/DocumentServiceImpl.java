@@ -94,6 +94,11 @@ public class DocumentServiceImpl implements DocumentService {
 	public int delete(int document_idx) {
 		return documentDAO.delete(document_idx);
 	}
+	
+	@Override // 박준형 추가
+	public List<Document> selectByFolderIdx(int folder_idx) {
+		return documentDAO.selectByFolderIdx(folder_idx);
+	}
 
 
 }
