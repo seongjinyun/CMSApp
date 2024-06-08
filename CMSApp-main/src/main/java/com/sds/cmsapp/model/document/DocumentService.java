@@ -15,18 +15,18 @@ public interface DocumentService {
 	public List selectAllForDashboard(Map map);
 	
 	// 결재 상태별 문서 수
-	public int countForDashboard(int status_code);
+	public int countForDashboard(int statusCode);
 
 	// 선택 문서 조회
-	public Document select(int document_idx); // returnType="Document"
+	public Document select(int documentIdx); // returnType="Document"
 
-	public Document selectByDocumentIdx(int document_idx); // returnMap="DocumentMap"
+	public Document selectByDocumentIdx(int documentIdx); // returnMap="DocumentMap"
 
 	// 문서생성 + 버전
 	public void documentInsert(VersionLog versionLog);
 	
 	// 문서 삭제 
-	public int delete(int document_idx);
+	public int delete(int documentIidx);
 
 	//document/list 파일 조회
 	public List documentListSelect(Map map);

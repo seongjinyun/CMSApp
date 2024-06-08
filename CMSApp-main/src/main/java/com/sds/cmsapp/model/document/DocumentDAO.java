@@ -18,12 +18,12 @@ public interface DocumentDAO {
 	public List selectAllForDashboard(Map map);
 	
 	// 결재 상태별 문서 수
-	public int countForDashboard(int status_code);
+	public int countForDashboard(int statusCode);
 
 	// 선택 문서 조회
 	public Document select(int document_idx); // returnType="Document"
-	public Document selectByDocumentIdx(int document_idx); // returnMap="DocumentMap"
-	public List<Document> selectByFolderIdx(int folder_idx); // mybatis 연결 부탁드려요~ (박준형)
+	public Document selectByDocumentIdx(int documentIdx); // returnMap="DocumentMap"
+	public List<Document> selectByFolderIdx(int folderIdx); // mybatis 연결 부탁드려요~ (박준형)
 
 	
 	public int documentInsert(Document document);
@@ -43,5 +43,5 @@ public interface DocumentDAO {
 	public DocumentVersion documentDetailSelect(DocumentVersion documentVersion);
 	
 	// 문서 삭제 (임시로 만들어뒀습니다 -박준형)
-	public int delete(int document_idx);
+	public int delete(int documentIdx);
 }

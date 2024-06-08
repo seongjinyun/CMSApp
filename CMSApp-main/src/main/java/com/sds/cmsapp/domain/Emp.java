@@ -5,7 +5,7 @@ import lombok.Data;
 @Data
 public class Emp {
 	private int empIdx;
-	private String emp_name;
+	private String empName;
 	
 	// 부모 테이블
 	private Dept dept;
