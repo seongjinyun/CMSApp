@@ -22,7 +22,7 @@ import com.sds.cmsapp.model.project.ProjectService;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
-@RestController(value = "dashboardRestDocumentListcontroller")
+@RestController //(value = "dashboardRestDocumentListcontroller")
 public class RestDocumentListController {
 
 	@Autowired
