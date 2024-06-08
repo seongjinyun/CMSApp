@@ -6,7 +6,7 @@ import lombok.Data;
 public class StatusLog {
 	private int status_log_idx;
 	private String comments;
-	private String regdate;
+	private Timestamp regdate;
 	
 	// 부모 테이블
 	private Emp emp;

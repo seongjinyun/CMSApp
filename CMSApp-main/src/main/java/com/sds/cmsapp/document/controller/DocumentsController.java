@@ -10,10 +10,14 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import com.sds.cmsapp.common.Pager;
+import com.sds.cmsapp.domain.DocumentVersion;
 import com.sds.cmsapp.domain.Trash;
 import com.sds.cmsapp.model.document.DocumentService;
 import com.sds.cmsapp.model.trash.TrashService;
 
+import lombok.extern.slf4j.Slf4j;
+
+@Slf4j
 @Controller
 public class DocumentsController {
 	
@@ -29,8 +33,9 @@ public class DocumentsController {
 	
 	//글 작성 폼
 	@GetMapping("/document/writeform")
-	public String getDocument() {
-
+	public String getDocument(Model model,@RequestParam(value="folder_idx") int folder_idx) {
+		
+		model.addAttribute("folder_idx", folder_idx);
 		return "documents/writeform";
 	} 
 
@@ -43,11 +48,16 @@ public class DocumentsController {
 	
 	//파일목록
 	@GetMapping("/document/list")
-	public String getDocumentList(Model model) {
+	public String getDocumentList(Model model, DocumentVersion documentVersion, @RequestParam(value="folder_idx") int folder_idx) {
 		HashMap map = new HashMap();
+		map.put("folder_idx", folder_idx);	
+		//폴더 -> 파일 리스트
+		List documentListSelect = documentService.documentListSelect(map);
 		
-		List documentVersionList = documentService.selectAll(map);//3단계 일시키기
-		model.addAttribute("documentVersionList",documentVersionList);//4단계 결과 저장
+		model.addAttribute("documentListSelect", documentListSelect);
+		log.debug("model= " + model);
+		
+		model.addAttribute("folder_idx", folder_idx);
 		
 		return "documents/list";
 	} 
@@ -75,7 +85,17 @@ public class DocumentsController {
 	} 
 	// 글 상세보기
 	@GetMapping("/document/detail")
-	public String getDetail() {
+	public String getDetail(@RequestParam("document_idx") int documentIdx,
+							            @RequestParam("folder_idx") int folderIdx,
+							            Model model, DocumentVersion documentVersion) {
+		DocumentVersion documentDetail = documentService.documentDetailSelect(documentVersion);
+		model.addAttribute("documentDetail", documentDetail);
 		return "documents/detail";
+	}
+	
+	// 테스트. 지울것
+	@GetMapping("/document/test2")
+	public String getTest() {
+		return "documents/test2";
 	}
 }

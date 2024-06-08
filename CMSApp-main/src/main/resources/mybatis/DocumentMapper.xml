@@ -25,16 +25,171 @@
 		select * from document where document_idx=#{document_idx}
 	</select>
 	
+    <!-- 문서 삽입 -->
+    <insert id="documentInsert" parameterType="Document">
+        INSERT INTO document (emp_idx, folder_idx) VALUES (#{emp.emp_idx}, #{folder.folder_idx})
+        <selectKey keyColumn="document_idx" keyProperty="document_idx" resultType="int" order="AFTER">
+			select last_insert_id() as document_idx
+		</selectKey>
+    </insert>
+    
+    <!-- 버전로그 삽입 -->
+    <insert id="versionInsert" parameterType="VersionLog">
+<!--     INSERT INTO version_log(branched_version_log_idx, emp_idx, project_idx, folder_idx, document_idx, version, title, content, comments) 
+    VALUES (#{branched_version_log_idx},#{emp_idx},#{project_idx},#{folder_idx},#{document_idx},#{version}, #{title}, #{content}, #{comments});
+     -->
+    INSERT INTO version_log(emp_idx,document_idx,version,title,content,comments) 
+    VALUES (7,#{document.document_idx}, 1,#{title}, #{content},#{comments})
+    
+        <selectKey keyColumn="version_log_idx" keyProperty="version_log_idx" resultType="int" order="AFTER">
+			select last_insert_id() as version_log_idx
+		</selectKey>
+    </insert>
+    
+    <insert id="documentVersionInsert" parameterType="DocumentVersion">
+    	insert into document_version (document_idx, version_log_idx, status_code)
+    	values (#{document.document_idx}, #{versionLog.version_log_idx}, 200)
+    </insert>
 	
-	<insert id="insert" parameterType="VersionLog">
-		<!-- INSERT INTO version_log(branched_version_log_idx, emp_idx, project_idx, 
-			folder_idx, document_idx, version, title, content, comments) VALUES (#{branched_version_log_idx},#{emp_idx},#{project_idx},#{folder_idx},#{document_idx},#{version}, 
-			#{title}, #{content}, #{comments}); -->
-		INSERT INTO
-		version_log(branched_version_log_idx,emp_idx,project_idx,folder_idx,document_idx,version,title,content,comments)
-		VALUES (NULL,7,1,NULL,1,1,#{title}, #{content},'초안');
-
-
-	</insert>
+	<!-- document/list 문서 리스트 조회 -->
+	<resultMap type="DocumentVersion" id="DocumentListSelectMap">
+		<id column="document_version_idx" property="document_version_idx"/>
+		
+		<association property="document" javaType="Document">
+			<id property="document_idx" column="document_idx"/>
+			
+			<association property="folder" javaType="Folder">
+				<id property="folder_idx" column="folder_idx"/>
+			</association>
+		</association>
+		
+		<association property="versionLog" javaType="VersionLog">
+			<id property="version_log_idx" column="version_log_idx"/>
+			<result property="version" column="version"/>
+			<result property="title" column="title"/>
+			<result property="regdate" column="regdate"/>
+		</association>
+	</resultMap>
 	
+	
+	<!-- 문서 목록 조회 -->
+    <select id="documentListSelect" resultMap="DocumentListSelectMap" parameterType="java.util.Map">
+        SELECT 
+	        dv.document_version_idx,
+	        d.document_idx,
+	        d.folder_idx,
+	        vl.version_log_idx,
+	        vl.version,
+	        vl.title,
+	        vl.regdate
+	    FROM Document_Version dv
+	    JOIN Document d ON dv.document_idx = d.document_idx
+	    JOIN Folder f ON d.folder_idx = f.folder_idx
+	    JOIN Version_Log vl ON dv.version_log_idx = vl.version_log_idx
+	    where d.folder_idx = #{folder_idx};
+    </select>
+    
+    <!-- 0603-4 추가 -->
+	<resultMap type="Document" id="DocumentMapForDashboard">
+		<id 	column="document_idx" property="document_idx"/>
+			
+			<!-- status_log -->
+	 		<association property="latestRegisteredStatusLog" javaType="StatusLog">
+				 <id property="status_log_idx" column="status_log_idx"/>
+				<result property="comments" column="comments"/>
+				<result property="regdate" column="regdate"/>
+				
+				<!-- mastercode -->
+				<association property="masterCode" javaType="MasterCode">
+					<id property="status_code" column="status_code"/>
+					<result property="status_name" column="status_name"/>
+				</association>
+				
+				<!-- emp (Map) -->
+				<association property="emp" javaType="Emp" column="emp_idx" select="com.sds.cmsapp.model.emp.EmpDAO.selectByEmpIdx"/>
+				 
+			</association> 
+			
+			<!-- document_version (Map) --> <!-- version_log(Type)을 association으로 가지고 있음 -> 제목 얻어오기 -->
+			<association
+				property="documentVersion" 
+				javaType="DocumentVersion" column="document_idx" select="com.sds.cmsapp.model.document.DocumentVersionDAO.selectByDocumentIdx"/>
+			
+			<!-- folder (Map) -->
+		    <association 
+		    	property="folder" 
+		    	javaType="Folder" column="folder_idx" select="com.sds.cmsapp.model.folder.FolderDAO.select"/>
+
+	</resultMap>
+	
+	<!-- 대시보드 메뉴를 위한 문서 목록 -->
+	<select id="selectAllForDashboard" resultMap="DocumentMapForDashboard" parameterType="java.util.Map">
+		select d.document_idx, v.title, v.version, s.comments, s.regdate, m.status_name, m.status_code, s.emp_idx, e.emp_name, f.folder_idx, f.project_idx, p.project_name
+		from document_version dv
+		
+		left join version_log v on dv.version_log_idx = v.version_log_idx
+		left join document d on dv.document_idx = d.document_idx
+
+		left join (
+		select * from status_log
+		where (document_idx, status_log_idx)
+		in (select document_idx, max(status_log_idx) as lastest_status_log_idx 
+		from status_log
+		group by document_idx)
+		) s
+		on dv.document_idx = s.document_idx
+
+		left join emp e on s.emp_idx = e.emp_idx
+		left join dept de on e.dept_idx = de.dept_idx
+		left join role r on e.role_code = r.role_code
+		left join mastercode m on s.status_code = m.status_code
+		left join folder f on d.folder_idx = f.folder_idx
+		left join project p on f.project_idx = p.project_idx
+		left join trash t on d.document_idx = t.document_idx
+        
+        where trash_idx is null
+		
+		<if test="status_code != 900">
+			and s.status_code=#{status_code}
+		</if>
+		
+		<if test="end_date != null">
+			and s.regdate <![CDATA[<=]]> #{end_date}
+		</if>
+		
+		<if test="start_date != null">
+			and s.regdate <![CDATA[>=]]> #{start_date}
+		</if>
+		
+		<if test="projects != null">
+			and f.project_idx in <foreach collection="projects" item="p" open="(" close=")" separator="," >#{p}</foreach>
+		</if>
+	</select>
+	
+	
+	<select id="countForDashboard" resultType="int" parameterType="int">
+        select count(d.document_idx), status_code
+        from document d
+		
+		left join
+		(select *
+		from status_log
+		where (document_idx, status_log_idx)
+		in ( 
+		select document_idx, max(status_log_idx) as lastest_status_log_idx
+		from status_log
+		group by document_idx)
+        ) s
+        
+		on d.document_idx = s.document_idx
+		
+		left join trash t on d.document_idx = t.document_idx
+        
+        where trash_idx is null
+        
+        group by status_code
+        having status_code=#{status_code};
+        
+	</select>
+    
 </mapper>

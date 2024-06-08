@@ -11,6 +11,11 @@ public class MainController {
 		return "admin/dashboard/activity";
 	}
 	
+	@GetMapping("/admin/dashboard/publishing")
+	public String getAdminDashboardPublishing() {
+		return "admin/dashboard/publishing";
+	}
+	
 	@GetMapping("/admin/dashboard/kanban")
 	public String getAdminDashboardKanban() {
 		return "admin/dashboard/kanban";
@@ -20,8 +25,6 @@ public class MainController {
 	public String getAdminDashboardAnalytics() {
 		return "admin/dashboard/analytics";
 	}
-	
-	
 	
 	@GetMapping("/writer/dashboard/activity")
 	public String getWriterDashboardActivity() {

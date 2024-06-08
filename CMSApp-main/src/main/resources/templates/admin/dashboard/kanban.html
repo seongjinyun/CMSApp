@@ -8,9 +8,52 @@
 
 <th:block th:replace="~{fragments/header_link :: header_link}" />
 
+<script>
+	
+		// 결재 상태에 따라 데이터를 보여주는 영역
+		function getData(status_code) {
+			$.ajax({
+				type:"get",  //전송타입
+				url:"/test?status_code=" + status_code,//서버요청대상파일
+				//async: false,
+				success: function (result) {
+					
+					alert('성공');
+					alert(result);
+					alert(JSON.stringify(result));
+					alert(JSON.parse(result));
+					alert(result.length);
+					alert(result[0].title);
+					
+					console.log(result[0].title);
+					
+					
+					
+				},
+				error: function (xhr, status, e) {
+					console.log("error", e);
+					console.log("status", status);
+				}
+			});
+		}
+	
+	
+		$(function() {
+			
+			// 배포 대기 문서 미리보기
+			$('#show-list-waiting-review').click(function(){
+				getData(200);
+			});
+		});
+		
+</script>
+			
+
 </head>
 
+
 <body class="hold-transition sidebar-mini layout-fixed">
+
 	<div class="wrapper">
 
 		<!-- Preloader -->
@@ -33,6 +76,7 @@
 					<div class="row mb-2">
 						<div class="col-sm-6">
 							<h1 class="m-0">칸반 보드</h1>
+							<button id="show-list-waiting-review">버튼</button>
 						</div>
 						<!-- /.col -->
 						<div class="col-sm-6">
@@ -170,62 +214,7 @@
 	<!-- ./wrapper -->
 
 	<th:block th:replace="~{fragments/footer_link :: footer_link}" />
-		<script>
-        $(function () {
-
-            $('[data-toggle="popover"]').popover();
-
-            // 요약 탭 - Date range button
-            $('#daterange-btn')
-                .daterangepicker(
-                    {
-
-                        // 초기화
-                        startDate: moment(),
-                        endDate: moment(),
-
-                        // 라벨 설정
-                        ranges: {
-                            '오늘': [moment(), moment()],
-                            '어제': [moment().subtract(1, 'days'),
-                            moment().subtract(1, 'days')],
-                            '지난 7일': [moment().subtract(6, 'days'),
-                            moment()],
-                            '지난 30일': [moment().subtract(29, 'days'),
-                            moment()]
-                        },
-
-                        // [취소], [적용] 버튼 없음
-                        autoApply: true
-                    },
-                    function (start, end) {
-
-                        $('#daterange-btn span').html(
-                            start.format('YYYY/MM/DD') + ' - '
-                            + end.format('YYYY/MM/DD'));
-
-                        $.ajax({
-                            type: 'GET',
-                            url: '/test/daterange',
-                            data: {
-                                startDate: start.format('YYYY/MM/DD'),
-                                endDate: end.format('YYYY/MM/DD')
-                            },
-                            success: function (result, status, xhr) {
-
-                                alert("성공");
-
-                            },
-                            error: function (xhr, status, err) {
-                                alert("실패");
-                            }
-
-                        });
-                    });
-            
-        });
-        
-        </script>
+		
 
 </body>
 

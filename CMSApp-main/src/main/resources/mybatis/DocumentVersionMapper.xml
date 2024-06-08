@@ -6,16 +6,26 @@
 
 	<resultMap type="DocumentVersion" id="DocumentVersionMap">
 		<id column="document_version_idx" property="document_version_idx" />
-		<association column="document_idx" property="document"
+		
+		<!-- document -->
+<!-- 		<association column="document_idx" property="document"
 			javaType="Document"
-			select="com.sds.cmsapp.model.document.DocumentDAO.selectByDocumentIdx" />
+			select="com.sds.cmsapp.model.document.DocumentDAO.selectByDocumentIdx" /> -->
+			
+		<!-- version_log -->
 		<association column="version_log_idx" property="versionLog"
 			javaType="VersionLog"
-			select="com.sds.cmsapp.model.versionlog.VersionLogDAO.selectByVersionLogIdx" /> <!-- 프로퍼티는 카멜케이스로 작성 -->
+			select="com.sds.cmsapp.model.versionlog.VersionLogDAO.select" />
 	</resultMap>
 
 	<select id="selectByDocumentIdx" parameterType="int"
 		resultMap="DocumentVersionMap">
+		select * from document_version where
+		document_idx=#{document_idx}
+	</select>
+	
+	<!-- 0603 추가 -->
+	<select id="select" parameterType="int" resultType="DocumentVersion">
 		select * from document_version where
 		document_idx=#{document_idx}
 	</select>
