@@ -10,6 +10,22 @@
 	<th:block th:replace="~{elements/advanced_forms_header_link :: advanced_forms_header_link}"/>
 	
 	 <style>
+	 		
+		input[type="file"] {
+		    display: none;
+		}
+		
+		.inputFileButton {
+		    padding: 6px 25px;
+			background-color:#FFFFFF;
+		    border-radius: 4px;
+		    color: black;
+		    cursor: pointer;
+		    display: inline-block;
+		    margin: 15px auto;  /* 세로 여백과 자동 가로 중앙 정렬 */
+		    text-align: center; /* 버튼 내 텍스트 중앙 정렬 */
+		}
+	 
         .addImage {
             width: 45%;
             height: 45%;
@@ -26,7 +42,8 @@
 	        max-width: 100%; /* 이미지가 부모 요소를 넘지 않도록 최대 크기 지정 */
 	        max-height: 100%;
 	        object-fit: cover;
-	    }        
+	    }   
+	         
     </style>
 	 
 	 <script>
@@ -133,12 +150,15 @@
 							            </div>
 							        </div> 
 								</div>
-								<div class="form-group">
-					                <label>Profile Image</label>
+				                <label>Profile Image</label>
+								<div class="form-group" style="display: flex; flex-direction: column; align-items: center;">
 					                <div class="addImage" id="image-show" style="width: 200px; height: 200px; margin: auto;">
 					                 	<!-- 이미지 띄울 공간 -->
-										<input type="file" name="file" id="file" accept="image/*" onchange="loadFile(this)" style="margin: auto; align-self: center; display: block;">
 					                </div>
+					                <label class="inputFileButton" for="inputFile">
+					                	이미지 첨부
+					                </label>
+									<input type="file" name="file" id="inputFile" accept="image/*" onchange="loadFile(this)"/>
 					            </div>
 					            <button type="button" id="btn_add_new_emp" class="col btn btn-success float-right" style="height: 38px; margin-top: 20px;">Add new Employee</button>
 							</form>

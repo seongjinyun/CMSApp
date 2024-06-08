@@ -79,4 +79,48 @@ public class EmpController {
         }
         return "redirect:/settings/user";
     }
+	
+	@PostMapping("/settings/mypage/update")
+	public String update(Emp emp, EmpDetail empDetail, @RequestParam("dept_idx") int deptIdx, @RequestParam("role_code") int roleCode) {
+		try {
+			 MultipartFile file = empDetail.getFile();
+	            if (file != null && !file.isEmpty()) {            // 파일이 존재한다면 
+	                String fileUrl = fileManager.save(empDetail); // 서버에 저장
+	                empDetail.setEmp_profile_url(fileUrl);
+	            } 
+	        
+           Dept dept = new Dept();
+           dept.setDept_idx(deptIdx);
+           emp.setDept(dept);
+           
+           Role role = new Role();
+           role.setRole_code(roleCode);
+           emp.setRole(role);    
+	       
+           System.out.println("emp.getEmp_name(): " + emp.getEmp_name());
+           System.out.println("empDetail.getEmp_id(): "+ empDetail.getEmp_id());
+           System.out.println("empDetail.getEmp_pw(): " + empDetail.getEmp_pw());
+           
+           // 이름, id, pw등이 변경되지 않았다면 원래 값으로 설정
+           if(emp.getEmp_name() == null) {
+        	   emp.setEmp_name(empService.selectByEmpIdx(emp.getEmp_idx()).getEmp_name());
+		   } if(empDetail.getEmp_id() == null) {
+        	   empDetail.setEmp_id(empDetailService.selectByEmpIdx(emp.getEmp_idx()).getEmp_id());
+		   } if(empDetail.getEmp_pw() == null) {
+			   empDetail.setEmp_pw(empDetailService.selectByEmpIdx(emp.getEmp_idx()).getEmp_pw());
+		   }
+		   
+           // EmpDetail 객체를 DB에 저장하는 로직	        
+	        empService.update(emp);
+	        empDetail.setEmp(emp);
+	        empDetailService.update(empDetail);
+
+           System.out.println("Employee updated successfully");
+           return "redirect:/settings/mypage";
+       } catch (UploadException e) {
+       	e.printStackTrace();
+           throw new UploadException("사원 수정 실패", e);
+       }
+		
+	}
 }

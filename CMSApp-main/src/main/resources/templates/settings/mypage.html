@@ -10,6 +10,22 @@
 	<th:block th:replace="~{elements/advanced_forms_header_link :: advanced_forms_header_link}"/>
 	
 	 <style>
+	 		
+		input[type="file"] {
+		    display: none;
+		}
+		
+		.inputFileButton {
+		    padding: 6px 25px;
+			background-color:#FFFFFF;
+		    border-radius: 4px;
+		    color: black;
+		    cursor: pointer;
+		    display: inline-block;
+		    margin: 15px auto;  /* 세로 여백과 자동 가로 중앙 정렬 */
+		    text-align: center; /* 버튼 내 텍스트 중앙 정렬 */
+		}
+	 
         .addImage {
             width: 45%;
             height: 45%;
@@ -28,25 +44,6 @@
 	        object-fit: cover;
 	    }
     </style>
-	 
-	 <script>
-	 	// 이미지 로드용
-        function loadFile(input) {
-            let file = input.files[0]; // 선택파일 가져오기
-
-            let newImage = document.getElementById("profileImg"); // 기존 이미지 태그 가져오기
-
-            //이미지 source 가져오기
-            newImage.src = URL.createObjectURL(file);
-            newImage.style.width = "100%"; 		// div에 꽉차게 넣기
-            newImage.style.height = "100%";
-            newImage.style.objectFit = "cover"; // div에 넘치지 않고 들어가게
-
-            // 이미지를 image-show div에 추가
-            // let container = document.getElementById('image-show');
-            // container.appendChild(newImage);
-        }
-	</script>
 
 </head>
 <body class="hold-transition sidebar-mini layout-fixed">
@@ -190,28 +187,29 @@
 				                        <div class="form-group row">
 				                            <label for="inputName" class="col-sm-2 col-form-label">Name</label>
 				                            <div class="col-sm-10">
-				                                <input type="text" th:value="${emp.getEmp_name}" class="form-control" id="emp_name">
+				                                <input type="text" th:value="${emp.getEmp_name}" class="form-control" name="emp_name">
 				                            </div>
 				                        </div>
 				                        <div class="form-group row">
 				                            <label for="inputID" class="col-sm-2 col-form-label">ID</label>
 				                            <div class="col-sm-10">
-				                                <input type="text" th:value="${empDetail.getEmp_id}" class="form-control" id="empDetail.emp_id">
+				                                <input type="text" th:value
+				                                ="${empDetail.getEmp_id}" class="form-control" name="emp_id">
 				                            </div>
 				                        </div>
 				                        <div class="form-group row">
 				                            <label for="inputPW" class="col-sm-2 col-form-label">PW</label>
 				                            <div class="col-sm-10">
-				                                <input type="password" th:value="${empDetail.getEmp_pw}" class="form-control" id="empDetail.emp_pw">
+				                                <input type="password" th:value="${empDetail.getEmp_pw}" class="form-control" name="emp_pw">
 				                            </div>
 				                        </div>
 				                        <div class="form-group row">
 				                            <label for="inputDepartment" class="col-sm-2 col-form-label">Department</label>
 				                            <div class="col-sm-10">
 				                                <div class="form-group">
-													<select class="select1 form-control" id="dept.dept_name" data-placeholder="Department" style="width: 100%;" disabled="disabled">
+				                                	<select id="input_dept_idx" name="dept_idx" class="select1 form-control" data-placeholder="부서 선택" style="width: 100%;" disabled="disabled">
 														<!-- 부서 이동 권한은 사용자에게는 없고, 관리자에게만 출력 (disabled) -->
-														<option th:each="role : ${roleList}" th:selected="${role}==${emp.role}" th:value="${role.role_code}" th:text="${role.role_name}"></option>
+														<option th:each="dept : ${deptList}" th:value="${dept.dept_idx}" th:text="${dept.dept_name}" th:selected="${dept}==${emp.dept}"></option>
 													</select>
 										        </div>
 				                            </div>
@@ -220,9 +218,9 @@
 				                            <label for="inputRole" class="col-sm-2 col-form-label">Role</label>
 				                            <div class="col-sm-10">
 									            <div class="form-group">
-									                <select id="input_dept_idx" name="dept_idx" class="select1 form-control" data-placeholder="부서 선택" style="width: 100%;" disabled="disabled">
-														<!-- 부서 이동 권한은 사용자에게는 없고, 관리자에게만 출력 (disabled) -->
-														<option th:each="dept : ${deptList}" th:selected="${dept}==${emp.dept}" th:value="${dept.dept_idx}" th:text="${dept.dept_name}"></option>
+									            	<select id="input_role_code" name="role_code" class="select1 form-control" data-placeholder="역할 선택" style="width: 100%;" disabled="disabled">
+														<!-- 역할 변경 권한은 사용자에게는 없고, 관리자에게만 출력 (disabled) -->
+														<option th:each="role : ${roleList}" th:value="${role.role_code}" th:text="${role.role_name}" th:selected="${role}==${emp.role}"></option>
 													</select>
 									            </div> 
 				                            </div>
@@ -233,9 +231,12 @@
 									        	<div class="col">
 										            <div class="form-group">
 											            <div class="addImage" id="image-show" style="width: 200px; height: 200px;">
-										                 	<img th:src="@{${profile_img_url}}" alt="Profile Image" id="profileImg">
+										                 	<img th:src="${profile_img_url}" alt="Profile Image" id="profileImg">
 										                </div>
-														<input type="file" name="file" id="file" accept="image/*" onchange="loadFile(this)" style="margin-top: 15px; display: block;">
+										                <label class="inputFileButton" for="inputFile">
+										                	이미지 첨부
+										                </label>
+														<input type="file" name="file" id="inputfile" accept="image/*" onchange="loadFile(this)" style="margin-top: 15px; display: block;">
 					                				</div>
 					                			</div>
 						                	</div>
@@ -279,14 +280,20 @@
 
 	function updateEmpAccount() {
 		$("#emp_account").attr({
-			action:"/settings/emp/update",
-			method:"post"
+			action:"/settings/mypage/update",
+			method:"post",
+			// 텍스트 데이터와 바이너리 데이터가 섞여 있는 복합 데이터 전송: enctype multipart/form-data
+			enctype:"multipart/form-data"
 		});
 		$("#emp_account").submit();
+		
 	}
 	
 	$(function(){
 		$("#update_emp_account").click(function(){
+			// disable된 값은 넘어가지 않기에 속성을 변경해준다
+			$("select[name=dept_idx]").removeAttr('disabled');
+			$("select[name=role_code]").removeAttr('disabled');
 			updateEmpAccount();
 		});		
 	});
