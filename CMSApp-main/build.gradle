@@ -51,6 +51,9 @@ dependencies {
 	
 	/////////////////////////////////////////////////////////////////////////////////////////////////////
 	
+	// Spring Security
+	// https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-starter-security
+	implementation 'org.springframework.boot:spring-boot-starter-security:3.2.5'
 	
 }
 

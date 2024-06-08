@@ -1,6 +1,5 @@
 package com.sds.cmsapp.document.controller;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,33 +29,33 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 @RestController
 public class RestDocumentController {
-	
+
 	@Autowired
 	private DocumentService documentService;
-	
+
 	@Autowired
 	private FolderService folderService;
 	
 	@Autowired
 	private TrashService trashService;
 	
+
 	@PostMapping("/document/save")
 	public ResponseEntity createDocument(@ModelAttribute DocumentRequest documentRequest) {
-       Document document = documentRequest.getDocument(); 
-        VersionLog versionLog = documentRequest.getVersionLog();
-        
-        log.debug("document 안의 folder_idx "+document.getFolder().getFolder_idx());
-        log.debug("document 안의 emp_idx is "+document.getEmp().getEmp_idx());
-        log.debug("version log title is "+versionLog.getTitle());
-        log.debug("version log content is "+versionLog.getContent());
-        
-     
-        versionLog.setDocument(document);
+		Document document = documentRequest.getDocument();
+		VersionLog versionLog = documentRequest.getVersionLog();
 
-        documentService.documentInsert(versionLog);
-        
+		log.debug("document 안의 folder_idx " + document.getFolder().getFolder_idx());
+		log.debug("document 안의 emp_idx is " + document.getEmp().getEmp_idx());
+		log.debug("version log title is " + versionLog.getTitle());
+		log.debug("version log content is " + versionLog.getContent());
+
+		versionLog.setDocument(document);
+
+		documentService.documentInsert(versionLog);
+
 		ResponseEntity entity = ResponseEntity.ok("DB 입력 성공");
-		
+
 		return entity;
     }
 	
@@ -105,10 +104,11 @@ public class RestDocumentController {
 		e3.printStackTrace();
 		
 		ResponseEntity entity = ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
-        return entity;
-		
+		return entity;
+
 	}
 	
 	
 }
+
 
