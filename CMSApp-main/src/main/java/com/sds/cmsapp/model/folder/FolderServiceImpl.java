@@ -11,10 +11,15 @@ import org.springframework.transaction.annotation.Transactional;
 import com.sds.cmsapp.domain.Document;
 import com.sds.cmsapp.domain.Folder;
 import com.sds.cmsapp.domain.Trash;
+import com.sds.cmsapp.exception.FolderException;
 import com.sds.cmsapp.model.document.DocumentDAO;
+import com.sds.cmsapp.model.document.DocumentVersionDAO;
 import com.sds.cmsapp.model.emp.EmpDAO;
 import com.sds.cmsapp.model.trash.TrashDAO;
 
+import lombok.extern.slf4j.Slf4j;
+
+@Slf4j
 @Service
 public class FolderServiceImpl implements FolderService {
 	
@@ -35,7 +40,6 @@ public class FolderServiceImpl implements FolderService {
 		Document document = documentDAO.select(document_idx);
 		document.setFolder(folderDAO.select(targetFolderIdx));
 		return documentDAO.update(document);
-		
 	}
 
 	@Override
@@ -71,7 +75,7 @@ public class FolderServiceImpl implements FolderService {
 	
 	@Override
 	public Folder select(int folder_idx) {
-		return folderDAO.select(folder_idx); 	
+		return folderDAO.select(folder_idx); 
 	}
 
 	@Override
@@ -81,7 +85,7 @@ public class FolderServiceImpl implements FolderService {
 
 	@Override
 	public List<Folder> selectAll() {
-		return completeTopFolder();
+		return folderDAO.selectAll();
 	}
 	
 	@Override
@@ -122,30 +126,98 @@ public class FolderServiceImpl implements FolderService {
 		return folderNameList;
 	}
 	
-	public List<Folder> completeTopFolder(){
-		int count = 0;
-		List<Folder> topFolderList = folderDAO.selectTopFolder();
-		List<Folder> folderList = new ArrayList<Folder>();
-		folderList.addAll(topFolderList);
+	public List<Folder> selectTopFolder(){
+		return folderDAO.selectTopFolder();
+	}
+	
+	public List<Folder> completeFolderList(List<Folder> folderList){
+		List<Folder> folderList1 = new ArrayList<Folder>();
 		List<Folder> folderList2 = new ArrayList<Folder>();
+		folderList1.addAll(folderList);
 		while(true) {
-			for (Folder folder : folderList) {			
-				int folder_idx = folder.getFolder_idx();				
-				List<Folder> subList = folderDAO.selectSub(folder_idx);				
+			for (Folder folder : folderList1) {			
+				List<Folder> subList = folderDAO.selectSub(folder.getFolder_idx());				
 				folder.setChildFolderList(subList);
-				for (Folder subFolder : subList) {				
-					folderList2.add(subFolder);
-					count++;
-				}
+				folderList2.addAll(subList);
 			}
-			folderList.clear();
+			folderList1.clear();
 			if (folderList2.size() == 0) {
 				break;
 			}
-			folderList.addAll(folderList2);
+			folderList1.addAll(folderList2);
 			folderList2.clear();
 		}
-		return topFolderList;
+		return folderList;
+	}
+	
+	public Folder completeFolder(int folder_idx) throws FolderException{
+		int count = 0;
+		Folder folder = folderDAO.select(folder_idx);
+		List<Folder> folderList1 = new ArrayList<Folder>();
+		List<Folder> folderList2 = new ArrayList<Folder>();
+		folderList1.add(folder);
+		while(true) {
+			for (Folder folderDTO : folderList1) {			
+				List<Folder> subList = folderDAO.selectSub(folderDTO.getFolder_idx());				
+				folderDTO.setChildFolderList(subList);
+				folderList2.addAll(subList);
+			}
+			folderList1.clear();
+			if (folderList2.isEmpty()) {
+				break;
+			}
+			folderList1.addAll(folderList2);
+			folderList2.clear();
+			count++;
+			if (count > 1000) {
+				throw new FolderException("폴더 DTO 생성 중 무한루프 발생 or 반복횟수 너무 많음");
+			}
+		}
+		return folder;
+	}
+	
+	
+	public Folder fillSub(Folder folder) {
+		List<Folder> subList = folderDAO.selectSub(folder.getFolder_idx());
+		folder.setChildFolderList(subList);
+		return folder;
+	}
+	
+	@Override
+	public Folder fillDocument(int folder_idx) {
+		Folder folder = folderDAO.select(folder_idx);
+		List<Document> documentList = documentDAO.selectByFolderIdx(folder_idx);
+		folder.setDocumentList(documentList);
+		return folder;
+	}
+	
+	@Override
+	public Folder completeFolderWithDocument(int folder_idx) throws Throwable {
+		int count = 0;
+		Folder folder = folderDAO.select(folder_idx);
+		List<Folder> folderList1 = new ArrayList<Folder>();
+		List<Folder> folderList2 = new ArrayList<Folder>();
+		folderList1.add(folder);
+		while(true) {
+			for (Folder folderDTO : folderList1) {			
+				List<Folder> subList = folderDAO.selectSub(folderDTO.getFolder_idx());				
+				folderDTO.setChildFolderList(subList);
+				List<Document> documentList = documentDAO.selectByFolderIdx(folderDTO.getFolder_idx());
+				folderDTO.setDocumentList(documentList);
+				folderList2.addAll(subList);
+			}
+			folderList1.clear();
+			if (folderList2.isEmpty()) {
+				break;
+			}
+			folderList1.addAll(folderList2);
+			folderList2.clear();
+			count++;
+			if (count > 1000) {
+				throw new FolderException("폴더 DTO 생성 중 무한루프 발생 or 반복횟수 너무 많음");
+			}
+		}
+		return folder;
 	}
 	
 }
