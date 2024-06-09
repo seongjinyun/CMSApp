@@ -24,7 +24,7 @@ public class RestSidebarController {
 		List<Folder> folderList = folderService.selectTopFolder();
 		folderList.forEach(folder -> {
 			try {
-				folderService.completeFolderWithDocument(folder.getFolder_idx());
+				folderService.completeFolderWithDocument(folder.getFolderIdx());
 			} catch (Throwable e) {
 				e.printStackTrace();
 			}
