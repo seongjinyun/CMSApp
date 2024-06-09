@@ -57,7 +57,7 @@
                   </div>
                   <input type="button" class="btn btn-default btn-sm ml-1 mr-1" value="필터" id="filterButton">
                   <input type="button" class="btn btn-default btn-sm" value="글 작성" id="write">
-                  <input type="hidden" name="folder_idx" th:value="${folder_idx}">
+                  <input type="hidden" name="folderIdx" th:value="${folderIdx}">
                 </div>
                 
               </div>
@@ -131,7 +131,7 @@
 				        </td>
 				        <td class="mailbox-star"><a href="#"><i class="fa fa-star" aria-hidden="true"></i></a></td>
 				        <!-- title, 업데이트 날짜, document가 아닌 versionLog에서 가져와야함.\ -->
-				        <td><a th:href="@{/document/detail(document_idx=${documentVersion.document.document_idx}, folder_idx=${documentVersion.document.folder.folder_idx})}" th:text="${documentVersion.versionLog.title}">튜토리얼</a></td>
+				        <td><a th:href="@{/document/detail(documentIdx=${documentVersion.document.documentIdx}, folderIdx=${documentVersion.document.folder.folderIdx})}" th:text="${documentVersion.versionLog.title}">튜토리얼</a></td>
 				        <td th:text="${documentVersion.versionLog.version}">v2.1</td>
 				        <td th:text="${documentVersion.versionLog.regdate}">2024.05.23 16:44</td>
 				        <!-- 상태는 masterCode 에서 가져와야함  -->
@@ -195,7 +195,7 @@ $(function(){
   function write(){
 	  $("#write").click(function() {
 			//글쓰기 폼 요청
-			location.href="/document/writeform?folder_idx="+$("input[name='folder_idx']").val();
+			location.href="/document/writeform?folderIdx="+$("input[name='folderIdx']").val();
 		});
   }
 	  
