@@ -54,7 +54,7 @@ public class TrashServiceImpl implements TrashService{
 	@Transactional
 	public int delete(Integer trash_idx) {
 		Trash trash = trashDAO.select(trash_idx);
-		documentDAO.delete(trash.getDocument().getDocument_idx());
+		documentDAO.delete(trash.getDocument().getDocumentIdx());
 		int result = trashDAO.delete(trash_idx);
 		
 		return result;

@@ -86,13 +86,13 @@ public class SettingsController {
 		// -----------------------------
 		// 테스트를 위해 사원 전달
 		Emp emp = empService.selectByEmpIdx(58);
-		EmpDetail empDetail = empDetailService.selectByEmpIdx(emp.getEmp_idx());
+		EmpDetail empDetail = empDetailService.selectByEmpIdx(emp.getEmpIdx());
 		model.addAttribute("emp", emp);
 		model.addAttribute("empDetail", empDetail);
-		System.out.println("DB에서 전달받은 프로필 이미지 url: "+empDetail.getEmp_profile_url());
-		String profileImgUrl = "/profileImg/" + empDetail.getEmp_profile_url();
+		System.out.println("DB에서 전달받은 프로필 이미지 url: "+empDetail.getEmpProfileUrl());
+		String profileImgUrl = "/profileImg/" + empDetail.getEmpProfileUrl();
 	    model.addAttribute("profile_img_url", profileImgUrl);
-	    System.out.println("File exists: " + new File("src/main/resources/static/profileImg/" + empDetail.getEmp_profile_url()).exists());
+	    System.out.println("File exists: " + new File("src/main/resources/static/profileImg/" + empDetail.getEmpProfileUrl()).exists());
 	    // System.out.println("html로 전달되는 경로: "+profileImgUrl);
 		// -----------------------------
 		

@@ -5,35 +5,35 @@
 	<insert id="insert" parameterType="Folder">
 		insert into folder (parent_folder_idx, folder_name, project_idx)
 		values (#{parent_folder.parent_folder_idx}, #{folder_name}, #{project.project_idx})
-		<selectKey keyColumn="folder_idx" keyProperty="folder_idx" resultType="int" order="AFTER">
+		<selectKey keyColumn="folder_idx" keyProperty="folderIdx" resultType="int" order="AFTER">
 			select last_insert_id() as folder_idx
 		</selectKey>
 	</insert>
 	
 	<delete id="delete" parameterType="int">
-		delete from folder where folder_idx = #{folder_idx}
+		delete from folder where folder_idx = #{folderIdx}
 	</delete>
 	
 	<update id="update" parameterType="Folder">
 		update folder
 			<set>
-				<if test="parent_folder_idx != null"> 
-					parent_folder_idx = #{parent_folder.folder_idx},
+				<if test="parentFolderIdx != null"> 
+					parent_folder_idx = #{parent_folder.folderIdx},
 				</if>
-				<if test="folder_name != null">
+				<if test="folderName != null">
 					folder_name = #{folder_name},
 				</if>
-				<if test="project_idx != null">
-					project_idx = #{project.project_idx}
+				<if test="projectIdx != null">
+					project_idx = #{project.projectIdx}
 				</if>
 			</set>
 		where folder_idx = #{folder_idx}
 	</update>
 	
 	<resultMap type="Folder" id="FolderMap">
-		<id 	column="folder_idx"	property="folder_idx"/>
+		<id 	column="folder_idx"	property="folderIdx"/>
 		<result	column="regdate"	property="regdate"/>
-		<association column="parent_folder_idx" property="parent_folder" javaType="Folder"
+		<association column="parentFolderIdx" property="parentFolder" javaType="Folder"
 			select="com.sds.cmsapp.model.folder.FolderDAO.select"/>
 		<association column="project_idx" property="project" javaType="Project"
 			select="com.sds.cmsapp.model.project.ProjectDAO.selectByProjectIdx"/>
@@ -41,7 +41,7 @@
 	
 	<select id="select" parameterType="int" resultMap="FolderMap">
 		select * from folder
-		where folder_idx = #{folder_idx}
+		where folder_idx = #{folderIdx}
 	</select>
 	
 	<select id="selectAll" resultMap="FolderMap">
@@ -50,12 +50,12 @@
 	
 	<select id="selectSub" parameterType="int" resultMap="FolderMap">
 		select * from folder
-		where parent_folder_idx = #{parent_folder_idx}
+		where parent_folder_idx = #{parentFolderIdx}
 	</select>
 	
 	<select id="selectParent" parameterType="Folder" resultMap="FolderMap">
 		select * from folder
-		where folder_idx = #{parent_folder.folder_idx}
+		where folder_idx = #{parent_folder.folderIdx}
 	</select>
 	
 	<select id="selectTopFolder" resultMap="FolderMap">

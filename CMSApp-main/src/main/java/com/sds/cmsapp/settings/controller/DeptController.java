@@ -30,7 +30,7 @@ public class DeptController {
 	    Dept deptWithIdx = deptService.selectByDeptIdx(dept_idx); // 추가된 부서 객체 조회
 	    for(int emp_idx : empIds) {
 	        Emp emp = new Emp();
-	        emp.setEmp_idx(emp_idx);
+	        emp.setEmpIdx(emp_idx);
 	        emp.setDept(deptWithIdx);
 	        // 사원들의 부서를 추가한 부서로 설정
 	        empService.updateDept(emp);

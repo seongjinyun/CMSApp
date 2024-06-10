@@ -4,20 +4,20 @@
 
 	<!-- 역할 추가 -->
 	<insert id="insert" parameterType="Role">
-		insert into role(role_name)
-		values(#{role_name});
+		insert into role(roleName)
+		values(#{roleName});
 	</insert>
 	
 	<!-- deprecated -->
 	<!-- role_idx가 가리키는 부서 조회 -->
 	<select id="selectByRoleIdx" parameterType="int" resultType="Role">
-		select * from role where role_idx=#{role_idx}
+		select * from role where role_idx=#{roleIdx}
 	</select>
 	<!-- deprecated -->
 	
 	<!-- role_code가 가리키는 부서 조회 -->
 	<select id="selectByRoleCode" parameterType="int" resultType="Role">
-		select * from role where role_code=#{role_code}
+		select * from role where role_code=#{roleCode}
 	</select>
 	
 	<!-- 모든 role 정보 조회 -->

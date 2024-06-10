@@ -5,7 +5,7 @@
 	<!-- Owner 계정 정보 변경 -->
 	<update id="update" parameterType="Owner">
 		update owner
-		set owner_id=#{owner_id}, owner_pw=#{owner_pw}
+		set owner_id=#{ownerId}, owner_pw=#{ownerPw}
 		where owner_idx=1
 	</update>
 	

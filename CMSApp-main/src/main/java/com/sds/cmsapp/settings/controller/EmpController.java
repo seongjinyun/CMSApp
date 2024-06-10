@@ -35,15 +35,15 @@ public class EmpController {
 			 MultipartFile file = empDetail.getFile();
 	            if (file != null && !file.isEmpty()) {            // 파일이 존재한다면 
 	                String fileUrl = fileManager.save(empDetail); // 서버에 저장
-	                empDetail.setEmp_profile_url(fileUrl);
+	                empDetail.setEmpProfileUrl(fileUrl);
 	            } 
 	        
             Dept dept = new Dept();
-            dept.setDept_idx(deptIdx);
+            dept.setDeptIdx(deptIdx);
             emp.setDept(dept);
             
             Role role = new Role();
-            role.setRole_code(roleCode);
+            role.setRoleCode(roleCode);
             emp.setRole(role);    
 	            
             // EmpDetail 객체를 DB에 저장하는 로직	        
@@ -67,11 +67,11 @@ public class EmpController {
             Emp emp = empService.selectByEmpIdx(empIdxList.get(i));
             if (emp != null) {
                 Dept dept = new Dept();
-                dept.setDept_idx(deptIdxList.get(i));
+                dept.setDeptIdx(deptIdxList.get(i));
                 emp.setDept(dept);
 
                 Role role = new Role();
-                role.setRole_code(roleCodeList.get(i));
+                role.setRoleCode(roleCodeList.get(i));
                 emp.setRole(role);
 
                 empService.update(emp);
@@ -86,28 +86,28 @@ public class EmpController {
 			 MultipartFile file = empDetail.getFile();
 	            if (file != null && !file.isEmpty()) {            // 파일이 존재한다면 
 	                String fileUrl = fileManager.save(empDetail); // 서버에 저장
-	                empDetail.setEmp_profile_url(fileUrl);
+	                empDetail.setEmpProfileUrl(fileUrl);
 	            } 
 	        
            Dept dept = new Dept();
-           dept.setDept_idx(deptIdx);
+           dept.setDeptIdx(deptIdx);
            emp.setDept(dept);
            
            Role role = new Role();
-           role.setRole_code(roleCode);
+           role.setRoleCode(roleCode);
            emp.setRole(role);    
 	       
-           System.out.println("emp.getEmp_name(): " + emp.getEmp_name());
-           System.out.println("empDetail.getEmp_id(): "+ empDetail.getEmp_id());
-           System.out.println("empDetail.getEmp_pw(): " + empDetail.getEmp_pw());
+           System.out.println("emp.getEmp_name(): " + emp.getEmpName());
+           System.out.println("empDetail.getEmp_id(): "+ empDetail.getEmpId());
+           System.out.println("empDetail.getEmp_pw(): " + empDetail.getEmpPw());
            
            // 이름, id, pw등이 변경되지 않았다면 원래 값으로 설정
-           if(emp.getEmp_name() == null) {
-        	   emp.setEmp_name(empService.selectByEmpIdx(emp.getEmp_idx()).getEmp_name());
-		   } if(empDetail.getEmp_id() == null) {
-        	   empDetail.setEmp_id(empDetailService.selectByEmpIdx(emp.getEmp_idx()).getEmp_id());
-		   } if(empDetail.getEmp_pw() == null) {
-			   empDetail.setEmp_pw(empDetailService.selectByEmpIdx(emp.getEmp_idx()).getEmp_pw());
+           if(emp.getEmpName() == null) {
+        	   emp.setEmpName(empService.selectByEmpIdx(emp.getEmpIdx()).getEmpName());
+		   } if(empDetail.getEmpId() == null) {
+        	   empDetail.setEmpId(empDetailService.selectByEmpIdx(emp.getEmpIdx()).getEmpId());
+		   } if(empDetail.getEmpPw() == null) {
+			   empDetail.setEmpPw(empDetailService.selectByEmpIdx(emp.getEmpIdx()).getEmpPw());
 		   }
 		   
            // EmpDetail 객체를 DB에 저장하는 로직	        
