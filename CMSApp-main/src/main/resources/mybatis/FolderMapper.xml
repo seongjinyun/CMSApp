@@ -63,5 +63,9 @@
 		where parent_folder_idx is null
 	</select>
 	
+	<select id="selectByProjectIdx" resultMap="FolderMap">
+		select * from folder
+		where project_idx = #{project.projectIdx}
+	</select>
 
 </mapper>

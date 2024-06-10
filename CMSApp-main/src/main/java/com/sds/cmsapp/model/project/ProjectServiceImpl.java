@@ -14,16 +14,16 @@ public class ProjectServiceImpl implements ProjectService {
 	private ProjectDAO projectDAO;
 
 	@Override
-	public int insert(Project project) {
+	public int insert(final Project project) {
 		// TODO Auto-generated method stub
 		projectDAO.insert(project);
-		return project.getProject_idx();
+		return project.getProjectIdx();
 	}
 
 	@Override
-	public Project selectByProjectIdx(int project_idx) {
+	public Project selectByProjectIdx(final int projectIdx) {
 		// TODO Auto-generated method stub
-		return projectDAO.selectByProjectIdx(project_idx);
+		return projectDAO.selectByProjectIdx(projectIdx);
 	}
 
 	@Override
