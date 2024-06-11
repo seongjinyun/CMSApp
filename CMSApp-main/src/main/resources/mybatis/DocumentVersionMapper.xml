@@ -5,7 +5,7 @@
 
 
 	<resultMap type="DocumentVersion" id="DocumentVersionMap">
-		<id column="document_version_idx" property="document_version_idx" />
+		<id column="document_version_idx" property="documentVersionIdx" />
 		
 		<!-- document -->
 <!-- 		<association column="document_idx" property="document"

@@ -67,6 +67,7 @@ public class FolderServiceImpl implements FolderService {
 		if(childFolderList != null) {
 			for(Folder folder : childFolderList) {
 				deleteFolder(folder.getFolderIdx(), empIdx, depth + 1);
+
 			}
 		}
 		folderDAO.delete(folderIdx);

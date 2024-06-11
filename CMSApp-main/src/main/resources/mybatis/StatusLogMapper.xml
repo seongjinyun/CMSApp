@@ -3,7 +3,7 @@
 <mapper namespace="com.sds.cmsapp.model.statuslog.StatusLogDAO">
 
 	<resultMap type="StatusLog" id="StatusLogMap">
-		<id column="status_log_idx" property="status_log_idx" />
+		<id column="status_log_idx" property="statusLogIdx" />
 		<result column="comments" property="comments" />
 		<result column="regdate" property="regdate" />
 
@@ -22,14 +22,14 @@
  	<select id="selectLatestRegisteredStatusLogByDocumentIdx"
 		parameterType="int" resultMap="StatusLogMap">
 		select * from status_log where
-		document_idx=#{document_idx}
+		document_idx=#{documentIdx}
 		order by status_log_idx desc
 		limit 1
 	</select>
 	
 	<!-- 0603 추가 -->
 		<resultMap type="StatusLog" id="StatusLogMapForDashboard">
-		<id column="status_log_idx" property="status_log_idx" />
+		<id column="status_log_idx" property="statusLogIdx" />
 		<result column="comments" property="comments" />
 		<result column="regdate" property="regdate" />
 
@@ -51,7 +51,7 @@
 	</resultMap>
 	
 	<select id="select" parameterType="int" resultMap="StatusLogMapForDashboard">
-		select * from status_log where document_idx=#{document_idx}
+		select * from status_log where document_idx=#{documentIdx}
 	</select>
 	
 

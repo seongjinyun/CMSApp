@@ -5,7 +5,7 @@
 	<!-- master_code 한 개 조회 -->
 	<!-- returnType="MasterCode" -->
 	<select id="select" parameterType="int" resultType="MasterCode">
-		select * from mastercode where status_code=#{status_code}
+		select * from mastercode where status_code=#{statusCode}
 	</select>
 
 
