@@ -45,8 +45,8 @@ public class RestDocumentController {
 		Document document = documentRequest.getDocument();
 		VersionLog versionLog = documentRequest.getVersionLog();
 
-		log.debug("document 안의 folder_idx " + document.getFolder().getFolderIdx());
-		log.debug("document 안의 emp_idx is " + document.getEmp().getEmpIdx());
+		log.debug("document 안의 folderIdx " + document.getFolder().getFolderIdx());
+		log.debug("document 안의 empIdx is " + document.getEmp().getEmpIdx());
 		log.debug("version log title is " + versionLog.getTitle());
 		log.debug("version log content is " + versionLog.getContent());
 
@@ -71,9 +71,9 @@ public class RestDocumentController {
 	}
 	
 	@PostMapping("document/list/trash")
-	public ResponseEntity goToTrash(List<Integer> document_idxList, int emp_idx) {
-		for(int document_idx : document_idxList) {
-			trashService.insert(document_idx, emp_idx);
+	public ResponseEntity goToTrash(List<Integer> documentIdxList, int empIdx) {
+		for(int documentIdx : documentIdxList) {
+			trashService.insert(documentIdx, empIdx);
 		}
 		ResponseEntity entity = ResponseEntity.ok("삭제 성공");
 
@@ -81,7 +81,7 @@ public class RestDocumentController {
 	}
 	
 	@PostMapping
-	public ResponseEntity createFolder(int folder_idx, String folderName, int emp_idx) {
+	public ResponseEntity createFolder(int folderIdx, String folderName, int empIdx) {
 		Folder folder = new Folder();
 		
 		folderService.createFolder(null);
@@ -91,8 +91,8 @@ public class RestDocumentController {
 	}
 	
 	@PatchMapping("document/folder")
-	public ResponseEntity moveDocuement(@RequestParam("document_idxList")List<Integer> document_idxList) {
-		log.debug("컨트롤러 moveDocument 호출, 선택된 idx: " + document_idxList);
+	public ResponseEntity moveDocuement(@RequestParam("documentIdxList")List<Integer> documentIdxList) {
+		log.debug("컨트롤러 moveDocument 호출, 선택된 idx: " + documentIdxList);
 		return null;
 	}
 	

@@ -213,16 +213,16 @@ $(function(){
       $("#trash_btn").click(function(){
 	      if (checkSelected()){
 	        if (confirm("선택한 항목들을 휴지통으로 보낼까요?")) {
-	          let document_idxList = [];
-	          $('input[name="document_idx"]:checked').each(function () {
-	            document_idxList.push($(this).val());
+	          let documentIdxList = [];
+	          $('input[name="documentIdx"]:checked').each(function () {
+	            documentIdxList.push($(this).val());
 	          });
 	          $.ajax({
 	            method: "POST",
 	            url: "/document/list/trash",
 	            data: {
-	              document_idxList: document_idxList,
-	              //emp_idx: emp_idx
+	              documentIdxList: documentIdxList,
+	              //empIdx: empIdx
 	            },
 	            success: function(result, status, xhr){
 	              alert("성공적으로 휴지통에 보냈습니다");
@@ -237,12 +237,12 @@ $(function(){
     }
 
     function checkSelected(){
-      let selectedDocument_idx = [];
-      $('input[name="document_idx"]:checked').each(function () {
-        selectedDocument_idx.push($(this).val());
+      let selectedDocumentIdx = [];
+      $('input[name="documentIdx"]:checked').each(function () {
+        selectedDocumentIdx.push($(this).val());
       });
 
-      if (selectedDocument_idx.length < 1) {
+      if (selectedDocumentIdx.length < 1) {
         alert("하나 이상의 문서를 선택해주세요");
         event.stopImmediatePropagation();
         console.log("list.html 파일의 alert 호출");
@@ -253,7 +253,7 @@ $(function(){
     }
 
     function openMoveDirectoryModal() {
-      let selectedDocument_idx = [];
+      let selectedDocumentIdx = [];
      // if(checkSelected()){
         $('#moveDirectory').modal('show');
       //}
