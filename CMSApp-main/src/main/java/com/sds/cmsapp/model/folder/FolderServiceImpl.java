@@ -13,16 +13,12 @@ import com.sds.cmsapp.domain.Folder;
 import com.sds.cmsapp.domain.Trash;
 import com.sds.cmsapp.exception.FolderException;
 import com.sds.cmsapp.model.document.DocumentDAO;
-import com.sds.cmsapp.model.document.DocumentVersionDAO;
 import com.sds.cmsapp.model.emp.EmpDAO;
 import com.sds.cmsapp.model.trash.TrashDAO;
 
-import lombok.extern.slf4j.Slf4j;
-
-@Slf4j
 @Service
 public class FolderServiceImpl implements FolderService {
-	
+		
 	@Autowired
 	private FolderDAO folderDAO;
 	
@@ -36,51 +32,60 @@ public class FolderServiceImpl implements FolderService {
 	private EmpDAO empDAO;
 
 	@Override
-	public int moveDirectory(int document_idx, int targetFolderIdx) {
-		Document document = documentDAO.select(document_idx);
+	public int moveDirectory(final int documentIdx, final int targetFolderIdx) {
+		Document document = documentDAO.select(documentIdx);
 		document.setFolder(folderDAO.select(targetFolderIdx));
 		return documentDAO.update(document);
 	}
 
 	@Override
-	public int  createFolder(Folder folder) {
+	public int  createFolder(final Folder folder) {
 		return folderDAO.insert(folder);
 	}
 
 	@Override
 	@Transactional
-	public void deleteFolder(int folder_idx, int emp_idx) {
-		List<Folder> childFolderList = folderDAO.selectSub(folder_idx);
-		List<Document> documentList = documentDAO.selectByFolderIdx(folder_idx);
+	public void deleteFolder(final int folderIdx, final int empIdx) throws FolderException {
+		deleteFolder(folderIdx, empIdx, 0);
+	}
+	
+	private void deleteFolder(final int folderIdx, final  int empIdx, final int depth) throws FolderException {
+	
+		if (depth > 1000) { // 재귀 깊이 제한
+			throw new FolderException("재귀 깊이 초과: 폴더 삭제 과정에서 문제가 발생했습니다. 하위 폴더부터 삭제해주세요.");
+		}
+		List<Folder> childFolderList = folderDAO.selectSub(folderIdx);
+		List<Document> documentList = documentDAO.selectByFolderIdx(folderIdx);
 		if(documentList != null) {
 			for(Document document : documentList) {
 				Trash trash = new Trash();
 				trash.setDocument(document);
-				trash.setEmp(empDAO.selectByEmpIdx(emp_idx));
+				trash.setEmp(empDAO.selectByEmpIdx(empIdx));
 				trashDAO.insert(trash);
 			}
 		}
 		if(childFolderList != null) {
 			for(Folder folder : childFolderList) {
-				deleteFolder(folder.getFolderIdx(), emp_idx);
+				deleteFolder(folder.getFolderIdx(), empIdx, depth + 1);
+
 			}
 		}
-		folderDAO.delete(folder_idx);
+		folderDAO.delete(folderIdx);
 	}
 
 	@Override
-	public int updateFolder(Folder folder) {
+	public int updateFolder(final Folder folder) {
 		return folderDAO.update(folder);
 	}
 	
 	@Override
-	public Folder select(int folder_idx) {
-		return folderDAO.select(folder_idx); 
+	public Folder select(final int folderIdx) {
+		return folderDAO.select(folderIdx); 
 	}
 
 	@Override
-	public List<Folder> selectSub(int folder_idx) {
-		return folderDAO.selectSub(folder_idx);
+	public List<Folder> selectSub(final int folderIdx) {
+		return folderDAO.selectSub(folderIdx);
 	}
 
 	@Override
@@ -89,17 +94,17 @@ public class FolderServiceImpl implements FolderService {
 	}
 	
 	@Override
-	public int selectDepth(int folder_idx) {
+	public int selectDepth(final int folderIdx) {
 		int depth = 1;
-		Integer parentFolder_idx = folder_idx;
+		Integer parentFolderIdx = folderIdx;
 		Folder folder = null;
 		while(true) {
-			folder = folderDAO.select(parentFolder_idx);
+			folder = folderDAO.select(parentFolderIdx);
 			Folder parentFolder = folder.getParentFolder();
 			if (parentFolder == null) {
 				break;
 			}
-			parentFolder_idx = parentFolder.getFolderIdx();
+			parentFolderIdx = parentFolder.getFolderIdx();
 			depth++;
 			
 		} 
@@ -108,19 +113,19 @@ public class FolderServiceImpl implements FolderService {
 	
 	// 현재 폴더부터 최상위 폴더까지 리스트에 담은 후 순서 반전
 	@Override
-	public List<String> selectPath(int folder_idx) {
+	public List<String> selectPath(final int folderIdx) {
 		Folder folder = null; 
-		Integer parentFolder_idx = folder_idx;
+		Integer parentFolderIdx = folderIdx;
 		List<String> folderNameList = new ArrayList<String>();
-		folderNameList.add(folderDAO.select(folder_idx).getFolderName());
+		folderNameList.add(folderDAO.select(folderIdx).getFolderName());
 		while(true) {
-			folder = folderDAO.select(parentFolder_idx);
+			folder = folderDAO.select(parentFolderIdx);
 			Folder parentFolder = folder.getParentFolder();
 			if (parentFolder == null) {
 				break;
 			}
-			parentFolder_idx = parentFolder.getFolderIdx();
-			folderNameList.add(folderDAO.select(parentFolder_idx).getFolderName());
+			parentFolderIdx = parentFolder.getFolderIdx();
+			folderNameList.add(folderDAO.select(parentFolderIdx).getFolderName());
 		}
 		Collections.reverse(folderNameList);
 		return folderNameList;
@@ -130,7 +135,7 @@ public class FolderServiceImpl implements FolderService {
 		return folderDAO.selectTopFolder();
 	}
 	
-	public List<Folder> completeFolderList(List<Folder> folderList){
+	public List<Folder> completeFolderList(final List<Folder> folderList){
 		List<Folder> folderList1 = new ArrayList<Folder>();
 		List<Folder> folderList2 = new ArrayList<Folder>();
 		folderList1.addAll(folderList);
@@ -150,9 +155,9 @@ public class FolderServiceImpl implements FolderService {
 		return folderList;
 	}
 	
-	public Folder completeFolder(int folder_idx) throws FolderException{
+	public Folder completeFolder(final int folderIdx) throws FolderException{
 		int count = 0;
-		Folder folder = folderDAO.select(folder_idx);
+		Folder folder = folderDAO.select(folderIdx);
 		List<Folder> folderList1 = new ArrayList<Folder>();
 		List<Folder> folderList2 = new ArrayList<Folder>();
 		folderList1.add(folder);
@@ -177,24 +182,24 @@ public class FolderServiceImpl implements FolderService {
 	}
 	
 	
-	public Folder fillSub(Folder folder) {
+	public Folder fillSub(final Folder folder) {
 		List<Folder> subList = folderDAO.selectSub(folder.getFolderIdx());
 		folder.setChildFolderList(subList);
 		return folder;
 	}
 	
 	@Override
-	public Folder fillDocument(int folder_idx) {
-		Folder folder = folderDAO.select(folder_idx);
-		List<Document> documentList = documentDAO.selectByFolderIdx(folder_idx);
+	public Folder fillDocument(final int folderIdx) {
+		Folder folder = folderDAO.select(folderIdx);
+		List<Document> documentList = documentDAO.selectByFolderIdx(folderIdx);
 		folder.setDocumentList(documentList);
 		return folder;
 	}
 	
 	@Override
-	public Folder completeFolderWithDocument(int folder_idx) throws Throwable {
+	public Folder completeFolderWithDocument(final int folderIdx) throws FolderException {
 		int count = 0;
-		Folder folder = folderDAO.select(folder_idx);
+		Folder folder = folderDAO.select(folderIdx);
 		List<Folder> folderList1 = new ArrayList<Folder>();
 		List<Folder> folderList2 = new ArrayList<Folder>();
 		folderList1.add(folder);
@@ -220,4 +225,20 @@ public class FolderServiceImpl implements FolderService {
 		return folder;
 	}
 	
+	@Override
+	public List<Folder> selectByProjectIdx(final int projectIdx) {
+		return folderDAO.selectByProjectIdx();
+	}
+	
+	@Override
+	public Folder selectProjectRootFolder(final int projectIdx) {
+		Folder result = new Folder();
+		List<Folder> folderList = folderDAO.selectByProjectIdx();
+		for(Folder folder : folderList) {
+			if(folder.getParentFolder() == null) {
+				result = folder;
+			}
+		}
+		return result;
+	}
 }

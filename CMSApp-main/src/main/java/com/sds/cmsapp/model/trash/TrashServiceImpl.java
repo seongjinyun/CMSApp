@@ -36,9 +36,9 @@ public class TrashServiceImpl implements TrashService{
 	EmpDAO empDAO;
 
 	@Override
-	public int insert(Integer document_idx, Integer emp_idx) {
-		Document document = documentDAO.select(document_idx);
-		Emp emp = empDAO.selectByEmpIdx(emp_idx);
+	public int insert(final Integer documentIdx, final Integer empIdx) {
+		Document document = documentDAO.select(documentIdx);
+		Emp emp = empDAO.selectByEmpIdx(empIdx);
 		Trash trash = new Trash();
 		trash.setDocument(document);
 		trash.setEmp(emp);
@@ -46,16 +46,16 @@ public class TrashServiceImpl implements TrashService{
 	}
 
 	@Override
-	public int restore(Integer trash_idx) {
-		return trashDAO.delete(trash_idx);
+	public int restore(final Integer trashIdx) {
+		return trashDAO.delete(trashIdx);
 	}
 
 	@Override
 	@Transactional
-	public int delete(Integer trash_idx) {
-		Trash trash = trashDAO.select(trash_idx);
+	public int delete(final Integer trashIdx) {
+		Trash trash = trashDAO.select(trashIdx);
 		documentDAO.delete(trash.getDocument().getDocumentIdx());
-		int result = trashDAO.delete(trash_idx);
+		int result = trashDAO.delete(trashIdx);
 		
 		return result;
 	}
@@ -66,7 +66,7 @@ public class TrashServiceImpl implements TrashService{
 	}
 
 	@Override
-	public List selectAllWithRange(Map map) {
+	public List<Trash> selectAllWithRange(final Map<String, Integer> map) {
 		List<Trash> trashList = trashDAO.selectAllWithRange(map);
 		for (int i = 0; i < trashList.size(); i++) {
 			Trash trash = trashList.get(i);
@@ -78,9 +78,9 @@ public class TrashServiceImpl implements TrashService{
 	}
 
 	@Override
-	public boolean isTrash(Integer document_idx) {
+	public boolean isTrash(final Integer documentIdx) {
 		boolean flag = false;
-		if(trashDAO.selectByDocumentIdx(document_idx) != null) {
+		if(trashDAO.selectByDocumentIdx(documentIdx) != null) {
 			flag = true;
 		}
 		return flag;
