@@ -4,7 +4,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>AdminLTE 3 | Dashboard</title>
+<title>Dashboard | 나의 활동</title>
 
 <!-- data-table css -->
 <link rel="stylesheet" href="/admin/plugins/datatables-bs4/css/dataTables.bootstrap4.min.css">
@@ -41,7 +41,7 @@ button.show_list:hover {
 		<!-- /.navbar -->
 
 		<!-- Main Sidebar Container -->
-		<th:block th:replace="~{fragments/admin_sidebar :: admin_sidebar}" />
+		<th:block th:replace="~{fragments/sidebar :: sidebar}" />
 
 		<!-- /.sidebar -->
 
@@ -377,7 +377,7 @@ button.show_list:hover {
 			};
 
 		// 요약 탭 -> 결재 상태에 따른 문서 개수만 가져오기
-		function getSummaryCount(status_code) {
+		function getSummaryCount(statusCode) {
 			$.ajax({
 				type:"GET"  //전송타입
 				, url:"/dashboard/list/count"
@@ -393,10 +393,10 @@ button.show_list:hover {
 		}
 		
 		// 요약 탭 -> 결재 상태에 따라 문서 목록 데이터 가져오기
-		function getSummaryData(status_code) {
+		function getSummaryData(statusCode) {
 			$.ajax({
 				type:"GET",  //전송타입
-				url:"/dashboard/list?status_code=" + status_code,
+				url:"/dashboard/list?statusCode=" + statusCode,
 				success: function (result, status, xhr) {
 					alert('문서 불러오기 성공');
 					
@@ -410,11 +410,11 @@ button.show_list:hover {
 					
 					// 배지 색 한번만 결정
 					let statusBadge = null;
-					if (status_code == 200) {
+					if (statusCode == 200) {
 						statusBadge = "badge-success";
-					} else if (status_code == 300) {
+					} else if (statusCode == 300) {
 						statusBadge = "badge-info";
-					} else if (status_code == 500) {
+					} else if (statusCode == 500) {
 						statusBadge = "badge-danger";
 					}
 					
@@ -423,10 +423,10 @@ button.show_list:hover {
 						tr += `
 							<tr>
 							<td>${i+1}</td>
-							<td><a href="#">${result[i].document_idx}. ${result[i].title}, ${result[i].project_name}</a></td>
+							<td><a href="#">${result[i].documentIdx}. ${result[i].title}, ${result[i].projectName}</a></td>
 							<td>${result[i].version}</td>
-							<td>${result[i].emp_name}<br>${result[i].dept_name}</td>
-							<td><span class="badge ${statusBadge}">${result[i].status_name}</span></td>
+							<td>${result[i].empName}<br>${result[i].deptName}</td>
+							<td><span class="badge ${statusBadge}">${result[i].statusName}</span></td>
 							<td>${result[i].comments}
 							</td>
 							<td>${result[i].regdate}</td>
@@ -443,12 +443,12 @@ button.show_list:hover {
 		}
 		
 		// 전체 보기 탭 -> 필터에 따라 문서 목록 가져오기
-		function getFilteredData(status_code, startDate, endDate, emp_idx, dept_idx, projectIds) {
+		function getFilteredData(statusCode, startDate, endDate, empIdx, deptIdx, projectIds) {
 			$.ajax({
 				type:"GET",  //전송타입
-				url:"/dashboard/list?status_code=" + status_code 
+				url:"/dashboard/list?statusCode=" + statusCode
 						+ "&startDate=" + startDate + "&endDate=" + endDate 
-						+ "&emp_idx=" + emp_idx + "&dept_idx=" + dept_idx
+						+ "&empIdx=" + empIdx + "&deptIdx=" + deptIdx
 						+ "&projectIds=" + projectIds,
 				success: function (result, status, xhr) {
 					alert('문서 불러오기 성공');
@@ -464,11 +464,11 @@ button.show_list:hover {
 						// 배지 색 정하기
 						let statusBadge = null;
 						
-						if (result[i].status_code == 200) {
+						if (result[i].statusCode == 200) {
 							statusBadge = "badge-success";
-						} else if (result[i].status_code == 300) {
+						} else if (result[i].statusCode == 300) {
 							statusBadge = "badge-info";
-						} else if (result[i].status_code == 500) {
+						} else if (result[i].statusCode == 500) {
 							statusBadge = "badge-danger";
 						}
 						
@@ -509,7 +509,7 @@ button.show_list:hover {
 	            type: "GET",
 	            url: "/admin/project/list",
 	            success: function(result) {
-	            	alert("loadProject 통신 성공");
+	            	//alert("loadProject 통신 성공");
 	                // 서버로부터 받은 JSON 데이터를 파싱하여 옵션으로 추가
 	                $('#project-tag').empty(); // 기존 옵션들을 모두 지우기
 	                	for (let i = 0; i < result.length; i++) {

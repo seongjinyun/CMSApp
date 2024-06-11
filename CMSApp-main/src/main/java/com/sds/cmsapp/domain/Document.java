@@ -4,7 +4,7 @@ import lombok.Data;
 
 @Data
 public class Document {
-	private int document_idx;
+	private int documentIdx;
 	private int hit;
 	private Folder folder;
 	

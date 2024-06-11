@@ -55,9 +55,8 @@
                       <i class="fas fa-search"></i>
                     </div>
                   </div>
-                  <input type="button" class="btn btn-default btn-sm ml-1 mr-1" value="필터" id="filterButton">
                   <input type="button" class="btn btn-default btn-sm" value="글 작성" id="write">
-                  <input type="hidden" name="folder_idx" th:value="${folder_idx}">
+                  <input type="hidden" name="folderIdx" th:value="${folderIdx}">
                 </div>
                 
               </div>
@@ -129,13 +128,13 @@
 		                        <label for="check1"></label>
                      		</div>
 				        </td>
-				        <td class="mailbox-star"><a href="#"><i class="fa fa-star" aria-hidden="true"></i></a></td>
+				        <td class="mailbox-star"><a href="#"><i class="fa fa-star-o" aria-hidden="true"></i></a></td>
 				        <!-- title, 업데이트 날짜, document가 아닌 versionLog에서 가져와야함.\ -->
-				        <td><a th:href="@{/document/detail(document_idx=${documentVersion.document.document_idx}, folder_idx=${documentVersion.document.folder.folder_idx})}" th:text="${documentVersion.versionLog.title}">튜토리얼</a></td>
+				        <td><a th:href="@{/document/detail(documentIdx=${documentVersion.document.documentIdx}, folderIdx=${documentVersion.document.folder.folderIdx})}" th:text="${documentVersion.versionLog.title}">튜토리얼</a></td>
 				        <td th:text="${documentVersion.versionLog.version}">v2.1</td>
 				        <td th:text="${documentVersion.versionLog.regdate}">2024.05.23 16:44</td>
 				        <!-- 상태는 masterCode 에서 가져와야함  -->
-				        <td>리뷰 중</td>
+				        <td th:text="${documentVersion.statusCode.statusName}">리뷰 중</td>
 				    </tr>
 				</tbody>
                 </table>
@@ -174,9 +173,11 @@
 	<!-- /.디렉토리 변경 모달 스크립트 -->
 <script>
 $(function(){
-	checkBoxAll();
-	write();
-	searchFile();
+    checkBoxAll();
+    write();
+    searchFile();
+    initializeOpnMoveDirectoryModal();
+    goToTrash();
   });
   
   function checkBoxAll(){
@@ -192,7 +193,7 @@ $(function(){
   function write(){
 	  $("#write").click(function() {
 			//글쓰기 폼 요청
-			location.href="/document/writeform?folder_idx="+$("input[name='folder_idx']").val();
+			location.href="/document/writeform?folderIdx="+$("input[name='folderIdx']").val();
 		});
   }
 	  
@@ -205,15 +206,67 @@ $(function(){
 		});
 	  }
 
-		
-		function goToTrash(){
-			if(confirm("선택한 항목들을 휴지통으로 보낼까요?")){
-				alert("슛~");
-			}
-		}
-	
+////////////////////////////////////////////////////
+    
+
+    function goToTrash() {
+      $("#trash_btn").click(function(){
+	      if (checkSelected()){
+	        if (confirm("선택한 항목들을 휴지통으로 보낼까요?")) {
+	          let documentIdxList = [];
+	          $('input[name="documentIdx"]:checked').each(function () {
+	            documentIdxList.push($(this).val());
+	          });
+	          $.ajax({
+	            method: "POST",
+	            url: "/document/list/trash",
+	            data: {
+	              documentIdxList: documentIdxList,
+	              //empIdx: empIdx
+	            },
+	            success: function(result, status, xhr){
+	              alert("성공적으로 휴지통에 보냈습니다");
+	            },
+	            error: function(status, xhr, err){
+	              alert("휴지통에 보내는데 실패했어요.");
+	            }
+	          });
+	        }
+	      }  
+      })
+    }
+
+    function checkSelected(){
+      let selectedDocumentIdx = [];
+      $('input[name="documentIdx"]:checked').each(function () {
+        selectedDocumentIdx.push($(this).val());
+      });
+
+      if (selectedDocumentIdx.length < 1) {
+        alert("하나 이상의 문서를 선택해주세요");
+        event.stopImmediatePropagation();
+        console.log("list.html 파일의 alert 호출");
+        return false;
+      } else{
+        return true;
+      }
+    }
+
+    function openMoveDirectoryModal() {
+      let selectedDocumentIdx = [];
+     // if(checkSelected()){
+        $('#moveDirectory').modal('show');
+      //}
+    }
+
+    function initializeOpenMoveDirectoryModal() {
+      $('#openMoveDirectoryModalButton').on('click', openMoveDirectoryModal);
+    }
 
 
-</script>
+
+
+  </script>
 </body>
+
 </html>

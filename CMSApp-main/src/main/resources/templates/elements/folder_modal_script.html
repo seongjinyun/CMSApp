@@ -1,71 +1,81 @@
 <th:block th:fragment="folder_modal_script">
-	<script>
+	<script type="text/javascript">
 		let jsonData;
 		let jsTreeData;
-		function getFolderJson() {
-			$.ajax({
-				method: "GET",
-				url: "/document/folder/list",
-				contentType: "application/json",
-				success: function (result, status, xhr) {
-					jsonData = JSON.stringify(result);
-					jsTreeData = jsonData.map(convertToJsTree);
-					console.log(jsTreeData);
-				},
-				error: function (status, xhr, err) {
-					alert("폴더트리구조를 로드하는데 실패했습니다");
-				}
-			});
-		}
 
 		function convertToJsTree(folderDTO) {
 			return {
-				id: folderDTO.folder_idx,
-				text: folderDTO.folder_name,
+				id: folderDTO.folderIdx,
+				text: folderDTO.folderName,
 				icon: "fa fa-folder",
 				children: folderDTO.childFolderList.map(convertToJsTree),
 				data: {
 					project: folderDTO.project,
 					regdate: folderDTO.regdate,
-					parent_folder: folderDTO.parent_folder
+					parentFolder: folderDTO.parentFolder
 				}
 			};
 		}
 
-		
+		function getFolderJson(callback) {
+			$.ajax({
+				method: "GET",
+				url: "/document/folder/list",
+				contentType: "application/json",
+				success: function (result, status, xhr) {
+					jsonData = result;
+					console.log("jsonData : ");
+					console.log(jsonData);
+
+					jsTreeData = jsonData.map(convertToJsTree);  // 여기로 이동
+					console.log("jsTreeData:");
+					console.log(jsTreeData);
+
+					callback();  // 데이터 로딩이 완료되면 콜백 호출
+				},
+				error: function (status, xhr, err) {
+					alert("실패~");
+				}
+			});
+		}
+
 		// 파일탐색기(모달) 관련
 		$(document).ready(function () {
 			initializeModal();
-			initializeDirectoryTree();
+			// initializeDirectoryTree();  // 여기서 호출하지 않음
 		});
 
 		function initializeModal() {
-			$('#directoryModal').on('shown.bs.modal', function () {
-				initializeDirectoryTree();
+			$('#moveDirectory').on('shown.bs.modal', function () {
+				initializeDirectoryTree();  // 모달이 표시될 때마다 트리 초기화
 			});
+			
 		}
 
 		// data 안에 배열로 자식구조를 구현합니다(jsTree)
 		function initializeDirectoryTree() {
-			getFolderJson();
-			$('#jstree_demo_div').jstree({
-				'core': {
-					'data': jsTreeData
-				}
-			});
+			getFolderJson(function () {  // 콜백 함수를 전달
+				$('#jstree_demo_div').jstree({
+					'core': {
+						'data': jsTreeData
+					}
+				});
 
-			$('#jstree_demo_div').on('changed.jstree', function (e, data) {
-				if (data.selected.length > 0) {
-					updateBreadcrumb(data.instance.get_path(data.selected[0]));
-				}
+				$('#jstree_demo_div').on('changed.jstree', function (e, data) {
+					if (data.selected.length > 0) {
+						updateBreadcrumb(data.instance.get_path(data.selected[0], ' > '));
+					}
+				});
 			});
 		}
 
 		function updateBreadcrumb(path) {
 			const breadcrumb = $('#breadcrumb');
 			breadcrumb.empty();
-			path.forEach((segment, index) => {
-				if (index === path.length - 1) {
+
+			const segments = Array.isArray(path) ? path : path.split(' > ');
+			segments.forEach((segment, index) => {
+				if (index === segments.length - 1) {
 					breadcrumb.append(`<li class="breadcrumb-item active" aria-current="page">${segment}</li>`);
 				} else {
 					breadcrumb.append(`<li class="breadcrumb-item">${segment}</li>`);
@@ -74,16 +84,53 @@
 		}
 
 		function selectDirectory() {
-
 			var selectedNode = $('#jstree_demo_div').jstree("get_selected", true);
 			if (selectedNode.length > 0) {
-				var selectedPath = $('#jstree_demo_div').jstree().get_path(selectedNode[0], '/');
-				console.log('Selected Directory:', selectedPath);
+				var selectedFolderIdx = selectedNode[0].id;
+				console.log('Selected Directory ID:', selectedFolderIdx);
+				
+				let selectedDocumentIdx = [];
+	          	$('input[name="documentIdx"]:checked').each(function() {
+	              selectedDocumentIdx.push($(this).val());
+	          	});
+	          
+	          	if (selectedDocumentIdx.length < 1){
+	        	  	alert("하나 이상의 문서를 선택해주세요");
+	        	  	return;
+	          	}
+
+				// 서버로 folder_idx 값을 전달하는 AJAX 요청
+				$.ajax({
+					method: "PATCH",
+					url: "/document/folder",
+					contentType: "application/json",
+					data: JSON.stringify({ folderIdx: selectedFolderIdx }),
+					success: function (result, status, xhr) {
+						console.log("성공적으로 서버에 변경된 Idx 전송");
+					},
+					error: function (status, xhr, err) {
+						console.log("서버에 변경된 Idx 전송 실패");
+					}
+				});
 			} else {
 				console.log('No directory selected.');
 			}
-			$('#directoryModal').modal('hide');
+			$('#moveDirectory').modal('hide');
+			removeModalBackdrop(); // 모달 배경 제거
 		}
+
+		// 모달 배경 제거
+		function removeModalBackdrop() {
+			$('.modal-backdrop').remove();
+			$('body').removeClass('modal-open');
+			$('body').css('padding-right', '');
+		}
+
+		// 모달이 닫힐 때마다 배경을 제거
+		$('#moveDirectory').on('hidden.bs.modal', function () {
+			removeModalBackdrop();
+		});
+
 		// 파일탐색기 관련 end
 	</script>
 </th:block>

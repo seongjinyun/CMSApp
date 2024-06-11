@@ -21,6 +21,9 @@ public class DocumentServiceImpl implements DocumentService {
 	@Autowired
 	private DocumentDAO documentDAO;
 	
+	@Autowired
+	private DocumentDetailDAO documentDetailDAO;
+	
 	// 모든 문서 조회
 	public List selectAll(Map map) {
 		return null;
@@ -31,20 +34,20 @@ public class DocumentServiceImpl implements DocumentService {
 	};
 	
 	// 결재 상태별 문서 수
-	public int countForDashboard(int status_code) {
-		return documentDAO.countForDashboard(status_code);
+	public int countForDashboard(int statusCode) {
+		return documentDAO.countForDashboard(statusCode);
 	};
 
 	// 선택 문서 조회
 	
 	// returnType="Document"
-	public Document select(int document_idx) {
-		return documentDAO.select(document_idx);
+	public Document select(int documentIdx) {
+		return documentDAO.select(documentIdx);
 	}; 
 	
 	// returnMap="DocumentMap"
-	public Document selectByDocumentIdx(int document_idx) {
-		return documentDAO.selectByDocumentIdx(document_idx);
+	public Document selectByDocumentIdx(int documentIdx) {
+		return documentDAO.selectByDocumentIdx(documentIdx);
 	}; 
 	
 	@Transactional
@@ -86,13 +89,19 @@ public class DocumentServiceImpl implements DocumentService {
 	}
 	
 	//document/detail 문서 상세보기 
-	public DocumentVersion documentDetailSelect(DocumentVersion documentVersion) {
-		return documentDAO.documentDetailSelect(documentVersion);
+	public DocumentVersion documentDetailSelect(int documentIdx) {
+	    
+        return documentDetailDAO.documentDetailSelect(documentIdx);
 	}
 	
 	@Override // 임시로 만들어뒀습니다 -박준형
-	public int delete(int document_idx) {
-		return documentDAO.delete(document_idx);
+	public int delete(int documentIdx) {
+		return documentDAO.delete(documentIdx);
+	}
+	
+	@Override // 박준형 추가
+	public List<Document> selectByFolderIdx(int folder_idx) {
+		return documentDAO.selectByFolderIdx(folder_idx);
 	}
 
 

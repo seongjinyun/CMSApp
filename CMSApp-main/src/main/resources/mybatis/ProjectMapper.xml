@@ -5,15 +5,15 @@
 	<!-- 프로젝트 추가 -->
 	<insert id="insert" parameterType="Project">
 	    insert into project(project_name)
-	    values(#{project_name});
-	    <selectKey keyColumn="project_idx" keyProperty="project_idx" resultType="int" order="AFTER">
+	    values(#{projectName});
+	    <selectKey keyColumn="project_idx" keyProperty="projectIdx" resultType="int" order="AFTER">
 	        select last_insert_id() as project_idx
 	    </selectKey>
 	</insert>
 	
 	<!-- project_idx가 가리키는 프로젝트 조회 -->
 	<select id="selectByProjectIdx" parameterType="int" resultType="Project">
-		select * from project where project_idx=#{project_idx}
+		select * from project where project_idx=#{projectIdx}
 	</select>
 	
 	<!-- admin dashboard의 프로젝트 필터를 위한 select -->

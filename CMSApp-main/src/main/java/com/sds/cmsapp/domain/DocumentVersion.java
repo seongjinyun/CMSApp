@@ -4,7 +4,7 @@ import lombok.Data;
 
 @Data
 public class DocumentVersion {
-	private int document_version_idx;
+	private int documentVersionIdx;
 
 	// 식별 관계
 	private Document document;
@@ -13,5 +13,5 @@ public class DocumentVersion {
 	private VersionLog versionLog;
 	
 	//상태 코드
-	private MasterCode status_code;
+	private MasterCode statusCode;
 }

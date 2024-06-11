@@ -14,26 +14,26 @@ public class DeptServiceImpl implements DeptService {
 	private DeptDAO deptDAO;
 	
 	@Override
-	public int insert(Dept dept) {
+	public int insert(final Dept dept) {
 		// TODO Auto-generated method stub
 		deptDAO.insert(dept);
-		return dept.getDept_idx();
+		return dept.getDeptIdx();
 	}
 
 	@Override
-	public List selectAllDeptName() {
+	public List<Dept> selectAllDeptName() {
 		// TODO Auto-generated method stub
 		return deptDAO.selectAllDeptName();
 	}
 	
 	@Override
-	public List selectAll() {
+	public List<Dept> selectAll() {
 		// TODO Auto-generated method stub
 		return deptDAO.selectAll();
 	}
 	
 	@Override
-	public Dept selectByDeptIdx(int dept_idx) {
-		return deptDAO.selectByDeptIdx(dept_idx);
+	public Dept selectByDeptIdx(final int deptIdx) {
+		return deptDAO.selectByDeptIdx(deptIdx);
 	}
 }

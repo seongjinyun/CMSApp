@@ -4,7 +4,7 @@ import lombok.Data;
 
 @Data
 public class VersionLog {
-	private int version_log_idx;
+	private int versionLogIdx;
 
 	private String version;
 	private String title;

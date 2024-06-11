@@ -4,11 +4,11 @@
 	
 	<!-- resultType="Document" -->
  	<select id="select" parameterType="int" resultType="Document">
-		select * from document where document_idx=#{document_idx}
+		select * from document where document_idx=#{documentIdx}
 	</select>
 	
 	<resultMap type="Document" id="DocumentMap">
-		<id 			column="document_idx" 	property="document_idx"/>
+		<id 			column="document_idx" 	property="documentIdx"/>
 		<result 		column="hit" 				property="hit"/>		
 			
 			<!-- 하나만 가져오기 -->
@@ -22,13 +22,13 @@
 	
 	<!-- resultMap="DocumentMap" -->
 	<select id="selectByDocumentIdx" parameterType="int" resultMap="DocumentMap">
-		select * from document where document_idx=#{document_idx}
+		select * from document where document_idx=#{documentIdx}
 	</select>
 	
     <!-- 문서 삽입 -->
     <insert id="documentInsert" parameterType="Document">
-        INSERT INTO document (emp_idx, folder_idx) VALUES (#{emp.emp_idx}, #{folder.folder_idx})
-        <selectKey keyColumn="document_idx" keyProperty="document_idx" resultType="int" order="AFTER">
+        INSERT INTO document (emp_idx, folder_idx) VALUES (#{emp.empIdx}, #{folder.folderIdx})
+        <selectKey keyColumn="document_idx" keyProperty="documentIdx" resultType="int" order="AFTER">
 			select last_insert_id() as document_idx
 		</selectKey>
     </insert>
@@ -39,35 +39,40 @@
     VALUES (#{branched_version_log_idx},#{emp_idx},#{project_idx},#{folder_idx},#{document_idx},#{version}, #{title}, #{content}, #{comments});
      -->
     INSERT INTO version_log(emp_idx,document_idx,version,title,content,comments) 
-    VALUES (7,#{document.document_idx}, 1,#{title}, #{content},#{comments})
+    VALUES (7,#{document.documentIdx}, 1,#{title}, #{content},#{comments})
     
-        <selectKey keyColumn="version_log_idx" keyProperty="version_log_idx" resultType="int" order="AFTER">
+        <selectKey keyColumn="version_log_idx" keyProperty="versionLogIdx" resultType="int" order="AFTER">
 			select last_insert_id() as version_log_idx
 		</selectKey>
     </insert>
     
     <insert id="documentVersionInsert" parameterType="DocumentVersion">
     	insert into document_version (document_idx, version_log_idx, status_code)
-    	values (#{document.document_idx}, #{versionLog.version_log_idx}, 200)
+    	values (#{document.documentIdx}, #{versionLog.versionLogIdx}, 100)
     </insert>
 	
 	<!-- document/list 문서 리스트 조회 -->
 	<resultMap type="DocumentVersion" id="DocumentListSelectMap">
-		<id column="document_version_idx" property="document_version_idx"/>
+		<id column="document_version_idx" property="documentVersionIdx"/>
 		
 		<association property="document" javaType="Document">
-			<id property="document_idx" column="document_idx"/>
+			<id property="documentIdx" column="document_idx"/>
 			
 			<association property="folder" javaType="Folder">
-				<id property="folder_idx" column="folder_idx"/>
+				<id property="folderIdx" column="folder_idx"/>
 			</association>
 		</association>
 		
 		<association property="versionLog" javaType="VersionLog">
-			<id property="version_log_idx" column="version_log_idx"/>
+			<id property="versionLogIdx" column="version_Log_Idx"/>
 			<result property="version" column="version"/>
 			<result property="title" column="title"/>
 			<result property="regdate" column="regdate"/>
+		</association>
+		
+		<association property="statusCode" javaType="MasterCode">
+			<id property="statusCode" column="status_code"/>
+			<result property="statusName" column="status_name"/>
 		</association>
 	</resultMap>
 	
@@ -76,33 +81,36 @@
     <select id="documentListSelect" resultMap="DocumentListSelectMap" parameterType="java.util.Map">
         SELECT 
 	        dv.document_version_idx,
+	        dv.status_code,
 	        d.document_idx,
 	        d.folder_idx,
 	        vl.version_log_idx,
 	        vl.version,
 	        vl.title,
-	        vl.regdate
+	        vl.regdate,
+	        mc.status_name
 	    FROM Document_Version dv
 	    JOIN Document d ON dv.document_idx = d.document_idx
 	    JOIN Folder f ON d.folder_idx = f.folder_idx
 	    JOIN Version_Log vl ON dv.version_log_idx = vl.version_log_idx
-	    where d.folder_idx = #{folder_idx};
+	    JOIN masterCode mc On dv.status_code = mc.status_code
+	    where d.folder_idx = #{folderIdx};
     </select>
     
     <!-- 0603-4 추가 -->
 	<resultMap type="Document" id="DocumentMapForDashboard">
-		<id 	column="document_idx" property="document_idx"/>
+		<id 	column="document_idx" property="documentIdx"/>
 			
 			<!-- status_log -->
 	 		<association property="latestRegisteredStatusLog" javaType="StatusLog">
-				 <id property="status_log_idx" column="status_log_idx"/>
+				 <id property="statusLogIdx" column="status_log_idx"/>
 				<result property="comments" column="comments"/>
 				<result property="regdate" column="regdate"/>
 				
 				<!-- mastercode -->
 				<association property="masterCode" javaType="MasterCode">
-					<id property="status_code" column="status_code"/>
-					<result property="status_name" column="status_name"/>
+					<id property="statusCode" column="status_code"/>
+					<result property="statusName" column="status_name"/>
 				</association>
 				
 				<!-- emp (Map) -->
@@ -149,16 +157,16 @@
         
         where trash_idx is null
 		
-		<if test="status_code != 900">
-			and s.status_code=#{status_code}
+		<if test="statusCode != 900">
+			and s.status_code=#{statusCode}
 		</if>
 		
-		<if test="end_date != null">
-			and s.regdate <![CDATA[<=]]> #{end_date}
+		<if test="endDate != null">
+			and s.regdate <![CDATA[<=]]> #{endDate}
 		</if>
 		
-		<if test="start_date != null">
-			and s.regdate <![CDATA[>=]]> #{start_date}
+		<if test="startDate != null">
+			and s.regdate <![CDATA[>=]]> #{startDate}
 		</if>
 		
 		<if test="projects != null">
@@ -190,6 +198,14 @@
         group by status_code
         having status_code=#{status_code};
         
+	</select>
+	
+	<delete id="delete" parameterType="int">
+		delete from document where document_idx = #{documentIdx}
+	</delete>
+	
+	<select id="selectByFolderIdx" parameterType="int" resultType="Document">
+		select * from document where folder_idx = #{folderIdx}
 	</select>
     
 </mapper>

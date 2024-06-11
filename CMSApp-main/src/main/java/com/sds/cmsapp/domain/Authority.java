@@ -4,7 +4,7 @@ import lombok.Data;
 
 @Data
 public class Authority {
-	private int authrity_idx;
-	private String authority_name;
-	private int authority_code;
+	private int authrityIdx;
+	private String authorityName;
+	private int authorityCode;
 }
