@@ -103,44 +103,33 @@
 					        </div>
 					    </div>
 					    <div class="card-body">
-					    	<table id="example2" class="table table-bordered table-striped">
-					            <thead>
-					                <tr>
-					                    <th style="vertical-align:middle; text-align: center;"><input style="zoom:1.5;" type='checkbox' name='chkAll' onclick='chkChange(this);'></th>
-					                    <th style="vertical-align:middle; text-align: center;">역할명</th>
-					                    <th style="vertical-align:middle; text-align: center;">보유 권한</th>
-					                </tr>
-					            </thead>
-					            <tbody>
-					                <tr>
-					                    <td style="vertical-align:middle; text-align: center;"><input style="zoom:1.5;" type='checkbox' name='chkProc' value=''/> </td>
-					                    <td style="vertical-align:middle; text-align: center;">Draft Writer</td>
-					                    <td>
-						                    <div class="form-group">
-												<select class="select2 form-control" multiple="multiple" data-placeholder="Select authorities" style="width: 100%;">
-													<option>Draft Writing</option>
-													<option>Reviewing</option>
-													<option>Publishing</option>
-												</select>
-											</div>
-										</td>
-					                </tr>
-					                <tr>
-					                    <td style="vertical-align:middle; text-align: center;"><input style="zoom:1.5;" type='checkbox' name='chkProc' value=''/> </td>
-					                    <td style="vertical-align:middle; text-align: center;">Editor</td>
-					                    <td>
-						                    <div class="form-group">
-												<select class="select2 form-control" multiple="multiple" data-placeholder="Select authorities" style="width: 100%;">
-													<option>Draft Writing</option>
-													<option>Reviewing</option>
-													<option>Publishing</option>
-												</select>
-											</div>
-										</td>
-					                </tr>
-					            </tbody>    
-					        </table>
-					        <input type="submit" value="Save Changes" class="btn btn-success float-right" style="height: 38px; margin-top: 20px;">
+					    	<form class="form-horizontal" id="role_auth_table">
+							     <table class="table table-bordered table-striped">
+					                <thead>
+					                    <tr>
+					                        <th style="vertical-align:middle; text-align: center;">역할명</th>
+					                        <th style="vertical-align:middle; text-align: center;">보유 권한</th>
+					                    </tr>
+					                </thead>
+					                <tbody>
+					                    <tr th:each="entry : ${roleAuthMap.entrySet()}">
+							                <input type="hidden" name="role_codes" th:value="${entry.key.role_code}">
+							                <td style="vertical-align: middle; text-align: center;" th:text="${entry.key.role_name}"></td>
+							                <td>
+							                    <div class="form-group">
+							                        <select class="select2 form-control" name="authorities_${entry.key.role_code}" multiple="multiple" style="width: 100%;">
+							                            <option th:each="authority : ${authList}" 
+							                                    th:value="${authority.authority_code}"
+							                                    th:text="${authority.authority_name}"
+							                                    th:selected="${entry.value.contains(authority)}"></option>
+							                        </select>
+							                    </div>
+							                </td>
+							            </tr>
+					                </tbody>
+					            </table>
+					        </form>
+					        <input type="button" id="btn_save_role_auth_changes" value="Save Changes" class="btn btn-success float-right" style="height: 38px; margin-top: 20px;">
 					    </div>
 					</div>
     			</div>
@@ -168,3 +157,52 @@
 
 </body>
 </html>
+
+<script>
+	
+	function saveRoleAuthChanges(){
+		let data = {
+	        role_codes: [],
+	        authorities: {}
+	    };
+
+	    // Collect role codes and corresponding authorities
+	    $('#role_auth_table').find('tr').each(function() {
+	        let roleCode = $(this).find('input[name="role_codes"]').val();
+	        if (roleCode) {
+	            data.role_codes.push(roleCode);
+
+	            let authorities = $(this).find('select').val();
+	            if (authorities) {
+	                data.authorities[roleCode] = authorities;
+	            }
+	        }
+	    });
+		
+		$.ajax({
+            url: '/settings/roleauth/update',
+            type: 'POST',
+            contentType: 'application/json',
+            data: JSON.stringify(data),
+            success: function(response) {
+                if(response.success) {
+                    alert("Changes saved successfully.");
+                } else {
+                    alert("Failed to save changes.");
+                }
+            },
+            error: function(jqXHR, textStatus, errorThrown) {
+                console.error("Error:", errorThrown);
+                alert("An error occurred while saving changes.");
+            }
+        });
+	}
+	
+	
+	$(function() {
+		$("#btn_save_role_auth_changes").click(function() {
+            saveRoleAuthChanges();
+        });
+	});
+	
+</script>
