@@ -62,7 +62,7 @@ public class FolderServiceImpl implements FolderService {
 		}
 		if(childFolderList != null) {
 			for(Folder folder : childFolderList) {
-				deleteFolder(folder.getFolder_idx(), emp_idx);
+				deleteFolder(folder.getFolderIdx(), emp_idx);
 			}
 		}
 		folderDAO.delete(folder_idx);
@@ -95,11 +95,11 @@ public class FolderServiceImpl implements FolderService {
 		Folder folder = null;
 		while(true) {
 			folder = folderDAO.select(parentFolder_idx);
-			Folder parentFolder = folder.getParent_folder();
+			Folder parentFolder = folder.getParentFolder();
 			if (parentFolder == null) {
 				break;
 			}
-			parentFolder_idx = parentFolder.getFolder_idx();
+			parentFolder_idx = parentFolder.getFolderIdx();
 			depth++;
 			
 		} 
@@ -112,15 +112,15 @@ public class FolderServiceImpl implements FolderService {
 		Folder folder = null; 
 		Integer parentFolder_idx = folder_idx;
 		List<String> folderNameList = new ArrayList<String>();
-		folderNameList.add(folderDAO.select(folder_idx).getFolder_name());
+		folderNameList.add(folderDAO.select(folder_idx).getFolderName());
 		while(true) {
 			folder = folderDAO.select(parentFolder_idx);
-			Folder parentFolder = folder.getParent_folder();
+			Folder parentFolder = folder.getParentFolder();
 			if (parentFolder == null) {
 				break;
 			}
-			parentFolder_idx = parentFolder.getFolder_idx();
-			folderNameList.add(folderDAO.select(parentFolder_idx).getFolder_name());
+			parentFolder_idx = parentFolder.getFolderIdx();
+			folderNameList.add(folderDAO.select(parentFolder_idx).getFolderName());
 		}
 		Collections.reverse(folderNameList);
 		return folderNameList;
@@ -136,7 +136,7 @@ public class FolderServiceImpl implements FolderService {
 		folderList1.addAll(folderList);
 		while(true) {
 			for (Folder folder : folderList1) {			
-				List<Folder> subList = folderDAO.selectSub(folder.getFolder_idx());				
+				List<Folder> subList = folderDAO.selectSub(folder.getFolderIdx());				
 				folder.setChildFolderList(subList);
 				folderList2.addAll(subList);
 			}
@@ -158,7 +158,7 @@ public class FolderServiceImpl implements FolderService {
 		folderList1.add(folder);
 		while(true) {
 			for (Folder folderDTO : folderList1) {			
-				List<Folder> subList = folderDAO.selectSub(folderDTO.getFolder_idx());				
+				List<Folder> subList = folderDAO.selectSub(folderDTO.getFolderIdx());				
 				folderDTO.setChildFolderList(subList);
 				folderList2.addAll(subList);
 			}
@@ -178,7 +178,7 @@ public class FolderServiceImpl implements FolderService {
 	
 	
 	public Folder fillSub(Folder folder) {
-		List<Folder> subList = folderDAO.selectSub(folder.getFolder_idx());
+		List<Folder> subList = folderDAO.selectSub(folder.getFolderIdx());
 		folder.setChildFolderList(subList);
 		return folder;
 	}
@@ -200,9 +200,9 @@ public class FolderServiceImpl implements FolderService {
 		folderList1.add(folder);
 		while(true) {
 			for (Folder folderDTO : folderList1) {			
-				List<Folder> subList = folderDAO.selectSub(folderDTO.getFolder_idx());				
+				List<Folder> subList = folderDAO.selectSub(folderDTO.getFolderIdx());				
 				folderDTO.setChildFolderList(subList);
-				List<Document> documentList = documentDAO.selectByFolderIdx(folderDTO.getFolder_idx());
+				List<Document> documentList = documentDAO.selectByFolderIdx(folderDTO.getFolderIdx());
 				folderDTO.setDocumentList(documentList);
 				folderList2.addAll(subList);
 			}

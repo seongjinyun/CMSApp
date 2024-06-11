@@ -17,7 +17,7 @@ public class DeptServiceImpl implements DeptService {
 	public int insert(Dept dept) {
 		// TODO Auto-generated method stub
 		deptDAO.insert(dept);
-		return dept.getDept_idx();
+		return dept.getDeptIdx();
 	}
 
 	@Override

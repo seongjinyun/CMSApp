@@ -22,7 +22,7 @@
 	
 	<!-- resultMap="DocumentMap" -->
 	<select id="selectByDocumentIdx" parameterType="int" resultMap="DocumentMap">
-		select * from document where document_idx=#{document_idx}
+		select * from document where document_idx=#{documentIdx}
 	</select>
 	
     <!-- 문서 삽입 -->
@@ -64,7 +64,7 @@
 		</association>
 		
 		<association property="versionLog" javaType="VersionLog">
-			<id property="versionLogIdx" column="version_log_idx"/>
+			<id property="versionLogIdx" column="versionLogIdx"/>
 			<result property="version" column="version"/>
 			<result property="title" column="title"/>
 			<result property="regdate" column="regdate"/>
@@ -149,16 +149,16 @@
         
         where trash_idx is null
 		
-		<if test="status_code != 900">
-			and s.status_code=#{status_code}
+		<if test="statusCode != 900">
+			and s.status_code=#{statusCode}
 		</if>
 		
-		<if test="end_date != null">
-			and s.regdate <![CDATA[<=]]> #{end_date}
+		<if test="endDate != null">
+			and s.regdate <![CDATA[<=]]> #{endDate}
 		</if>
 		
-		<if test="start_date != null">
-			and s.regdate <![CDATA[>=]]> #{start_date}
+		<if test="startDate != null">
+			and s.regdate <![CDATA[>=]]> #{startDate}
 		</if>
 		
 		<if test="projects != null">
@@ -193,11 +193,11 @@
 	</select>
 	
 	<delete id="delete" parameterType="int">
-		delete from document where document_idx = #{document_idx}
+		delete from document where document_idx = #{documentIdx}
 	</delete>
 	
 	<select id="selectByFolderIdx" parameterType="int" resultType="Document">
-		select * from document where folder_idx = #{folder_idx}
+		select * from document where folder_idx = #{folderIdx}
 	</select>
     
 </mapper>

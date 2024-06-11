@@ -17,7 +17,7 @@ public class ProjectServiceImpl implements ProjectService {
 	public int insert(Project project) {
 		// TODO Auto-generated method stub
 		projectDAO.insert(project);
-		return project.getProject_idx();
+		return project.getProjectIdx();
 	}
 
 	@Override

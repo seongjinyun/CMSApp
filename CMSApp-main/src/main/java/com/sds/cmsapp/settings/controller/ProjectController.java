@@ -37,7 +37,7 @@ public class ProjectController {
 		
 		for(int deptId : deptIds) {
 			Dept dept = new Dept();
-			dept.setDept_idx(deptId); // dept 객체
+			dept.setDeptIdx(deptId); // dept 객체
 			
 			// dept_project에 두개 다 넣기
 			DeptProject deptProject = new DeptProject();

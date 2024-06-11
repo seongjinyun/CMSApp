@@ -50,7 +50,7 @@ public class RestDocumentListController {
 	-------------------------------------*/
 	@GetMapping("/dashboard/list")
 	public List<DashboardDocument> getDocumentListByFilter(
-			@RequestParam(value = "status_code", required = false) String status_code
+			@RequestParam(value = "statusCode", required = false) String statusCode
 			, @RequestParam(value = "startDate", required = false) String startDate
 			, @RequestParam(value = "endDate", required = false) String endDate
 			, @RequestParam(value = "projectIds", required = false) List<Integer> projectIds
@@ -62,19 +62,17 @@ public class RestDocumentListController {
 		Map map = new HashMap();
 
 		// 조건: 상태 코드
-		map.put("status_code", status_code);
+		map.put("statusCode", statusCode);
 		
 		// 조건: 날짜
 		if(StringUtils.hasText(startDate)) {
 			// 날짜 파라미터가 있을 경우 (전체 보기 탭) - String을 Timestamp로 변환
-			Timestamp start_date = Timestamp.valueOf(startDate);
-			Timestamp end_date = Timestamp.valueOf(endDate);
-			map.put("start_date", start_date);
-			map.put("end_date", end_date);
+			map.put("startDate", Timestamp.valueOf(startDate));
+			map.put("endDate", Timestamp.valueOf(endDate));
 		} else {
 			// 날짜 파라미터가 없을 경우 (요약 탭)
-			map.put("start_date", null);
-			map.put("end_date", null); 
+			map.put("startDate", null);
+			map.put("endDate", null); 
 		}
 		
 		// 조건: 프로젝트

@@ -64,7 +64,7 @@ public class RestDocumentController {
 		List<Folder> folderList = folderService.selectTopFolder();
 		for(int i = 0; i < folderList.size(); i++) {
 			Folder folder = folderList.get(i);
-			folder = folderService.completeFolder(folder.getFolder_idx());
+			folder = folderService.completeFolder(folder.getFolderIdx());
 			folderList.set(i, folder);
 		}
 		return new ResponseEntity<>(folderList, HttpStatus.OK);

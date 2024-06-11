@@ -5,13 +5,13 @@
 	<insert id="insert" parameterType="Bookmark">
 		insert into bookmark(emp_idx, document_idx)
 		values(#{emp.emp_idx}, #{document.document_idx})
-		<selectKey keyColumn="bookmark_idx" keyProperty="bookmark_idx" resultType="int" order="AFTER">
+		<selectKey keyColumn="bookmark_idx" keyProperty="bookmarkIdx" resultType="int" order="AFTER">
 			select last_insert_id() as bookmark_idx
 		</selectKey>
 	</insert>
 	
 	<resultMap type="Bookmark" id="BookmarkMap">
-		<id 	column="bookmark_idx" 	property="bookmark_idx"/>
+		<id 	column="bookmark_idx" 	property="bookmarkIdx"/>
 		<result	column="regdate" 		property="regdate"/>		
 		<association column="emp_idx" property="emp" javaType="Emp" 
 			select="com.sds.cmsapp.model.emp.EmpDAO.select"/>

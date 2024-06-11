@@ -6,7 +6,7 @@
 	<insert id="insert" parameterType="Dept">
 	    insert into dept(dept_name)
 	    values(#{dept_name});
-	    <selectKey keyColumn="dept_idx" keyProperty="dept_idx" resultType="int" order="AFTER">
+	    <selectKey keyColumn="dept_idx" keyProperty="deptIdx" resultType="int" order="AFTER">
 	        select last_insert_id() as dept_idx
 	    </selectKey>
 	</insert>

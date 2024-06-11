@@ -4,14 +4,14 @@
 	
 	<insert id="insert" parameterType="Trash">
 		insert into trash(emp_idx, document_idx)
-		values(#{emp.emp_idx}, #{document.document_idx})
+		values(#{emp.empIdx}, #{document.documentIdx})
 		<selectKey keyColumn="trash_idx" keyProperty="trash_idx" resultType="int" order="AFTER">
 			select last_insert_id() as trash_idx
 		</selectKey>
 	</insert>
 	
 	<resultMap type="Trash" id="TrashMap">
-		<id 	column="trash_idx" 	property="trash_idx"/>
+		<id 	column="trash_idx" 	property="trashIdx"/>
 		<result	column="regdate" 		property="regdate"/>		
 		<association column="emp_idx" property="emp" javaType="Emp" 
 			select="com.sds.cmsapp.model.emp.EmpDAO.select"/>
@@ -20,12 +20,12 @@
 	</resultMap>
 	
 	<delete id="delete" parameterType="int">
-		delete from trash where trash_idx = #{trash_idx}	
+		delete from trash where trash_idx = #{trashIdx}	
 	</delete>
 	
 	<select id="select" parameterType="int" resultMap="TrashMap">
 		select * from trash
-		where trash_idx = #{trash_idx}
+		where trash_idx = #{trashIdx}
 	</select>
 	
 	<select id="selectCount" resultType="int">
@@ -37,7 +37,7 @@
 	</select>
 	
 	<select id="selectByDocumentIdx" parameterType="int" resultMap="TrashMap">
-		select * from trash where document_idx = #{document_idx}
+		select * from trash where document_idx = #{documentIdx}
 	</select>
 	
 	<select id="selectAllWithRange" parameterType="java.util.Map" resultMap="TrashMap">
