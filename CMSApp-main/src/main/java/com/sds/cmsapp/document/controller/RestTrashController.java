@@ -28,21 +28,21 @@ public class RestTrashController {
 	@Autowired
 	DocumentVersionService documentVersionService;
 	
-	@PostMapping("/document/trash/test2")
-	public ResponseEntity restoreTrash(@RequestParam("trash_idxList") List<Integer> trash_idxList) {
+	@PostMapping("/document/trash")
+	public ResponseEntity restoreTrash(@RequestParam("trashIdxList") final List<Integer> trashIdxList) {
 		System.out.println("복원메서드 연결");
-		System.out.println("복원 대상" + trash_idxList);
-		trash_idxList.forEach(trashService :: restore);
+		System.out.println("복원 대상" + trashIdxList);
+		trashIdxList.forEach(trashService :: restore);
 		ResponseEntity entity = ResponseEntity.ok("복원 성공");
 		System.out.println("RestTrashController 복원메서드 호출");
 		return entity;
 	}
 	
-	@DeleteMapping("/document/trash/test1")
-	public ResponseEntity deleteTrash(@RequestParam("trash_idxList") List<Integer> trash_idxList) {
+	@DeleteMapping("/document/trash")
+	public ResponseEntity deleteTrash(@RequestParam("trashIdxList") List<Integer> trashIdxList) {
 		System.out.println("삭제메서드 연결");
-		System.out.println("삭제 대상" + trash_idxList);
-		trash_idxList.forEach(trashService :: delete);
+		System.out.println("삭제 대상" + trashIdxList);
+		trashIdxList.forEach(trashService :: delete);
 		ResponseEntity entity = ResponseEntity.ok("삭제 성공");
 		System.out.println("RestTrashController 삭제 메서드 호출");
 
