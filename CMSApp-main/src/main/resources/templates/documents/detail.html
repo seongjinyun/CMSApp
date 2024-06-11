@@ -77,12 +77,17 @@
 								<i class="fas fa-edit"></i> 수정
 							</button>
 							
+							<button type="button" class="btn btn-primary btn-sm mt-1" id="draftButton">
+								<i class="fas fa-save"></i> 요청
+							</button>
+							
 							<button type="button" class="btn btn-danger btn-sm mt-1" onclick="del();">
 								<i class="fas fa-trash"></i> 삭제
 							</button>
 							
 							<!-- draft 창 -->
 							<div class="popup" id="draftPopup">
+								<button type="button" class="btn btn-secondary">리뷰 요청</button>
 								<button type="button" class="btn btn-secondary">배포 요청</button>
 							</div>
 						</div>
@@ -120,24 +125,26 @@
 							</div>
 						</div>
 					</div>
-					<form id="detailForm">
 						<div class="col-md-12">
 							<div class="card card-outline card-info">
 								<div class="card-header">
 									<div class="col-sm-12">
-										<h5 class="ml-2 mt-2" th:text="${documentDetail.versionLog.title}"></h5>
+										<h5 class="ml-2 mt-2" th:text="${documentVersion.versionLog.title}">title</h5>
 										<font size=1>작성자</font>
 									</div>
 								</div>
 								<!-- /.card-header -->
 								<div class="card-body">
-									<p th:text="${documentDetail.versionLog.content}"></p>
+									<p th:text="${documentVersion.versionLog.content}">content</p>
+								</div>
+								<div class="card-footer">
+										<h4>Comment</h4>
+									<p th:text="${documentVersion.versionLog.comments}">content</p>
 								</div>
 							</div>
 						</div>
-					</form>
 					<!-- list에서 넘어오는 값 -->
-					<input type="hidden" name="folderIdx" th:value="${folderIdx}">
+ 					<input type="hidden" name="folderIdx" th:value="${folderIdx}">
 					<input type="hidden" name="documentIdx" th:value="${documentIdx}">
 					
 					<!-- /.col-->
@@ -191,7 +198,7 @@
   }
   
     function getList(){
-    	location.href = "/document_list";
+    	location.href = "/document/list?folderIdx="+ $("input[name='folderIdx']").val();;
     }
 
   	function edit(){

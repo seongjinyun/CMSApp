@@ -55,7 +55,6 @@
                       <i class="fas fa-search"></i>
                     </div>
                   </div>
-                  <input type="button" class="btn btn-default btn-sm ml-1 mr-1" value="필터" id="filterButton">
                   <input type="button" class="btn btn-default btn-sm" value="글 작성" id="write">
                   <input type="hidden" name="folderIdx" th:value="${folderIdx}">
                 </div>
@@ -129,13 +128,13 @@
 		                        <label for="check1"></label>
                      		</div>
 				        </td>
-				        <td class="mailbox-star"><a href="#"><i class="fa fa-star" aria-hidden="true"></i></a></td>
+				        <td class="mailbox-star"><a href="#"><i class="fa fa-star-o" aria-hidden="true"></i></a></td>
 				        <!-- title, 업데이트 날짜, document가 아닌 versionLog에서 가져와야함.\ -->
 				        <td><a th:href="@{/document/detail(documentIdx=${documentVersion.document.documentIdx}, folderIdx=${documentVersion.document.folder.folderIdx})}" th:text="${documentVersion.versionLog.title}">튜토리얼</a></td>
 				        <td th:text="${documentVersion.versionLog.version}">v2.1</td>
 				        <td th:text="${documentVersion.versionLog.regdate}">2024.05.23 16:44</td>
 				        <!-- 상태는 masterCode 에서 가져와야함  -->
-				        <td>리뷰 중</td>
+				        <td th:text="${documentVersion.statusCode.statusName}">리뷰 중</td>
 				    </tr>
 				</tbody>
                 </table>
@@ -176,7 +175,6 @@
 $(function(){
     checkBoxAll();
     write();
-    filterFile();
     searchFile();
     initializeOpnMoveDirectoryModal();
     goToTrash();
@@ -210,11 +208,6 @@ $(function(){
 
 ////////////////////////////////////////////////////
     
-    function filterFile() {
-      $('#filterButton').click(function () {
-        $('#filterOptions').toggle();
-      });
-    }
 
     function goToTrash() {
       $("#trash_btn").click(function(){

@@ -35,7 +35,7 @@ public interface DocumentService {
 	public List<Document> selectByFolderIdx(int folder_idx); 
 	
 	//document/detail 문서 상세보기 
-	public DocumentVersion documentDetailSelect(DocumentVersion documentVersion);
+	public DocumentVersion documentDetailSelect(int documentIdx);
 	
 
 }

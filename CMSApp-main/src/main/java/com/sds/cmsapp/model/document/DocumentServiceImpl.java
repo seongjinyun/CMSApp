@@ -21,6 +21,9 @@ public class DocumentServiceImpl implements DocumentService {
 	@Autowired
 	private DocumentDAO documentDAO;
 	
+	@Autowired
+	private DocumentDetailDAO documentDetailDAO;
+	
 	// 모든 문서 조회
 	public List selectAll(Map map) {
 		return null;
@@ -86,8 +89,9 @@ public class DocumentServiceImpl implements DocumentService {
 	}
 	
 	//document/detail 문서 상세보기 
-	public DocumentVersion documentDetailSelect(DocumentVersion documentVersion) {
-		return documentDAO.documentDetailSelect(documentVersion);
+	public DocumentVersion documentDetailSelect(int documentIdx) {
+	    
+        return documentDetailDAO.documentDetailSelect(documentIdx);
 	}
 	
 	@Override // 임시로 만들어뒀습니다 -박준형

@@ -74,7 +74,7 @@
 								<i class=""></i> 버전 관리
 							</button>
 
-							<button type="button" class="btn btn-default" id="document_list">
+							<button type="button" class="btn btn-default" id="document_list" onclick="getList();">
 								<i class="far fa-list-alt"></i>목록
 							</button>
 
@@ -85,7 +85,6 @@
 							<!-- draft 창 -->
 							<div class="popup" id="draftPopup">
 								<button type="button" class="btn btn-secondary" id="bt_save">저장</button>
-								<button type="button" class="btn btn-secondary">리뷰 요청</button>
 							</div>
 						</div>
 						<!-- 버전관리 사이드바 -->
@@ -128,8 +127,8 @@
 					<div class="col-md-12">
 						<div class="card card-outline card-info">
 							<form id="form1">
-								<input type="hidden" id="folder_idx" name="document.folder.folder_idx" th:value="${folder_idx}"> 
-								<input type="hidden" name="document.emp.emp_idx" th:value="1">
+								<input type="hidden" id="folderIdx" name="document.folder.folderIdx" th:value="${folderIdx}"> 
+								<input type="hidden" name="document.emp.empIdx" th:value="1">
 								<div class="card-header">
 									<div class="col-sm-12">
 										<input type="text" name="versionLog.title"
@@ -194,7 +193,7 @@
 				data:$("#form1").serialize(),
 				success:function(result, status, xhr){ //200
 					alert("성공");
-					location.href="/document/list?folder_idx=" + $("#folder_idx").val();
+					location.href="/document/list?folderIdx=" + $("#folderIdx").val();
 					//location.href="/document/detail?folder_idx="+$("#folder_idx").val();
 				},
 				error:function(xhr, status, err){
@@ -227,6 +226,11 @@
 				$('#versionSidebar').toggle();
 			});
 		}
+		
+	    function getList(){
+	    	location.href = "/document/list?folderIdx="+ $("#folderIdx").val();
+	    }
+	    
 		//빈공간 클릭시 draft or version sidebar 비활성화 스크립트
 		$(document)
 				.ready(

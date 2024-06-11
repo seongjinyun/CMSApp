@@ -1,10 +1,51 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "mybatis-3-mapper.dtd">
-<mapper namespace="com.sds.cmsapp.model.document.DocumentDAO">
+<mapper namespace="com.sds.cmsapp.model.document.DocumentDetailDAO">
 
+<resultMap type="DocumentVersion" id="documentDetailMap">
+        <id column="document_version_idx" property="documentVersionIdx"/>
 
-<!-- 	<select id="documentDetailSelect" parameterType="">
-		select * from version_log
-	</select> -->
+        <association property="document" javaType="Document">
+            <id property="documentIdx" column="document_idx"/>
+
+            <association property="folder" javaType="Folder">
+                <id property="folderIdx" column="folder_idx"/>
+            </association>
+        </association>
+
+        <association property="versionLog" javaType="VersionLog">
+            <id property="versionLogIdx" column="version_log_idx"/>
+            <result property="version" column="version"/>
+            <result property="title" column="title"/>
+            <result property="content" column="content"/>
+            <result property="comments" column="comments"/>
+            <result property="regdate" column="regdate"/>
+        </association>
+
+        <association property="statusCode" javaType="MasterCode">
+            <id property="statusCode" column="status_code"/>
+            <result property="statusName" column="status_name"/>
+        </association>
+    </resultMap>
+
+    <select id="documentDetailSelect" parameterType="int" resultMap="documentDetailMap">
+        SELECT
+            dv.document_version_idx,
+            dv.document_idx,
+            dv.version_log_idx,
+            dv.status_code,
+            d.folder_idx,
+            vl.version,
+            vl.title,
+            vl.content,
+            vl.comments,
+            vl.regdate,
+            mc.status_name
+        FROM document_version dv
+        JOIN document d ON dv.document_idx = d.document_idx
+        JOIN version_log vl ON dv.version_log_idx = vl.version_log_idx
+        JOIN mastercode mc ON dv.status_code = mc.status_code
+        WHERE dv.document_idx = #{documentIdx}
+    </select>
 	
 </mapper>
