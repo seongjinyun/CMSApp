@@ -87,171 +87,77 @@
     		<div class="row">
     			<div class="col-md-12">
 				    <div class="card">
-				        <div class="card-header p-2">
-				            <ul class="nav nav-pills">
-				                <li class="nav-item"><a class="nav-link active" href="#settings" data-toggle="tab">Settings</a></li>
-				                <li class="nav-item"><a class="nav-link" href="#timeline" data-toggle="tab">Timeline</a></li>
-				            </ul>
+				        <div class="card-header">
+	            			<h3 class="card-title" style="font-weight: bold;">내 정보</h3>
 				        </div>
 				        <div class="card-body">
-				            <div class="tab-content">
-				
-				                <div class="tab-pane" id="timeline">
-				
-				                    <div class="timeline timeline-inverse">
-				
-				                        <div class="time-label">
-				                            <span class="bg-danger">
-				                                10 Feb. 2014
-				                            </span>
-				                        </div>
-				
-				
-				                        <div>
-				                            <i class="fas fa-envelope bg-primary"></i>
-				                            <div class="timeline-item">
-				                                <span class="time"><i class="far fa-clock"></i> 12:05</span>
-				                                <h3 class="timeline-header"><a href="#">Support Team</a> sent you an email</h3>
-				                                <div class="timeline-body">
-				                                    Etsy doostang zoodles disqus groupon greplin oooj voxy zoodles,
-				                                    weebly ning heekya handango imeem plugg dopplr jibjab, movity
-				                                    jajah plickers sifteo edmodo ifttt zimbra. Babblely odeo kaboodle
-				                                    quora plaxo ideeli hulu weebly balihoo...
-				                                </div>
-				                                <div class="timeline-footer">
-				                                    <a href="#" class="btn btn-primary btn-sm">Read more</a>
-				                                    <a href="#" class="btn btn-danger btn-sm">Delete</a>
-				                                </div>
-				                            </div>
-				                        </div>
-				
-				
-				                        <div>
-				                            <i class="fas fa-user bg-info"></i>
-				                            <div class="timeline-item">
-				                                <span class="time"><i class="far fa-clock"></i> 5 mins ago</span>
-				                                <h3 class="timeline-header border-0"><a href="#">Sarah Young</a> accepted your friend
-				                                    request
-				                                </h3>
-				                            </div>
-				                        </div>
-				
-				
-				                        <div>
-				                            <i class="fas fa-comments bg-warning"></i>
-				                            <div class="timeline-item">
-				                                <span class="time"><i class="far fa-clock"></i> 27 mins ago</span>
-				                                <h3 class="timeline-header"><a href="#">Jay White</a> commented on your post</h3>
-				                                <div class="timeline-body">
-				                                    Take me to your leader!
-				                                    Switzerland is small and neutral!
-				                                    We are more like Germany, ambitious and misunderstood!
-				                                </div>
-				                                <div class="timeline-footer">
-				                                    <a href="#" class="btn btn-warning btn-flat btn-sm">View comment</a>
-				                                </div>
-				                            </div>
-				                        </div>
-				
-				
-				                        <div class="time-label">
-				                            <span class="bg-success">
-				                                3 Jan. 2014
-				                            </span>
-				                        </div>
-				
-				
-				                        <div>
-				                            <i class="fas fa-camera bg-purple"></i>
-				                            <div class="timeline-item">
-				                                <span class="time"><i class="far fa-clock"></i> 2 days ago</span>
-				                                <h3 class="timeline-header"><a href="#">Mina Lee</a> uploaded new photos</h3>
-				                                <div class="timeline-body">
-				                                    <img src="https://placehold.it/150x100" alt="...">
-				                                    <img src="https://placehold.it/150x100" alt="...">
-				                                    <img src="https://placehold.it/150x100" alt="...">
-				                                    <img src="https://placehold.it/150x100" alt="...">
-				                                </div>
-				                            </div>
-				                        </div>
-				
-				                        <div>
-				                            <i class="far fa-clock bg-gray"></i>
-				                        </div>
-				                    </div>
-				                </div>
-								
-				                <div class="tab-pane active" id="settings">
-				                    <form class="form-horizontal" id="emp_account">
-				                    	<input type="hidden" id="emp_idx" name="emp_idx" th:value="${emp.emp_idx}">
-				                        <div class="form-group row">
-				                            <label for="inputName" class="col-sm-2 col-form-label">Name</label>
-				                            <div class="col-sm-10">
-				                                <input type="text" th:value="${emp.getEmp_name}" class="form-control" name="emp_name">
-				                            </div>
-				                        </div>
-				                        <div class="form-group row">
-				                            <label for="inputID" class="col-sm-2 col-form-label">ID</label>
-				                            <div class="col-sm-10">
-				                                <input type="text" th:value
-				                                ="${empDetail.getEmp_id}" class="form-control" name="emp_id">
-				                            </div>
-				                        </div>
-				                        <div class="form-group row">
-				                            <label for="inputPW" class="col-sm-2 col-form-label">PW</label>
-				                            <div class="col-sm-10">
-				                                <input type="password" th:value="${empDetail.getEmp_pw}" class="form-control" name="emp_pw">
-				                            </div>
-				                        </div>
-				                        <div class="form-group row">
-				                            <label for="inputDepartment" class="col-sm-2 col-form-label">Department</label>
-				                            <div class="col-sm-10">
-				                                <div class="form-group">
-				                                	<select id="input_dept_idx" name="dept_idx" class="select1 form-control" data-placeholder="부서 선택" style="width: 100%;" disabled="disabled">
-														<!-- 부서 이동 권한은 사용자에게는 없고, 관리자에게만 출력 (disabled) -->
-														<option th:each="dept : ${deptList}" th:value="${dept.dept_idx}" th:text="${dept.dept_name}" th:selected="${dept}==${emp.dept}"></option>
-													</select>
-										        </div>
-				                            </div>
-				                        </div>
-				                        <div class="form-group row">
-				                            <label for="inputRole" class="col-sm-2 col-form-label">Role</label>
-				                            <div class="col-sm-10">
-									            <div class="form-group">
-									            	<select id="input_role_code" name="role_code" class="select1 form-control" data-placeholder="역할 선택" style="width: 100%;" disabled="disabled">
-														<!-- 역할 변경 권한은 사용자에게는 없고, 관리자에게만 출력 (disabled) -->
-														<option th:each="role : ${roleList}" th:value="${role.role_code}" th:text="${role.role_name}" th:selected="${role}==${emp.role}"></option>
-													</select>
-									            </div> 
-				                            </div>
-				                        </div>
-				                        <div class="form-group row">
-							                <label for="inputImage" class="col-sm-2 col-form-label">Profile Image</label>
-						                	<div class="col-sm-8 row">
-									        	<div class="col">
-										            <div class="form-group">
-											            <div class="addImage" id="image-show" style="width: 200px; height: 200px;">
-										                 	<img th:src="${profile_img_url}" alt="Profile Image" id="profileImg">
-										                </div>
-										                <label class="inputFileButton" for="inputFile">
-										                	이미지 첨부
-										                </label>
-														<input type="file" name="file" id="inputfile" accept="image/*" onchange="loadFile(this)" style="margin-top: 15px; display: block;">
-					                				</div>
-					                			</div>
-						                	</div>
-							            </div>
-				                        <div class="form-group">
-			                                <button type="button" id="update_emp_account" class="btn btn-success float-right" style="height: 38px">Save Changes</button>
-				                        </div>
-				                    </form>
-				                </div>
-				
-				            </div>
-				
-				        </div>
-				    </div>
-				
+	                    <form class="form-horizontal" id="emp_account">
+		                    	<input type="hidden" id="empIdx" name="empIdx" th:value="${emp.empIdx}">
+		                        <div class="form-group row">
+		                            <label for="inputName" class="col-sm-2 col-form-label">Name</label>
+		                            <div class="col-sm-10">
+		                                <input type="text" th:value="${emp.getEmpName}" class="form-control" name="empName">
+		                            </div>
+		                        </div>
+		                        <div class="form-group row">
+		                            <label for="inputID" class="col-sm-2 col-form-label">ID</label>
+		                            <div class="col-sm-10">
+		                                <input type="text" th:value
+		                                ="${empDetail.getEmpId}" class="form-control" name="empId">
+		                            </div>
+		                        </div>
+		                        <div class="form-group row">
+		                            <label for="inputPW" class="col-sm-2 col-form-label">PW</label>
+		                            <div class="col-sm-10">
+		                                <input type="password" th:value="${empDetail.getEmpPw}" class="form-control" name="empPw">
+		                            </div>
+		                        </div>
+		                        <div class="form-group row">
+		                            <label for="inputDepartment" class="col-sm-2 col-form-label">Department</label>
+		                            <div class="col-sm-10">
+		                                <div class="form-group">
+		                                	<select id="inputDeptIdx" name="deptIdx" class="select1 form-control" data-placeholder="부서 선택" style="width: 100%;" disabled="disabled">
+												<!-- 부서 이동 권한은 사용자에게는 없고, 관리자에게만 출력 (disabled) -->
+												<option th:each="dept : ${deptList}" th:value="${dept.deptIdx}" th:text="${dept.deptName}" th:selected="${dept}==${emp.dept}"></option>
+											</select>
+								        </div>
+		                            </div>
+		                        </div>
+		                        <div class="form-group row">
+		                            <label for="inputRole" class="col-sm-2 col-form-label">Role</label>
+		                            <div class="col-sm-10">
+							            <div class="form-group">
+							            	<select id="inputRoleCode" name="roleCode" class="select1 form-control" data-placeholder="역할 선택" style="width: 100%;" disabled="disabled">
+												<!-- 역할 변경 권한은 사용자에게는 없고, 관리자에게만 출력 (disabled) -->
+												<option th:each="role : ${roleList}" th:value="${role.roleCode}" th:text="${role.roleName}" th:selected="${role}==${emp.role}"></option>
+											</select>
+							            </div> 
+		                            </div>
+		                        </div>
+		                        <div class="form-group row">
+					                <label for="inputImage" class="col-sm-2 col-form-label">Profile Image</label>
+				                	<div class="col-sm-8 row">
+							        	<div class="col">
+								            <div class="form-group">
+									            <div class="addImage" id="image-show" style="width: 200px; height: 200px;">
+								                 	<img th:src="${profileImgUrl}" alt="Profile Image" id="profileImg">
+								                </div>
+								                <label class="inputFileButton" for="inputFile">
+								                	이미지 첨부
+								                </label>
+												<input type="file" name="file" id="inputfile" accept="image/*" onchange="loadFile(this)" style="margin-top: 15px; display: block;">
+			                				</div>
+			                			</div>
+				                	</div>
+					            </div>
+		                        <div class="form-group">
+	                                <button type="button" id="updateEmpAccount" class="btn btn-success float-right" style="height: 38px">Save Changes</button>
+		                        </div>
+		                    </form>
+		                </div>
+		
+		            </div>
+
 				</div>
     		</div>
    		</div>  	
@@ -283,21 +189,21 @@
 <script type="text/javascript">
 
 	function updateEmpAccount() {
-		$("#emp_account").attr({
+		$("#empAccount").attr({
 			action:"/settings/mypage/update",
 			method:"post",
 			// 텍스트 데이터와 바이너리 데이터가 섞여 있는 복합 데이터 전송: enctype multipart/form-data
 			enctype:"multipart/form-data"
 		});
-		$("#emp_account").submit();
+		$("#empAccount").submit();
 		
 	}
 	
 	$(function(){
-		$("#update_emp_account").click(function(){
+		$("#updateEmpAccount").click(function(){
 			// disable된 값은 넘어가지 않기에 속성을 변경해준다
-			$("select[name=dept_idx]").removeAttr('disabled');
-			$("select[name=role_code]").removeAttr('disabled');
+			$("select[name=deptIdx]").removeAttr('disabled');
+			$("select[name=roleCode]").removeAttr('disabled');
 			updateEmpAccount();
 		});		
 	});

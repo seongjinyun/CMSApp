@@ -30,4 +30,10 @@ public class ProjectServiceImpl implements ProjectService {
 	public List selectAll() {
 		return projectDAO.selectAll();
 	}
+
+	@Override
+	public void delete(Project project) {
+		// TODO Auto-generated method stub
+		projectDAO.delete(project);
+	}
 }

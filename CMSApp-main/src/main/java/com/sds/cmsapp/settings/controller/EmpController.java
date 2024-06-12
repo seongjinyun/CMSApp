@@ -30,7 +30,7 @@ public class EmpController {
 	private EmpDetailService empDetailService;
 	
 	@PostMapping("/emp/regist")
-	public String regist(Emp emp, EmpDetail empDetail, @RequestParam("dept_idx") int deptIdx, @RequestParam("role_code") int roleCode) {
+	public String regist(Emp emp, EmpDetail empDetail, @RequestParam("deptIdx") int deptIdx, @RequestParam("roleCode") int roleCode) {
 		try {
 			 MultipartFile file = empDetail.getFile();
 	            if (file != null && !file.isEmpty()) {            // 파일이 존재한다면 
@@ -60,9 +60,9 @@ public class EmpController {
 	}
 	
 	@PostMapping("/emp/update")
-    public String update(@RequestParam("emp_idx") List<Integer> empIdxList,
-                         @RequestParam("role_code") List<Integer> roleCodeList,
-                         @RequestParam("dept_idx") List<Integer> deptIdxList) {
+    public String update(@RequestParam("empIdx") List<Integer> empIdxList,
+                         @RequestParam("roleCode") List<Integer> roleCodeList,
+                         @RequestParam("deptIdx") List<Integer> deptIdxList) {
         for (int i = 0; i < empIdxList.size(); i++) {
             Emp emp = empService.selectByEmpIdx(empIdxList.get(i));
             if (emp != null) {
@@ -81,7 +81,7 @@ public class EmpController {
     }
 	
 	@PostMapping("/settings/mypage/update")
-	public String update(Emp emp, EmpDetail empDetail, @RequestParam("dept_idx") int deptIdx, @RequestParam("role_code") int roleCode) {
+	public String update(Emp emp, EmpDetail empDetail, @RequestParam("deptIdx") int deptIdx, @RequestParam("roleCode") int roleCode) {
 		try {
 			 MultipartFile file = empDetail.getFile();
 	            if (file != null && !file.isEmpty()) {            // 파일이 존재한다면 
@@ -97,9 +97,9 @@ public class EmpController {
            role.setRoleCode(roleCode);
            emp.setRole(role);    
 	       
-           System.out.println("emp.getEmp_name(): " + emp.getEmpName());
-           System.out.println("empDetail.getEmp_id(): "+ empDetail.getEmpId());
-           System.out.println("empDetail.getEmp_pw(): " + empDetail.getEmpPw());
+           System.out.println("emp.getEmpName(): " + emp.getEmpName());
+           System.out.println("empDetail.getEmpId(): "+ empDetail.getEmpId());
+           System.out.println("empDetail.getEmpPw(): " + empDetail.getEmpPw());
            
            // 이름, id, pw등이 변경되지 않았다면 원래 값으로 설정
            if(emp.getEmpName() == null) {

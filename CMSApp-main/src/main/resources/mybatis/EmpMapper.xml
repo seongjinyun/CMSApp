@@ -5,7 +5,7 @@
 	<!-- 사원 추가 -->
 	<insert id="insert" parameterType="Emp">
 		insert into emp(emp_name, dept_idx, role_code)
-		values(#{emp_name},
+		values(#{empName},
 		#{dept.deptIdx}, #{role.roleCode})
 		<!-- emp_detail에 상세 정보를 insert 하기 위해 부모테이블 emp의 index 값 추출 -->
 		<selectKey keyColumn="emp_idx" keyProperty="empIdx"

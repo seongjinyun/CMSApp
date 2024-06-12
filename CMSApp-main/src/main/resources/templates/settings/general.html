@@ -10,9 +10,9 @@
   <script>
         function checkDeleteInput() {
             // 입력 필드의 값을 가져옵니다.
-            var input = document.getElementById('confirm_delete').value;
+            var input = document.getElementById('confirmDelete').value;
             // 버튼 요소를 가져옵니다.
-            var deleteButton = document.getElementById('delete_button');
+            var deleteButton = document.getElementById('deleteButton');
             // 입력 값이 'project'와 일치하는지 확인합니다.
             if (input === 'project') {
                 // 일치하면 버튼을 활성화합니다.
@@ -73,15 +73,15 @@
 	                </button>
 	            </div>
 	        </div>
-	        <form class="form-horizontal" id="owner_account">
+	        <form class="form-horizontal" id="ownerAccount">
 		        <div class="card-body">
 				    <div class="d-flex justify-content-between form-group">
 				    	<label for="" class="col-sm-2 col-form-label">계정 정보 변경</label>
 				    	<div class="col-sm-8">
-				    		<input type="text" id="owner_id" name="owner_id" class="form-control" placeholder="ID 입력">
-				    		<input type="password" id="owner_pw" name="owner_pw" class="form-control" placeholder="PW 입력">
+				    		<input type="text" id="ownerId" name="ownerId" class="form-control" placeholder="ID 입력">
+				    		<input type="password" id="ownerPw" name="ownerPw" class="form-control" placeholder="PW 입력">
 						</div>
-						<button type="button" id="update_owner_account" class="col-sm-1 btn btn-success float-right" style="height: 38px">Save Changes</button>
+						<button type="button" id="updateOwnerAccount" class="col-sm-1 btn btn-success float-right" style="height: 38px">Save Changes</button>
 				    </div>
 				</div>
 			</form>
@@ -139,14 +139,14 @@
 	                <p style="color: red; font-weight: bold;">사이트는 삭제 이후 다시 되돌릴 수 없습니다.</p>
 	                <p></p>
 	                <p>삭제를 위해 아래에 "사이트명" 입력</p>
-	                <input type="text" id="confirm_delete" name="confirm_delete" 
-               			th:value="${confirm_delete}" class="form-control" 
+	                <input type="text" id="confirmDelete" name="confirmDelete" 
+               			th:value="${confirmDelete}" class="form-control" 
                			onkeyup="checkDeleteInput()">
 			    	<p style="font-weight: bold; text-align: center;">사이트 삭제에 대한 책임을 이해했습니다.</p>
 	            </div>	            
 	            <div class="modal-footer justify-content-between">
 	                <button type="button" class="btn btn-outline-light" data-dismiss="modal">Close</button>
-	                <button type="button" id="delete_button" class="btn btn-danger" disabled>
+	                <button type="button" id="deleteButton" class="btn btn-danger" disabled>
 			            Delete Site
 			        </button>
 	        </div>
@@ -177,15 +177,15 @@
 <script type="text/javascript">
 
 	function updateOwnerAccount() {
-		$("#owner_account").attr({
+		$("#ownerAccount").attr({
 			action:"/settings/owner/update",
 			method:"post"
 		});
-		$("#owner_account").submit();
+		$("#ownerAccount").submit();
 	}
 	
 	$(function(){
-		$("#update_owner_account").click(function(){
+		$("#updateOwnerAccount").click(function(){
 			updateOwnerAccount();
 		});		
 	});
