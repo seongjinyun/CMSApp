@@ -19,4 +19,7 @@ public class Document {
 	
 	// 0603 추가
 	private DocumentVersion documentVersion; // documentVersion이 version_log_idx를 가지고 있음...
+	
+	// 제목을 출력하기 위한 객체
+	private VersionLog versionLog;
 }
