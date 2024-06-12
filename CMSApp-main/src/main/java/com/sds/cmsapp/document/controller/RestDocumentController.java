@@ -59,7 +59,16 @@ public class RestDocumentController {
 		return entity;
     }
 	
-	@GetMapping("document/folder/list")
+	@PostMapping("/document/edit")
+	public ResponseEntity<String> editDocument(@ModelAttribute DocumentRequest documentRequest) {
+		VersionLog versionLog = documentRequest.getVersionLog();
+		
+		documentService.versionUpdate(versionLog);
+		ResponseEntity<String> entity = ResponseEntity.ok("DB입력 성공");
+		return entity;
+	}
+	
+	@GetMapping("/document/folder/list")
 	public ResponseEntity getFolderList() throws FolderException {
 		List<Folder> folderList = folderService.selectTopFolder();
 		for(int i = 0; i < folderList.size(); i++) {
@@ -70,7 +79,7 @@ public class RestDocumentController {
 		return new ResponseEntity<>(folderList, HttpStatus.OK);
 	}
 	
-	@PostMapping("document/list/trash")
+	@PostMapping("/document/list/trash")
 	public ResponseEntity goToTrash(List<Integer> documentIdxList, int empIdx) {
 		for(int documentIdx : documentIdxList) {
 			trashService.insert(documentIdx, empIdx);
@@ -90,7 +99,7 @@ public class RestDocumentController {
 		return entity;
 	}
 	
-	@PatchMapping("document/folder")
+	@PatchMapping("/document/folder")
 	public ResponseEntity moveDocuement(@RequestParam("documentIdxList")List<Integer> documentIdxList) {
 		log.debug("컨트롤러 moveDocument 호출, 선택된 idx: " + documentIdxList);
 		return null;
@@ -107,6 +116,7 @@ public class RestDocumentController {
 		return entity;
 
 	}
+	
 	
 	
 }

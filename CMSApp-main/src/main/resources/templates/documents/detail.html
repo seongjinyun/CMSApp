@@ -88,7 +88,6 @@
 							<!-- draft 창 -->
 							<div class="popup" id="draftPopup">
 								<button type="button" class="btn btn-secondary">리뷰 요청</button>
-								<button type="button" class="btn btn-secondary">배포 요청</button>
 							</div>
 						</div>
 						<!-- 버전관리 사이드바 -->
@@ -163,6 +162,10 @@
 		<!-- /.control-sidebar -->
 	</div>
 	<!-- ./wrapper -->
+	
+	<!-- 사이드바 디렉토리 관련 로직 -->
+  	<th:block th:replace="~{elements/sidebar_script :: sidebar_script}"/>
+  	<!-- /.사이드바 디렉토리 관련 로직 -->
 
 	<th:block th:replace="~{fragments/footer_link :: footer_link}" />
 	<script>
@@ -198,12 +201,13 @@
   }
   
     function getList(){
-    	location.href = "/document/list?folderIdx="+ $("input[name='folderIdx']").val();;
+    	location.href = "/document/list?folderIdx="+ $("input[name='folderIdx']").val();
     }
 
   	function edit(){
 	  	if(confirm("문서를 수정하실건가요?")){
-		
+	    	location.href = "/document/editform?documentIdx="+ $("input[name='documentIdx']").val() 
+	    			+ "&folderIdx=" + $("input[name='folderIdx']").val();
 	  	}	  
   	}
   

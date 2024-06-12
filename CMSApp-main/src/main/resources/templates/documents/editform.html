@@ -128,22 +128,24 @@
 						<div class="card card-outline card-info">
 							<form id="form1">
 								<input type="hidden" id="folderIdx" name="document.folder.folderIdx" th:value="${folderIdx}"> 
+								<input type="hidden" id="documentIdx" name="versionLog.document.documentIdx" th:value="${documentIdx}"> 
+								<input type="hidden" id="versionLogIdx" name="versionLog.versionLogIdx" th:value="${versionLogIdx}"> 
 								<input type="hidden" name="document.emp.empIdx" th:value="1">
 								<div class="card-header">
 									<div class="col-sm-12">
 										<input type="text" name="versionLog.title"
-											class="form-control" id="" placeholder="제목...">
+											class="form-control" id="" placeholder="제목..." th:value="${documentVersion.versionLog.title}">
 									</div>
 								</div>
 								<!-- /.card-header -->
 								<div class="card-body">
-									<textarea name="versionLog.content" id="summernote" rows="6">
+									<textarea name="versionLog.content" id="summernote" rows="6" th:text="${documentVersion.versionLog.content}">
 					             </textarea>
 								</div>
 								<div class="card-footer">
 								  <div class="col-sm-12">
 								    <h5>Comments</h5>
-								    <textarea name="versionLog.comments" id="comments" rows="2" class="form-control"></textarea>
+								    <textarea name="versionLog.comments" id="comments" rows="2" class="form-control" th:text="${documentVersion.versionLog.comments}"></textarea>
 								  </div>
 								</div>
 							</form>
@@ -165,12 +167,8 @@
 		<!-- /.control-sidebar -->
 	</div>
 	<!-- ./wrapper -->
-	
 
 	<th:block th:replace="~{fragments/footer_link :: footer_link}" />
-	<!-- 사이드바 디렉토리 관련 로직 -->
-  	<th:block th:replace="~{elements/sidebar_script :: sidebar_script}"/>
-  	<!-- /.사이드바 디렉토리 관련 로직 -->
 	<script type="text/javascript">
 		$(function() {
 			// Summernote276
@@ -192,7 +190,7 @@
 			$('textarea[name="versionLog.content"]').html(htmlContent);
 			
 			$.ajax({
-				url:"/document/save",
+				url:"/document/edit",
 				type:"post",
 				data:$("#form1").serialize(),
 				success:function(result, status, xhr){ //200
