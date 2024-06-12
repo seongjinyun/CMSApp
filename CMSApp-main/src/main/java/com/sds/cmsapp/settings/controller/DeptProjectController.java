@@ -27,11 +27,11 @@ public class DeptProjectController {
     
     // 해당 부서에 프로젝트 추가
     @PostMapping("/settings/deptProject/insert")
-    public String addProjectsToDept(@RequestParam("dept_idx") int dept_idx, @RequestParam("projectIds") List<Integer> projectIds, RedirectAttributes redirectAttributes) {
+    public String addProjectsToDept(@RequestParam("deptIdx") int deptIdx, @RequestParam("projectIds") List<Integer> projectIds, RedirectAttributes redirectAttributes) {
         try {
             for(int projectIdx : projectIds) {
                 DeptProject deptProject = new DeptProject();
-                deptProject.setDept(deptService.selectByDeptIdx(dept_idx));
+                deptProject.setDept(deptService.selectByDeptIdx(deptIdx));
                 deptProject.setProject(projectService.selectByProjectIdx(projectIdx));
                 deptProjectService.insert(deptProject);            	
             }
@@ -45,11 +45,11 @@ public class DeptProjectController {
     
     // 해당 부서에서 프로젝트 제거
     @PostMapping("/settings/deptProject/delete")
-    public String deleteProjectsFromDept(@RequestParam("dept_idx") int dept_idx, @RequestParam("projectIds") List<Integer> projectIds, RedirectAttributes redirectAttributes) {
+    public String deleteProjectsFromDept(@RequestParam("deptIdx") int deptIdx, @RequestParam("projectIds") List<Integer> projectIds, RedirectAttributes redirectAttributes) {
         try {
             for(int projectIdx : projectIds) {
                 DeptProject deptProject = new DeptProject();
-                deptProject.setDept(deptService.selectByDeptIdx(dept_idx));
+                deptProject.setDept(deptService.selectByDeptIdx(deptIdx));
                 deptProject.setProject(projectService.selectByProjectIdx(projectIdx));
                 deptProjectService.delete(deptProject);            	
             }

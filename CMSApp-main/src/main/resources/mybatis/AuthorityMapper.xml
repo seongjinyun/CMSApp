@@ -5,13 +5,13 @@
 	<!-- deprecated -->
 	<!-- authority_idx가 가리키는 권한 조회 -->
 	<select id="selectByAuthorityIdx" parameterType="int" resultType="Authority">
-		select * from authority where authority_idx=#{authority_idx}
+		select * from authority where authority_idx=#{authorityIdx}
 	</select>
 	<!-- deprecated -->
 	
 	<!-- authority_code가 가리키는 부서 조회 -->
 	<select id="selectByAuthorityCode" parameterType="int" resultType="Authority">
-		select * from authority where authority_code=#{authority_code}
+		select * from authority where authority_code=#{authorityCode}
 	</select>
 	
 	<!-- 모든 authority 정보 조회 -->

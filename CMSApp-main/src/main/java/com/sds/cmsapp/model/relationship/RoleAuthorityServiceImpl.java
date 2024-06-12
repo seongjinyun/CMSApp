@@ -21,15 +21,15 @@ public class RoleAuthorityServiceImpl implements RoleAuthorityService {
 	}
 
 	@Override
-	public List<Authority> selectAuthoritiesByRoleCode(int role_code) {
+	public List<Authority> selectAuthoritiesByRoleCode(int roleCode) {
 		// TODO Auto-generated method stub
-		return roleAuthorityDAO.selectAuthoritiesByRoleCode(role_code);
+		return roleAuthorityDAO.selectAuthoritiesByRoleCode(roleCode);
 	}
 
 	@Override
-	public void deleteAuthoritiesByRoleCode(int role_code) {
+	public void deleteAuthoritiesByRoleCode(int roleCode) {
 		// TODO Auto-generated method stub
-		roleAuthorityDAO.deleteAuthoritiesByRoleCode(role_code);
+		roleAuthorityDAO.deleteAuthoritiesByRoleCode(roleCode);
 	}
 
 	@Override

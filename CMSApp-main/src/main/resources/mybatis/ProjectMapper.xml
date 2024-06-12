@@ -21,4 +21,8 @@
 		select * from project
 	</select> 
 	
+	<delete id="delete" parameterType="Project">
+		delete from project where project_idx=#{projectIdx}
+	</delete>
+	
 </mapper>

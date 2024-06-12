@@ -20,14 +20,14 @@ public class AuthorityServiceImpl implements AuthorityService {
 	}
 
 	@Override
-	public Authority selectByAuthorityIdx(int authority_idx) {
+	public Authority selectByAuthorityIdx(int authorityIdx) {
 		// TODO Auto-generated method stub
-		return authorityDAO.selectByAuthorityIdx(authority_idx);
+		return authorityDAO.selectByAuthorityIdx(authorityIdx);
 	}
 
 	@Override
-	public Authority selectByAuthorityCode(int authority_code) {
-		return authorityDAO.selectByAuthorityCode(authority_code);
+	public Authority selectByAuthorityCode(int authorityCode) {
+		return authorityDAO.selectByAuthorityCode(authorityCode);
 	}
 
 	@Override

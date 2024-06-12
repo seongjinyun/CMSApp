@@ -5,7 +5,7 @@
 	<!-- emp_idx가 가리키는 사원의 상세 정보 추가 -->
 	<insert id="insert" parameterType="EmpDetail">
 		insert into emp_detail(emp_idx, emp_id, emp_pw, emp_profile_url)
-		values(#{emp.emp_idx}, #{emp_id}, #{emp_pw}, #{emp_profile_url})
+		values(#{emp.empIdx}, #{empId}, #{empPw}, #{empProfileUrl})
 	</insert>
 	
 	<resultMap type="EmpDetail" id="EmpDetailMap">
@@ -18,14 +18,14 @@
 		
 	<!-- emp_idx가 가리키는 사원의 상세정보 가져오기  -->
 	<select id="selectByEmpIdx" parameterType="int" resultMap="EmpDetailMap">
-		select * from emp_detail where emp_idx=#{emp_idx}
+		select * from emp_detail where emp_idx=#{empIdx}
 	</select>
 	
 	<!-- emp_idx가 가리키는 사원의 상세 정보 변경 -->
 	<update id="update" parameterType="EmpDetail">
 		update emp_detail
-		set emp_id=#{emp_id}, emp_pw=#{emp_pw}, emp_profile_url=#{emp_profile_url}
-		where emp_idx=#{emp.emp_idx} 
+		set emp_id=#{empId}, emp_pw=#{empPw}, emp_profile_url=#{empProfileUrl}
+		where emp_idx=#{emp.empIdx} 
 	</update>
 	
 </mapper>

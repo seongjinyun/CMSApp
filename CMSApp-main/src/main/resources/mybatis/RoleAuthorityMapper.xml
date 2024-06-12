@@ -5,7 +5,7 @@
 	<!-- 권한 - 역할 연결 -->
 	<insert id="insertAuthorityIntoRole" parameterType="RoleAuthority">
         INSERT INTO role_authority (role_code, authority_code)
-        VALUES (#{role.role_code}, #{authority.authority_code})
+        VALUES (#{role.roleCode}, #{authority.authorityCode})
     </insert>
 	
 	<!-- role_code에 해당하는 authority_code 목록 가져오기 -->
@@ -13,14 +13,14 @@
         SELECT a.*
         FROM authority a
         JOIN role_authority ra ON a.authority_code = ra.authority_code
-        WHERE ra.role_code=#{role_code}
+        WHERE ra.role_code=#{roleCode}
     </select>
     
     <!-- role에 기존 authority 삭제 -->
     <delete id="deleteAuthoritiesByRoleCode" parameterType="int">
 	    DELETE
 	    FROM role_authority
-	    WHERE role_code=#{role.role_code}
+	    WHERE role_code=#{role.roleCode}
 	</delete>
 	
 	<!-- 연동 테스트용: 테이블 지우기 -->

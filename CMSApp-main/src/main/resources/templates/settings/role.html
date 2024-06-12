@@ -60,34 +60,35 @@
 					        </div>
 					    </div>
 					    <div class="card-body">
-					    	<form>
+					    	<form class="form-horizontal" id="addNewRole">
 							    <div class="form-group">
-					                <label>역할명</label>
-					                <input type="text" class="form-control" placeholder="Enter ...">
-					            </div>
-								<div class="form-group">
-					                <label>설명</label>
-					                <textarea class="form-control" rows="3" placeholder="Enter ..." disabled></textarea>
-					            </div>
+							        <label for="roleName" class="col-form-label">역할명</label>
+							        <input type="text" id="roleName" name="roleName" class="form-control" placeholder="새 역할명 입력">
+							    </div>
+							
 							    <div class="row">
 							        <div class="col">
 							            <div class="form-group">
-							                <div class="form-check">
-							                    <input class="form-check-input" type="checkbox" checked>
-							                    <label class="form-check-label">Drafts</label>
+							            	<div class="form-check">
+							                    <input class="form-check-input" type="checkbox" name="authorities" value="100" id="read">
+							                    <label class="form-check-label" for="drafts">Read</label>
 							                </div>
 							                <div class="form-check">
-							                    <input class="form-check-input" type="checkbox">
-							                    <label class="form-check-label">Review</label>
+							                    <input class="form-check-input" type="checkbox" name="authorities" value="200" id="write">
+							                    <label class="form-check-label" for="write">Write</label>
 							                </div>
 							                <div class="form-check">
-							                    <input class="form-check-input" type="checkbox" disabled>
-							                    <label class="form-check-label">Publish</label>
+							                    <input class="form-check-input" type="checkbox" name="authorities" value="300" id="review">
+							                    <label class="form-check-label" for="review">Review</label>
+							                </div>
+							                <div class="form-check">
+							                    <input class="form-check-input" type="checkbox" name="authorities" value="400" id="publish" disabled>
+							                    <label class="form-check-label" for="publish">Publish</label>
 							                </div>
 							            </div>
-							        </div> 
-								</div>
-								<input type="submit" value="Save Changes" class="btn btn-success float-right" style="height: 38px">
+							        </div>
+							    </div>
+							    <input type="button" id="btnAddNewRole" value="Add Role" class="btn btn-success float-right" style="height: 38px">
 							</form>
 					    </div>
 					</div>
@@ -103,7 +104,7 @@
 					        </div>
 					    </div>
 					    <div class="card-body">
-					    	<form class="form-horizontal" id="role_auth_table">
+					    	<form class="form-horizontal" id="roleAuthTable">
 							     <table class="table table-bordered table-striped">
 					                <thead>
 					                    <tr>
@@ -113,14 +114,14 @@
 					                </thead>
 					                <tbody>
 					                    <tr th:each="entry : ${roleAuthMap.entrySet()}">
-							                <input type="hidden" name="role_codes" th:value="${entry.key.role_code}">
-							                <td style="vertical-align: middle; text-align: center;" th:text="${entry.key.role_name}"></td>
+							                <input type="hidden" name="roleCodes" th:value="${entry.key.roleCode}">
+							                <td style="vertical-align: middle; text-align: center;" th:text="${entry.key.roleName}"></td>
 							                <td>
 							                    <div class="form-group">
-							                        <select class="select2 form-control" name="authorities_${entry.key.role_code}" multiple="multiple" style="width: 100%;">
+							                        <select class="select2 form-control" name="authorities_${entry.key.roleCode}" multiple="multiple" style="width: 100%;">
 							                            <option th:each="authority : ${authList}" 
-							                                    th:value="${authority.authority_code}"
-							                                    th:text="${authority.authority_name}"
+							                                    th:value="${authority.authorityCode}"
+							                                    th:text="${authority.authorityName}"
 							                                    th:selected="${entry.value.contains(authority)}"></option>
 							                        </select>
 							                    </div>
@@ -129,7 +130,7 @@
 					                </tbody>
 					            </table>
 					        </form>
-					        <input type="button" id="btn_save_role_auth_changes" value="Save Changes" class="btn btn-success float-right" style="height: 38px; margin-top: 20px;">
+					        <input type="button" id="btnSaveRoleAuthChanges" value="Save Changes" class="btn btn-success float-right" style="height: 38px; margin-top: 20px;">
 					    </div>
 					</div>
     			</div>
@@ -159,18 +160,48 @@
 </html>
 
 <script>
+
+	function submitNewRole() {
+		event.preventDefault(); // 폼의 기본 제출 동작을 막음
+        let formData = new FormData(document.getElementById('addNewRole')); // 폼 데이터를 FormData 객체로 생성
+        let jsonData = {};
+
+        formData.forEach(function(value, key) {
+            if (jsonData[key]) {
+                if (!Array.isArray(jsonData[key])) {
+                    jsonData[key] = [jsonData[key]];
+                }
+                jsonData[key].push(value);
+            } else {
+                jsonData[key] = value;
+            }
+        });
+
+        $.ajax({
+            type: 'POST',
+            url: '/settings/roleauth/add',
+            contentType: 'application/json',
+            data: JSON.stringify(jsonData),
+            success: function(response) {
+                alert('Roles saved successfully!');
+            },
+            error: function(error) {
+                alert('Error saving roles!');
+            }
+        });
+	}
 	
 	function saveRoleAuthChanges(){
 		let data = {
-	        role_codes: [],
+	        roleCodes: [],
 	        authorities: {}
 	    };
 
 	    // Collect role codes and corresponding authorities
-	    $('#role_auth_table').find('tr').each(function() {
-	        let roleCode = $(this).find('input[name="role_codes"]').val();
+	    $('#roleAuthTable').find('tr').each(function() {
+	        let roleCode = $(this).find('input[name="roleCodes"]').val();
 	        if (roleCode) {
-	            data.role_codes.push(roleCode);
+	            data.roleCodes.push(roleCode);
 
 	            let authorities = $(this).find('select').val();
 	            if (authorities) {
@@ -200,7 +231,10 @@
 	
 	
 	$(function() {
-		$("#btn_save_role_auth_changes").click(function() {
+		$("#btnAddNewRole").click(function() {
+			submitNewRole();
+		});
+		$("#btnSaveRoleAuthChanges").click(function() {
             saveRoleAuthChanges();
         });
 	});

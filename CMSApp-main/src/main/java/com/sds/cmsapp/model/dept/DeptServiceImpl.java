@@ -36,4 +36,10 @@ public class DeptServiceImpl implements DeptService {
 	public Dept selectByDeptIdx(final int deptIdx) {
 		return deptDAO.selectByDeptIdx(deptIdx);
 	}
+
+	@Override
+	public void delete(Dept dept) {
+		// TODO Auto-generated method stub
+		deptDAO.delete(dept);
+	}
 }

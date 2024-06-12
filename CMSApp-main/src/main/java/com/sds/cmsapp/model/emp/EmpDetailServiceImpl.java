@@ -24,9 +24,9 @@ public class EmpDetailServiceImpl implements EmpDetailService {
 	}
 
 	@Override
-	public EmpDetail selectByEmpIdx(int emp_idx) {
+	public EmpDetail selectByEmpIdx(int empIdx) {
 		// TODO Auto-generated method stub
-		return empDetailDAO.selectByEmpIdx(emp_idx);
+		return empDetailDAO.selectByEmpIdx(empIdx);
 	}
 
 	@Override

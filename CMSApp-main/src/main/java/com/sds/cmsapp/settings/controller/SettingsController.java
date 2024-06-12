@@ -20,6 +20,7 @@ import com.sds.cmsapp.model.authority.AuthorityService;
 import com.sds.cmsapp.model.dept.DeptService;
 import com.sds.cmsapp.model.emp.EmpDetailService;
 import com.sds.cmsapp.model.emp.EmpService;
+import com.sds.cmsapp.model.relationship.DeptProjectService;
 import com.sds.cmsapp.model.relationship.RoleAuthorityService;
 import com.sds.cmsapp.model.role.RoleService;
 
@@ -37,6 +38,9 @@ public class SettingsController {
 	
 	@Autowired
 	private DeptService deptService;
+	
+	@Autowired
+	private DeptProjectService deptProjectService;
 	
 	@Autowired
 	private RoleService roleService;
@@ -66,7 +70,15 @@ public class SettingsController {
 		// 부서 이름과 index 가져오기
 		List deptList = deptService.selectAllDeptName();
 		model.addAttribute("deptList", deptList);
-				
+		
+		// 빈 부서 가져오기
+		List emptyDeptList = deptProjectService.selectEmptyDept();
+		model.addAttribute("emptyDeptList", emptyDeptList);
+		
+		// 어느 부서도 관리하지 않는 프로젝트 가져오기
+		List emptyProjectList = deptProjectService.selectEmptyProject();
+		model.addAttribute("emptyProjectList", emptyProjectList);
+		
 		return "settings/dept_project";
 	}
 	
@@ -155,7 +167,7 @@ public class SettingsController {
 		Map<Role, List<Authority>> roleAuthMap = new HashMap<>();
 	    for(int i=0; i<roleList.size(); i++) {
 	    	Role role = (Role) roleList.get(i);
-	    	List<Authority> RoleAuthList = roleAuthorityService.selectAuthoritiesByRoleCode(role.getRole_code());
+	    	List<Authority> RoleAuthList = roleAuthorityService.selectAuthoritiesByRoleCode(role.getRoleCode());
 	    	System.out.println(("RoleAuthList: "+RoleAuthList));
 	    	roleAuthMap.put(role, RoleAuthList);
 	    }

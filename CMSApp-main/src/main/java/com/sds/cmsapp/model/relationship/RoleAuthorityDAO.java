@@ -11,8 +11,8 @@ import com.sds.cmsapp.domain.RoleAuthority;
 public interface RoleAuthorityDAO {
 
 	public void insertAuthorityIntoRole(RoleAuthority roleAuthority);
-	public List<Authority> selectAuthoritiesByRoleCode(int role_code);
-	public void deleteAuthoritiesByRoleCode(int role_code);
+	public List<Authority> selectAuthoritiesByRoleCode(int roleCode);
+	public void deleteAuthoritiesByRoleCode(int roleCode);
 	
 	// test
 	public void deleteAll();

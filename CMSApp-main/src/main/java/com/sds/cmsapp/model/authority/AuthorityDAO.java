@@ -10,8 +10,8 @@ import com.sds.cmsapp.domain.Authority;
 public interface AuthorityDAO {
 
 	public void insert(Authority authority);
-	public Authority selectByAuthorityIdx(int authority_idx);
-	public Authority selectByAuthorityCode(int authority_code);
+	public Authority selectByAuthorityIdx(int authorityIdx);
+	public Authority selectByAuthorityCode(int authorityCode);
 	public List selectAll();
 	
 }

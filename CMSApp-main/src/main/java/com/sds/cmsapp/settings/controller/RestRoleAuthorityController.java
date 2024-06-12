@@ -22,18 +22,50 @@ import com.sds.cmsapp.model.relationship.RoleAuthorityService;
 import com.sds.cmsapp.model.role.RoleService;
 
 @RestController
-public class RoleAuthorityController {
+public class RestRoleAuthorityController {
 
-    private static final Logger logger = LoggerFactory.getLogger(RoleAuthorityController.class);
+    private static final Logger logger = LoggerFactory.getLogger(RestRoleAuthorityController.class);
 
     @Autowired
     private RoleAuthorityService roleAuthorityService;
+    
+    @Autowired
+    private RoleService roleService;
+    
+    @Autowired
+    private AuthorityService authorityService;
+    
+    @PostMapping("/settings/roleauth/add")
+    public String saveRoles(@RequestBody Map<String, Object> payload) {
+        String roleName = (String) payload.get("roleName");
+        List<String> authorityCodes = (List<String>) payload.get("authorities");
+
+        // 역할명과 선택된 체크박스 값들을 출력합니다.
+        System.out.println("Role Name: " + roleName);
+        System.out.println("authorities: " + authorityCodes);
+
+        // 새 역할 생성
+        Role role = new Role();
+        role.setRoleName(roleName);
+        role.setRoleCode(roleService.getMaxRoleCode()+100);
+        roleService.insertRole(role);
+        
+        // 역할-권한 매핑
+        for(String authorityCode : authorityCodes) {
+        	RoleAuthority roleAuthority = new RoleAuthority();
+            roleAuthority.setRole(role);
+        	roleAuthority.setAuthority(authorityService.selectByAuthorityCode(Integer.parseInt(authorityCode)));
+        	roleAuthorityService.insertAuthorityIntoRole(roleAuthority);
+        }
+
+        return "/settings/role";
+    } 
 
     @PostMapping("/settings/roleauth/update")
     public ResponseEntity<?> updateRoleAuth(@RequestBody Map<String, Object> params) {
         try {
             logger.info("Received parameters: {}", params);
-            List<String> roleCodes = (List<String>) params.get("role_codes");
+            List<String> roleCodes = (List<String>) params.get("roleCodes");
             Map<String, List<String>> authorities = (Map<String, List<String>>) params.get("authorities");
 
             for (String roleCodeStr : roleCodes) {
@@ -51,9 +83,9 @@ public class RoleAuthorityController {
                         int authorityCode = Integer.parseInt(authorityCodeStr);
                         RoleAuthority roleAuthority = new RoleAuthority();
                         Role role = new Role();
-                        role.setRole_code(roleCode);
+                        role.setRoleCode(roleCode);
                         Authority authority = new Authority();
-                        authority.setAuthority_code(authorityCode);
+                        authority.setAuthorityCode(authorityCode);
 
                         roleAuthority.setRole(role);
                         roleAuthority.setAuthority(authority);
