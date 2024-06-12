@@ -5,6 +5,7 @@ import java.util.List;
 import org.apache.ibatis.annotations.Mapper;
 
 import com.sds.cmsapp.domain.Folder;
+import com.sds.cmsapp.domain.RequestDocumentDTO;
 
 @Mapper
 public interface FolderDAO {
@@ -32,5 +33,8 @@ public interface FolderDAO {
 	
 	// 최상위 폴더 조회
 	public List<Folder> selectTopFolder();
+	
+	// 폴더 목록 조회
+	public List<Integer> selectFolderIdxListInProject(RequestDocumentDTO requestDocumentDTO);
 	
 }

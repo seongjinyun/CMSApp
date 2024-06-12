@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.sds.cmsapp.domain.Project;
+import com.sds.cmsapp.domain.RequestDocumentDTO;
 
 @Service
 public class ProjectServiceImpl implements ProjectService {
@@ -27,7 +28,12 @@ public class ProjectServiceImpl implements ProjectService {
 	}
 
 	@Override
-	public List selectAll() {
+	public List<Project> selectAll() {
 		return projectDAO.selectAll();
 	}
+
+//	@Override
+//	public List<Project> selectAllByFilteredProjectIdx(RequestDocumentDTO requestDocumentDTO) {
+//		return projectDAO.selectAllByFilteredProjectIdx(requestDocumentDTO);
+//	}
 }

@@ -1,5 +1,7 @@
 package com.sds.cmsapp.model.mastercode;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -14,6 +16,11 @@ public class MasterCodeServiceImpl implements MasterCodeService {
 	@Override
 	public MasterCode select(int status_code) {
 		return masterCodeDAO.select(status_code); //returnType="MasterCode"
+	}
+
+	@Override
+	public List<MasterCode> selectAll() {
+		return masterCodeDAO.selectAll();
 	}
 		
 }

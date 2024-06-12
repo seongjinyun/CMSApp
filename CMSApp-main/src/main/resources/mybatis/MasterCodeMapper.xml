@@ -7,6 +7,9 @@
 	<select id="select" parameterType="int" resultType="MasterCode">
 		select * from mastercode where status_code=#{statusCode}
 	</select>
-
+	
+	<select id="selectAll" resultType="MasterCode">
+		select * from mastercode
+	</select>
 
 </mapper>

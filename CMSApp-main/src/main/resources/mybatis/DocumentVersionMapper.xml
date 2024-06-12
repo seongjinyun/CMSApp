@@ -3,31 +3,22 @@
 <mapper
 	namespace="com.sds.cmsapp.model.document.DocumentVersionDAO">
 
-
-	<resultMap type="DocumentVersion" id="DocumentVersionMap">
+ 	<resultMap type="DocumentVersion" id="DocumentVersionMap">
 		<id column="document_version_idx" property="documentVersionIdx" />
-		
-		<!-- document -->
-<!-- 		<association column="document_idx" property="document"
-			javaType="Document"
-			select="com.sds.cmsapp.model.document.DocumentDAO.selectByDocumentIdx" /> -->
-			
-		<!-- version_log -->
-		<association column="version_log_idx" property="versionLog"
-			javaType="VersionLog"
+		<association column="document_idx" property="document" javaType="Document"
+			select="com.sds.cmsapp.model.document.DocumentDAO.select" />
+		<association column="version_log_idx" property="versionLog" javaType="VersionLog"
 			select="com.sds.cmsapp.model.versionlog.VersionLogDAO.select" />
 	</resultMap>
 
 	<select id="selectByDocumentIdx" parameterType="int"
 		resultMap="DocumentVersionMap">
-		select * from document_version where
-		document_idx=#{document_idx}
-	</select>
+		select * from document_version where document_idx = #{document_idx}
+	</select> 
 	
 	<!-- 0603 추가 -->
-	<select id="select" parameterType="int" resultType="DocumentVersion">
-		select * from document_version where
-		document_idx=#{document_idx}
-	</select>
+<!-- 	<select id="select" parameterType="int" resultType="DocumentVersion">
+		select * from document_version where document_idx = #{document_idx}
+	</select> -->
 
 </mapper>

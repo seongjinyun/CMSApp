@@ -21,4 +21,13 @@
 		select * from project
 	</select> 
 	
+	<!-- 필터 조건에 해당하는 프로젝트만 조회 -->
+<!-- 	<select id="selectByFilteredProjectIdx" parameterType="RequestDocumentDTO" resultType="Project">
+		select * from project
+		<if test="projectIds != null">
+			WHERE f.project_idx 
+			IN <foreach collection="projectIds" item="p" open="(" close=")" separator="," >#{p}</foreach>
+		</if>
+	</select> -->
+	
 </mapper>
