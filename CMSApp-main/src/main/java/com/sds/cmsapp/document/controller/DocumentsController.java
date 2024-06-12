@@ -108,7 +108,7 @@ public class DocumentsController {
 	}
 	
 	// 글 수정하기
-	@GetMapping("/document/writeform")
+	@GetMapping("/document/editForm")
 	public String getEdit() {
 		return "documents/writeform";
 	}
