@@ -172,13 +172,17 @@
   	<!-- 디렉토리 변경 모달 스크립트 -->
 	<th:block th:replace="~{elements/folder_modal_script :: folder_modal_script}"/>
 	<!-- /.디렉토리 변경 모달 스크립트 -->
+	<!-- 사이드바 디렉토리 관련 로직 -->
+  	<th:block th:replace="~{elements/sidebar_script :: sidebar_script}"/>
+  	<!-- /.사이드바 디렉토리 관련 로직 -->
+
 <script>
 $(function(){
     checkBoxAll();
     write();
     filterFile();
     searchFile();
-    initializeOpnMoveDirectoryModal();
+    initializeOpenMoveDirectoryModal();
     goToTrash();
   });
   
