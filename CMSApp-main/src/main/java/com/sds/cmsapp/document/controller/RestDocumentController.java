@@ -59,6 +59,15 @@ public class RestDocumentController {
 		return entity;
     }
 	
+	@PostMapping("/document/edit")
+	public ResponseEntity<String> editDocument(@ModelAttribute DocumentRequest documentRequest) {
+		VersionLog versionLog = documentRequest.getVersionLog();
+		
+		documentService.versionUpdate(versionLog);
+		ResponseEntity<String> entity = ResponseEntity.ok("DB입력 성공");
+		return entity;
+	}
+	
 	@GetMapping("document/folder/list")
 	public ResponseEntity getFolderList() throws FolderException {
 		List<Folder> folderList = folderService.selectTopFolder();

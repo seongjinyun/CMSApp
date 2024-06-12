@@ -104,12 +104,20 @@ public class DocumentsController {
 		DocumentVersion documentVersion  = documentService.documentDetailSelect(documentIdx);
         model.addAttribute("documentVersion", documentVersion);
         model.addAttribute("folderIdx", folderIdx);
+        model.addAttribute("documentIdx", documentIdx);
 		return "documents/detail";
 	}
 	
 	// 글 수정하기
-	@GetMapping("/document/writeform")
-	public String getEdit() {
-		return "documents/writeform";
+	@GetMapping("/document/editform")
+	public String getEdit(@RequestParam("documentIdx") int documentIdx,
+            						@RequestParam("folderIdx") int folderIdx,
+            						Model model) {
+		DocumentVersion documentVersion  = documentService.documentDetailSelect(documentIdx);
+		model.addAttribute("documentVersion", documentVersion);
+        model.addAttribute("folderIdx", folderIdx);
+        model.addAttribute("documentIdx", documentIdx);
+        model.addAttribute("versionLogIdx", documentVersion.getVersionLog().getVersionLogIdx());
+        return "documents/editform";
 	}
 }
