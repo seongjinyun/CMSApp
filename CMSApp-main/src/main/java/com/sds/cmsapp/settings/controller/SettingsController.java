@@ -93,22 +93,9 @@ public class SettingsController {
 		List roleList = roleService.selectAll();
 		model.addAttribute("roleList", roleList);
 		
-		/*
 		// -----------------------------
-		// 테스트를 위해 사원 '아이린'전달
-		Emp emp = empService.selectByEmpIdx(51);
-		EmpDetail empDetail = empDetailService.selectByEmpIdx(emp.getEmp_idx());
-		model.addAttribute("emp", emp);
-		model.addAttribute("empDetail", empDetail);
-		System.out.println(empDetail.getEmp_profile_url());
-		String profileImgUrl = "/profileImg/" + empDetail.getEmp_profile_url();
-	    model.addAttribute("profile_img_url", profileImgUrl);
-		// -----------------------------
-		*/
-		
-		// -----------------------------
-		// 테스트를 위해 사원 전달
-		Emp emp = empService.selectByEmpIdx(58);
+		//  테스트를 위해 사원 '아이린'전달
+		Emp emp = empService.selectByEmpIdx(45);
 		EmpDetail empDetail = empDetailService.selectByEmpIdx(emp.getEmpIdx());
 		model.addAttribute("emp", emp);
 		model.addAttribute("empDetail", empDetail);
