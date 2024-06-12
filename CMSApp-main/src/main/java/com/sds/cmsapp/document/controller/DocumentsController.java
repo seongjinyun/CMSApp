@@ -49,31 +49,31 @@ public class DocumentsController {
 	} 
 	
 	//파일목록
-	@GetMapping("/document/list")
-
-	public String getDocumentList(Model model, DocumentVersion documentVersion, @RequestParam(value="folderIdx", defaultValue = "0") int folderIdx) {
-		if (folderIdx == 0) {
-			HashMap<String, Integer> map=new HashMap<String, Integer>();
-			map.put("startIndex", pager.getStartIndex());
-			map.put("rowCount", pager.getPageSize());
-			List<Document> documentList = documentService.selectAll(map);
-			model.addAttribute("documentListSelect", documentList);
-			model.addAttribute("folderIdx", folderIdx);
-			return "documents/list";
-		}else {
-			HashMap map = new HashMap();
-			map.put("folderIdx", folderIdx);	
-			//폴더 -> 파일 리스트
-			List documentListSelect = documentService.documentListSelect(map);
-			
-			model.addAttribute("documentListSelect", documentListSelect);
-			log.debug("model= " + model);
-			
-			model.addAttribute("folderIdx", folderIdx);
-			
-			return "documents/list";
-		}
-	} 
+//	@GetMapping("/document/list")
+//
+//	public String getDocumentList(Model model, DocumentVersion documentVersion, @RequestParam(value="folderIdx", defaultValue = "0") int folderIdx) {
+//		if (folderIdx == 0) {
+//			HashMap<String, Integer> map=new HashMap<String, Integer>();
+//			map.put("startIndex", pager.getStartIndex());
+//			map.put("rowCount", pager.getPageSize());
+//			List<Document> documentList = documentService.selectAll(map);
+//			model.addAttribute("documentListSelect", documentList);
+//			model.addAttribute("folderIdx", folderIdx);
+//			return "documents/list";
+//		}else {
+//			HashMap map = new HashMap();
+//			map.put("folderIdx", folderIdx);	
+//			//폴더 -> 파일 리스트
+//			List documentListSelect = documentService.documentListSelect(map);
+//			
+//			model.addAttribute("documentListSelect", documentListSelect);
+//			log.debug("model= " + model);
+//			
+//			model.addAttribute("folderIdx", folderIdx);
+//			
+//			return "documents/list";
+//		}
+//	} 
 	//휴지통
 	@GetMapping("/document/trash")
 	public String getTrash(Model model, @RequestParam(value="currentPage", defaultValue="1") int currentPage) {

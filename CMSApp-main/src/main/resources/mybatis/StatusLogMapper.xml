@@ -40,6 +40,7 @@
 		<if test="startDate != null and endDate != null">
 			AND s.regdate BETWEEN #{startDate} AND #{endDate}
 		</if>
+		ORDER BY s.regdate desc
 	</select>
 	
 	<select id="selectSummaryListOfLatestRegisteredLog" parameterType="int" resultMap="StatusLogMap">

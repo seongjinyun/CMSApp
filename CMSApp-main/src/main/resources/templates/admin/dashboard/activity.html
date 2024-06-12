@@ -27,6 +27,29 @@ button.show_list {
 button.show_list:hover {
 	color: blue;
 }
+
+div#filter-card {
+	font-weight: 500;
+}
+
+/* .filter-title {
+	padding-left: 2rem;
+} */
+
+button#daterange-btn {
+	display: inline-block;
+	line-height: 22px;
+}
+/*
+[class*=icheck-]>label,button#daterange-btn {
+	vertical-align: middle;
+} */
+
+div.table-detail, span.table-detail {
+	font-size: 0.9rem;
+	color: gray;
+}
+
 </style>
 </head>
 
@@ -76,9 +99,9 @@ button.show_list:hover {
 					<!-- Nav tabs -->
 					<div class="row">
 						<div class="col-md-12">
-							<ul class="nav nav-tabs">
+							<ul class="nav nav-tabs" id="activity-tabs">
 								<li class="nav-item"><a class="nav-link active"
-									data-toggle="tab" href="#summary">요약 </a></li>
+									data-toggle="tab" href="#summary">요약</a></li>
 								<li class="nav-item"><a class="nav-link" data-toggle="tab"
 									href="#entire-list">전체 보기</a></li>
 							</ul>
@@ -138,7 +161,7 @@ button.show_list:hover {
 												<div class="input-group">
 													<!-- button -->
 													<button type="button" class="btn btn-default float-right"
-														id="goToEntireList">전체 보기</button>
+														id="goToEntireList-btn">전체 보기</button>
 												</div>
 											</div>
 										</div>
@@ -146,15 +169,14 @@ button.show_list:hover {
 											<div class="table-responsive">
 												<table id="table-preview" class="table table-hover m-0">
 													<thead>
-														<tr>
+														<!-- <tr>
 															<th>No.</th>
 															<th>제목</th>
-															<th>버전</th>
 															<th>사원</th>
 															<th>결재 상태</th>
 															<th>코멘트</th>
 															<th>일자</th>
-														</tr>
+														</tr> -->
 													</thead>
 													<tbody>
 													</tbody>
@@ -176,7 +198,7 @@ button.show_list:hover {
 							<div class="row">
 								<div class="col-md-12">
 									<!-- Card -->
-									<div class="card">
+									<div class="card" id="filter-card">
 										<div class="card-header">
 											<h3 class="card-title">필터</h3>
 											<div class="card-tools">
@@ -185,32 +207,31 @@ button.show_list:hover {
 										</div>
 										<div class="card-body">
 											<div class="row">
-												<div class="col-sm-2">날짜</div>
+												<div class="col-sm-2 filter-title">날짜</div>
 												<div class="col-sm-2">
 													<div class="icheck-primary d-inline">
 														<input type="radio" id="radio-date-all" name="date-filter"
-															value="radio-date-all" checked> <label
-															for="radio-date-all">전체 보기 </label>
+															value="radio-date-all" checked> 
+														<label for="radio-date-all">전체 보기 </label>
 													</div>
 												</div>
-												<div class="col-sm-8">
+												<div class="col-sm-2">
 													<div class="icheck-primary d-inline">
 														<input type="radio" id="radio-date-custom"
-															name="date-filter" value="radio-date-select" >
-														<label for="radio-date-custom">날짜 선택 </label>
+															name="date-filter" value="radio-date-custom" >
+														<label for="radio-date-custom">직접 선택 </label>
 													</div>
-													<div>
-														<!-- button -->
-														<button type="button" class="btn btn-default" id="daterange-btn">
-															<i class="far fa-calendar-alt"></i> 
-															날짜 선택: <span></span> 
-															<i class="fas fa-caret-down"></i>
+												</div>
+												<div class="col-sm-6">
+													<div class="form-group">
+														<button type="button" class="btn btn-default disabled" id="daterange-btn" style="vertical-align: top">
+															<i class="far fa-calendar-alt"></i> <span>어제</span> <i class="fas fa-caret-down"></i>
 														</button>
 													</div>
 												</div>
 											</div>
 											<div class="row">
-												<div class="col-sm-2">프로젝트</div>
+												<div class="col-sm-2 filter-title">프로젝트</div>
 												<div class="col-sm-2">
 													<div class="icheck-primary d-inline">
 														<input type="radio" id="radio-project-all"
@@ -218,13 +239,15 @@ button.show_list:hover {
 															for="radio-project-all">전체 보기 </label>
 													</div>
 												</div>
-												<div class="col-sm-8">
+												<div class="col-sm-2">
 													<div class="icheck-primary d-inline">
-														<input type="radio" id="radio-project-select"
-															name="project-filter" value="radio-project-select" > <label
-															for="radio-project-select">프로젝트 선택</label>
+														<input type="radio" id="radio-project-custom"
+															name="project-filter" value="radio-project-custom"> <label
+															for="radio-project-custom">직접 선택</label>
 													</div>
-			                                        <div class="form-group">
+												</div>
+												<div class="col-sm-6">
+													<div class="form-group">
 			                                            <select id="project-tag" name="project-tag" 
 			                                            	class="select2 form-control" multiple="multiple" data-placeholder="추가할 프로젝트 (다중)선택" 
 			                                            	style="width: 100%;">
@@ -232,7 +255,6 @@ button.show_list:hover {
 			                                        </div>
 												</div>
 											</div>
-
 											<!-- <div class="row">
 												<div class="col-sm-3">사원</div>
 												<div class="col-sm-3">
@@ -259,88 +281,65 @@ button.show_list:hover {
 											</div> -->
 
 											<div class="row">
-												<div class="col-sm-2">결재 상태</div>
+												<div class="col-sm-2 filter-title">결재 상태</div>
 												<div class="col-sm-2">
 													<div class="icheck-primary d-inline">
 														<input type="radio" id="radio-status-all"
-															name="status-filter" value="radio-status-all" checked=""> <label
+															name="status-filter" value="radio-status-all" checked> <label
 															for="radio-status-all">전체 보기 </label>
 													</div>
 												</div>
-												<div class="col-sm-8">
+												<div class="col-sm-2">
 													<div class="icheck-primary d-inline">
-														<input type="radio" id="radio-status-select"
-															name="status-filter" value="radio-status-select" > <label
-															for="radio-status-select">결재 상태 선택</label>
+														<input type="radio" id="radio-status-custom"
+															name="status-filter" value="radio-status-custom" > <label
+															for="radio-status-custom">직접 선택</label>
 													</div>
-			                                        <div class="form-group">
+			                                    </div>
+			                                    <div class="col-sm-6">
+			                                    	<div class="form-group">
 			                                            <select id="status-tag" name="status-tag" 
 			                                            	class="select2 form-control" multiple="multiple" data-placeholder="결재 상태 (다중)선택" 
 			                                            	style="width: 100%;">
 			                                            </select>
 			                                        </div>
 			                                    </div>
-												
-<!-- 													<div class="icheck-primary d-inline">
-														<input type="radio" id="radio-status-inreview"
-															name="status-filter" value="radio-status-inreview" > <label
-															for="radio-status-inreview">리뷰 대기 문서 </label>
-													</div>
-												<div class="col-sm-2">
-													<div class="icheck-primary d-inline">
-														<input type="radio" id="radio-status-reviewed"
-															name="status-filter" value="radio-status-reviewed"> <label
-															for="radio-status-reviewed">리뷰 완료 문서 </label>
-													</div>
-												</div>
-												<div class="col-sm-2">
-													<div class="icheck-primary d-inline">
-														<input type="radio" id="radio-status-rejected"
-															name="status-filter" value="radio-status-rejected"> <label
-															for="radio-status-rejected">반려 문서 </label>
-													</div>
-												</div> -->
 											</div>
 										</div>
 										<!-- card-body end -->
 									</div>
 									<!-- Card End -->
-
-									<!-- table wrapper -->
-									<div id="publish-table_wrapper"
-										class="dataTables_wrapper dt-bootstrap4">
-										<div class="row">
-											<div class="col-sm-12">
-												<table id="table-filtered"
-													class="bg-white table table-hover table-bordered dataTable dtr-inline">
-													<thead>
-														<tr>
-															<th>선택</th>
-															<th>No.</th>
-															<th>제목</th>
-															<th>버전</th>
-															<th>부서</th>
-															<th>사원</th>
-															<th>결재 상태</th>
-															<th>코멘트</th>
-															<th>일자</th>
-														</tr>
-													</thead>
-													<tbody>
-
-													</tbody>
-												</table>
-											</div>
-										</div>
-									</div>
-									<!-- table wrapper end -->
 								</div>
-								<!-- col end -->
+								<!-- Col End -->
 							</div>
-							<!-- Row end -->
+							<!-- Row End -->
+
+							<!-- Row -->
+							<div class="row">
+								<div class="col-sm-12">
+									<div id="filtered-table_wrapper" class="dataTables_wrapper dt-bootstrap4">
+										<table id="table-filtered" class="bg-white table table-hover table-bordered dataTable dtr-inline">
+											<thead>
+												<tr>
+													<!-- <th>선택</th>
+													<th>No.</th>
+													<th>제목</th>
+													<th>버전</th>
+													<th>부서</th>
+													<th>사원</th>
+													<th>결재 상태</th>
+													<th>코멘트</th>
+													<th>일자</th> -->
+												</tr>
+											</thead>
+											<tbody></tbody>
+										</table>
+									</div>
+								</div>
+							</div>
+							<!-- Row End -->
 						</div>
 						<!-- Tab End -->
-
 					</div>
 					<!-- Tab panes End -->
 				</div>
@@ -442,15 +441,20 @@ button.show_list:hover {
 					for (let i = 0; i < result.length; i++) {
 						tr += `
 							<tr>
-							<td>${i+1}</td>
-							<td><a href="#">${result[i].documentIdx}. ${result[i].title}</a><br>${result[i].projectName}, ${result[i].folderName}</td>
-							<td>${result[i].version}</td>
-							<td>${result[i].empName}<br>${result[i].deptName}</td>
-							<td><span class="badge ${statusBadge}">${result[i].statusName}</span></td>
-							<td>${result[i].comments}
-							</td>
-							<td>${result[i].regdate}</td>
-						</tr>
+								<td>${i+1}</td>
+								<td>
+									<a href="#">${result[i].title}</a> <span class="table-detail">ver.${result[i].version}</span>
+									<div class="table-detail">${result[i].projectName} > ${result[i].folderName}</div>
+								</td>
+								<td>
+									${result[i].empName}
+									<div class="table-detail">${result[i].deptName}</div>
+								</td>
+								<td><span class="badge ${statusBadge}">${result[i].statusName}</span></td>
+								<td>${result[i].comments}
+								</td>
+								<td>${result[i].regdate}</td>
+							</tr>
 						`;
 					}
 					preview.html(tr);
@@ -462,56 +466,36 @@ button.show_list:hover {
 		
 		/* 필터에 따라 문서 목록 가져오기 */
 		function getFilteredData(statusCodeList, startDate, endDate, projectIdxList) {
-			
+			// url 쿼리 스트링 설정
 			let url = "/dashboard/entire/list?";
 			if (statusCodeList != null) url += "&statusCodeList=" + statusCodeList;
 			if (projectIdxList != null) url += "&projectIdxList=" + projectIdxList;
 			if (startDate != null && endDate != null) url += "&startDate=" + startDate + "&endDate=" + endDate;
 			
-			$.ajax({
-				type: "GET",
-				url: url,
-				success: function (result, status, xhr) {
-					// alert('문서 불러오기 성공');
-					// 테이블 초기화
-				 	$("#table-filtered").DataTable().destroy();
-					let preview = $("#table-filtered tbody");
-					preview.empty();
-					let tr = "";
-					
-					for (let i = 0; i < result.length; i++) {
-						// 배지 색 정하기
-						let statusBadge = null; 
-						if (result[i].statusCode == 200) statusBadge = "badge-success";
-						else if (result[i].statusCode == 300) statusBadge = "badge-info";
-						else if (result[i].statusCode == 500) statusBadge = "badge-danger";
-						
-						// 테이블 행 추가
-						tr += `
-							<tr>
-							<td><input type="checkbox" name="checked-documenet"></td>
-							<td>${i+1}</td>
-							<td><a href="#">${result[i].documentIdx}. ${result[i].title}</a><br>${result[i].projectName}</td>
-							<td>${result[i].version}</td>
-							<td>${result[i].deptName}</td>
-							<td>${result[i].empName}</td>
-							<td><span class="badge ${statusBadge}">${result[i].statusName}</span></td>
-							<td>${result[i].comments}
-							</td>
-							<td>${result[i].regdate}</td>
-						</tr>
-						`;
+			// 데이터 테이블 적용
+			$("#table-filtered").DataTable({
+				ordering: true,
+				serverSide: false,
+				language : datatable_ko,
+				autoWidth: true,
+				responsive: true,
+				columns: [
+					{ data: "title", title: "제목", width: '20%'},
+					{ data: "version" , title: "버전", width: '10%'},
+					{ data: "deptName" , title: "부서명", width: '10%'},
+					{ data: "empName" , title: "사원명", width: '10%'},
+					{ data: "statusName" , title: "상태명", width: '10%'},
+					{ data: "comments" , title: "코멘트", width: '20%'},
+					{ data: "regdate" , title: "일자", width: '20%'}
+				],
+				ajax: {
+					url: url,
+					type: "GET",
+					"dataSrc": function (result) {
+						return result;
+		            }, 	error: function(xhr, status, err) {
+		            	alert('통신 실패!!!');
 					}
-					preview.html(tr); 
-					
-					// 데이터 테이블 적용
-					$("#table-filtered").DataTable({
-						ordering: true,
-						serverSide: false,
-						language : datatable_ko
-					});
-				}, error: function (xhr, status, e) {
-					console.log("error", e);
 				}
 			});
 		}
@@ -559,6 +543,11 @@ button.show_list:hover {
  			$('#btn-reviewed').click(function(){ getSummaryData(300);}); // 리뷰 완료 문서 미리보기 버튼 클릭 시 목록 가져오기
  			$('#btn-rejected').click(function(){ getSummaryData(500);}); // 반려 문서 미리보기 버튼 클릭 시 목록 가져오기
  			
+ 			/* 전체보기 버튼 */
+ 			$("#goToEntireList-btn").click(function(){
+ 				$("a[href='#entire-list']").tab('show');
+ 			});
+ 			
 			/* [전체보기 탭] 초기화 */
             $('#project-tag').select2(); // 부서 선택 폼 플러그인 활성화
 	        loadProject(); // 전체 부서 목록 불러오기
@@ -566,37 +555,60 @@ button.show_list:hover {
            	loadStatus(); // 전체 상태 목록 불러오기
 
            	/* 날짜 선택 폼 설정 */
-			let dateRangePicker_startDate = null;
-			let dateRangePicker_endDate = null;		
+			let dateRangePicker_startDate = moment().subtract(1, 'days').hours('00').minutes('00').seconds('00').format("YYYY-MM-DD HH:mm:ss");
+			let dateRangePicker_endDate = moment().format("YYYY-MM-DD HH:mm:ss");		
 			
 			$('#daterange-btn').daterangepicker({ 	// 날짜 선택 폼 플러그인 활성화
-					language : "ko",
+					language : 'ko',
+					locale : { 
+						//'format': 'YYYY-MM-DD HH:mm:ss',
+						'seperator': '-',
+						'applyLabel': '적용',
+						'cancelLabel': '취소',
+						'customRangeLabel': '직접 선택'
+					},
+					startDate : dateRangePicker_startDate,
+					endDate :dateRangePicker_endDate,
 					ranges : {
 						'오늘' : [ moment(), moment() ],
-						'어제' : [ moment().subtract(1, 'days'), moment().subtract(1, 'days') ],
+						'어제' : [ moment().subtract(1, 'days'), moment() ],
 						'지난 7일' : [ moment().subtract(6, 'days'), moment() ],
 						'지난 30일' : [ moment().subtract(29, 'days'), moment() ],
 					},
-					autoApply : true // [취소], [적용] 버튼 없음
-				}, function(start, end) {
-					//alert(start.format("ll") + "-" + end.format("ll")); // 날짜 선택 확인용 메시지
-					dateRangePicker_startDate = start.format("YYYY-MM-DD hh:mm:ss");
-					dateRangePicker_endDate = end.format("YYYY-MM-DD hh:mm:ss");
-					
-					if (this.chosenLabel == "오늘") {
-						$('#daterange-btn span').html("오늘");
-					} else if (this.chosenLabel == "어제") {
-						$('#daterange-btn span').html("어제");
-					} else {
-						$('#daterange-btn span').html(start.format('YYYY/MM/DD') + ' - ' + end.format('YYYY/MM/DD'));
-					}
+					autoApply : true, // [취소], [적용] 버튼 없음
+				}, function(start, end, label) {
+					alert(label + " : " + start.format("YYYY-MM-DD HH:mm:ss") + "-" + end.format("YYYY-MM-DD HH:mm:ss")); // 날짜 선택 확인용 메시지
+					dateRangePicker_startDate = start.format("YYYY-MM-DD HH:mm:ss");
+					dateRangePicker_endDate = end.format("YYYY-MM-DD HH:mm:ss");
+					// 선택한 기간 라벨을 폼에 표시
+					if (this.chosenLabel == "오늘") $('#daterange-btn span').html("오늘");
+					else if (this.chosenLabel == "어제") $('#daterange-btn span').html("어제");
+					else $('#daterange-btn span').html(start.format('YYYY/MM/DD') + ' - ' + end.format('YYYY/MM/DD'));
 				});
 			
 			/* 필터 라디오 버튼에 따른 선택 박스 활성화 조건 */
-			$("input#radio-project-select").click(function(){ $('#project-tag').prop('disabled', false); })
-			$("input#radio-project-all").click(function(){ $('#project-tag').prop('disabled', true); })
-			$("input#radio-status-select").click(function(){ $('#status-tag').prop('disabled', false); })
-			$("input#radio-status-all").click(function(){ $('#status-tag').prop('disabled', true); })
+			$("input#radio-date-all").click(function(){ 
+				$('#daterange-btn').addClass('disabled');
+			})
+			
+			$("input#radio-date-custom").click(function(){ 
+				$('#daterange-btn').removeClass('disabled');
+			})
+			
+			$("input#radio-project-custom").click(function(){ 
+				$('#project-tag').prop('disabled', false); 
+				/* $("input#radio-project-custom").prop('disabled', false);
+				$("input#radio-project-all").prop('disabled', true); */
+			})
+			$("input#radio-project-all").click(function(){ 
+				$('#project-tag').prop('disabled', true); 
+			})
+			$("input#radio-status-custom").click(function(){ 
+				$('#status-tag').prop('disabled', false);
+			})
+			$("input#radio-status-all").click(function(){ 
+				$('#status-tag').prop('disabled', true); 
+			})
 			
 			/* 필터 적용 후 조회 버튼 클릭 이벤트 */
 			$('#btn-filtered').click(function(){
@@ -606,24 +618,29 @@ button.show_list:hover {
 				let filter_status = document.querySelector("input[name='status-filter']:checked").value;
 				
 				let statusCodeList = null; // 상태 정보
-				if (filter_status == "radio-status-select")
+				if (filter_status == "radio-status-custom")
 					statusCodeList = $('#status-tag').val(); 
 				alert("선택된 상태 코드: " + statusCodeList);
 				
-				let startDate, endDate = null; // 날짜 정보
-				if (filter_date == "radio-date-select") {
+				let startDate = null; // 날짜 정보
+				let endDate = null
+				if (filter_date == "radio-date-custom") {
 					startDate = dateRangePicker_startDate;
 					endDate = dateRangePicker_endDate;
 				} 
-				alert("선택된 날짜: " + startDate + "-" +endDate)
+				alert("선택된 날짜: " + startDate + "-" + endDate)
 				
 				let projectIdxList = null; // 프로젝트 정보
-				if (filter_project == "radio-project-select")			
+				if (filter_project == "radio-project-custom")			
 					projectIdxList = $('#project-tag').val(); 
 				alert("선택된 프로젝트: " + projectIdxList);
 				
 				getFilteredData(statusCodeList, startDate, endDate, projectIdxList); // 필터 처리된 목록 조회
 			});
+			
+			setTimeout(function(){
+	           	getFilteredData(null, null, null, null); // 초기화
+			}, 2000);
 		});
 	</script>
 

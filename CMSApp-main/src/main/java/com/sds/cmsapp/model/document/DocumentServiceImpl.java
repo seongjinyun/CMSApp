@@ -85,7 +85,7 @@ public class DocumentServiceImpl implements DocumentService {
 					.comments(s.getComments())
 					.statusCode(s.getMasterCode().getStatusCode())
 					.statusName(s.getMasterCode().getStatusName()) // MasterCodeMap
-					.regdate(new SimpleDateFormat("yyyy-MM-dd hh:mm:ss").format(new Date(s.getRegdate().getTime())))
+					.regdate(new SimpleDateFormat("yyyy년 M월 dd일 HH:mm:ss").format(new Date(s.getRegdate().getTime())))
 					.empName(s.getEmp().getEmpName()) // EmpMap
 					.deptName(s.getEmp().getDept().getDeptName())
 					.folderName(s.getDocument().getFolder().getFolderName()) // DocumentMap
@@ -136,7 +136,7 @@ public class DocumentServiceImpl implements DocumentService {
 					.comments(s.getComments())
 					.statusCode(s.getMasterCode().getStatusCode())
 					.statusName(s.getMasterCode().getStatusName()) // MasterCodeMap
-					.regdate(new SimpleDateFormat("yyyy-MM-dd hh:mm:ss").format(new Date(s.getRegdate().getTime())))
+					.regdate(new SimpleDateFormat("yyyy년 M월 dd일 HH:mm:ss").format(new Date(s.getRegdate().getTime())))
 					.empName(s.getEmp().getEmpName()) // EmpMap
 					.deptName(s.getEmp().getDept().getDeptName())
 					.folderName(s.getDocument().getFolder().getFolderName()) // DocumentMap

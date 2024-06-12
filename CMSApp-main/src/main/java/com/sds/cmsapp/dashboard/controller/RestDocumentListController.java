@@ -39,37 +39,24 @@ public class RestDocumentListController {
 	/* 결재 진행 상태별 문서 수 조회 (휴지통에 있는 문서 제외) */
 	@GetMapping("/dashboard/summary/count")
 	public ResponseDocumentCountDTO getCountByStatus() {
-		log.debug("======== 문서 수 집계 요청이 들어왔습니다. ======== ");
-		
 		return documentService.countByStatus();
 	}
 	
 	/* 결재 진행 상태별 문서 목록 조회 (휴지통에 있는 문서 제외, 10개까지) */
 	@GetMapping("/dashboard/summary/list")
 	public List<ResponseDocumentDTO> getSummaryList(@RequestParam(value="statusCode") int statusCode) {
-		log.debug("======== 문서 목록 요청이 들어왔습니다. ======== ");
 		log.debug("입력받은 상태 코드: " + statusCode);
-		
-		log.debug("======== 문서 목록 조회를 시작합니다. ======== ");
-		List<ResponseDocumentDTO> list = documentService.selectSummaryListOfCurrentStatus(statusCode);
-		
-		return list;
+		return documentService.selectSummaryListOfCurrentStatus(statusCode);
 	}
 	
 	/* 필터에 따라 결재 진행 중인 문서 목록 조회 (휴지통에 있는 문서 제외) */
 	@GetMapping("/dashboard/entire/list")
 	public List<ResponseDocumentDTO> getFilteredList(RequestDocumentDTO item) {
-		
-		log.debug("======== 문서 목록 요청이 들어왔습니다. ======== ");
 		log.debug("입력받은 상태 코드: " + item.getStatusCodeList());
 		log.debug("입력받은 시작일: " + item.getStartDate());
 		log.debug("입력받은 마지막일: " + item.getEndDate());
 		log.debug("입력받은 프로젝트 리스트: " + item.getProjectIdxList());
-		
-		log.debug("======== 문서 목록 조회를 시작합니다. ======== ");
-		List<ResponseDocumentDTO> list = documentService.selectFilteredListOfCurrentStatus(item);
-		
-		return list;
+		return documentService.selectFilteredListOfCurrentStatus(item);
 	}
 	
 	/* 전체 프로젝트 목록 조회 */
@@ -88,7 +75,6 @@ public class RestDocumentListController {
 	public ModelAndView handle(RuntimeException e) {
 		ModelAndView mav = new ModelAndView("adminn/error/result");
 		mav.addObject("e", e);
-		
 		return mav;
 	}
 
