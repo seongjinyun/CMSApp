@@ -48,7 +48,7 @@
     
     <insert id="documentVersionInsert" parameterType="DocumentVersion">
     	insert into document_version (document_idx, version_log_idx, status_code)
-    	values (#{document.documentIdx}, #{versionLog.versionLogIdx}, 200)
+    	values (#{document.documentIdx}, #{versionLog.versionLogIdx}, 100)
     </insert>
 	
 	<!-- document/list 문서 리스트 조회 -->
@@ -64,10 +64,15 @@
 		</association>
 		
 		<association property="versionLog" javaType="VersionLog">
-			<id property="versionLogIdx" column="versionLogIdx"/>
+			<id property="versionLogIdx" column="version_Log_Idx"/>
 			<result property="version" column="version"/>
 			<result property="title" column="title"/>
 			<result property="regdate" column="regdate"/>
+		</association>
+		
+		<association property="statusCode" javaType="MasterCode">
+			<id property="statusCode" column="status_code"/>
+			<result property="statusName" column="status_name"/>
 		</association>
 	</resultMap>
 	
@@ -76,16 +81,19 @@
     <select id="documentListSelect" resultMap="DocumentListSelectMap" parameterType="java.util.Map">
         SELECT 
 	        dv.document_version_idx,
+	        dv.status_code,
 	        d.document_idx,
 	        d.folder_idx,
 	        vl.version_log_idx,
 	        vl.version,
 	        vl.title,
-	        vl.regdate
+	        vl.regdate,
+	        mc.status_name
 	    FROM Document_Version dv
 	    JOIN Document d ON dv.document_idx = d.document_idx
 	    JOIN Folder f ON d.folder_idx = f.folder_idx
 	    JOIN Version_Log vl ON dv.version_log_idx = vl.version_log_idx
+	    JOIN masterCode mc On dv.status_code = mc.status_code
 	    where d.folder_idx = #{folderIdx};
     </select>
     

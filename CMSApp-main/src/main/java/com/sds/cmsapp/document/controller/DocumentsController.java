@@ -100,11 +100,16 @@ public class DocumentsController {
 	@GetMapping("/document/detail")
 	public String getDetail(@RequestParam("documentIdx") int documentIdx,
 							            @RequestParam("folderIdx") int folderIdx,
-							            Model model, DocumentVersion documentVersion) {
-		DocumentVersion documentDetail = documentService.documentDetailSelect(documentVersion);
-		model.addAttribute("documentDetail", documentDetail);
+							            Model model) {
+		DocumentVersion documentVersion  = documentService.documentDetailSelect(documentIdx);
+        model.addAttribute("documentVersion", documentVersion);
+        model.addAttribute("folderIdx", folderIdx);
 		return "documents/detail";
 	}
 	
-
+	// 글 수정하기
+	@GetMapping("/document/writeform")
+	public String getEdit() {
+		return "documents/writeform";
+	}
 }
