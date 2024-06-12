@@ -12,6 +12,7 @@ import com.sds.cmsapp.domain.DocumentVersion;
 import com.sds.cmsapp.domain.VersionLog;
 import com.sds.cmsapp.exception.DocumentException;
 import com.sds.cmsapp.exception.VersionLogException;
+import com.sds.cmsapp.model.versionlog.VersionLogDAO;
 
 import lombok.extern.slf4j.Slf4j;
 @Slf4j
@@ -21,6 +22,12 @@ public class DocumentServiceImpl implements DocumentService {
 	@Autowired
 	private DocumentDAO documentDAO;
 	
+	@Autowired
+	private VersionLogDAO versionLogDAO;
+	
+	@Autowired
+	private DocumentVersionDAO documentVersionDAO;
+
 	@Autowired
 	private DocumentDetailDAO documentDetailDAO;
 	
@@ -104,5 +111,12 @@ public class DocumentServiceImpl implements DocumentService {
 		return documentDAO.selectByFolderIdx(folder_idx);
 	}
 
+	@Override
+	public Document fillVersionLog(final Document document) {
+		DocumentVersion documentVersion = documentVersionDAO.selectByDocumentIdx(document.getDocumentIdx());
+		VersionLog versionLog = documentVersion.getVersionLog();
+		document.setVersionLog(versionLog);
+		return document;
+	}
 
 }

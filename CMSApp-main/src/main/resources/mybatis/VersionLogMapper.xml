@@ -27,5 +27,4 @@
 	<select id="select" parameterType="int" resultType="VersionLog">
 				select * from version_log where version_log_idx=#{versionLogIdx}
 	</select>
-
 </mapper>

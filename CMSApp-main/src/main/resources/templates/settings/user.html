@@ -253,9 +253,14 @@
 </div>
 <!-- ./wrapper -->
 	
+  <!-- 사이드바 디렉토리 관련 로직 -->
+  <th:block th:replace="~{elements/sidebar_script :: sidebar_script}"/>
+  <!-- /.사이드바 디렉토리 관련 로직 -->
   <th:block th:replace="~{fragments/footer_link :: footer_link}"/>
   <th:block th:replace="~{elements/datatables_footer_link :: datatables_footer_link}"/>
   <th:block th:replace="~{elements/advanced_forms_footer_link :: advanced_forms_footer_link}"/>
+  
+  
 
 </body>
 </html>
