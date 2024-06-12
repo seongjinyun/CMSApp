@@ -70,7 +70,7 @@ public class TrashServiceImpl implements TrashService{
 		List<Trash> trashList = trashDAO.selectAllWithRange(map);
 		for (int i = 0; i < trashList.size(); i++) {
 			Trash trash = trashList.get(i);
-			DocumentVersion documentVersion = documentVersionDAO.selectByDocumentIdx(i);
+			DocumentVersion documentVersion = documentVersionDAO.selectByDocumentIdx(trash.getDocument().getDocumentIdx());
 			VersionLog versionLog = documentVersion.getVersionLog();
 			trash.setVersionLog(versionLog);
 		}

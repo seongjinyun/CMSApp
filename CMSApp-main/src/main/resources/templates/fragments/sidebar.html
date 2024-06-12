@@ -1,218 +1,170 @@
 <th:block th:fragment="sidebar">
-<aside class="main-sidebar sidebar-dark-primary elevation-4">
-	<!-- Brand Logo -->
-	<a href="index3.html" class="brand-link"> <img
-		src="/admin/dist/img/AdminLTELogo.png" alt="AdminLTE Logo"
-		class="brand-image img-circle elevation-3" style="opacity: .8">
-		<span class="brand-text font-weight-light">CMS</span>
-	</a>
+	<aside class="main-sidebar sidebar-dark-primary elevation-4">
+		<!-- Brand Logo -->
+		<a href="index3.html" class="brand-link"> <img src="/admin/dist/img/AdminLTELogo.png" alt="AdminLTE Logo"
+				class="brand-image img-circle elevation-3" style="opacity: .8">
+			<span class="brand-text font-weight-light">CMS</span>
+		</a>
 
-	<!-- Sidebar -->
-	<div class="sidebar">
-		<!-- Sidebar user panel (optional) -->
-		<div class="user-panel mt-3 pb-3 mb-3 d-flex">
-			<div class="image">
-				<img src="/admin/dist/img/user2-160x160.jpg"
-					class="img-circle elevation-2" alt="User Image">
-			</div>
-			<div class="info">
-				<a href="#" class="d-block">사용자 이름</a>
-			</div>
-		</div>
-
-		<!-- SidebarSearch Form -->
-		<div class="form-inline">
-			<div class="input-group" data-widget="sidebar-search">
-				<input class="form-control form-control-sidebar" type="search"
-					placeholder="Search" aria-label="Search">
-				<div class="input-group-append">
-					<button class="btn btn-sidebar">
-						<i class="fas fa-search fa-fw"></i>
-					</button>
+		<!-- Sidebar -->
+		<div class="sidebar">
+			<!-- Sidebar user panel (optional) -->
+			<div class="user-panel mt-3 pb-3 mb-3 d-flex">
+				<div class="image">
+					<img src="/admin/dist/img/user2-160x160.jpg" class="img-circle elevation-2" alt="User Image">
+				</div>
+				<div class="info">
+					<a href="#" class="d-block">사용자 이름</a>
 				</div>
 			</div>
-		</div>
 
-		<!-- Sidebar Menu -->
-		<nav class="mt-2">
-			<ul class="nav nav-pills nav-sidebar flex-column"
-				data-widget="treeview" role="menu" data-accordion="false">
-				<!-- Add icons to the links using the .nav-icon class
+			<!-- SidebarSearch Form -->
+			<div class="form-inline">
+				<div class="input-group" data-widget="sidebar-search">
+					<input class="form-control form-control-sidebar" type="search" placeholder="Search"
+						aria-label="Search">
+					<div class="input-group-append">
+						<button class="btn btn-sidebar">
+							<i class="fas fa-search fa-fw"></i>
+						</button>
+					</div>
+				</div>
+			</div>
+
+			<!-- Sidebar Menu -->
+			<nav class="mt-2">
+				<ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu"
+					data-accordion="false">
+					<!-- Add icons to the links using the .nav-icon class
                with font-awesome or any other icon font library -->
-				
-				<!-- Dashboard 메뉴 -->               
-				<li class="nav-item menu-open">
-					<a href="#"class="nav-link"> 
-						<i class="nav-icon fas fa-tachometer-alt"></i>
-						<p>
-							Dashboard <i class="right fas fa-angle-left"></i>
-						</p>
-					</a>
+
+					<!-- Dashboard 메뉴 -->
+					<li class="nav-item menu-open">
+						<a href="#" class="nav-link">
+							<i class="nav-icon fas fa-tachometer-alt"></i>
+							<p>
+								Dashboard <i class="right fas fa-angle-left"></i>
+							</p>
+						</a>
 						<ul class="nav nav-treeview">
-							<li class="nav-item"><a href="/admin/dashboard/activity"
-								class="nav-link"> <i class="far fa-circle nav-icon"></i>
+							<li class="nav-item"><a href="/admin/dashboard/activity" class="nav-link"> <i
+										class="far fa-circle nav-icon"></i>
 									<p>나의 활동</p>
-							</a></li>
-						<li class="nav-item"><a href="/admin/dashboard/publishing"
-								class="nav-link"> <i class="far fa-circle nav-icon"></i>
+								</a></li>
+							<li class="nav-item"><a href="/admin/dashboard/publishing" class="nav-link"> <i
+										class="far fa-circle nav-icon"></i>
 									<p>배포 관리</p>
-							</a></li>
-							<li class="nav-item"><a href="/admin/dashboard/kanban"
-								class="nav-link"> <i class="far fa-circle nav-icon"></i>
+								</a></li>
+							<li class="nav-item"><a href="/admin/dashboard/kanban" class="nav-link"> <i
+										class="far fa-circle nav-icon"></i>
 									<p>칸반 보드</p>
-							</a></li>
-							<li class="nav-item"><a href="/admin/dashboard/analytics"
-								class="nav-link"> <i class="far fa-circle nav-icon"></i>
+								</a></li>
+							<li class="nav-item"><a href="/admin/dashboard/analytics" class="nav-link"> <i
+										class="far fa-circle nav-icon"></i>
 									<p>문서 통계</p>
-							</a></li>
+								</a></li>
 
-						</ul></li>
-				</li>
-			
-				<!-- Document 메뉴 -->               
-				<li class="nav-item menu-open">
-					<a href="#"class="nav-link"> 
-						<i class="nav-icon fas fa-tachometer-alt"></i>
-						<p>
-							Documents <i class="right fas fa-angle-left"></i>
-						</p>
-					</a>
-					<ul class="nav nav-treeview">
-						<li class="nav-item">
+						</ul>
+					</li>
+					</li>
 
-							<a href="/document/list" class="nav-link"> 
+					<!-- Document 메뉴 -->
+					<li class="nav-item menu-open">
+						<a href="#" class="nav-link">
+							<i class="nav-icon fas fa-tachometer-alt"></i>
+							<p>
+								Documents <i class="right fas fa-angle-left"></i>
+							</p>
+						</a>
+						<ul class="nav nav-treeview">
+							<li class="nav-item">
 
-								<i class="far fa-circle nav-icon"></i>
-								<p>전체보기</p>
-							</a>
-						</li>
-						<li class="nav-item">
-							<a href="/document/bookmark" class="nav-link"> 
-								<i class="far fa-circle nav-icon"></i>
-								<p>즐겨찾기</p>
-							</a>
-						</li>
-						<li class="nav-item">
-							<a href="/document/trash" class="nav-link"> 
-								<i class="far fa-circle nav-icon"></i>
-								<p>휴지통</p>
-							</a>
-						</li>
-						
-						<!-- Document 하위 프로젝트 목록 -->
-							<li class="nav-item"><a href="#" class="nav-link"> 
-								<i class="far fa-circle nav-icon"></i>
+								<a href="/document/list" class="nav-link">
+
+									<i class="far fa-circle nav-icon"></i>
+									<p>전체보기</p>
+								</a>
+							</li>
+							<li class="nav-item">
+								<a href="/document/bookmark" class="nav-link">
+									<i class="far fa-circle nav-icon"></i>
+									<p>즐겨찾기</p>
+								</a>
+							</li>
+							<li class="nav-item">
+								<a href="/document/trash" class="nav-link">
+									<i class="far fa-circle nav-icon"></i>
+									<p>휴지통</p>
+								</a>
+							</li>
+
+							<!-- Document 하위 프로젝트 목록 -->
+							<li class="nav-item"><a href="#" class="nav-link">
+									<i class="far fa-circle nav-icon"></i>
 									<p>
 										프로젝트 목록 <i class="fas fa-angle-left right"></i>
 									</p>
-							</a>
-								<ul class="nav nav-treeview">
-									<li class="nav-item">
-										<a href="/document/folder_list" class="nav-link">
-												<i class="fas fa-box nav-icon ml-1"></i>
-												<p>A 프로젝트</p>
-										</a>
-										<ul class="nav nav-treeview">
-											<li class="nav-item">
-												<a href="/document/folder_list" class="nav-link">
-														<i class="fas fa-folder nav-icon ml-2"></i>
-														<p>시작하기(폴더)</p>
-												</a>
-												</li>
-												<li class="nav-item">
-													<a href="/document/list?folderIdx=1" class="nav-link">
-															<i class="fas fa-file nav-icon ml-3"></i>
-															<p>A 파일</p>
-													</a>
-												</li>
-												<li class="nav-item">
-													<a href="/document/list?folderIdx=1" class="nav-link">
-															<i class="fas fa-file nav-icon ml-3"></i>
-															<p>B 파일</p>
-													</a>
-												</li>
-											</li>
-											<li class="nav-item">
-												<a href="/document/folder_list" class="nav-link">
-														<i class="fas fa-folder nav-icon ml-2"></i>
-														<p>B 폴더</p>
-												</a>
-											</li>
-											<li class="nav-item">
-												<a href="/document/folder_list" class="nav-link">
-														<i class="fas fa-folder nav-icon ml-2"></i>
-														<p>C 폴더</p>
-												</a>
-											</li>
-										</ul>
-									</li>
-									<li class="nav-item">
-										<a href="/document/folder_list" class="nav-link">
-												<i class="fas fa-box nav-icon ml-1"></i>
-												<p>B 프로젝트</p>
-										</a>
-									</li>
-									<li class="nav-item">
-										<a href="/document/folder_list" class="nav-link">
-												<i class="fas fa-box nav-icon ml-1"></i>
-												<p>C 프로젝트</p>
-										</a>
-									</li>
+								</a>
+								<ul class="nav nav-treeview" id="folderTree">
+									<!-- 폴더 목록이 들어올 곳 -->
 								</ul>
 							</li>
 						</ul>
-				</li>
-			
-				<!-- 설정 관리 메뉴 -->               
-				<!-- ##### themeleaf를 이용한 링크 ##### -->
-				<!-- ##### 240524 p태그 추가(접었을 때 동그라미만 보이게) ##### -->               
-				<li class="nav-item menu-open">
-					<a href="#"class="nav-link"> 
-						<i class="nav-icon fas fa-wrench"></i>
-						<p>
-							Setting <i class="right fas fa-angle-left"></i>
-						</p>
-					</a>
-					<ul class="nav nav-treeview">
-						<li class="nav-item">
-							<a th:href="@{/settings/general}" class="nav-link"> 
-								<i class="fas fa-wrench nav-icon"></i>
-								<p>일반</p>
-							</a>
-						</li>
-						<li class="nav-item">
-							<a th:href="@{/settings/dept_project}" class="nav-link"> 
-								<i class="fas fa-building nav-icon"></i>
-								<p>부서 및 프로젝트</p>
-							</a>
-						</li>
-						<li class="nav-item">
-							<a th:href="@{/settings/mypage}" class="nav-link"> 
-								<i class="fas fa-user nav-icon"></i>
-								<p>개인 정보 변경</p>
-							</a>
-						</li>
-						<li class="nav-item">
-							<a th:href="@{/settings/user}" class="nav-link"> 
-								<i class="fas fa-users nav-icon"></i>
-								<p>이용자 관리</p>
-							</a>
-						</li>
-						<li class="nav-item">
-							<a th:href="@{/settings/role}" class="nav-link"> 
-								<i class="fas fa-eye nav-icon"></i>
-								<p>역할 및 권한</p>
-							</a>
-						</li>
-					</ul>
-				</li>
-			
-			</ul>
-		</nav>
-		<!-- /.sidebar-menu -->
-	</div>
-</aside>
-</th:block>
-<script>
+					</li>
 
-</script>
+					<!-- 설정 관리 메뉴 -->
+					<!-- ##### themeleaf를 이용한 링크 ##### -->
+					<!-- ##### 240524 p태그 추가(접었을 때 동그라미만 보이게) ##### -->
+					<li class="nav-item menu-open">
+						<a href="#" class="nav-link">
+							<i class="nav-icon fas fa-wrench"></i>
+							<p>
+								Setting <i class="right fas fa-angle-left"></i>
+							</p>
+						</a>
+						<ul class="nav nav-treeview">
+							<li class="nav-item">
+								<a th:href="@{/settings/general}" class="nav-link">
+									<i class="fas fa-wrench nav-icon"></i>
+									<p>일반</p>
+								</a>
+							</li>
+							<li class="nav-item">
+								<a th:href="@{/settings/log}" class="nav-link">
+									<i class="fas fa-chart-bar nav-icon"></i>
+									<p>로그</p>
+								</a>
+							</li>
+							<li class="nav-item">
+								<a th:href="@{/settings/dept_project}" class="nav-link">
+									<i class="fas fa-building nav-icon"></i>
+									<p>부서 및 프로젝트</p>
+								</a>
+							</li>
+							<li class="nav-item">
+								<a th:href="@{/settings/mypage}" class="nav-link">
+									<i class="fas fa-user nav-icon"></i>
+									<p>개인 정보 변경</p>
+								</a>
+							</li>
+							<li class="nav-item">
+								<a th:href="@{/settings/user}" class="nav-link">
+									<i class="fas fa-users nav-icon"></i>
+									<p>이용자 관리</p>
+								</a>
+							</li>
+							<li class="nav-item">
+								<a th:href="@{/settings/role}" class="nav-link">
+									<i class="fas fa-eye nav-icon"></i>
+									<p>역할 및 권한</p>
+								</a>
+							</li>
+						</ul>
+					</li>
+
+				</ul>
+			</nav>
+			<!-- /.sidebar-menu -->
+		</div>
+	</aside>
+</th:block>

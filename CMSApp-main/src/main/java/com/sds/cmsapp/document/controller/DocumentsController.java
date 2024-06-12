@@ -61,7 +61,7 @@ public class DocumentsController {
 			model.addAttribute("folderIdx", folderIdx);
 			return "documents/list";
 		}else {
-			HashMap map = new HashMap();
+			HashMap<String, Integer> map = new HashMap<>();
 			map.put("folderIdx", folderIdx);	
 			//폴더 -> 파일 리스트
 			List documentListSelect = documentService.documentListSelect(map);
@@ -78,7 +78,7 @@ public class DocumentsController {
 	@GetMapping("/document/trash")
 	public String getTrash(Model model, @RequestParam(value="currentPage", defaultValue="1") int currentPage) {
 		pager.init(trashService.selectCount(), currentPage);
-		HashMap<String, Integer> map=new HashMap();
+		HashMap<String, Integer> map=new HashMap<>();
 		map.put("startIndex", pager.getStartIndex());
 		map.put("rowCount", pager.getPageSize());
 		List<Trash> trashList = trashService.selectAllWithRange(map);
@@ -104,12 +104,20 @@ public class DocumentsController {
 		DocumentVersion documentVersion  = documentService.documentDetailSelect(documentIdx);
         model.addAttribute("documentVersion", documentVersion);
         model.addAttribute("folderIdx", folderIdx);
+        model.addAttribute("documentIdx", documentIdx);
 		return "documents/detail";
 	}
 	
 	// 글 수정하기
 	@GetMapping("/document/editform")
-	public String getEdit() {
-		return "documents/editform";
+	public String getEdit(@RequestParam("documentIdx") int documentIdx,
+            						@RequestParam("folderIdx") int folderIdx,
+            						Model model) {
+		DocumentVersion documentVersion  = documentService.documentDetailSelect(documentIdx);
+		model.addAttribute("documentVersion", documentVersion);
+        model.addAttribute("folderIdx", folderIdx);
+        model.addAttribute("documentIdx", documentIdx);
+        model.addAttribute("versionLogIdx", documentVersion.getVersionLog().getVersionLogIdx());
+        return "documents/editform";
 	}
 }
