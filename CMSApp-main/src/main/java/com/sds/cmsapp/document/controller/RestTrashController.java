@@ -29,38 +29,38 @@ public class RestTrashController {
 	DocumentVersionService documentVersionService;
 	
 	@PostMapping("/document/trash")
-	public ResponseEntity restoreTrash(@RequestParam("trashIdxList") final List<Integer> trashIdxList) {
+	public ResponseEntity<String> restoreTrash(@RequestParam("trashIdxList") final List<Integer> trashIdxList) {
 		System.out.println("복원메서드 연결");
 		System.out.println("복원 대상" + trashIdxList);
 		trashIdxList.forEach(trashService :: restore);
-		ResponseEntity entity = ResponseEntity.ok("복원 성공");
+		ResponseEntity<String> entity = ResponseEntity.ok("복원 성공");
 		System.out.println("RestTrashController 복원메서드 호출");
 		return entity;
 	}
 	
 	@DeleteMapping("/document/trash")
-	public ResponseEntity deleteTrash(@RequestParam("trashIdxList") List<Integer> trashIdxList) {
+	public ResponseEntity<String> deleteTrash(@RequestParam("trashIdxList") List<Integer> trashIdxList) {
 		System.out.println("삭제메서드 연결");
 		System.out.println("삭제 대상" + trashIdxList);
 		trashIdxList.forEach(trashService :: delete);
-		ResponseEntity entity = ResponseEntity.ok("삭제 성공");
+		ResponseEntity<String> entity = ResponseEntity.ok("삭제 성공");
 		System.out.println("RestTrashController 삭제 메서드 호출");
 
 		return entity;
 	}
 	
 	@DeleteMapping("/document/trash/list")
-	public ResponseEntity emptyTrash() {
+	public ResponseEntity<String> emptyTrash() {
 		trashService.deleteAll();
-		ResponseEntity entity = ResponseEntity.ok("휴지통 비우기 성공");
+		ResponseEntity<String> entity = ResponseEntity.ok("휴지통 비우기 성공");
 		System.out.println("RestTrashController 비우기메서드 호출");
 
 		return entity;
 	}
 	
 	@ExceptionHandler(TrashException.class)
-	public ResponseEntity handle(TrashException e) {
-		ResponseEntity entity = ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+	public ResponseEntity<String> handle(TrashException e) {
+		ResponseEntity<String> entity = ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Trash 처리 중 오류가 발생했습니다.");
 		return entity;
 	}
 	

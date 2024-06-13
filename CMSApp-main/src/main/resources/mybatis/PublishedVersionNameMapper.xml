@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "mybatis-3-mapper.dtd">
+<mapper namespace="com.sds.cmsapp.model.versionlog.PublishedVersionNameDAO">
+	
+	<insert id="insert" parameterType="PublishedVersionName">
+		insert into published_version(publishedVersionName)
+		values(#{publishedVersionName})
+	</insert>
+	
+	<delete id="delete" parameterType="int">
+		delete from published_version_name
+		where published_version_name_idx = #{publishedVersionNameIdx}
+	</delete>
+	
+	<select id="select" parameterType="int" resultType="PublishedVersionName">
+		select * from published_version_name
+		where published_version_name_idx = #{publishedVersionNameIdx}
+	</select>
+	
+	<select id="selectAll" resultType="PublishedVersionName">
+		select * from published_version_name
+	</select>
+	
+</mapper>

@@ -12,28 +12,53 @@ import com.sds.cmsapp.domain.DocumentVersion;
 import com.sds.cmsapp.domain.Emp;
 import com.sds.cmsapp.domain.Trash;
 import com.sds.cmsapp.domain.VersionLog;
+import com.sds.cmsapp.exception.TrashException;
+import com.sds.cmsapp.model.bookmark.BookmarkDAO;
 import com.sds.cmsapp.model.document.DocumentDAO;
+import com.sds.cmsapp.model.document.DocumentService;
 import com.sds.cmsapp.model.document.DocumentVersionDAO;
+import com.sds.cmsapp.model.document.OneditDAO;
 import com.sds.cmsapp.model.emp.EmpDAO;
+import com.sds.cmsapp.model.folder.FolderDAO;
+import com.sds.cmsapp.model.statuslog.StatusLogDAO;
+import com.sds.cmsapp.model.versionlog.PublishedVersionDAO;
 import com.sds.cmsapp.model.versionlog.VersionLogDAO;
 
 @Service
 public class TrashServiceImpl implements TrashService{
 	
 	@Autowired
-	TrashDAO trashDAO;
+	private TrashDAO trashDAO;
 	
 	@Autowired
-	DocumentDAO documentDAO;
+	private DocumentDAO documentDAO;
 	
 	@Autowired
-	DocumentVersionDAO documentVersionDAO;
+	private DocumentVersionDAO documentVersionDAO;
+		
+	@Autowired
+	private EmpDAO empDAO;
 	
 	@Autowired
-	VersionLogDAO versionLogDAO;
+	private DocumentService documentService;
 	
 	@Autowired
-	EmpDAO empDAO;
+	private FolderDAO folderDAO;
+	
+	@Autowired
+	private OneditDAO oneditDAO;
+	
+	@Autowired
+	private BookmarkDAO bookmarkDAO;
+	
+	@Autowired
+	private StatusLogDAO statusLogDAO;
+
+	@Autowired
+	private VersionLogDAO versionLogDAO;
+	
+	@Autowired
+	private PublishedVersionDAO publishedVersionDAO;
 
 	@Override
 	public int insert(final Integer documentIdx, final Integer empIdx) {
@@ -47,22 +72,43 @@ public class TrashServiceImpl implements TrashService{
 
 	@Override
 	public int restore(final Integer trashIdx) {
+		Trash trash = trashDAO.select(trashIdx);
+		Document document = trash.getDocument();
+		if(folderDAO.select(document.getFolder().getFolderIdx()) == null) { // 복원됐는데 돌아갈 곳이 없다면
+			document.setFolder(folderDAO.selectRestoreFolder());
+			documentDAO.update(document);
+		}
 		return trashDAO.delete(trashIdx);
 	}
 
 	@Override
 	@Transactional
-	public int delete(final Integer trashIdx) {
+	public int delete(final Integer trashIdx) throws TrashException {
 		Trash trash = trashDAO.select(trashIdx);
-		documentDAO.delete(trash.getDocument().getDocumentIdx());
+		int documentIdx = trash.getDocument().getDocumentIdx();
+		if(oneditDAO.selectByDocumentIdx(documentIdx).isEmpty()) {
+			throw new TrashException("수정 작업중인 문서입니다");
+		};
+		oneditDAO.deleteByDocumentIdx(documentIdx);
+		trashDAO.delete(trashIdx);
+		bookmarkDAO.deleteByDocumentIdx(documentIdx);
+		statusLogDAO.deleteByDocumentIdx(documentIdx);
+		//publishedVersionD
 		int result = trashDAO.delete(trashIdx);
-		
+		documentService.delete(trash.getDocument().getDocumentIdx()); // 삭제의 책임을 documentService에게
 		return result;
 	}
 
 	@Override
+	@Transactional
 	public int deleteAll() {
-		return trashDAO.deleteAll();
+		int count = 0;
+		List<Trash> trashList = trashDAO.selectAll();
+		for(Trash trash : trashList) {
+			delete(trash.getTrashIdx());
+			count++;
+		}
+		return count;
 	}
 
 	@Override
