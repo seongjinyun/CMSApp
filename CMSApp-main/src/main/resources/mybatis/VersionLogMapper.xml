@@ -10,8 +10,4 @@
 		select * from version_log where document_idx = #{documentIdx}
 	</select>
 
-<!-- 	<select id="selectByVersionLogIdx" parameterType="int" resultMap="VersionLogMap">
-		select * from version_log where version_log_idx=#{versionLogIdx}
-	</select> -->
-
 </mapper>

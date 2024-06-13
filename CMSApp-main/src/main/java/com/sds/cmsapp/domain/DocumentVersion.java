@@ -12,4 +12,6 @@ public class DocumentVersion {
 	// 부모 테이블
 	private VersionLog versionLog;
 	
+	//상태 코드
+	private MasterCode statusCode;
 }

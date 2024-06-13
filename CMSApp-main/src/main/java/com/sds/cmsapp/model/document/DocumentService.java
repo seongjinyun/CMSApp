@@ -25,6 +25,8 @@ public interface DocumentService {
 	public Document select(int documentIdx); // returnType="Document"
 	
 	public Document selectMap(int documentIdx); // association: VersionLog
+	
+	public List<Document> selectAll(Map map);
 
 	// 문서생성 + 버전
 	public void documentInsert(VersionLog versionLog);
@@ -39,9 +41,14 @@ public interface DocumentService {
 	public List<Document> selectByFolderIdx(int folder_idx); 
 	
 	//document/detail 문서 상세보기 
-	public DocumentVersion documentDetailSelect(DocumentVersion documentVersion);
+	public DocumentVersion documentDetailSelect(int documentIdx);
 	
 	// 폴더 idx 목록에 따른 문서 idx 목록 조회
 	public List<Integer> selectDocumentIdxListInFolder(List<Integer> folderIdxList);
 
+	//문서버전 업데이트
+	public void versionUpdate(VersionLog versionLog);
+
+	// DocumentDTO 안에 versionLog 채워넣기(제목 출력)
+	public Document fillVersionLog(Document document);
 }

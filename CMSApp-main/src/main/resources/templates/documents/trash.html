@@ -99,7 +99,7 @@
                   <tr th:each="trash : ${trashList}">
                     <td>
                       <div class="icheck-primary">
-                        <input type="checkbox" name="trash_idx" th:value="${trash.trash_idx}" id="check1">
+                        <input type="checkbox" name="trashIdx" th:value="${trash.trashIdx}" id="check1">
                         <label for="check1"></label>
                       </div>
                     </td>
@@ -135,8 +135,12 @@
   <!-- /.control-sidebar -->
 </div>
 <!-- ./wrapper -->
+
 	
 	<th:block th:replace="~{fragments/footer_link :: footer_link}"/>
+	<!-- 사이드바 디렉토리 관련 로직 -->
+  	<th:block th:replace="~{elements/sidebar_script :: sidebar_script}"/>
+  	<!-- /.사이드바 디렉토리 관련 로직 -->
 
 <script th:inline="javascript">
 $(function(){
@@ -164,21 +168,21 @@ $(function(){
 	  }
   function restore(){
 	  if(confirm("선택된 문서를 복원하시겠습니까?")){
-		  let selectedTrash_idx = [];
-          $('input[name="trash_idx"]:checked').each(function() {
-              selectedTrash_idx.push($(this).val());
+		  let selectedTrashIdx = [];
+          $('input[name="trashIdx"]:checked').each(function() {
+              selectedTrashIdx.push($(this).val());
           });
           
-          if (selectedTrash_idx.length < 1){
+          if (selectedTrashIdx.length < 1){
         	  alert("하나 이상의 문서를 선택해주세요");
         	  return;
           }
          
           $.ajax({
               type: 'POST',
-              url: '/document/trash/test2',
+              url: '/document/trash',
               contentType: 'application/json',
-              data: JSON.stringify(selectedTrash_idx),
+              data: JSON.stringify(selectedTrashIdx),
               success: function(result, status, xhr) {
                   alert('복원에 성공했어요');
               },
@@ -193,21 +197,21 @@ $(function(){
   function deleteTrash(){
 	  if(confirm("선택된 문서를 영구삭제하시겠습니까?")){
 		  
-		  let selectedTrash_idx = [];
-          $('input[name="trash_idx"]:checked').each(function() {
-              selectedDocument_idx.push($(this).val());
+		  let selectedTrashIdx = [];
+          $('input[name="trashIdx"]:checked').each(function() {
+              selectedDocumentIdx.push($(this).val());
           });
           
-          if (selectedTrash_idx.length < 1){
+          if (selectedTrashIdx.length < 1){
         	  alert("하나 이상의 문서를 선택해주세요");
         	  return;
           }
           
           $.ajax({
               type: 'DELETE',
-              url: '/document/trash/test1',
+              url: '/document/trash',
               contentType: 'application/json',
-              data: JSON.stringify(selectedTrash_idx),
+              data: JSON.stringify(selectedTrashIdx),
               success: function(result, status, xhr) {
                   alert('문서가 삭제됐어요');
               },

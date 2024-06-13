@@ -4,7 +4,7 @@
 
 	<insert id="insert" parameterType="Folder">
 		insert into folder (parent_folder_idx, folder_name, project_idx)
-		values (#{parent_folder.parent_folder_idx}, #{folder_name}, #{project.project_idx})
+		values (#{parentFolder.parentFolderIdx}, #{folderName}, #{project.projectIdx})
 		<selectKey keyColumn="folder_idx" keyProperty="folderIdx" resultType="int" order="AFTER">
 			select last_insert_id() as folder_idx
 		</selectKey>
@@ -18,22 +18,22 @@
 		update folder
 			<set>
 				<if test="parentFolderIdx != null"> 
-					parent_folder_idx = #{parent_folder.folderIdx},
+					parent_folder_idx = #{parentFolder.folderIdx},
 				</if>
 				<if test="folderName != null">
-					folder_name = #{folder_name},
+					folder_name = #{folderName},
 				</if>
 				<if test="projectIdx != null">
 					project_idx = #{project.projectIdx}
 				</if>
 			</set>
-		where folder_idx = #{folder_idx}
+		where folder_idx = #{folderIdx}
 	</update>
 	
 	<resultMap type="Folder" id="FolderMap">
 		<id 	column="folder_idx"	property="folderIdx"/>
 		<result	column="regdate"	property="regdate"/>
-		<association column="parentFolderIdx" property="parentFolder" javaType="Folder"
+		<association column="parent_folder_idx" property="parentFolder" javaType="Folder"
 			select="com.sds.cmsapp.model.folder.FolderDAO.select"/>
 		<association column="project_idx" property="project" javaType="Project"
 			select="com.sds.cmsapp.model.project.ProjectDAO.selectByProjectIdx"/>
@@ -53,9 +53,9 @@
 		where parent_folder_idx = #{parentFolderIdx}
 	</select>
 	
-	<select id="selectParent" parameterType="Folder" resultMap="FolderMap">
-		select * from folder
-		where folder_idx = #{parent_folder.folderIdx}
+	<select id="selectParentIdx" parameterType="int" resultType="int">
+		select parent_folder_idx from folder
+		where folder_idx = #{folderIdx}
 	</select>
 	
 	<select id="selectTopFolder" resultMap="FolderMap">
@@ -71,5 +71,15 @@
 		</if>
 	</select>
 	
+	<select id="selectByProjectIdx" resultMap="FolderMap">
+		select * from folder
+		where project_idx = #{project.projectIdx}
+	</select>
+	
+	<select id="selectRestoreFolder" resultMap="FolderMap">
+    	<![CDATA[
+    	SELECT * FROM folder WHERE folder_name = 'restored'
+    	]]>
+	</select>
 
 </mapper>

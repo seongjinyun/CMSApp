@@ -71,5 +71,7 @@
 		GROUP BY status_code
 		HAVING status_code = #{statusCode}
 	</select>
-
+	
+	<delete id="deleteBy"></delete>
+	
 </mapper>

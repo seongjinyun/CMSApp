@@ -20,7 +20,11 @@ public interface DocumentDAO {
 	// 선택 문서 조회
 	public Document select(int documentIdx); // returnType="Document"
 	
+	public Document selectByDocumentIdx(int documentIdx); //
+	
 	public Document selectMap(int documentIdx);
+	
+	public List<Document> selectAll(Map map);
 	
 	public List<Document> selectByFolderIdx(int folderIdx); // mybatis 연결 부탁드려요~ (박준형)
 
@@ -38,8 +42,6 @@ public interface DocumentDAO {
 	// 문서 수정
 	public int update(Document document);
 	
-	//document/detail 문서 상세보기 
-	public DocumentVersion documentDetailSelect(DocumentVersion documentVersion);
 	
 	// 문서 삭제 (임시로 만들어뒀습니다 -박준형)
 	public int delete(int documentIdx);

@@ -18,16 +18,28 @@ public class RoleServiceImpl implements RoleService {
 		// TODO Auto-generated method stub
 		roleDAO.insert(role);
 	}
-
+	
 	@Override
-	public Role selectByRoleIdx(int role_idx) {
+	public void insertRole(Role role) {
 		// TODO Auto-generated method stub
-		return roleDAO.selectByRoleIdx(role_idx);
+		roleDAO.insertRole(role);
 	}
 
 	@Override
-	public Role selectByRoleCode(int role_code) {
-		return roleDAO.selectByRoleCode(role_code);
+	public int getMaxRoleCode() {
+		// TODO Auto-generated method stub
+		return roleDAO.getMaxRoleCode();
+	}
+
+	@Override
+	public Role selectByRoleIdx(int roleIdx) {
+		// TODO Auto-generated method stub
+		return roleDAO.selectByRoleIdx(roleIdx);
+	}
+
+	@Override
+	public Role selectByRoleCode(int roleCode) {
+		return roleDAO.selectByRoleCode(roleCode);
 	}
 
 	@Override

@@ -48,8 +48,8 @@ public class EmpServiceImpl implements EmpService {
 	}
 	
 	@Override
-	public Emp selectByEmpIdx(int emp_idx) {
-		return empDAO.selectByEmpIdx(emp_idx);
+	public Emp selectByEmpIdx(int empIdx) {
+		return empDAO.selectByEmpIdx(empIdx);
 	}
 	
 	@Transactional

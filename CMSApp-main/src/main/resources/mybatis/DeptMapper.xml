@@ -5,7 +5,7 @@
 	<!-- 부서 추가 -->
 	<insert id="insert" parameterType="Dept">
 	    insert into dept(dept_name)
-	    values(#{dept_name});
+	    values(#{deptName});
 	    <selectKey keyColumn="dept_idx" keyProperty="deptIdx" resultType="int" order="AFTER">
 	        select last_insert_id() as dept_idx
 	    </selectKey>
@@ -13,7 +13,7 @@
 	
 	<!-- 부서 이름 전체 출력 -->
 	<select id="selectAllDeptName" resultType="Dept">
-		select dept_idx, dept_name from dept
+		select dept_idx, dept_name from dept 
 	</select>
 	
 	<select id="selectAll" resultType="Dept">
@@ -22,7 +22,14 @@
 	
 	<!-- dept_idx가 가리키는 부서 조회 -->
 	<select id="selectByDeptIdx" parameterType="int" resultType="Dept">
-		select * from dept where dept_idx=#{dept_idx}
+		select * from dept where dept_idx=#{deptIdx}
 	</select>
+	
+	<!-- ************************************************************** -->
+	<!-- 다른 테이블들이 dept를 참조하기에 삭제 불가: 사원이 없는 경우에 가능          -->
+	<!-- ************************************************************** -->
+	<delete id="delete" parameterType="Dept">
+		delete from dept where dept_idx=#{deptIdx}
+	</delete>
 	
 </mapper>

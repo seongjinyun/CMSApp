@@ -16,10 +16,10 @@ public class MainController {
 		return "admin/dashboard/publish/new";
 	}
 	
-	@GetMapping("/admin/dashboard/publish/history")
-	public String getAdminDashboardPublishedHistory() {
-		return "admin/dashboard/publish/history";
-	}
+//	@GetMapping("/admin/dashboard/publish/history")
+//	public String getAdminDashboardPublishedHistory() {
+//		return "admin/dashboard/publish/history";
+//	}
 	
 //	@GetMapping("/admin/dashboard/analytics")
 //	public String getAdminDashboardAnalytics() {

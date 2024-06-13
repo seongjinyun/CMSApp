@@ -8,4 +8,8 @@ import com.sds.cmsapp.domain.DocumentVersion;
 public interface DocumentVersionDAO {
 
 	public DocumentVersion selectByDocumentIdx(int document_idx); //resultMap="DocumentVersionMap"
+	
+	public int insert(final DocumentVersion documentVersion);
+	
+	public int delete(final int documentVersionIdx);
 }

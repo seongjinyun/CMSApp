@@ -9,6 +9,8 @@
 			select="com.sds.cmsapp.model.document.DocumentDAO.select" />
 		<association column="version_log_idx" property="versionLog" javaType="VersionLog"
 			select="com.sds.cmsapp.model.versionlog.VersionLogDAO.select" />
+		<association column="status_code" property="statusCode" javaType="MasterCode"
+			select="com.sds.cmsapp.model.mastercode.MasterCodeDAO.select"/>
 	</resultMap>
 
 	<select id="selectByDocumentIdx" parameterType="int"
@@ -17,8 +19,17 @@
 	</select> 
 	
 	<!-- 0603 추가 -->
-<!-- 	<select id="select" parameterType="int" resultType="DocumentVersion">
-		select * from document_version where document_idx = #{document_idx}
-	</select> -->
-
+	<select id="select" parameterType="int" resultType="DocumentVersion">
+		select * from document_version where
+		document_idx=#{document_idx}
+	</select>
+	
+	<insert id="insert" parameterType="DocumentVersion">
+		insert into document_version(document_idx, version_log_idx)
+		values (#{document.documentIdx}, #{version.versionLogIdx})
+	</insert>
+	
+	<delete id="delete" parameterType="int">
+		delete from document_version where document_version_idx = #{documentVersionIdx}
+	</delete>
 </mapper>

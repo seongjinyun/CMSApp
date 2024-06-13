@@ -8,8 +8,9 @@ import com.sds.cmsapp.domain.RequestDocumentDTO;
 public interface ProjectService {
 	
 	public int insert(Project project);
-	public Project selectByProjectIdx(int project_idx);
+
+	public Project selectByProjectIdx(int projectIdx);
+	public List selectAll();
 	
-	public List<Project> selectAll();
-	//public List<Project> selectAllByFilteredProjectIdx(RequestDocumentDTO requestDocumentDTO);
+	public void delete(Project project);
 }

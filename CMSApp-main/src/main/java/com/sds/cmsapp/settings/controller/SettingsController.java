@@ -3,6 +3,7 @@ package com.sds.cmsapp.settings.controller;
 import java.io.File;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -11,11 +12,16 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import com.sds.cmsapp.common.Pager;
+import com.sds.cmsapp.domain.Authority;
 import com.sds.cmsapp.domain.Emp;
 import com.sds.cmsapp.domain.EmpDetail;
+import com.sds.cmsapp.domain.Role;
+import com.sds.cmsapp.model.authority.AuthorityService;
 import com.sds.cmsapp.model.dept.DeptService;
 import com.sds.cmsapp.model.emp.EmpDetailService;
 import com.sds.cmsapp.model.emp.EmpService;
+import com.sds.cmsapp.model.relationship.DeptProjectService;
+import com.sds.cmsapp.model.relationship.RoleAuthorityService;
 import com.sds.cmsapp.model.role.RoleService;
 
 @Controller
@@ -34,7 +40,16 @@ public class SettingsController {
 	private DeptService deptService;
 	
 	@Autowired
+	private DeptProjectService deptProjectService;
+	
+	@Autowired
 	private RoleService roleService;
+	
+	@Autowired
+	private AuthorityService authorityService;
+	
+	@Autowired
+	private RoleAuthorityService roleAuthorityService;
 	
 	@GetMapping("/settings/general")
 	public String getGeneral() {
@@ -55,7 +70,15 @@ public class SettingsController {
 		// 부서 이름과 index 가져오기
 		List deptList = deptService.selectAllDeptName();
 		model.addAttribute("deptList", deptList);
-				
+		
+		// 빈 부서 가져오기
+		List emptyDeptList = deptProjectService.selectEmptyDept();
+		model.addAttribute("emptyDeptList", emptyDeptList);
+		
+		// 어느 부서도 관리하지 않는 프로젝트 가져오기
+		List emptyProjectList = deptProjectService.selectEmptyProject();
+		model.addAttribute("emptyProjectList", emptyProjectList);
+		
 		return "settings/dept_project";
 	}
 	
@@ -127,9 +150,29 @@ public class SettingsController {
 		
 		return "settings/user";
 	}
-	
+
+	// 0610
 	@GetMapping("/settings/role")
-	public String getRole() {
+	public String getRole(Model model) {
+		
+		// 역할 목록 가져오기
+		List roleList = roleService.selectAll();
+		model.addAttribute("roleList", roleList);
+		
+		// 권한 목록 가져오기
+		List authList = authorityService.selectAll();
+		model.addAttribute("authList", authList);
+        
+		// Role과 해당하는 권한 목록 가져오기
+		Map<Role, List<Authority>> roleAuthMap = new HashMap<>();
+	    for(int i=0; i<roleList.size(); i++) {
+	    	Role role = (Role) roleList.get(i);
+	    	List<Authority> RoleAuthList = roleAuthorityService.selectAuthoritiesByRoleCode(role.getRoleCode());
+	    	System.out.println(("RoleAuthList: "+RoleAuthList));
+	    	roleAuthMap.put(role, RoleAuthList);
+	    }
+	    model.addAttribute("roleAuthMap", roleAuthMap);
+		
 		return "settings/role";
 	}
 }

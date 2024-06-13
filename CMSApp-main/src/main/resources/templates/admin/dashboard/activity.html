@@ -481,13 +481,15 @@ div.table-detail, span.table-detail {
 				responsive: true,
 				destroy: true,
 				columns: [
-					{ data: "title", title: "제목", width: '20%'},
-					{ data: "version" , title: "버전", width: '10%'},
-					{ data: "deptName" , title: "부서명", width: '10%'},
-					{ data: "empName" , title: "사원명", width: '10%'},
-					{ data: "statusName" , title: "상태명", width: '10%'},
+					{ data: "projectName", title: "프로젝트", width: '10%'},
+					{ data: "folderName", title: "폴더", width: '10%'},
+					{ data: "title", title: "제목", width: '15%'},
+					{ data: "version" , title: "버전", width: '5%'},
+					{ data: "deptName" , title: "부서", width: '10%'},
+					{ data: "empName" , title: "사원", width: '10%'},
+					{ data: "statusName" , title: "상태", width: '10%'},
 					{ data: "comments" , title: "코멘트", width: '20%'},
-					{ data: "regdate" , title: "일자", width: '20%'}
+					{ data: "regdate" , title: "일자", width: '10%'}
 				],
 				ajax: {
 					url: url,

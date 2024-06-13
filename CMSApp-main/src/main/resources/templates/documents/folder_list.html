@@ -126,7 +126,7 @@
                       </div>
                     </td>
                     <td class="mailbox-star"><a href="#"><i class="fa fa-star-o" aria-hidden="true"></i></a></td>
-                    <td class="mailbox-subject"><a href="/document/list?folder_idx=1">개발</a></td>
+                    <td class="mailbox-subject"><a href="/document/list?folderIdx=1">개발</a></td>
                     <td class="mailbox-name"></td>
                     <td class="mailbox-date">2024.05.23 16:44</td>
                     <td class="mailbox-attachment">폴더</td>
@@ -139,7 +139,7 @@
                       </div>
                     </td>
                     <td class="mailbox-star"><a href="#"><i class="fas fa-star-o text-warning"></i></a></td>
-                    <td class="mailbox-subject"><a href="/document/list?folder_idx=1">기획</a></td>
+                    <td class="mailbox-subject"><a href="/document/list?folderIdx=1">기획</a></td>
                     <td class="mailbox-name"></td>
                     <td class="mailbox-date">2024.05.21 16:44</td>
                     <td class="mailbox-attachment">폴더</td>
@@ -170,8 +170,12 @@
   <!-- /.control-sidebar -->
 </div>
 <!-- ./wrapper -->
+
 	
 	<th:block th:replace="~{fragments/footer_link :: footer_link}"/>
+	<!-- 사이드바 디렉토리 관련 로직 -->
+  	<th:block th:replace="~{elements/sidebar_script :: sidebar_script}"/>
+  	<!-- /.사이드바 디렉토리 관련 로직 -->
 
 <script>
 $(function(){

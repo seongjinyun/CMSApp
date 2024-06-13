@@ -17,7 +17,7 @@ public interface EmpDAO {
 	public List selectEmpPage(Map map);
 
 	// EmpMap 반환
-	public Emp selectByEmpIdx(int emp_idx);
+	public Emp selectByEmpIdx(int empIdx);
 	public void update(Emp emp);
 	public void updateDept(Emp emp);
 	

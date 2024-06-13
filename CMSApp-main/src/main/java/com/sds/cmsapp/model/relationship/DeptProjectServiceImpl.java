@@ -20,15 +20,27 @@ public class DeptProjectServiceImpl implements DeptProjectService {
 	}
 
 	@Override
-	public List selectByDeptIdx(int dept_idx) {
+	public List selectByDeptIdx(int deptIdx) {
 		// TODO Auto-generated method stub
-		return deptProjectDAO.selectByDeptIdx(dept_idx);
+		return deptProjectDAO.selectByDeptIdx(deptIdx);
 	}
 
 	@Override
-	public List selectOtherByDeptIdx(int dept_idx) {
+	public List selectOtherByDeptIdx(int deptIdx) {
 		// TODO Auto-generated method stub
-		return deptProjectDAO.selectOtherByDeptIdx(dept_idx);
+		return deptProjectDAO.selectOtherByDeptIdx(deptIdx);
+	}
+	
+	@Override
+	public List selectEmptyDept() {
+		// TODO Auto-generated method stub
+		return deptProjectDAO.selectEmptyDept();
+	}
+	
+	@Override
+	public List selectEmptyProject() {
+		// TODO Auto-generated method stub
+		return deptProjectDAO.selectEmptyProject();
 	}
 
 	@Override
@@ -36,5 +48,4 @@ public class DeptProjectServiceImpl implements DeptProjectService {
 		// TODO Auto-generated method stub
 		deptProjectDAO.delete(deptProject);
 	}
-
 }

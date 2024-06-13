@@ -32,7 +32,7 @@
 		select count(*) from trash
 	</select>
 	
-	<select id="selectAll">
+	<select id="selectAll" resultMap="TrashMap">
 		select * from trash
 	</select>
 	

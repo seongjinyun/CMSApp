@@ -16,10 +16,6 @@ public class StatusLogServiceImpl implements StatusLogService {
 	@Autowired
 	private StatusLogDAO statusLogDAO;
 	
-//	public StatusLog select(int document_idx) {
-//		return statusLogDAO.select(document_idx);
-//	};
-	
 	/* 상태별 문서 수 조회 */
 	public Integer countByStatus(int statusCode) {
 		return statusLogDAO.countByStatus(statusCode);
@@ -34,6 +30,13 @@ public class StatusLogServiceImpl implements StatusLogService {
 	public List<StatusLog> selectFilteredListOfLatestRegisteredLog(FilterItemDTO filterItemDTO) {
 		return statusLogDAO.selectFilteredListOfLatestRegisteredLog(filterItemDTO);
 	};
-	
+	public StatusLog select(int documentIdx) {
+		return statusLogDAO.select(documentIdx);
+	};
+
+	// 해당 문서에 대하여 가장 마지막에 등록된 상태 로그
+	public StatusLog selectLatestRegisteredStatusLogByDocumentIdx(int documentIdx) {
+		return statusLogDAO.selectLatestRegisteredStatusLogByDocumentIdx(documentIdx);
+	}
 }
 

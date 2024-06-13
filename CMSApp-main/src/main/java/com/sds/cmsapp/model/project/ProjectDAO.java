@@ -11,10 +11,11 @@ import com.sds.cmsapp.domain.RequestDocumentDTO;
 public interface ProjectDAO {
 	
 	public int insert(Project project);
+
 	public Project selectByProjectIdx(int project_idx);
 	
 	public List<Project> selectAll();
 	
-	//public List<Project> selectAllByFilteredProjectIdx(RequestDocumentDTO requestDocumentDTO);
+	public void delete(Project project);
 	
 }
