@@ -36,4 +36,13 @@ public interface FolderDAO {
 	// 프로젝트 idx로 폴더 조회
 	public List<Folder> selectByProjectIdx();
 	
+	/**
+	 * 복원된 문서들이 갈 폴더 조회 메서드
+	 * @return: Folder
+	 * @Method info: 최초의 restored 라는 이름을 가진 폴더가 insert 되어야 합니다
+	 * test
+	 */
+	public Folder selectRestoreFolder();
+	
+	
 }

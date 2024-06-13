@@ -23,6 +23,7 @@ import com.sds.cmsapp.exception.DocumentException;
 import com.sds.cmsapp.exception.FolderException;
 import com.sds.cmsapp.exception.VersionLogException;
 import com.sds.cmsapp.model.document.DocumentService;
+import com.sds.cmsapp.model.document.DocumentVersionService;
 import com.sds.cmsapp.model.folder.FolderService;
 import com.sds.cmsapp.model.trash.TrashService;
 
@@ -41,7 +42,10 @@ public class RestDocumentController {
 	@Autowired
 	private TrashService trashService;
 	
-	//새 글 작성
+	@Autowired
+	private DocumentVersionService documentVersionService;
+	
+
 	@PostMapping("/document/save")
 	public ResponseEntity createDocument(@ModelAttribute DocumentRequest documentRequest) {
 		Document document = documentRequest.getDocument();
@@ -83,11 +87,18 @@ public class RestDocumentController {
 	}
 	
 	@PostMapping("/document/list/trash")
-	public ResponseEntity goToTrash(List<Integer> documentIdxList, int empIdx) {
+	public ResponseEntity<String> goToTrash(List<Integer> documentIdxList, int empIdx) {
+		int countAll = documentIdxList.size();
+		int countFail = 0;
 		for(int documentIdx : documentIdxList) {
+			int statusCode = documentVersionService.selectByDocumentIdx(documentIdx).getStatusCode().getStatusCode();
+			if(statusCode > 150 && statusCode < 450) {
+				countFail++;
+				continue;
+			}
 			trashService.insert(documentIdx, empIdx);
 		}
-		ResponseEntity entity = ResponseEntity.ok("삭제 성공");
+		ResponseEntity<String> entity = ResponseEntity.ok("총 " + countAll + "개 중 " + (countAll - countFail) + "개 삭제 성공");
 
 		return entity;
 	}
