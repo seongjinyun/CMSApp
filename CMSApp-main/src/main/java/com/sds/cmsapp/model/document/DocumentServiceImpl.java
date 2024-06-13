@@ -11,6 +11,7 @@ import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.StringUtils;
 
 import com.sds.cmsapp.domain.Document;
 import com.sds.cmsapp.domain.RequestDocumentDTO;
@@ -179,6 +180,13 @@ public class DocumentServiceImpl implements DocumentService {
 	//새로운 문서 작성
 	@Transactional
     public void documentInsert(VersionLog versionLog) throws DocumentException, VersionLogException {
+	    // 문서 내용이 비어있거나 공백인지 확인
+		if (!StringUtils.hasText(versionLog.getTitle()) 
+			    || !StringUtils.hasText(versionLog.getContent())
+			    || !StringUtils.hasText(versionLog.getComments())) {
+			    throw new VersionLogException("문서 내용이 비어있습니다.");
+		}
+
         // 문서 삽입
 		int result = documentDAO.documentInsert(versionLog.getDocument());
 		
@@ -252,6 +260,17 @@ public class DocumentServiceImpl implements DocumentService {
 	public void versionUpdate(VersionLog versionLog) throws VersionLogException{
 		
 		DocumentVersion documentVersion = documentDetailDAO.documentDetailSelect(versionLog.getDocument().getDocumentIdx());
+		documentVersion.getVersionLog().setTitle(versionLog.getTitle());
+		documentVersion.getVersionLog().setContent(versionLog.getContent());
+		documentVersion.getVersionLog().setComments(versionLog.getComments());
+		
+		int maxVersion = documentDetailDAO.findMaxVersionByDocumentIdx(versionLog.getDocument().getDocumentIdx());
+		
+		//버전 로그 증가
+		//int versionIdx = Integer.parseInt(documentVersion.getVersionLog().getVersion());
+		String newVersion = Integer.toString(maxVersion + 1);
+		documentVersion.getVersionLog().setVersion(newVersion);
+		
 		log.debug("versionLog = "+documentVersion.getVersionLog());
 		
 		int result = documentDetailDAO.versionLogInsert(documentVersion.getVersionLog());
@@ -260,16 +279,7 @@ public class DocumentServiceImpl implements DocumentService {
 			throw new VersionLogException("문서 버전 로그 등록실패 ");
 		}
 		
-		int versionIdx = Integer.parseInt(documentVersion.getVersionLog().getVersion());
-		String newVersion = Integer.toString(versionIdx + 1);
-		documentVersion.getVersionLog().setVersion(newVersion);
-		
-		result = documentDetailDAO.versionUpdate(documentVersion.getVersionLog());
-		
-		log.debug("version = " + documentVersion.getVersionLog().getVersion());
-		if(result < 1) {
-			throw new VersionLogException("문서 버전 증가 실패 ");
-		}
+
 		
 		result = documentDetailDAO.documentVersionUpdate(documentVersion.getVersionLog());
 		
@@ -277,6 +287,12 @@ public class DocumentServiceImpl implements DocumentService {
 			throw new DocumentException("문서 현재 버전 업데이트 실패 ");
 		}
 	}
+	
+	public void documentVersionStatusUpdate(DocumentVersion documentVersion) {
+		documentDetailDAO.documentVersionStatusUpdate(documentVersion);
+		
+	}
+	
 	@Override
 	public Document fillVersionLog(final Document document) {
 		DocumentVersion documentVersion = documentVersionDAO.selectByDocumentIdx(document.getDocumentIdx());

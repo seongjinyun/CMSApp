@@ -109,7 +109,7 @@ public class DocumentsController {
 		return "documents/detail";
 	}
 	
-	// 글 수정하기
+	// 글 수정폼
 	@GetMapping("/document/editform")
 	public String getEdit(@RequestParam("documentIdx") int documentIdx,
             						@RequestParam("folderIdx") int folderIdx,

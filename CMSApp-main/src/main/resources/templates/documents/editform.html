@@ -195,7 +195,7 @@
 				data:$("#form1").serialize(),
 				success:function(result, status, xhr){ //200
 					alert("성공");
-					location.href="/document/list?folderIdx=" + $("#folderIdx").val();
+					location.href="/document/detail?documentIdx="+ $("#documentIdx").val() + "&folderIdx=" + $("#folderIdx").val();
 					//location.href="/document/detail?folder_idx="+$("#folder_idx").val();
 				},
 				error:function(xhr, status, err){
@@ -212,6 +212,7 @@
 				focus : true, // 에디터 로딩후 포커스를 맞출지 여부
 				lang : "ko-KR", // 한글 설정
 				placeholder : '내용을 입력하세요.' //placeholder 설정
+				
 			});
 		}
 
