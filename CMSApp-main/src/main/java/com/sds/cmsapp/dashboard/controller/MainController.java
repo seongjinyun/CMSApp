@@ -11,20 +11,20 @@ public class MainController {
 		return "admin/dashboard/activity";
 	}
 	
-	@GetMapping("/admin/dashboard/publishing")
+	@GetMapping("/admin/dashboard/publish/new")
 	public String getAdminDashboardPublishing() {
-		return "admin/dashboard/publishing";
+		return "admin/dashboard/publish/new";
 	}
 	
-	@GetMapping("/admin/dashboard/kanban")
-	public String getAdminDashboardKanban() {
-		return "admin/dashboard/kanban";
+	@GetMapping("/admin/dashboard/publish/history")
+	public String getAdminDashboardPublishedHistory() {
+		return "admin/dashboard/publish/history";
 	}
 	
-	@GetMapping("/admin/dashboard/analytics")
-	public String getAdminDashboardAnalytics() {
-		return "admin/dashboard/analytics";
-	}
+//	@GetMapping("/admin/dashboard/analytics")
+//	public String getAdminDashboardAnalytics() {
+//		return "admin/dashboard/analytics";
+//	}
 	
 	@GetMapping("/writer/dashboard/activity")
 	public String getWriterDashboardActivity() {

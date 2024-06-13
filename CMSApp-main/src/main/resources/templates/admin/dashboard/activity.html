@@ -479,6 +479,7 @@ div.table-detail, span.table-detail {
 				language : datatable_ko,
 				autoWidth: true,
 				responsive: true,
+				destroy: true,
 				columns: [
 					{ data: "title", title: "제목", width: '20%'},
 					{ data: "version" , title: "버전", width: '10%'},
@@ -638,9 +639,9 @@ div.table-detail, span.table-detail {
 				getFilteredData(statusCodeList, startDate, endDate, projectIdxList); // 필터 처리된 목록 조회
 			});
 			
-			setTimeout(function(){
+/* 			setTimeout(function(){
 	           	getFilteredData(null, null, null, null); // 초기화
-			}, 2000);
+			}, 2000); */
 		});
 	</script>
 
