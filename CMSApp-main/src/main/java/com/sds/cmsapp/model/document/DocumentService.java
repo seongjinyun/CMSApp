@@ -42,4 +42,7 @@ public interface DocumentService {
 
 	// DocumentDTO 안에 versionLog 채워넣기(제목 출력)
 	public Document fillVersionLog(Document document);
+	
+	//DocumentVersion 의 상태 ( 리뷰요청 )
+	public void documentVersionStatusUpdate(DocumentVersion documentVersion);
 }

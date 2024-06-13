@@ -10,5 +10,8 @@ public interface DocumentDetailDAO {
 	public DocumentVersion documentDetailSelect(int documentIdx);
 	public int versionLogInsert(VersionLog versionLog);
 	public int documentVersionUpdate(VersionLog versionLog);
-	public int versionUpdate(VersionLog versionLog);
+	public void documentVersionStatusUpdate(DocumentVersion documentVersion);
+	
+    public int findMaxVersionByDocumentIdx(int documentIdx);
+
 }

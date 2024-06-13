@@ -10,11 +10,13 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.sds.cmsapp.domain.Document;
 import com.sds.cmsapp.domain.DocumentRequest;
+import com.sds.cmsapp.domain.DocumentVersion;
 import com.sds.cmsapp.domain.Folder;
 import com.sds.cmsapp.domain.VersionLog;
 import com.sds.cmsapp.exception.DocumentException;
@@ -39,7 +41,7 @@ public class RestDocumentController {
 	@Autowired
 	private TrashService trashService;
 	
-
+	//새 글 작성
 	@PostMapping("/document/save")
 	public ResponseEntity createDocument(@ModelAttribute DocumentRequest documentRequest) {
 		Document document = documentRequest.getDocument();
@@ -59,6 +61,7 @@ public class RestDocumentController {
 		return entity;
     }
 	
+	//수정 글 저장
 	@PostMapping("/document/edit")
 	public ResponseEntity<String> editDocument(@ModelAttribute DocumentRequest documentRequest) {
 		VersionLog versionLog = documentRequest.getVersionLog();
@@ -105,6 +108,17 @@ public class RestDocumentController {
 		return null;
 	}
 	
+	//리뷰요청
+	@PostMapping("/document/review/request")
+	public ResponseEntity reviewRequest(@RequestParam("documentIdx") int documentIdx) {
+		DocumentVersion documentVersion  = documentService.documentDetailSelect(documentIdx);
+		documentVersion.getDocument().setDocumentIdx(documentIdx);
+		log.debug("documentVersion = " + documentVersion);
+		
+		documentService.documentVersionStatusUpdate(documentVersion);
+		
+		return null;
+	}
 	
 	@ExceptionHandler({DocumentException.class, VersionLogException.class, FolderException.class})
 	public ResponseEntity handle(DocumentException e, VersionLogException e2, FolderException e3) {

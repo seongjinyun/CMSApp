@@ -87,7 +87,7 @@
 							
 							<!-- draft 창 -->
 							<div class="popup" id="draftPopup">
-								<button type="button" class="btn btn-secondary">리뷰 요청</button>
+								<input type="button" class="btn btn-secondary" value="리뷰 요청" onclick="reviewRequest();" style="width:100%">
 							</div>
 						</div>
 						<!-- 버전관리 사이드바 -->
@@ -134,7 +134,7 @@
 								</div>
 								<!-- /.card-header -->
 								<div class="card-body">
-									<p th:text="${documentVersion.versionLog.content}">content</p>
+									<p th:utext="${documentVersion.versionLog.content}">content</p>
 								</div>
 								<div class="card-footer">
 										<h4>Comment</h4>
@@ -144,7 +144,7 @@
 						</div>
 					<!-- list에서 넘어오는 값 -->
  					<input type="hidden" name="folderIdx" th:value="${folderIdx}">
-					<input type="hidden" name="documentIdx" th:value="${documentIdx}">
+					<input type="hidden" id="documentIdx" name="documentIdx" th:value="${documentIdx}">
 					
 					<!-- /.col-->
 				</div>
@@ -184,6 +184,20 @@
 			  lang: "ko-KR",					// 한글 설정
 			  placeholder: '내용을 입력하세요.'	//placeholder 설정
 	    });
+  }
+  
+  function reviewRequest(){
+	  $.ajax({
+		    url: '/document/review/request',
+		    type: 'POST',
+		    data: {documentIdx: $("#documentIdx").val() },
+			success:function(result, status, xhr){ //200
+				alert("리뷰 요청 성공");
+		    },
+		    error: function(xhr, status, error) {
+				alert("리뷰 요청 실패");
+		    }
+		  });
   }
   
   function draftBtn(){
