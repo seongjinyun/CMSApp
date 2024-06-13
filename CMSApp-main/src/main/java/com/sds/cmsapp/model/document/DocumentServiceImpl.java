@@ -11,7 +11,10 @@ import com.sds.cmsapp.domain.Document;
 import com.sds.cmsapp.domain.DocumentVersion;
 import com.sds.cmsapp.domain.VersionLog;
 import com.sds.cmsapp.exception.DocumentException;
+import com.sds.cmsapp.exception.TrashException;
 import com.sds.cmsapp.exception.VersionLogException;
+import com.sds.cmsapp.model.bookmark.BookmarkDAO;
+import com.sds.cmsapp.model.statuslog.StatusLogDAO;
 import com.sds.cmsapp.model.versionlog.VersionLogDAO;
 
 import lombok.extern.slf4j.Slf4j;
@@ -23,13 +26,11 @@ public class DocumentServiceImpl implements DocumentService {
 	private DocumentDAO documentDAO;
 	
 	@Autowired
-	private VersionLogDAO versionLogDAO;
-	
-	@Autowired
 	private DocumentVersionDAO documentVersionDAO;
 
 	@Autowired
 	private DocumentDetailDAO documentDetailDAO;
+
 	
 	// 모든 문서 조회
 	public List selectAll(Map map) {
@@ -101,14 +102,20 @@ public class DocumentServiceImpl implements DocumentService {
         return documentDetailDAO.documentDetailSelect(documentIdx);
 	}
 	
-	@Override // 임시로 만들어뒀습니다 -박준형
+	/**
+	 * 문서와 관련된 모든 레코드를 영구삭제하는 메서드.
+	 * @param 삭제할 문서의 documentIdx
+	 * @return 삭제된 문서의 수
+	 * @throws TrashException 트랜잭션 중 하나라도 실패하면 발생합니다
+	 */
+	@Override
 	public int delete(int documentIdx) {
 		return documentDAO.delete(documentIdx);
 	}
 	
 	@Override // 박준형 추가
-	public List<Document> selectByFolderIdx(int folder_idx) {
-		return documentDAO.selectByFolderIdx(folder_idx);
+	public List<Document> selectByFolderIdx(int folderIdx) {
+		return documentDAO.selectByFolderIdx(folderIdx);
 	}
 
 	@Override

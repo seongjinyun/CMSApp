@@ -67,5 +67,11 @@
 		select * from folder
 		where project_idx = #{project.projectIdx}
 	</select>
+	
+	<select id="selectRestoreFolder" resultMap="FolderMap">
+    	<![CDATA[
+    	SELECT * FROM folder WHERE folder_name = 'restored'
+    	]]>
+	</select>
 
 </mapper>

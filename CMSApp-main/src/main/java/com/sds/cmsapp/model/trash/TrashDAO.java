@@ -25,7 +25,7 @@ public interface TrashDAO {
 	public int selectCount();
 	
 	// 휴지통 내 문서 전체조회
-	public int selectAll();
+	public List<Trash> selectAll();
 	
 	// 휴지통 내 문서 리스트 조회
 	public List<Trash> selectAllWithRange(final Map<String, Integer> map);

@@ -21,8 +21,11 @@ public interface BookmarkDAO {
 	// 북마크 페이지에서 한건 제거 (북마크번호로)
 	public int deleteByBookmarkIdx(int bookmark_idx);
 	
+	// 문서 번호로 삭제
+	public Integer deleteByDocumentIdx(final int documentIdx);
+	
 	// 사용자별 북마크된 문서리스트 조회
-	public List selectByEmpIdx(@Param("emp_idx") int emp_idx, @Param("startIndex") int startIndex, @Param("rowCount") int rowCount);
+	public List<Bookmark> selectByEmpIdx(@Param("emp_idx") int emp_idx, @Param("startIndex") int startIndex, @Param("rowCount") int rowCount);
 	
 	// 북마크 갯수(사원별)
 	public int selectCountByEmpIdx(int emp_idx);

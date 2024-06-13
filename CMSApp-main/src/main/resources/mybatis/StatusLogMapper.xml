@@ -54,5 +54,7 @@
 		select * from status_log where document_idx=#{documentIdx}
 	</select>
 	
+	<delete id="deleteBy"></delete>
+	
 
 </mapper>
