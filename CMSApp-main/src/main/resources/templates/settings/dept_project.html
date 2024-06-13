@@ -72,19 +72,19 @@
                                     </div>
                                 </div>
                                 <div class="card-body">
-                                    <form class="form-horizontal" id="add_new_dept">
+                                    <form class="form-horizontal" id="addNewDept">
                                         <div class="form-group">
-                                            <label for="dept_name" class="col-form-label">부서명</label>
-                                            <input type="text" id="dept_name" name="dept_name" class="form-control" placeholder="부서명 입력">
+                                            <label for="deptName" class="col-form-label">부서명</label>
+                                            <input type="text" id="deptName" name="deptName" class="form-control" placeholder="부서명 입력">
                                         </div>
                                         <div>
-                                            <label for="emp_idx" class="col-form-label">부서 사원 추가/이동</label>
-                                            <select id="emp_idx" name="emp_idx" class="select2 form-control" multiple="multiple" data-placeholder="(다중)선택" style="width: 100%;">
-                                                <option th:each="emp : ${empList}" th:value="${emp.emp_idx}" th:text="${emp.emp_name}"></option>
+                                            <label for="empIdx" class="col-form-label">부서 사원 추가/이동</label>
+                                            <select id="empIdx" name="empIdx" class="select2 form-control" multiple="multiple" data-placeholder="(다중)선택" style="width: 100%;">
+                                                <option th:each="emp : ${empList}" th:value="${emp.empIdx}" th:text="${emp.empName}"></option>
                                             </select>
                                         </div>
                                     </form>
-                                    <button type="button" id="btn_add_new_dept" class="col btn btn-success float-right" style="height: 38px; margin-top: 20px;">Add New Department</button>
+                                    <button type="button" id="btnAddNewDept" class="col btn btn-success float-right" style="height: 38px; margin-top: 20px;">Add New Department</button>
                                 </div>
                             </div>
                             <!-- 새 프로젝트 추가 폼 -->
@@ -98,19 +98,19 @@
                                     </div>
                                 </div>
                                 <div class="card-body">
-                                    <form class="form-horizontal" id="add_new_project">
+                                    <form class="form-horizontal" id="addNewProject">
                                         <div class="form-group">
-                                            <label for="project_name">프로젝트명</label>
-                                            <input type="text" id="project_name" name="project_name" class="form-control" placeholder="프로젝트명 입력">
+                                            <label for="projectName">프로젝트명</label>
+                                            <input type="text" id="projectName" name="projectName" class="form-control" placeholder="프로젝트명 입력">
                                         </div>
                                         <div>
-                                            <label for="dept_idx">담당 부서 추가</label>
-                                            <select id="dept_idx" name="dept_idx" class="select2 form-control" multiple="multiple" data-placeholder="(다중)선택" style="width: 100%;">
-                                                <option th:each="dept : ${deptList}" th:value="${dept.dept_idx}" th:text="${dept.dept_name}"></option>
+                                            <label for="deptIdx">담당 부서 추가</label>
+                                            <select id="deptIdx" name="deptIdx" class="select2 form-control" multiple="multiple" data-placeholder="(다중)선택" style="width: 100%;">
+                                                <option th:each="dept : ${deptList}" th:value="${dept.deptIdx}" th:text="${dept.deptName}"></option>
                                             </select>
                                         </div>
                                     </form>
-                                    <button type="button" id="btn_add_new_project" class="col btn btn-success float-right" style="height: 38px; margin-top: 20px;">Add New Project</button>
+                                    <button type="button" id="btnAddNewProject" class="col btn btn-success float-right" style="height: 38px; margin-top: 20px;">Add New Project</button>
                                 </div>
                             </div>
                         </div>
@@ -121,18 +121,18 @@
                                     <h3 class="card-title" style="font-weight: bold;">부서에 프로젝트 추가</h3>
                                 </div>
                                 <div class="card-body">
-                                    <form class="form-horizontal" id="add_dept_project">
+                                    <form class="form-horizontal" id="addDeptProject">
                                         <div class="form-group">
-                                            <select id="dept_name_add" name="dept_idx" class="select2 form-control" data-placeholder="부서 선택" style="width: 100%;">
-                                                <option th:each="dept : ${deptList}" th:value="${dept.dept_idx}" th:text="${dept.dept_name}"></option>
+                                            <select id="deptNameAdd" name="deptIdx" class="select2 form-control" data-placeholder="부서 선택" style="width: 100%;">
+                                                <option th:each="dept : ${deptList}" th:value="${dept.deptIdx}" th:text="${dept.deptName}"></option>
                                             </select>
                                             <br>
-                                            <select id="project_name_add" name="projectIds" class="select2 form-control" multiple="multiple" data-placeholder="추가할 프로젝트 (다중)선택" style="width: 100%;" disabled>
+                                            <select id="projectNameAdd" name="projectIds" class="select2 form-control" multiple="multiple" data-placeholder="추가할 프로젝트 (다중)선택" style="width: 100%;" disabled>
                                                 <!-- 프로젝트는 부서를 선택한 후 JavaScript로 동적으로 로딩 -->
                                             </select>
                                         </div>
                                     </form>
-                                    <button type="button" id="btn_add_dept_project" class="col btn btn-success float-right" style="height: 38px; margin-top: 20px;">Add Project</button>
+                                    <button type="button" id="btnAddDeptProject" class="col btn btn-success float-right" style="height: 38px; margin-top: 20px;">Add Project</button>
                                 </div>
                             </div>
                             <!-- 삭제 폼 -->
@@ -141,24 +141,56 @@
                                     <h3 class="card-title" style="font-weight: bold;">부서에서 프로젝트 제거</h3>
                                 </div>
                                 <div class="card-body">
-                                    <form class="form-horizontal" id="delete_dept_project">
+                                    <form class="form-horizontal" id="deleteDeptProject">
                                         <div class="form-group">
-                                            <select id="dept_name_delete" name="dept_idx" class="select2 form-control" data-placeholder="부서 선택" style="width: 100%;">
-                                                <option th:each="dept : ${deptList}" th:value="${dept.dept_idx}" th:text="${dept.dept_name}"></option>
+                                            <select id="deptNameDelete" name="deptIdx" class="select2 form-control" data-placeholder="부서 선택" style="width: 100%;">
+                                                <option th:each="dept : ${deptList}" th:value="${dept.deptIdx}" th:text="${dept.deptName}"></option>
                                             </select>
                                             <br>
-                                            <select id="project_name_delete" name="projectIds" class="select2 form-control" multiple="multiple" data-placeholder="삭제할 프로젝트 (다중)선택" style="width: 100%;" disabled>
+                                            <select id="projectNameDelete" name="projectIds" class="select2 form-control" multiple="multiple" data-placeholder="삭제할 프로젝트 (다중)선택" style="width: 100%;" disabled>
                                                 <!-- 프로젝트는 부서를 선택한 후 JavaScript로 동적으로 로딩 -->
                                             </select>
                                         </div>
                                     </form>
-                                    <button type="button" id="btn_delete_dept_project" class="col btn btn-success float-right" style="height: 38px; margin-top: 20px;">Delete Project</button>
+                                    <button type="button" id="btnDeleteDeptProject" class="col btn btn-success float-right" style="height: 38px; margin-top: 20px;">Delete Project</button>
                                 </div>
                             </div>
 
                             <!-- 프로젝트를 보유하지 않은 부서 삭제 -->
+                            <!-- 
+                            <div class="card">
+                                <div class="card-header">
+                                    <h3 class="card-title" style="font-weight: bold;">빈 부서 삭제</h3>
+                                </div>
+                                <div class="card-body">
+                                    <form class="form-horizontal" id="deleteEmptyDept">
+                                        <div class="form-group">
+                                            <select id="emptyDept" name="deptIdx" class="select2 form-control" data-placeholder="부서 선택" style="width: 100%;">
+                                                <option th:each="emptyDept : ${emptyDeptList}" th:value="${emptyDept.deptIdx}" th:text="${emptyDept.deptName}"></option>
+                                            </select>
+                                        </div>
+                                    </form>
+                                    <button type="button" id="btnDeleteEmptyDept" class="col btn btn-danger float-right" style="height: 38px; margin-top: 20px;">Delete empty department</button>
+                                </div>
+                            </div>
+                            -->
                             
-                            <!-- 어느 부서에도 해당되지 않은 프로젝트 삭제 -->
+                            <!-- 빈 프로젝트 삭제 -->
+							<div class="card">
+                                <div class="card-header">
+                                    <h3 class="card-title" style="font-weight: bold;">비관리 프로젝트 삭제</h3>
+                                </div>
+                                <div class="card-body">
+                                    <form class="form-horizontal" id="deleteEmptyProject">
+                                        <div class="form-group">
+                                            <select id="emptyProject" name="projectIdx" class="select2 form-control" data-placeholder="프로젝트 선택" style="width: 100%;">
+                                                <option th:each="emptyProject : ${emptyProjectList}" th:value="${emptyProject.projectIdx}" th:text="${emptyProject.projectName}"></option>
+                                            </select>
+                                        </div>
+                                    </form>
+                                    <button type="button" id="btnDeleteEmptyProject" class="col btn btn-danger float-right" style="height: 38px; margin-top: 20px;">Delete project no longer used</button>
+                                </div>
+                            </div>
 
                         </div>
                     </div>
@@ -192,17 +224,17 @@
 </html>
 <script type="text/javascript">
     // 추가 form에 보여질 프로젝트 option 태그 채우기
-    function loadOtherProjects(dept_idx) {
+    function loadOtherProjects(deptIdx) {
         $.ajax({
             type: "GET",
-            url: "/settings/deptProject/getOtherProjectsByDeptIdx/" + dept_idx, // 프로젝트를 가져올 엔드포인트 URL
+            url: "/settings/deptProject/getOtherProjectsByDeptIdx/" + deptIdx, // 프로젝트를 가져올 엔드포인트 URL
             success: function(response) {
                 // 서버로부터 받은 JSON 데이터를 파싱하여 옵션으로 추가
-                $('#project_name_add').empty(); // 기존 옵션들을 모두 지우기
+                $('#projectNameAdd').empty(); // 기존 옵션들을 모두 지우기
                 $.each(response, function(index, project) {
-                    $('#project_name_add').append('<option value="' + project.project_idx + '">' + project.project_name + '</option>');
+                    $('#projectNameAdd').append('<option value="' + project.projectIdx + '">' + project.projectName + '</option>');
                 });
-                $('#project_name_add').prop('disabled', false);
+                $('#projectNameAdd').prop('disabled', false);
             },
             error: function(xhr, status, error) {
                 console.error("Failed to load projects: " + error);
@@ -212,17 +244,17 @@
     }
 
     // 삭제 form에 보여질 프로젝트 option 태그 채우기
-    function loadCurrentProjects(dept_idx) {
+    function loadCurrentProjects(deptIdx) {
         $.ajax({
             type: "GET",
-            url: "/settings/deptProject/getProjectsByDeptIdx/" + dept_idx, // 프로젝트를 가져올 엔드포인트 URL
+            url: "/settings/deptProject/getProjectsByDeptIdx/" + deptIdx, // 프로젝트를 가져올 엔드포인트 URL
             success: function(response) {
                 // 서버로부터 받은 JSON 데이터를 파싱하여 옵션으로 추가
-                $('#project_name_delete').empty(); // 기존 옵션들을 모두 지우기
+                $('#projectNameDelete').empty(); // 기존 옵션들을 모두 지우기
                 $.each(response, function(index, project) {
-                    $('#project_name_delete').append('<option value="' + project.project_idx + '">' + project.project_name + '</option>');
+                    $('#projectNameDelete').append('<option value="' + project.projectIdx + '">' + project.projectName + '</option>');
                 });
-                $('#project_name_delete').prop('disabled', false);
+                $('#projectNameDelete').prop('disabled', false);
             },
             error: function(xhr, status, error) {
                 console.error("Failed to load projects: " + error);
@@ -233,62 +265,86 @@
 
     // 새 부서 추가
     function addNewDepartment() {
-        $("#add_new_dept").attr({
+        $("#addNewDept").attr({
             action: "/settings/dept/insert",
             method: "post"
         });
-        $("#add_new_dept").submit();
+        $("#addNewDept").submit();
     }
 
     // 새 프로젝트 추가
     function addNewProject() {
-        $("#add_new_project").attr({
+        $("#addNewProject").attr({
             action: "/settings/project/insert",
             method: "post"
         });
-        $("#add_new_project").submit();
+        $("#addNewProject").submit();
     }
 
     // 기존 부서에 프로젝트 추가
     function addProject() {
-        $("#add_dept_project").attr({
+        $("#addDeptProject").attr({
             action: "/settings/deptProject/insert",
             method: "post"
         });
-        $("#add_dept_project").submit();
+        $("#addDeptProject").submit();
     }
 
     // 기존 부서에 프로젝트 제거
     function deleteProject() {
-        $("#delete_dept_project").attr({
+        $("#deleteDeptProject").attr({
             action: "/settings/deptProject/delete",
             method: "post"
         });
-        $("#delete_dept_project").submit();
+        $("#deleteDeptProject").submit();
+    }
+    
+    // 빈(어느 프로젝트도 보유하지 않은) 부서 삭제
+    function deleteEmptyDept() {
+    	$("#deleteEmptyDept").attr({
+    		action: "/settings/dept/delete",
+    		method: "post"
+    	});
+    	$("#deleteEmptyDept").submit();
+    }
+    
+ 	// 빈 프로젝트 삭제
+    function deleteEmptyProject() {
+    	$("#deleteEmptyProject").attr({
+    		action: "/settings/project/delete",
+    		method: "post"
+    	});
+    	$("#deleteEmptyProject").submit();
     }
 
     $(function() {
-        $("#btn_add_new_dept").click(function() {
+        $("#btnAddNewDept").click(function() {
             addNewDepartment();
         });
-        $("#btn_add_new_project").click(function() {
+        $("#btnAddNewProject").click(function() {
             addNewProject();
         });
-        $("#btn_add_dept_project").click(function() {
+        $("#btnAddDeptProject").click(function() {
             addProject();
         });
-        $("#btn_delete_dept_project").click(function() {
+        $("#btnDeleteDeptProject").click(function() {
             deleteProject();
+        });
+        $("#btnDeleteEmptyDept").click(function(){
+        	deleteEmptyDept();
+        });
+        $("#btnDeleteEmptyProject").click(function(){
+        	deleteEmptyProject();
         });
 
         // 추가할 부서 선택 시 해당 부서가 보유하지 않은 프로젝트를 동적으로 로딩
-        $('#dept_name_add').change(function() {
+        $('#deptNameAdd').change(function() {
             // console.log($(this).val()); 부서 idx
             loadOtherProjects($(this).val());
         });
 
         // 삭제할 부서 선택 시 해당 부서가 보유한 프로젝트를 동적으로 로딩
-        $('#dept_name_delete').change(function() {
+        $('#deptNameDelete').change(function() {
             // console.log($(this).val()); 부서 idx
             loadCurrentProjects($(this).val());
         });

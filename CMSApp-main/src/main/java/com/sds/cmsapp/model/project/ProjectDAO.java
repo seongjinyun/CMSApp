@@ -10,8 +10,8 @@ import com.sds.cmsapp.domain.Project;
 public interface ProjectDAO {
 	
 	public int insert(Project project);
-	public Project selectByProjectIdx(int project_idx);
-	
+	public Project selectByProjectIdx(int projectIdx);
 	public List selectAll();
+	public void delete(Project project);
 	
 }

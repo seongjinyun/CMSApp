@@ -117,25 +117,25 @@
 					        </div>
 					    </div>
 						<div class="card-body">
-					        <form class="inputImg" enctype="multipart/form-data" id="add_new_emp">
+					        <form class="inputImg" enctype="multipart/form-data" id="addNewEmp">
 							    <div class="form-group">
 					                <label>사원명</label>
-					                <input type="text" name="emp_name" class="form-control" placeholder="사원명 입력">
+					                <input type="text" name="empName" class="form-control" placeholder="사원명 입력">
 					            </div>
 					            <div class="form-group">
 					                <label>ID</label>
-					                <input type="text" name="emp_id" class="form-control" placeholder="ID 입력">
+					                <input type="text" name="empId" class="form-control" placeholder="ID 입력">
 					            </div>
 					            <div class="form-group">
 					                <label>PW</label>
-					                <input type="password" name="emp_pw" class="form-control" placeholder="PW 입력">
+					                <input type="password" name="empPw" class="form-control" placeholder="PW 입력">
 					            </div>
 							    <div class="row">
 							        <div class="col">
 							            <div class="form-group">
 							            	<label>Role</label>
-							                <select id="input_role_code" name="role_code" class="select1 form-control" data-placeholder="역할 선택" style="width: 100%;">
-												<option th:each="role : ${roleList}" th:value="${role.role_code}" th:text="${role.role_name}"></option>
+							                <select id="inputRoleCode" name="roleCode" class="select1 form-control" data-placeholder="역할 선택" style="width: 100%;">
+												<option th:each="role : ${roleList}" th:value="${role.roleCode}" th:text="${role.roleName}"></option>
 											</select>
 							            </div>
 							        </div> 
@@ -144,8 +144,8 @@
 							        <div class="col">
 							            <div class="form-group">
 							            	<label>Department</label>
-							                <select id="input_dept_idx" name="dept_idx" class="select1 form-control" data-placeholder="부서 선택" style="width: 100%;">
-												<option th:each="dept : ${deptList}" th:value="${dept.dept_idx}" th:text="${dept.dept_name}"></option>
+							                <select id="inputDeptIdx" name="deptIdx" class="select1 form-control" data-placeholder="부서 선택" style="width: 100%;">
+												<option th:each="dept : ${deptList}" th:value="${dept.deptIdx}" th:text="${dept.deptName}"></option>
 											</select>
 							            </div>
 							        </div> 
@@ -160,7 +160,7 @@
 					                </label>
 									<input type="file" name="file" id="inputFile" accept="image/*" onchange="loadFile(this)"/>
 					            </div>
-					            <button type="button" id="btn_add_new_emp" class="col btn btn-success float-right" style="height: 38px; margin-top: 20px;">Add new Employee</button>
+					            <button type="button" id="btnAddNewEmp" class="col btn btn-success float-right" style="height: 38px; margin-top: 20px;">Add new Employee</button>
 							</form>
 					    </div>
 			 		</div>
@@ -176,7 +176,7 @@
 					        </div>
 					    </div>
 						<div class="card-body">
-							<form class="form-horizontal" id="update_emps">
+							<form class="form-horizontal" id="updateEmps">
 						        <table id="emp" class="table table-bordered table-striped">
 						            <thead>
 						                <tr>
@@ -187,16 +187,16 @@
 						            </thead>
 						            <tbody>
 						                <tr th:each="emp : ${empList}">
-						                	<input type="hidden" id="emp_idx" name="emp_idx" th:value="${emp.emp_idx}">
-							                <td th:text="${emp.emp_name}" id="emp_name"></td>
+						                	<input type="hidden" id="empIdx" name="empIdx" th:value="${emp.empIdx}">
+							                <td th:text="${emp.empName}" id="empName"></td>
 							                <td>
-							                    <select name="role_code" class="select1 form-control" data-placeholder="역할 선택" style="width: 100%;">
-							                        <option th:each="role : ${roleList}" th:selected="${role}==${emp.role}" th:value="${role.role_code}" th:text="${role.role_name}"></option>
+							                    <select name="roleCode" class="select1 form-control" data-placeholder="역할 선택" style="width: 100%;">
+							                        <option th:each="role : ${roleList}" th:selected="${role}==${emp.role}" th:value="${role.roleCode}" th:text="${role.roleName}"></option>
 							                    </select>
 							                </td>
 							                <td>
-							                    <select name="dept_idx" class="select1 form-control" data-placeholder="부서 선택" style="width: 100%;">
-							                        <option th:each="dept : ${deptList}" th:selected="${dept}==${emp.dept}" th:value="${dept.dept_idx}" th:text="${dept.dept_name}"></option>
+							                    <select name="deptIdx" class="select1 form-control" data-placeholder="부서 선택" style="width: 100%;">
+							                        <option th:each="dept : ${deptList}" th:selected="${dept}==${emp.dept}" th:value="${dept.deptIdx}" th:text="${dept.deptName}"></option>
 							                    </select>
 							                </td>
 							            </tr>
@@ -232,7 +232,7 @@
 						        	</div>
 						        </div>
 						    </form>
-						    <button type="button" id="btn_update_emps" class="col btn btn-success float-right" style="height: 38px; margin-top: 20px;">Save Changes</button>
+						    <button type="button" id="btnUpdateEmps" class="col btn btn-success float-right" style="height: 38px; margin-top: 20px;">Save Changes</button>
 					    </div>
 			  		</div>
     			</div>
@@ -277,7 +277,7 @@
 	}
 	
 	function updateEmps() { // 회원 정보 변경 전송
-		var formData = $("#update_emps").serialize();
+		var formData = $("#updateEmps").serialize();
 		 $.ajax({
 			url: '/emp/update',
 	        type: 'POST',
@@ -291,14 +291,14 @@
 	        }
 		});
 		 
-		$("form.update_emps").submit();
+		$("form.updateEmps").submit();
 	}
 	
 	$(function(){
-		$("#btn_add_new_emp").click(function(){
+		$("#btnAddNewEmp").click(function(){
 			registEmp();
 		});
-		$("#btn_update_emps").click(function(){
+		$("#btnUpdateEmps").click(function(){
 			updateEmps();
 		});
 	});

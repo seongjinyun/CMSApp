@@ -15,7 +15,7 @@ public interface EmpService {
 	public int getTotalCount();
 	public List selectEmpPage(Map map);
 	
-	public Emp selectByEmpIdx(int emp_idx);
+	public Emp selectByEmpIdx(int empIdx);
 	public void update(Emp emp);
 	public void updateDept(Emp emp);
 	

@@ -37,6 +37,9 @@ public interface DocumentService {
 	//document/detail 문서 상세보기 
 	public DocumentVersion documentDetailSelect(int documentIdx);
 	
+	//문서버전 업데이트
+	public void versionUpdate(VersionLog versionLog);
+
 	// DocumentDTO 안에 versionLog 채워넣기(제목 출력)
 	public Document fillVersionLog(Document document);
 }

@@ -58,6 +58,7 @@ public class DocumentServiceImpl implements DocumentService {
 		return documentDAO.selectByDocumentIdx(documentIdx);
 	}; 
 	
+	//새로운 문서 작성
 	@Transactional
     public void documentInsert(VersionLog versionLog) throws DocumentException, VersionLogException {
         // 문서 삽입
@@ -118,6 +119,35 @@ public class DocumentServiceImpl implements DocumentService {
 		return documentDAO.selectByFolderIdx(folderIdx);
 	}
 
+	@Transactional
+	public void versionUpdate(VersionLog versionLog) throws VersionLogException{
+		
+		DocumentVersion documentVersion = documentDetailDAO.documentDetailSelect(versionLog.getDocument().getDocumentIdx());
+		log.debug("versionLog = "+documentVersion.getVersionLog());
+		
+		int result = documentDetailDAO.versionLogInsert(documentVersion.getVersionLog());
+		
+		if(result < 1) {
+			throw new VersionLogException("문서 버전 로그 등록실패 ");
+		}
+		
+		int versionIdx = Integer.parseInt(documentVersion.getVersionLog().getVersion());
+		String newVersion = Integer.toString(versionIdx + 1);
+		documentVersion.getVersionLog().setVersion(newVersion);
+		
+		result = documentDetailDAO.versionUpdate(documentVersion.getVersionLog());
+		
+		log.debug("version = " + documentVersion.getVersionLog().getVersion());
+		if(result < 1) {
+			throw new VersionLogException("문서 버전 증가 실패 ");
+		}
+		
+		result = documentDetailDAO.documentVersionUpdate(documentVersion.getVersionLog());
+		
+		if(result < 1) {
+			throw new DocumentException("문서 현재 버전 업데이트 실패 ");
+		}
+	}
 	@Override
 	public Document fillVersionLog(final Document document) {
 		DocumentVersion documentVersion = documentVersionDAO.selectByDocumentIdx(document.getDocumentIdx());
@@ -125,5 +155,4 @@ public class DocumentServiceImpl implements DocumentService {
 		document.setVersionLog(versionLog);
 		return document;
 	}
-
 }

@@ -10,8 +10,10 @@ import com.sds.cmsapp.domain.Role;
 public interface RoleDAO {
 
 	public void insert(Role role);
-	public Role selectByRoleIdx(int role_idx);
-	public Role selectByRoleCode(int role_code);
+	public void insertRole(Role role);
+	public int getMaxRoleCode();
+	public Role selectByRoleIdx(int roleIdx);
+	public Role selectByRoleCode(int roleCode);
 	public List selectAll();
 	
 }

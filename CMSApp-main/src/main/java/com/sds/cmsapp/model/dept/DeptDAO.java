@@ -13,5 +13,6 @@ public interface DeptDAO {
 	public List<Dept> selectAllDeptName();
 	public List<Dept> selectAll();
 	public Dept selectByDeptIdx(final int deptIdx);
+	public void delete(final Dept dept);
 	
 }
