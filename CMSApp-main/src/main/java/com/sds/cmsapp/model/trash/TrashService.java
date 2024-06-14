@@ -3,6 +3,8 @@ package com.sds.cmsapp.model.trash;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.ibatis.annotations.Select;
+
 import com.sds.cmsapp.domain.Trash;
 
 public interface TrashService {
@@ -26,6 +28,5 @@ public interface TrashService {
 	
 	// 총 레코드 수
 	public int selectCount();
-	
 	
 }

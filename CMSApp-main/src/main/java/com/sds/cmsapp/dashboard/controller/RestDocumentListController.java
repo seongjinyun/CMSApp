@@ -11,9 +11,9 @@ import org.springframework.web.servlet.ModelAndView;
 
 import com.sds.cmsapp.domain.MasterCode;
 import com.sds.cmsapp.domain.Project;
-import com.sds.cmsapp.domain.RequestDocumentDTO;
-import com.sds.cmsapp.domain.ResponseDocumentCountDTO;
-import com.sds.cmsapp.domain.ResponseDocumentDTO;
+import com.sds.cmsapp.domain.RequestDocFilterDTO;
+import com.sds.cmsapp.domain.ResponseDocCountDTO;
+import com.sds.cmsapp.domain.ResponseDocDTO;
 import com.sds.cmsapp.exception.DocumentException;
 import com.sds.cmsapp.exception.FolderException;
 import com.sds.cmsapp.exception.StatusLogException;
@@ -31,32 +31,22 @@ public class RestDocumentListController {
 	DocumentService documentService;
 	
 	@Autowired
-	ProjectService projectService;
+	ProjectService projectService; // 필터의 프로젝트 목록 조회
 	
 	@Autowired
-	MasterCodeService masterCodeService;
+	MasterCodeService masterCodeService; // 필터의 결재 상태 목록 조회
 	
 	/* 결재 진행 상태별 문서 수 조회 (휴지통에 있는 문서 제외) */
 	@GetMapping("/dashboard/summary/count")
-	public ResponseDocumentCountDTO getCountByStatus() {
+	public ResponseDocCountDTO getCountByStatus() {
 		return documentService.countByStatus();
 	}
 	
-	/* 결재 진행 상태별 문서 목록 조회 (휴지통에 있는 문서 제외, 10개까지) */
-	@GetMapping("/dashboard/summary/list")
-	public List<ResponseDocumentDTO> getSummaryList(@RequestParam(value="statusCode") int statusCode) {
-		log.debug("입력받은 상태 코드: " + statusCode);
-		return documentService.selectSummaryListOfCurrentStatus(statusCode);
-	}
-	
-	/* 필터에 따라 결재 진행 중인 문서 목록 조회 (휴지통에 있는 문서 제외) */
-	@GetMapping("/dashboard/entire/list")
-	public List<ResponseDocumentDTO> getFilteredList(RequestDocumentDTO item) {
-		log.debug("입력받은 상태 코드: " + item.getStatusCodeList());
-		log.debug("입력받은 시작일: " + item.getStartDate());
-		log.debug("입력받은 마지막일: " + item.getEndDate());
-		log.debug("입력받은 프로젝트 리스트: " + item.getProjectIdxList());
-		return documentService.selectFilteredListOfCurrentStatus(item);
+	/* 필터에 따라 결재 진행 중인 문서 목록 조회 (휴지통에 있는 문서 제외) */ //RequestParam 값을 요청 DTO로 자동 매핑
+	@GetMapping("/dashboard/list/entire")
+	public List<ResponseDocDTO> getFilteredList(RequestDocFilterDTO filterDTO) {
+		log.debug("입력받은 상태 코드: " + filterDTO.getStatusList());
+		return documentService.selectFilteredList(filterDTO);
 	}
 	
 	/* 전체 프로젝트 목록 조회 */

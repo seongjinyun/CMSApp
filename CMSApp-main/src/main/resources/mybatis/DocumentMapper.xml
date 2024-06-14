@@ -2,23 +2,11 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "mybatis-3-mapper.dtd">
 <mapper namespace="com.sds.cmsapp.model.document.DocumentDAO">
 	
- 	<select id="select" parameterType="int" resultType="Document">
-		select * from document where document_idx=#{documentIdx}
-	</select>
-	
 	<resultMap type="Document" id="DocumentMap">
 		<id column="document_idx" property="documentIdx"/>
 		<association column="folder_idx" property="folder" javaType="Folder"
 			select="com.sds.cmsapp.model.folder.FolderDAO.select"/>
 	</resultMap>
-	
-	<select id="selectMap" parameterType="int" resultMap="DocumentMap">
-		select * from document where document_idx = #{documentIdx}
-	</select>
-	
-	<select id="selectAll" parameterType="java.util.Map" resultType="Document">
-		select * from document limit  #{startIndex} , #{rowCount}
-	</select>
 	
     <!-- 문서 삽입 -->
     <insert id="documentInsert" parameterType="Document">

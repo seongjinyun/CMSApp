@@ -2,25 +2,19 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "mybatis-3-mapper.dtd">
 <mapper namespace="com.sds.cmsapp.model.statuslog.StatusLogDAO">
 	
-<!-- 	<select id="select" parameterType="int">
-		select * from status_log where document_idx=#{documentIdx}
-	</select> -->
-	
 	<resultMap type="StatusLog" id="StatusLogMap">
 		<id column="status_log_idx" property="statusLogIdx"/>
 		<result column="comments" property="comments"/>
 		<result column="regdate" property="regdate"/>
 		<!-- EmpMap -->
 		<association column="emp_idx" property="emp" javaType="Emp"
-			select="com.sds.cmsapp.model.emp.EmpDAO.selectByEmpIdx"/>
-		<!-- DocumentMap -->
-		<association column="document_idx" property="document" javaType="Document"
-			select="com.sds.cmsapp.model.document.DocumentDAO.selectMap"/>
+			select="com.sds.cmsapp.model.emp.EmpDAO.selectByEmpIdx"/> <!-- EmpMap -->
+		<!-- DocumentMap을 추가하면 재귀적인 문제가 발생할 수 있으므로 생략 -->
 		<association column="status_code" property="masterCode" javaType="MasterCode"
-			select="com.sds.cmsapp.model.mastercode.MasterCodeDAO.select"/>
+			select="com.sds.cmsapp.model.mastercode.MasterCodeDAO.select"/> <!-- Type -->
 	</resultMap>
 	
-	<select id="selectFilteredListOfLatestRegisteredLog" parameterType="FilterItemDTO" resultMap="StatusLogMap">
+	<!-- <select id="selectFilteredListOfLatestRegisteredLog" parameterType="FilterItemDTO" resultMap="StatusLogMap">
 		SELECT * 
 		FROM (
 			SELECT * FROM status_log 
@@ -41,9 +35,9 @@
 			AND s.regdate BETWEEN #{startDate} AND #{endDate}
 		</if>
 		ORDER BY s.regdate desc
-	</select>
+	</select> -->
 	
-	<select id="selectSummaryListOfLatestRegisteredLog" parameterType="int" resultMap="StatusLogMap">
+	<!-- <select id="selectSummaryListOfLatestRegisteredLog" parameterType="int" resultMap="StatusLogMap">
 		SELECT * 
 		FROM (
 			SELECT * FROM status_log 
@@ -57,9 +51,9 @@
 		</if>
 		ORDER BY s.regdate desc
         LIMIT 10;
-	</select>
+	</select> -->
 	
-	<select id="countByStatus" parameterType="int" resultType="Integer">	
+<!-- 	<select id="countByStatus" parameterType="int" resultType="Integer">	
 		SELECT COUNT(s.document_idx), status_code 
 		FROM (
 			SELECT * FROM status_log 
@@ -70,7 +64,7 @@
 		WHERE t.trash_idx IS NULL
 		GROUP BY status_code
 		HAVING status_code = #{statusCode}
-	</select>
+	</select> -->
 	
 	<delete id="deleteBy"></delete>
 	

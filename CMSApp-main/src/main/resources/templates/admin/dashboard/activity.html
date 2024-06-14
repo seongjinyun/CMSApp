@@ -117,10 +117,10 @@ div.table-detail, span.table-detail {
 							<!-- Row -->
 							<div class="row">
 								<div class="col-lg-4 col-12">
-									<div id="box-inreview" class="small-box bg-success">
+									<div id="box-in_review" class="small-box bg-success">
 										<div class="inner">
 											<h3></h3>
-											<button id="btn-inreview" class="show_list">
+											<button id="btn-in_review" class="show_list" value="in_review">
 												리뷰 대기 문서 <i class="fas fa-arrow-circle-right"></i>
 											</button>
 										</div>
@@ -130,7 +130,7 @@ div.table-detail, span.table-detail {
 									<div id="box-reviewed" class="small-box bg-info">
 										<div class="inner">
 											<h3></h3>
-											<button id="btn-reviewed" class="show_list">
+											<button id="btn-reviewed" class="show_list" value="reviewed">
 												리뷰 완료 문서 <i class="fas fa-arrow-circle-right"></i>
 											</button>
 										</div>
@@ -140,7 +140,7 @@ div.table-detail, span.table-detail {
 									<div id="box-rejected" class="small-box bg-danger">
 										<div class="inner">
 											<h3></h3>
-											<button id="btn-rejected" class="show_list">
+											<button id="btn-rejected" class="show_list" value="rejected">
 												반려 문서 <i class="fas fa-arrow-circle-right"></i>
 											</button>
 										</div>
@@ -402,16 +402,22 @@ div.table-detail, span.table-detail {
 	            "sortDescending" : " :  내림차순 정렬"        
 	            }
 			};
+			
+		let statusSet = {
+				"in_review" : "리뷰 중",
+				"reviewed" : "리뷰 완료",
+				"rejected" : "반려"
+		};
 
 		/* 결재 상태에 따른 문서 개수만 가져오기 */
-		function getSummaryCount(statusCode) {
+		function getSummaryCount() {
 			$.ajax({
 				type:"GET"  //전송타입
 				, url:"/dashboard/summary/count"
 				, success: function (result, status, xhr) {
-						$("#box-inreview h3").html(result.inReview); // 리뷰 대기 문서 수 표시
-						$("#box-reviewed h3").html(result.reviewed); // 리뷰 완료 문서 수 표시
-						$("#box-rejected h3").html(result.rejected); // 반려 문서 수 표시
+						$("#box-in_review h3").html(result.inReviewCount); // 리뷰 대기 문서 수 표시
+						$("#box-reviewed h3").html(result.reviewedCount); // 리뷰 완료 문서 수 표시
+						$("#box-rejected h3").html(result.rejectedCount); // 반려 문서 수 표시
 					}, error: function (xhr, status, e) {
 					console.log("error", e);
 				}
@@ -419,24 +425,29 @@ div.table-detail, span.table-detail {
 		}
 		
 		/* 결재 상태에 따라 문서 목록 데이터 가져오기 (10개까지만) */
-		function getSummaryData(statusCode) {
+		function getSummaryData(statusList) {
 			$.ajax({
 				type: "GET",
-				url: "/dashboard/summary/list?statusCode=" + statusCode,
+				url: "/dashboard/list/entire?statusList=" + statusList,
 				success: function (result, status, xhr) {
 					// alert('문서 불러오기 성공');
 					// 테이블 초기화
 					let preview = $("#table-preview tbody");					
 					preview.empty(); 
-					let tr = "";
-					if (result.length == 0) tr += "<tr><td colspan='6'>내용이 없습니다.</td></tr>";
+
+					if (result.length == 0) {
+						tr = "<tr><td colspan='6'>내용이 없습니다.</td></tr>";
+					}
 					
 					// 배지 색 한번만 결정
+					// 숫자로 받지 않을 수 있는 방법 고민하기
+					let statusName = statusList[0];
 					let statusBadge = null;
-					if (statusCode == 200) statusBadge = "badge-success";
-					else if (statusCode == 300) statusBadge = "badge-info";
-					else if (statusCode == 500) statusBadge = "badge-danger";
+					if (statusName == "리뷰 중") statusBadge = "badge-success";
+					else if (statusName == "리뷰 완료") statusBadge = "badge-info";
+					else if (statusName == "반려") statusBadge = "badge-danger";
 					
+					let tr = "";
 					// 차후 10건까지만 보여주는 것으로 변경 예정
 					for (let i = 0; i < result.length; i++) {
 						tr += `
@@ -465,11 +476,11 @@ div.table-detail, span.table-detail {
 		}
 		
 		/* 필터에 따라 문서 목록 가져오기 */
-		function getFilteredData(statusCodeList, startDate, endDate, projectIdxList) {
+		function getFilteredData(statusList, startDate, endDate, projectList) {
 			// url 쿼리 스트링 설정
-			let url = "/dashboard/entire/list?";
-			if (statusCodeList != null) url += "&statusCodeList=" + statusCodeList;
-			if (projectIdxList != null) url += "&projectIdxList=" + projectIdxList;
+			let url = "/dashboard/list/entire?";
+			if (statusList != null) url += "&statusList=" + statusList;
+			if (projectList != null) url += "&projectList=" + projectList;
 			if (startDate != null && endDate != null) url += "&startDate=" + startDate + "&endDate=" + endDate;
 			
 			// 데이터 테이블 적용
@@ -511,7 +522,7 @@ div.table-detail, span.table-detail {
 	            success: function(result) {
 	                $('#project-tag').empty(); // 기존 옵션들을 모두 지우기
 	                	for (let i = 0; i < result.length; i++) {
-	                    	$('#project-tag').append('<option value="' + result[i].projectIdx + '">' + result[i].projectName + '</option>');
+	                    	$('#project-tag').append('<option value="' + result[i].projectName + '">' + result[i].projectName + '</option>');
 	                	}
 	                $('#project-tag').prop('disabled', true);
 	            }, error: function(xhr, status, error) {
@@ -528,7 +539,7 @@ div.table-detail, span.table-detail {
 	            success: function(result) {
 	                $('#status-tag').empty(); // 기존 옵션들을 모두 지우기
 	                	for (let i = 0; i < result.length; i++) {
-	                    	$('#status-tag').append('<option value="' + result[i].statusCode + '">' + result[i].statusName + '</option>');
+	                    	$('#status-tag').append('<option value="' + result[i].statusName + '">' + result[i].statusName + '</option>');
 	                	}
 	                $('#status-tag').prop('disabled', true);
 	            }, error: function(xhr, status, error) {
@@ -540,12 +551,21 @@ div.table-detail, span.table-detail {
 		$(function() {
 			/* [요약 탭] 초기화 */
 			getSummaryCount(); 	// 결재 상태별 문서 수 표시
-			getSummaryData(200); // 리뷰 대기 문서 목록 표시
+			getSummaryData([statusSet[$('#btn-in_review').val()]]); // 리뷰 대기 문서 목록 표시
 			
-			$('#btn-inreview').click(function(){ getSummaryData(200);}); // 리뷰 대기 문서 미리보기 버튼 클릭 시 목록 가져오기
- 			$('#btn-reviewed').click(function(){ getSummaryData(300);}); // 리뷰 완료 문서 미리보기 버튼 클릭 시 목록 가져오기
- 			$('#btn-rejected').click(function(){ getSummaryData(500);}); // 반려 문서 미리보기 버튼 클릭 시 목록 가져오기
- 			
+			$('#btn-in_review').click(function(){ 
+				let statusList = [statusSet[$('#btn-in_review').val()]];
+				getSummaryData(statusList); // 리뷰 대기 문서 미리보기 버튼 클릭 시 목록 가져오기
+			});
+			$('#btn-reviewed').click(function(){ 
+				let statusList = [statusSet[$('#btn-reviewed').val()]];
+				getSummaryData(statusList); // 리뷰 중 문서 미리보기 버튼 클릭 시 목록 가져오기
+			});
+			$('#btn-rejected').click(function(){ 
+				let statusList = [statusSet[$('#btn-rejected').val()]];
+				getSummaryData(statusList); // 리뷰 완료 문서 미리보기 버튼 클릭 시 목록 가져오기
+			});
+		
  			/* 전체보기 버튼 */
  			$("#goToEntireList-btn").click(function(){
  				$("a[href='#entire-list']").tab('show');
@@ -620,10 +640,10 @@ div.table-detail, span.table-detail {
 				let filter_project = document.querySelector("input[name='project-filter']:checked").value;
 				let filter_status = document.querySelector("input[name='status-filter']:checked").value;
 				
-				let statusCodeList = null; // 상태 정보
+				let statusList = null; // 상태 정보
 				if (filter_status == "radio-status-custom")
-					statusCodeList = $('#status-tag').val(); 
-				alert("선택된 상태 코드: " + statusCodeList);
+					statusList = $('#status-tag').val(); 
+				alert("선택된 상태 코드: " + statusList);
 				
 				let startDate = null; // 날짜 정보
 				let endDate = null
@@ -633,12 +653,11 @@ div.table-detail, span.table-detail {
 				} 
 				alert("선택된 날짜: " + startDate + "-" + endDate)
 				
-				let projectIdxList = null; // 프로젝트 정보
+				let projectList = null; // 프로젝트 정보
 				if (filter_project == "radio-project-custom")			
-					projectIdxList = $('#project-tag').val(); 
-				alert("선택된 프로젝트: " + projectIdxList);
+					projectList = $('#project-tag').val(); 
 				
-				getFilteredData(statusCodeList, startDate, endDate, projectIdxList); // 필터 처리된 목록 조회
+				getFilteredData(statusList, startDate, endDate, projectList); // 필터 처리된 목록 조회
 			});
 			
 /* 			setTimeout(function(){

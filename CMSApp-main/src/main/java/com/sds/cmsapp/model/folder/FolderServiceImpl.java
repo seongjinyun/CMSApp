@@ -10,7 +10,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.sds.cmsapp.domain.Document;
 import com.sds.cmsapp.domain.Folder;
-import com.sds.cmsapp.domain.RequestDocumentDTO;
+import com.sds.cmsapp.domain.RequestDocFilterDTO;
 import com.sds.cmsapp.domain.Trash;
 import com.sds.cmsapp.exception.FolderException;
 import com.sds.cmsapp.model.document.DocumentDAO;
@@ -250,21 +250,16 @@ public class FolderServiceImpl implements FolderService {
 		}
 		return folder;
 	}
-
-	@Override
-	public List<Integer> selectFolderIdxListInProject(RequestDocumentDTO requestDocumentDTO) {
-		return folderDAO.selectFolderIdxListInProject(requestDocumentDTO);
-	}
 	
 	@Override
 	public List<Folder> selectByProjectIdx(final int projectIdx) {
-		return folderDAO.selectByProjectIdx();
+		return folderDAO.selectByProjectIdx(projectIdx);
 	}
 	
 	@Override
 	public Folder selectProjectRootFolder(final int projectIdx) {
 		Folder result = new Folder();
-		List<Folder> folderList = folderDAO.selectByProjectIdx();
+		List<Folder> folderList = folderDAO.selectByProjectIdx(projectIdx);
 		for(Folder folder : folderList) {
 			if(folder.getParentFolder() == null) {
 				result = folder;

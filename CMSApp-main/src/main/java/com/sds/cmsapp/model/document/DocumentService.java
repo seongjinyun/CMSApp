@@ -4,29 +4,22 @@ import java.util.List;
 import java.util.Map;
 
 import com.sds.cmsapp.domain.Document;
-import com.sds.cmsapp.domain.RequestDocumentDTO;
-import com.sds.cmsapp.domain.ResponseDocumentCountDTO;
+import com.sds.cmsapp.domain.RequestDocFilterDTO;
+import com.sds.cmsapp.domain.ResponseDocCountDTO;
 import com.sds.cmsapp.domain.DocumentVersion;
-import com.sds.cmsapp.domain.ResponseDocumentDTO;
+import com.sds.cmsapp.domain.ResponseDocDTO;
 import com.sds.cmsapp.domain.VersionLog;
 
 public interface DocumentService {
 	
+	/* 모든 문서 조회 */
+	public List<Document> selectAll();
+	
 	/* 결재 상태별 문서 수 조회 */
-	public ResponseDocumentCountDTO countByStatus();
+	public ResponseDocCountDTO countByStatus();
 	
-	/* 결재 상태에 따라 문서 목록 조회 (10개만, 휴지통에 있는 문서 제외) */
-	public List<ResponseDocumentDTO> selectSummaryListOfCurrentStatus(int statusCode);
-	
-	/* 필터 조건에 따라 결재 진행 중인 문서 목록 조회 (휴지통에 있는 문서 제외) */
-	public List<ResponseDocumentDTO> selectFilteredListOfCurrentStatus(RequestDocumentDTO requestDocumentDTO);
-
-	// 선택 문서 조회
-	public Document select(int documentIdx); // returnType="Document"
-	
-	public Document selectMap(int documentIdx); // association: VersionLog
-	
-	public List<Document> selectAll(Map map);
+	/* 결재 상태에 따라 문서 목록 조회 */
+	public List<ResponseDocDTO> selectFilteredList(RequestDocFilterDTO requestDTO);
 
 	// 문서생성 + 버전
 	public void documentInsert(VersionLog versionLog);
@@ -42,9 +35,6 @@ public interface DocumentService {
 	
 	//document/detail 문서 상세보기 
 	public DocumentVersion documentDetailSelect(int documentIdx);
-	
-	// 폴더 idx 목록에 따른 문서 idx 목록 조회
-	public List<Integer> selectDocumentIdxListInFolder(List<Integer> folderIdxList);
 
 	//문서버전 업데이트
 	public void versionUpdate(VersionLog versionLog);

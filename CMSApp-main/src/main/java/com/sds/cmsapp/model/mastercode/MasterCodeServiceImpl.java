@@ -14,11 +14,6 @@ public class MasterCodeServiceImpl implements MasterCodeService {
 	MasterCodeDAO masterCodeDAO;
 
 	@Override
-	public MasterCode select(int status_code) {
-		return masterCodeDAO.select(status_code); //returnType="MasterCode"
-	}
-
-	@Override
 	public List<MasterCode> selectAll() {
 		return masterCodeDAO.selectAll();
 	}

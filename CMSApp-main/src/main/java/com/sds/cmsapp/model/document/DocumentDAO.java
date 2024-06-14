@@ -4,27 +4,23 @@ import java.util.List;
 import java.util.Map;
 
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.ResultMap;
+import org.apache.ibatis.annotations.Select;
 
 import com.sds.cmsapp.domain.Document;
-import com.sds.cmsapp.domain.RequestDocumentDTO;
 import com.sds.cmsapp.domain.DocumentVersion;
-import com.sds.cmsapp.domain.ResponseDocumentDTO;
 import com.sds.cmsapp.domain.VersionLog;
 
 @Mapper
 public interface DocumentDAO {
-	
-	/* 폴더 idx 목록에 따른 문서idx 목록 조회 (휴지통에 있는 문서 제외) */
-	public List<Integer> selectDocumentIdxListInFolder(List<Integer> folderIdxList);
 
-	// 선택 문서 조회
-	public Document select(int documentIdx); // returnType="Document"
-	
-	public Document selectByDocumentIdx(int documentIdx); //
-	
-	public Document selectMap(int documentIdx);
-	
-	public List<Document> selectAll(Map map);
+	@Select("SELECT * FROM DOCUMENT")
+	@ResultMap("DocumentMap")
+	public List<Document> selectAll(); // 전체 문서 목록 조회
+
+	@Select("SELECT * FROM document WHERE document_idx = #{documentIdx}")
+	@ResultMap("DocumentMap")
+	public Document select(int documentIdx); // 선택 문서 조회
 	
 	public List<Document> selectByFolderIdx(int folderIdx); // mybatis 연결 부탁드려요~ (박준형)
 

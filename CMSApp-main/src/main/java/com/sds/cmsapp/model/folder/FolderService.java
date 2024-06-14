@@ -3,7 +3,7 @@ package com.sds.cmsapp.model.folder;
 import java.util.List;
 
 import com.sds.cmsapp.domain.Folder;
-import com.sds.cmsapp.domain.RequestDocumentDTO;
+import com.sds.cmsapp.domain.RequestDocFilterDTO;
 import com.sds.cmsapp.exception.FolderException;
 
 public interface FolderService {
@@ -36,7 +36,6 @@ public interface FolderService {
 	
 	public Folder completeFolderWithDocument(final int folderIdx) throws FolderException; // 폴더 하나를 문서를 포함하여 끝까지 채우기
 	
-	public List<Integer> selectFolderIdxListInProject(RequestDocumentDTO requestDocumentDTO); 	// 폴더 목록 조회
 	public List<Folder> selectByProjectIdx(final int projectIdx); // 프로젝트 ID로 폴더 리스트 조회
 	
 	public Folder selectProjectRootFolder(final int projectIdx); // 프로젝트와 동일시되는 최상위폴더 조회
