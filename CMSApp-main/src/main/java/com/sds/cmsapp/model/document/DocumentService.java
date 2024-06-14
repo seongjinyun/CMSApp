@@ -10,9 +10,12 @@ import com.sds.cmsapp.domain.VersionLog;
 public interface DocumentService {
 
 	// 모든 문서 조회
-	public List selectAll(Map map);
+	public List<DocumentVersion> selectAll();
 	
-	public List selectAllForDashboard(Map map);
+	public List<Document> selectAllForDashboard(Map map);
+	
+	// 범위만큼만 가져오기
+	public List<Document> selectAllByRange(final Map<String, Integer> map);
 	
 	// 결재 상태별 문서 수
 	public int countForDashboard(int statusCode);
@@ -42,4 +45,10 @@ public interface DocumentService {
 
 	// DocumentDTO 안에 versionLog 채워넣기(제목 출력)
 	public Document fillVersionLog(Document document);
+	
+	/**
+	 * 배포된 버전인지 확인 후 boolean 반환
+	 * @Return 배포됐으면 True 아니면 false
+	 */
+	public boolean isPublished(final int doucmentIdx);
 }

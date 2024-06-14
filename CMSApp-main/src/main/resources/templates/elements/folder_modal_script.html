@@ -24,12 +24,8 @@
 				contentType: "application/json",
 				success: function (result, status, xhr) {
 					jsonData = result;
-					console.log("jsonData : ");
-					console.log(jsonData);
 
 					jsTreeData = jsonData.map(convertToJsTree);  // 여기로 이동
-					console.log("jsTreeData:");
-					console.log(jsTreeData);
 
 					callback();  // 데이터 로딩이 완료되면 콜백 호출
 				},
@@ -106,14 +102,11 @@
 					contentType: "application/json",
 					data: JSON.stringify({ folderIdx: selectedFolderIdx }),
 					success: function (result, status, xhr) {
-						console.log("성공적으로 서버에 변경된 Idx 전송");
 					},
 					error: function (status, xhr, err) {
-						console.log("서버에 변경된 Idx 전송 실패");
 					}
 				});
 			} else {
-				console.log('No directory selected.');
 			}
 			$('#moveDirectory').modal('hide');
 			removeModalBackdrop(); // 모달 배경 제거

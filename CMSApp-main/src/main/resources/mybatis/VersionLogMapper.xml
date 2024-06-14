@@ -16,7 +16,11 @@
 		<!-- branched_version_log 컬럼은 보류 -->
 		
 	</resultMap>
-
+	
+	<insert id="insert" parameterType="versionLog">
+		insert into version_log(title, content, comments, emp_idx, document_idx)
+		values(#{title}, #{content}, #{comments}, #{emp.empIdx}, #{document.documentIdx})
+	</insert>
 	
 	<!-- 하나 조회 by version_log_idx  -->
 	<select id="selectByVersionLogIdx" parameterType="int" resultMap="VersionLogMap">
@@ -27,4 +31,12 @@
 	<select id="select" parameterType="int" resultType="VersionLog">
 				select * from version_log where version_log_idx=#{versionLogIdx}
 	</select>
+	
+	<delete id="delete" parameterType="int">
+		delete from version_log where version_log_idx = #{versionLogIdx}
+	</delete>
+	
+	<delete id="deleteByDocumentIdx" parameterType="int">
+		delete from version_log where document_idx = #{document.documentIdx}
+	</delete>
 </mapper>

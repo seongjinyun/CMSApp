@@ -38,4 +38,7 @@ public interface FolderService {
 	public List<Folder> selectByProjectIdx(final int projectIdx); // 프로젝트 ID로 폴더 리스트 조회
 	
 	public Folder selectProjectRootFolder(final int projectIdx); // 프로젝트와 동일시되는 최상위폴더 조회
+	
+	public List<Folder> selectParentList(final int folderIdx); // 부모가 1번, 인덱스를 입력한 자식이 마지막인 리스트 반환
+
 }

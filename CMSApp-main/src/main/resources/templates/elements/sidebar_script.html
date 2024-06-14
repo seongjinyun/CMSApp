@@ -2,13 +2,10 @@
     <script>
         $(document).ready(function () {
             // 초기 최상위 폴더(프로젝트) 로드
-            console.log("sidebar_script");
             loadTopLevelProjects();
-            console.log("documentReady(sidebar)");
         });
 
         function loadTopLevelProjects() {
-            console.log("첫 loadTopLeverProjects() ", $('#folderTree'));
             $.ajax({
                 url: '/sidebar/folder',
                 method: 'GET',
@@ -17,7 +14,6 @@
                         result = [result];
                     }
                     result.forEach(folder => {
-                        console.log("loadTopList ()호출", result, "forEach의 folder: ", folder);
                         renderFolder(folder, $('#folderTree'));
                     });
                 },
@@ -28,13 +24,11 @@
         }
 
         function loadFolder(folderIdx, parentElement) {
-            console.log(" loadFolder() folderIdx: " + folderIdx + ", parentElement: ", parentElement);
             $.ajax({
                 url: '/sidebar/folder/sub',
                 method: 'GET',
                 data: { folderIdx: folderIdx },
                 success: function (result, status, xhr) {
-                    console.log("loadFolder() 호출", result);
                     if (!Array.isArray(result)) {
                         result = [result];
                     }
@@ -49,17 +43,15 @@
         }
 
         function renderFolder(folder, parentElement) {
-            console.log("renderFolder() 호출");
             let depth = folder.depth || 0;
             let folderHTML = `<li class="nav-item">
                                     <a href="/document/list?folderIdx=${folder.folderIdx}" class="nav-link" data-folder-id="${folder.folderIdx}">
-                                        <i class="nav-icon fas fa-box ml-${depth * 2}"></i>
+                                        <i class="nav-icon fas fa-box ml-${depth * 2}"></i>                            
                                         <p>${folder.folderName}</p>
                                         <i class="fas fa-angle-left right toggle-dropdown" data-folder-id="${folder.folderIdx}"></i>
                                     </a>
+                                    </div>
                                     <ul class="nav nav-treeview" style="display: none;">`;
-
-            console.log("     renderFolder() childFolderList: ", folder.childFolderList);
             if (folder.childFolderList) {
                 folder.childFolderList.forEach(subFolder => {
                     folderHTML += `<li class="nav-item">
@@ -72,11 +64,10 @@
                 });
             }
 
-            console.log("folderIdx: ", folder.folderIdx, "documentList: ", folder.documentList);
             if (folder.documentList) {
                 folder.documentList.forEach(doc => {
                     folderHTML += `<li class="nav-item">
-                                        <a href="/document/detail?documentIdx=${doc.documentIdx}" class="nav-link" data-doc-id="${doc.documentIdx}">
+                                        <a href="/document/detail?documentIdx=${doc.documentIdx}&folderIdx=${doc.folder.folderIdx}" class="nav-link" data-doc-id="${doc.documentIdx}" data-folder-id="${doc.folder.folderIdx}">
                                             <i class="far fa-file nav-icon ml-${(depth + 1) * 2}"></i>
                                             <p>${doc.versionLog.title}</p>
                                         </a>
@@ -107,8 +98,9 @@
         $(document).on('click', '.nav-link[data-doc-id]', function (e) {
             e.preventDefault();
             const docId = $(this).data('doc-id');
+            const folderId = $(this).data('folder-id');
             // 문서 상세보기 로직 구현
-            console.log(`Document ID: ${docId}`);
+            location.href = "/document/detail?documentIdx=" + docId + "&folderIdx=" + folderId;
         });
 
     </script>

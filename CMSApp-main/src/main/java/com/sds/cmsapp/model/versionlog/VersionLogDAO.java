@@ -1,7 +1,5 @@
 package com.sds.cmsapp.model.versionlog;
 
-import java.util.List;
-
 import org.apache.ibatis.annotations.Mapper;
 
 import com.sds.cmsapp.domain.VersionLog;
@@ -14,5 +12,11 @@ public interface VersionLogDAO {
 	
 	// 0603 추가
 	public VersionLog select(int version_log_idx);
+	
+	public int insert(final VersionLog versionLog);
+	
+	public int delete(final int versionLogDAO);
+	
+	public int deleteByDocumentIdx(final int versionLogDAO);
 
 }

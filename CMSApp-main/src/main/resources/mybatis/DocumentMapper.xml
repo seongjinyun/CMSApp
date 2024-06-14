@@ -207,5 +207,13 @@
 	<select id="selectByFolderIdx" parameterType="int" resultType="Document">
 		select * from document where folder_idx = #{folderIdx}
 	</select>
+	
+	<select id="selectAllWithRange" parameterType="java.util.Map" resultMap="DocumentListSelectMap">
+		select * from document limit  #{startIndex} , #{rowCount}
+	</select>
+	
+	<select id="selectAll" resultMap="DocumentListSelectMap">
+		select * from document
+	</select>
     
 </mapper>

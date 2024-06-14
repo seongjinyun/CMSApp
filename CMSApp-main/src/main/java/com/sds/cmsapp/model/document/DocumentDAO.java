@@ -13,7 +13,9 @@ import com.sds.cmsapp.domain.VersionLog;
 public interface DocumentDAO {
 
 	// 모든 문서 조회
-	public List selectAll(Map map);
+	public List<Document> selectAll();
+	
+	public List<Document> selectAllByRange(Map<String,Integer> map);
 	
 	public List selectAllForDashboard(Map map);
 	
@@ -34,7 +36,7 @@ public interface DocumentDAO {
 	public int documentVersionInsert(DocumentVersion documentVersion);
 	
 	//파일 리스트 조회
-	public List documentListSelect(Map map);
+	public List<DocumentVersion> documentListSelect(final Map<String, Integer> map);
 	
 	// 문서 수정
 	public int update(Document document);

@@ -4,7 +4,7 @@
 
 	<insert id="insert" parameterType="Folder">
 		insert into folder (parent_folder_idx, folder_name, project_idx)
-		values (#{parentFolder.parentFolderIdx}, #{folderName}, #{project.projectIdx})
+		values (#{parentFolder.folderIdx}, #{folderName}, #{project.projectIdx})
 		<selectKey keyColumn="folder_idx" keyProperty="folderIdx" resultType="int" order="AFTER">
 			select last_insert_id() as folder_idx
 		</selectKey>

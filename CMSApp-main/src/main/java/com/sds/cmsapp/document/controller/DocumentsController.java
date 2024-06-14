@@ -1,5 +1,7 @@
 package com.sds.cmsapp.document.controller;
 
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 
@@ -9,11 +11,14 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import com.mysql.cj.x.protobuf.MysqlxCrud.Collection;
 import com.sds.cmsapp.common.Pager;
 import com.sds.cmsapp.domain.Document;
 import com.sds.cmsapp.domain.DocumentVersion;
+import com.sds.cmsapp.domain.Folder;
 import com.sds.cmsapp.domain.Trash;
 import com.sds.cmsapp.model.document.DocumentService;
+import com.sds.cmsapp.model.folder.FolderService;
 import com.sds.cmsapp.model.trash.TrashService;
 
 import lombok.extern.slf4j.Slf4j;
@@ -31,7 +36,8 @@ public class DocumentsController {
 	@Autowired
 	private TrashService trashService;
 	
-
+	@Autowired
+	private FolderService folderService;
 	
 	//글 작성 폼
 	@GetMapping("/document/writeform")
@@ -56,21 +62,37 @@ public class DocumentsController {
 			HashMap<String, Integer> map=new HashMap<String, Integer>();
 			map.put("startIndex", pager.getStartIndex());
 			map.put("rowCount", pager.getPageSize());
-			List<Document> documentList = documentService.selectAll(map);
+			Folder folder = new Folder();
+			folder.setFolderName("전체보기");
+			folder.setFolderIdx(0);
+			List<Folder> subFolderList = folderService.selectTopFolder();
+			List<Folder> parentFolderList = new ArrayList<>();
+			parentFolderList.add(folder);
+			List<DocumentVersion> documentList = documentService.selectAll();
 			model.addAttribute("documentListSelect", documentList);
 			model.addAttribute("folderIdx", folderIdx);
+			model.addAttribute("folder", folder);
+			model.addAttribute("parentFolderList", parentFolderList);
+			model.addAttribute("subFolderList", subFolderList);
 			return "documents/list";
 		}else {
 			HashMap<String, Integer> map = new HashMap<>();
-			map.put("folderIdx", folderIdx);	
+			map.put("folderIdx", folderIdx);
+			Folder folder = folderService.completeFolderWithDocument(folderIdx);
 			//폴더 -> 파일 리스트
 			List documentListSelect = documentService.documentListSelect(map);
+			List<Folder> parentFolderList = folderService.selectParentList(folderIdx);
+			List<Folder> subFolderList = folderService.selectSub(folderIdx);
 			
 			model.addAttribute("documentListSelect", documentListSelect);
 			log.debug("model= " + model);
 			
 			model.addAttribute("folderIdx", folderIdx);
-			
+			model.addAttribute("folder", folder);
+			Collections.reverse(parentFolderList);
+			model.addAttribute("parentFolderList", parentFolderList);
+			model.addAttribute("subFolderList", subFolderList);
+			System.out.println("요청받은 folderIdx: " + folderIdx + "길이: " + subFolderList + "하위 폴더: " + subFolderList);
 			return "documents/list";
 		}
 	} 

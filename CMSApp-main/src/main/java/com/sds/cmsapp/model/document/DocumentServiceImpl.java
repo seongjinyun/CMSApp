@@ -1,5 +1,7 @@
 package com.sds.cmsapp.model.document;
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -9,13 +11,13 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.sds.cmsapp.domain.Document;
 import com.sds.cmsapp.domain.DocumentVersion;
+import com.sds.cmsapp.domain.Folder;
 import com.sds.cmsapp.domain.VersionLog;
 import com.sds.cmsapp.exception.DocumentException;
 import com.sds.cmsapp.exception.TrashException;
 import com.sds.cmsapp.exception.VersionLogException;
-import com.sds.cmsapp.model.bookmark.BookmarkDAO;
-import com.sds.cmsapp.model.statuslog.StatusLogDAO;
-import com.sds.cmsapp.model.versionlog.VersionLogDAO;
+import com.sds.cmsapp.model.folder.FolderDAO;
+import com.sds.cmsapp.model.versionlog.PublishedVersionDAO;
 
 import lombok.extern.slf4j.Slf4j;
 @Slf4j
@@ -30,12 +32,29 @@ public class DocumentServiceImpl implements DocumentService {
 
 	@Autowired
 	private DocumentDetailDAO documentDetailDAO;
+	
+	@Autowired
+	private PublishedVersionDAO publishedVersionDAO;
+	
+	@Autowired
+	private FolderDAO folderDAO;
 
 	
 	// 모든 문서 조회
-	public List selectAll(Map map) {
-		return null;
+	public List<DocumentVersion> selectAll() {
+		List<DocumentVersion> resultList = new ArrayList<>();
+		List<Folder> topFolderList = folderDAO.selectTopFolder();
+		for(Folder folder : topFolderList) {
+			Map<String, Integer> map = new HashMap<>();
+			map.put("folderIdx", folder.getFolderIdx());
+			resultList.addAll(documentDAO.documentListSelect(map));
+		}
+		return resultList;
 	};
+	
+	public List<Document> selectAllByRange(final Map<String, Integer> map){
+		return documentDAO.selectAllByRange(map);
+	}
 	
 	public List selectAllForDashboard(Map map) {
 		return documentDAO.selectAllForDashboard(map);
@@ -154,5 +173,14 @@ public class DocumentServiceImpl implements DocumentService {
 		VersionLog versionLog = documentVersion.getVersionLog();
 		document.setVersionLog(versionLog);
 		return document;
+	}
+	
+	@Override
+	public boolean isPublished(int doucmentIdx) {
+		boolean flag = false;
+		if(publishedVersionDAO.selectByDocumentIdx(doucmentIdx) == null) {
+			flag = true;
+		}
+		return flag;
 	}
 }

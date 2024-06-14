@@ -163,11 +163,11 @@
 	</div>
 	<!-- ./wrapper -->
 	
+	<th:block th:replace="~{fragments/footer_link :: footer_link}" />
 	<!-- 사이드바 디렉토리 관련 로직 -->
   	<th:block th:replace="~{elements/sidebar_script :: sidebar_script}"/>
   	<!-- /.사이드바 디렉토리 관련 로직 -->
 
-	<th:block th:replace="~{fragments/footer_link :: footer_link}" />
 	<script>
   $(function () {
     // Summernote
@@ -213,7 +213,18 @@
   
   	function del(){
 	  	if(confirm("문서를 휴지통으로 보낼까요?")){
-		  
+			let objectIdx = "d" + $("input[name='documentIdx']").val();
+			$.ajax({
+				url: "/document/list/trash",
+				data: JSON.stringify([objectIdx]),
+				method: "POST",
+				success: function(result, status, xhr){
+					alert("문서를 성공적으로 휴지통에 보냈어요");
+				},
+				error: function(status, xhr, err){
+					alert("문서를 휴지통으로 보내는데 실패했어요");
+				}
+			})
 	  	}
   	}
   //빈공간 클릭시 draft or version sidebar 비활성화 스크립트
@@ -229,6 +240,8 @@
 	    }
 	  });
 	});
+
+	
 </script>
 </body>
 </html>
