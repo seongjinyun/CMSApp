@@ -15,5 +15,9 @@ public class DocumentVersionServiceImpl implements DocumentVersionService {
 	public DocumentVersion selectByDocumentIdx(int document_idx) {
 		return documentVersionDAO.selectByDocumentIdx(document_idx);
 	}
+	
+	public Integer countByStatus(int statusCode) {
+		return documentVersionDAO.countByStatus(statusCode);
+	};
 
 }

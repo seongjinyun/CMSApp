@@ -91,7 +91,7 @@ public class RestDocumentController {
 		int countAll = documentIdxList.size();
 		int countFail = 0;
 		for(int documentIdx : documentIdxList) {
-			int statusCode = documentVersionService.selectByDocumentIdx(documentIdx).getStatusCode().getStatusCode();
+			int statusCode = documentVersionService.selectByDocumentIdx(documentIdx).getMasterCode().getStatusCode();
 			if(statusCode > 150 && statusCode < 450) {
 				countFail++;
 				continue;
@@ -145,5 +145,3 @@ public class RestDocumentController {
 	
 	
 }
-
-

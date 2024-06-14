@@ -13,5 +13,5 @@ public class DocumentVersion {
 	private VersionLog versionLog;
 	
 	//상태 코드
-	private MasterCode statusCode;
+	private MasterCode masterCode;
 }
