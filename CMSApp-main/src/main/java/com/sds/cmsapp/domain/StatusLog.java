@@ -11,7 +11,7 @@ public class StatusLog {
 	private Timestamp regdate;
 	
 	// 부모 테이블
+	private Document document;
 	private Emp emp;
 	private MasterCode masterCode;
-	private Document document;
 }

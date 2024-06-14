@@ -2,28 +2,11 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "mybatis-3-mapper.dtd">
 <mapper namespace="com.sds.cmsapp.model.document.DocumentDAO">
 	
-	<!-- resultType="Document" -->
- 	<select id="select" parameterType="int" resultType="Document">
-		select * from document where document_idx=#{documentIdx}
-	</select>
-	
 	<resultMap type="Document" id="DocumentMap">
-		<id 			column="document_idx" 	property="documentIdx"/>
-		<result 		column="hit" 				property="hit"/>		
-			
-			<!-- 하나만 가져오기 -->
-	 		<association
-			column="document_idx" 
-			property="latestRegisteredStatusLog" 
-			javaType="StatusLog"
-			select="com.sds.cmsapp.model.statuslog.StatusLogDAO.selectLatestRegisteredStatusLogByDocumentIdx"/> 
-		
+		<id column="document_idx" property="documentIdx"/>
+		<association column="folder_idx" property="folder" javaType="Folder"
+			select="com.sds.cmsapp.model.folder.FolderDAO.select"/>
 	</resultMap>
-	
-	<!-- resultMap="DocumentMap" -->
-	<select id="selectByDocumentIdx" parameterType="int" resultMap="DocumentMap">
-		select * from document where document_idx=#{documentIdx}
-	</select>
 	
     <!-- 문서 삽입 -->
     <insert id="documentInsert" parameterType="Document">
@@ -96,109 +79,6 @@
 	    JOIN masterCode mc On dv.status_code = mc.status_code
 	    where d.folder_idx = #{folderIdx};
     </select>
-    
-    <!-- 0603-4 추가 -->
-	<resultMap type="Document" id="DocumentMapForDashboard">
-		<id 	column="document_idx" property="documentIdx"/>
-			
-			<!-- status_log -->
-	 		<association property="latestRegisteredStatusLog" javaType="StatusLog">
-				 <id property="statusLogIdx" column="status_log_idx"/>
-				<result property="comments" column="comments"/>
-				<result property="regdate" column="regdate"/>
-				
-				<!-- mastercode -->
-				<association property="masterCode" javaType="MasterCode">
-					<id property="statusCode" column="status_code"/>
-					<result property="statusName" column="status_name"/>
-				</association>
-				
-				<!-- emp (Map) -->
-				<association property="emp" javaType="Emp" column="emp_idx" select="com.sds.cmsapp.model.emp.EmpDAO.selectByEmpIdx"/>
-				 
-			</association> 
-			
-			<!-- document_version (Map) --> <!-- version_log(Type)을 association으로 가지고 있음 -> 제목 얻어오기 -->
-			<association
-				property="documentVersion" 
-				javaType="DocumentVersion" column="document_idx" select="com.sds.cmsapp.model.document.DocumentVersionDAO.selectByDocumentIdx"/>
-			
-			<!-- folder (Map) -->
-		    <association 
-		    	property="folder" 
-		    	javaType="Folder" column="folder_idx" select="com.sds.cmsapp.model.folder.FolderDAO.select"/>
-
-	</resultMap>
-	
-	<!-- 대시보드 메뉴를 위한 문서 목록 -->
-	<select id="selectAllForDashboard" resultMap="DocumentMapForDashboard" parameterType="java.util.Map">
-		select d.document_idx, v.title, v.version, s.comments, s.regdate, m.status_name, m.status_code, s.emp_idx, e.emp_name, f.folder_idx, f.project_idx, p.project_name
-		from document_version dv
-		
-		left join version_log v on dv.version_log_idx = v.version_log_idx
-		left join document d on dv.document_idx = d.document_idx
-
-		left join (
-		select * from status_log
-		where (document_idx, status_log_idx)
-		in (select document_idx, max(status_log_idx) as lastest_status_log_idx 
-		from status_log
-		group by document_idx)
-		) s
-		on dv.document_idx = s.document_idx
-
-		left join emp e on s.emp_idx = e.emp_idx
-		left join dept de on e.dept_idx = de.dept_idx
-		left join role r on e.role_code = r.role_code
-		left join mastercode m on s.status_code = m.status_code
-		left join folder f on d.folder_idx = f.folder_idx
-		left join project p on f.project_idx = p.project_idx
-		left join trash t on d.document_idx = t.document_idx
-        
-        where trash_idx is null
-		
-		<if test="statusCode != 900">
-			and s.status_code=#{statusCode}
-		</if>
-		
-		<if test="endDate != null">
-			and s.regdate <![CDATA[<=]]> #{endDate}
-		</if>
-		
-		<if test="startDate != null">
-			and s.regdate <![CDATA[>=]]> #{startDate}
-		</if>
-		
-		<if test="projects != null">
-			and f.project_idx in <foreach collection="projects" item="p" open="(" close=")" separator="," >#{p}</foreach>
-		</if>
-	</select>
-	
-	
-	<select id="countForDashboard" resultType="int" parameterType="int">
-        select count(d.document_idx), status_code
-        from document d
-		
-		left join
-		(select *
-		from status_log
-		where (document_idx, status_log_idx)
-		in ( 
-		select document_idx, max(status_log_idx) as lastest_status_log_idx
-		from status_log
-		group by document_idx)
-        ) s
-        
-		on d.document_idx = s.document_idx
-		
-		left join trash t on d.document_idx = t.document_idx
-        
-        where trash_idx is null
-        
-        group by status_code
-        having status_code=#{status_code};
-        
-	</select>
 	
 	<delete id="delete" parameterType="int">
 		delete from document where document_idx = #{documentIdx}
@@ -206,6 +86,14 @@
 	
 	<select id="selectByFolderIdx" parameterType="int" resultType="Document">
 		select * from document where folder_idx = #{folderIdx}
+	</select>
+	
+	<select id="selectDocumentIdxListInFolder" parameterType="java.util.List" resultType="Integer">
+		select document_idx from document
+		<if test="list != null">
+			WHERE folder_idx 
+			IN <foreach collection="list" item="folderIdx" open="(" close=")" separator="," >#{folderIdx}</foreach>
+		</if>
 	</select>
     
 </mapper>
