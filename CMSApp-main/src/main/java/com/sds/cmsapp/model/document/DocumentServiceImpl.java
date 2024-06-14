@@ -161,9 +161,17 @@ public class DocumentServiceImpl implements DocumentService {
 	
 	public void documentVersionStatusUpdate(DocumentVersion documentVersion) {
 		documentDetailDAO.documentVersionStatusUpdate(documentVersion);
-		
 	}
 	
+	//버전관리
+    public List<VersionLog> getVersionLogSelect(int documentIdx) {
+        return documentDetailDAO.getVersionLogSelect(documentIdx);
+    }
+	
+    public int documentVersionUpdate(VersionLog versionLog) {
+    	return documentDetailDAO.documentVersionUpdate(versionLog);
+    }
+    
 	@Override
 	public Document fillVersionLog(final Document document) {
 		DocumentVersion documentVersion = documentVersionDAO.selectByDocumentIdx(document.getDocumentIdx());

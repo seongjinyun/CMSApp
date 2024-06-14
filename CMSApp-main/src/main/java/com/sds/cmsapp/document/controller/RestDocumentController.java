@@ -131,6 +131,23 @@ public class RestDocumentController {
 		return null;
 	}
 	
+	//버전관리
+	@PostMapping("/document/version/update")
+	public ResponseEntity getVersion(@RequestParam("versionLogIdx") int versionLogIdx, 
+														@RequestParam("documentIdx") int documentIdx) {
+		VersionLog versionLog = new VersionLog();
+		versionLog.setVersionLogIdx(versionLogIdx);
+		
+	    // Document 객체 생성 및 초기화
+	    Document document = new Document();
+	    document.setDocumentIdx(documentIdx);
+	    versionLog.setDocument(document);
+		documentService.documentVersionUpdate(versionLog);
+		
+		
+		return null;
+	}
+	
 	@ExceptionHandler({DocumentException.class, VersionLogException.class, FolderException.class})
 	public ResponseEntity handle(DocumentException e, VersionLogException e2, FolderException e3) {
 		e.printStackTrace();

@@ -13,6 +13,7 @@ import com.sds.cmsapp.common.Pager;
 import com.sds.cmsapp.domain.Document;
 import com.sds.cmsapp.domain.DocumentVersion;
 import com.sds.cmsapp.domain.Trash;
+import com.sds.cmsapp.domain.VersionLog;
 import com.sds.cmsapp.model.document.DocumentService;
 import com.sds.cmsapp.model.trash.TrashService;
 
@@ -102,6 +103,9 @@ public class DocumentsController {
 							            @RequestParam("folderIdx") int folderIdx,
 							            Model model) {
 		DocumentVersion documentVersion  = documentService.documentDetailSelect(documentIdx);
+        List<VersionLog> versionLogs = documentService.getVersionLogSelect(documentIdx);
+        
+        model.addAttribute("versionLogs", versionLogs);
         model.addAttribute("documentVersion", documentVersion);
         model.addAttribute("folderIdx", folderIdx);
         model.addAttribute("documentIdx", documentIdx);
@@ -120,4 +124,6 @@ public class DocumentsController {
         model.addAttribute("versionLogIdx", documentVersion.getVersionLog().getVersionLogIdx());
         return "documents/editform";
 	}
+	
+
 }

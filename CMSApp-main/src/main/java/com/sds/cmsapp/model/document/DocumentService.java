@@ -45,4 +45,11 @@ public interface DocumentService {
 	
 	//DocumentVersion 의 상태 ( 리뷰요청 )
 	public void documentVersionStatusUpdate(DocumentVersion documentVersion);
+	
+	//버전 조회
+	public List<VersionLog> getVersionLogSelect(int documentIdx);
+
+	//문서 버전 관리
+	public int documentVersionUpdate(VersionLog versionLog);
+
 }

@@ -91,9 +91,28 @@
 		WHERE document_idx = #{document.documentIdx}
 	</update>
 	
+	<!-- 리뷰요청 -->
 	<update id="documentVersionStatusUpdate" parameterType="DocumentVersion">
 		UPDATE document_version
 		SET status_code = 200
 		WHERE document_idx = #{document.documentIdx}
 	</update>
+	
+	<!-- 버전 조회 -->
+	<select id="getVersionLogSelect" parameterType="int" resultType="com.sds.cmsapp.domain.VersionLog">
+	    SELECT 
+	    	vl.version_log_idx,
+	        vl.version,
+	        vl.title,
+	        vl.content,
+	        vl.comments,
+	        vl.regdate
+	    FROM 
+	        version_log vl
+	    WHERE 
+	        vl.document_idx = #{documentIdx}
+	    ORDER BY 
+	        vl.version DESC
+</select>
+	
 </mapper>
