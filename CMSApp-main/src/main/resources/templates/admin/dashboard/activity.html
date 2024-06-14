@@ -454,7 +454,7 @@ div.table-detail, span.table-detail {
 							<tr>
 								<td>${i+1}</td>
 								<td>
-									<a href="#">${result[i].title}</a> <span class="table-detail">ver.${result[i].version}</span>
+									<a href="/document/detail?documentIdx=${result[i].documentIdx}&folderIdx=${result[i].folderIdx}">${result[i].title}</a> <span class="table-detail">ver.${result[i].version}</span>
 									<div class="table-detail">${result[i].projectName} > ${result[i].folderName}</div>
 								</td>
 								<td>
