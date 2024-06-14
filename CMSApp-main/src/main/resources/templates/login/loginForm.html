@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="zxx" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>AdminLTE 3 | Log in (v2)</title>
+
+  <th:block th:replace="~{fragments/header_link :: header_link}"/>
+ 
+</head>
+<body class="hold-transition login-page">
+<div class="login-box">
+  <!-- /.login-logo -->
+  <div class="card card-outline card-primary">
+    <div class="card-header text-center">
+      <a href="../../index2.html" class="h1"><b>Admin</b>LTE</a>
+    </div>
+    <div class="card-body">
+      <p class="login-box-msg">Sign in to start your session</p>
+
+      <form id="loginForm" method="post">
+        <div class="input-group mb-3">
+          <input type="text" class="form-control" placeholder="Employee ID" name="empId">
+          <div class="input-group-append">
+            <div class="input-group-text">
+              <span class="fas fa-user"></span>
+            </div>
+          </div>
+        </div>
+        <div class="input-group mb-3">
+          <input type="text" class="form-control" placeholder="Password" name="empPw">
+          <div class="input-group-append">
+            <div class="input-group-text">
+              <span class="fas fa-lock"></span>
+            </div>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-12">
+            <button type="button" class="btn btn-primary btn-block" id="bt_login">Sign In</button>
+          </div>
+        </div>
+      </form>
+
+      <p class="mb-1">
+        <a href="forgot-password.html">I forgot my password</a>
+      </p>
+
+      <p class="mb-0">
+        <a href="register.html" class="text-center">Register a new membership</a>
+      </p>
+    </div>
+    <!-- /.card-body -->
+  </div>
+  <!-- /.card -->
+</div>
+<!-- /.login-box -->
+
+  <th:block th:replace="~{fragments/footer_link :: footer_link}"/>
+  
+</body>
+</html>
+<script>
+
+	// 더이상 세션을 이용한 인증 방식을 사용하지 않기 때문에, 로그인 요청을 비동기방식으로 하고 
+	// 그 결과로써, JWT를 발급받아 오자
+	function loginCheck(){
+		
+//	    let formData = {
+//			empId: $("input[name='empId']").val(),
+//			empPw: $("input[name='empPw']").val()
+//        };
+		
+		$.ajax({
+			url:"/emp/login", // MSA 구성시 게이트웨이를 통한 접근
+			type:"post",
+			data:$("#loginForm").serialize(),
+//			data: JSON.stringify(formData),
+//			contentType: "application/json; charset=utf-8",
+			success:function(result, status, xhr){
+				console.log("서버가 보낸 jwt 토큰은 ", result);
+				localStorage.setItem("token", result.token); // 서버로 받은 JSON 중, token에 담겨있는 json token 값만 담기
+				console.log("resut.token: ", resut.token);
+//				location.href="/settings/mypage?empIdx";
+				alert("로그인 성공입니다");
+			},
+			error:function(xhr, status, err){
+				alert("로그인 정보가 올바르지 않습니다");
+			}
+			
+		});
+	}
+	
+	$(function(){
+		$("#bt_login").click(function(){
+			loginCheck();
+		});
+		
+	});
+	
+</script>

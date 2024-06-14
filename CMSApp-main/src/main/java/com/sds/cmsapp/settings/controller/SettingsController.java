@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import com.sds.cmsapp.common.Pager;
@@ -51,6 +52,19 @@ public class SettingsController {
 	@Autowired
 	private RoleAuthorityService roleAuthorityService;
 	
+	@GetMapping("/loginForm")
+	public String getLoginForm() {
+		System.out.println("로그인 폼 요청");
+		return "/login/loginForm";
+	}
+	
+	// 로그인 요청
+	// Spring boot security가 로그인 검증을 알아서 하므로, 로그인 성공시 보여질 페이지만 명시하자
+	@PostMapping("/emp/login")
+	public String login(Emp emp) {
+		return "redirect:/settings/mypage";
+	}
+	
 	@GetMapping("/settings/general")
 	public String getGeneral() {
 		return "settings/general";
@@ -83,7 +97,7 @@ public class SettingsController {
 	}
 	
 	@GetMapping("/settings/mypage")
-	public String getMypageInfo(Model model) {
+	public String getMypageInfo(@RequestParam("empIdx") int empIdx, Model model) {
 		
 		// 부서 이름과 index 가져오기
 		List deptList = deptService.selectAll();
@@ -93,8 +107,6 @@ public class SettingsController {
 		List roleList = roleService.selectAll();
 		model.addAttribute("roleList", roleList);
 		
-		// -----------------------------
-		//  테스트를 위해 사원 '아이린'전달
 		Emp emp = empService.selectByEmpIdx(45);
 		EmpDetail empDetail = empDetailService.selectByEmpIdx(emp.getEmpIdx());
 		model.addAttribute("emp", emp);
@@ -104,7 +116,6 @@ public class SettingsController {
 	    model.addAttribute("profile_img_url", profileImgUrl);
 	    System.out.println("File exists: " + new File("src/main/resources/static/profileImg/" + empDetail.getEmpProfileUrl()).exists());
 	    // System.out.println("html로 전달되는 경로: "+profileImgUrl);
-		// -----------------------------
 		
 		return "settings/mypage";
 	}

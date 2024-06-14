@@ -31,6 +31,14 @@ dependencies {
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
 
 	testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
+
+	/////////////////////////////////////////////////////////////////////////////////////////////////////
+	
+	// config server 클라이언트 등록
+	// implementation 'org.springframework.cloud:spring-cloud-starter-config'
+	
+	// Eureka 클라이언트로 등록
+	// implementation 'org.springframework.cloud:spring-cloud-starter-netflix-eureka-client'
 	
 	/////////////////////////////////////////////////////////////////////////////////////////////////////
 	
@@ -51,9 +59,12 @@ dependencies {
 	
 	/////////////////////////////////////////////////////////////////////////////////////////////////////
 	
-	// Spring Security
-	// https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-starter-security
-	implementation 'org.springframework.boot:spring-boot-starter-security:3.2.5'
+	// io.jsonwebtoken
+	// https://mvnrepository.com/artifact/io.jsonwebtoken/jjwt
+	implementation 'io.jsonwebtoken:jjwt:0.9.1'	
+	
+
+
 	
 }
 
