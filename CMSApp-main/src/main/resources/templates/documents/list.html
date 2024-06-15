@@ -131,10 +131,10 @@
 				        <td class="mailbox-star"><a href="#"><i class="fa fa-star-o" aria-hidden="true"></i></a></td>
 				        <!-- title, 업데이트 날짜, document가 아닌 versionLog에서 가져와야함.\ -->
 				        <td><a th:href="@{/document/detail(documentIdx=${documentVersion.document.documentIdx}, folderIdx=${documentVersion.document.folder.folderIdx})}" th:text="${documentVersion.versionLog.title}">튜토리얼</a></td>
-				        <td th:text="${documentVersion.versionLog.version}">v2.1</td>
+				        <td th:text="'v' + ${documentVersion.versionLog.version}">v2.1</td>
 				        <td th:text="${documentVersion.versionLog.regdate}">2024.05.23 16:44</td>
 				        <!-- 상태는 masterCode 에서 가져와야함  -->
-				        <td th:text="${documentVersion.statusCode.statusName}">리뷰 중</td>
+				        <td th:text="${documentVersion.masterCode.statusName}">리뷰 중</td>
 				    </tr>
 				</tbody>
                 </table>

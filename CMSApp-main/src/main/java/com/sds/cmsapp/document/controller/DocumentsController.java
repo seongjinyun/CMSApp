@@ -13,6 +13,7 @@ import com.sds.cmsapp.common.Pager;
 import com.sds.cmsapp.domain.Document;
 import com.sds.cmsapp.domain.DocumentVersion;
 import com.sds.cmsapp.domain.Trash;
+import com.sds.cmsapp.domain.VersionLog;
 import com.sds.cmsapp.model.document.DocumentService;
 import com.sds.cmsapp.model.trash.TrashService;
 
@@ -52,15 +53,14 @@ public class DocumentsController {
 	@GetMapping("/document/list")
 
 	public String getDocumentList(Model model, DocumentVersion documentVersion, @RequestParam(value="folderIdx", defaultValue = "0") int folderIdx) {
-		if (folderIdx == 0) {
-			HashMap<String, Integer> map=new HashMap<String, Integer>();
-			map.put("startIndex", pager.getStartIndex());
-			map.put("rowCount", pager.getPageSize());
-			List<Document> documentList = documentService.selectAll(map);
-			model.addAttribute("documentListSelect", documentList);
-			model.addAttribute("folderIdx", folderIdx);
-			return "documents/list";
-		}else {
+//		if (folderIdx == 0) {
+//			HashMap<String, Integer> map=new HashMap<String, Integer>();
+//			map.put("startIndex", pager.getStartIndex());
+//			map.put("rowCount", pager.getPageSize());
+//			List<Document> documentList = documentService.selectAll(map);
+//			model.addAttribute("documentListSelect", documentList);
+//			model.addAttribute("folderIdx", folderIdx);
+//		}else {
 			HashMap<String, Integer> map = new HashMap<>();
 			map.put("folderIdx", folderIdx);	
 			//폴더 -> 파일 리스트
@@ -71,9 +71,10 @@ public class DocumentsController {
 			
 			model.addAttribute("folderIdx", folderIdx);
 			
-			return "documents/list";
-		}
+//		}
+	return "documents/list";
 	} 
+
 	//휴지통
 	@GetMapping("/document/trash")
 	public String getTrash(Model model, @RequestParam(value="currentPage", defaultValue="1") int currentPage) {
@@ -102,13 +103,16 @@ public class DocumentsController {
 							            @RequestParam("folderIdx") int folderIdx,
 							            Model model) {
 		DocumentVersion documentVersion  = documentService.documentDetailSelect(documentIdx);
+        List<VersionLog> versionLogs = documentService.getVersionLogSelect(documentIdx);
+        
+        model.addAttribute("versionLogs", versionLogs);
         model.addAttribute("documentVersion", documentVersion);
         model.addAttribute("folderIdx", folderIdx);
         model.addAttribute("documentIdx", documentIdx);
 		return "documents/detail";
 	}
 	
-	// 글 수정하기
+	// 글 수정폼
 	@GetMapping("/document/editform")
 	public String getEdit(@RequestParam("documentIdx") int documentIdx,
             						@RequestParam("folderIdx") int folderIdx,
@@ -120,4 +124,6 @@ public class DocumentsController {
         model.addAttribute("versionLogIdx", documentVersion.getVersionLog().getVersionLogIdx());
         return "documents/editform";
 	}
+	
+
 }

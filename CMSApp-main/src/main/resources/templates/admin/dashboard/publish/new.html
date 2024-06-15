@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html lang="zxx" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Dashboard | 배포 관리</title>
+
+<!-- data-table css -->
+<link rel="stylesheet"
+	href="/admin/plugins/datatables-bs4/css/dataTables.bootstrap4.min.css">
+<link rel="stylesheet"
+	href="/admin/plugins/datatables-responsive/css/responsive.bootstrap4.min.css">
+<link rel="stylesheet"
+	href="/admin/plugins/datatables-buttons/css/buttons.bootstrap4.min.css">
+<!-- select2 css -->
+<link rel="stylesheet" href="/admin/plugins/select2/css/select2.min.css">
+<link rel="stylesheet"
+	href="/admin/plugins/select2-bootstrap4-theme/select2-bootstrap4.min.css">
+<!-- duallistbox -->
+<link rel="stylesheet"
+	href="/admin/plugins/bootstrap4-duallistbox/bootstrap-duallistbox.min.css">
+
+<th:block th:replace="~{fragments/header_link :: header_link}" />
+
+<style>
+button.show_list {
+	border: 0;
+	background-color: transparent;
+	color: white;
+	cursor: pointer;
+}
+
+button.show_list:hover {
+	color: blue;
+}
+
+div#filter-card {
+	font-weight: 500;
+}
+
+/* .filter-title {
+	padding-left: 2rem;
+} */
+button#daterange-btn {
+	display: inline-block;
+	line-height: 22px;
+}
+/*
+[class*=icheck-]>label,button#daterange-btn {
+	vertical-align: middle;
+} */
+div.table-detail, span.table-detail {
+	font-size: 0.9rem;
+	color: gray;
+}
+</style>
+</head>
+
+<body class="hold-transition sidebar-mini layout-fixed">
+	<div class="wrapper">
+
+		<!-- Preloader -->
+		<th:block th:replace="~{fragments/preloader :: preloader}" />
+
+		<!-- Navbar -->
+		<th:block th:replace="~{fragments/navi :: navi}" />
+		<!-- /.navbar -->
+
+		<!-- Main Sidebar Container -->
+		<th:block th:replace="~{fragments/sidebar :: sidebar}" />
+
+		<!-- /.sidebar -->
+
+		<!-- Content Wrapper. Contains page content -->
+		<div class="content-wrapper">
+			<!-- Content Header (Page header) -->
+			<div class="content-header">
+				<div class="container-fluid">
+					<div class="row mb-2">
+						<div class="col-sm-6">
+							<h1 class="m-0">배포 관리</h1>
+						</div>
+						<!-- /.col -->
+						<div class="col-sm-6">
+							<ol class="breadcrumb float-sm-right">
+								<li class="breadcrumb-item"><a href="#">Home</a></li>
+								<li class="breadcrumb-item active">Dashboard</li>
+								<li class="breadcrumb-item active">배포 관리</li>
+							</ol>
+						</div>
+						<!-- /.col -->
+					</div>
+					<!-- /.row -->
+				</div>
+				<!-- /.container-fluid -->
+			</div>
+			<!-- /.content-header -->
+
+			<!-- Main content -->
+			<section class="content">
+				<div class="container-fluid">
+				
+				<div class="row">
+						<div class="col-md-12">
+							<!-- Card -->
+							<div class="card" id="filter-card">
+								<div class="card-body">
+									<div class="row">
+									<!-- <div><button>프리뷰 보기(가능할 경우))</button></div> -->
+									<label for="publish-version">배포판 이름</label> <input class="form-control form-control-sm"
+										id="publish-version" type="text" placeholder="배포판 이름">
+									<label for="published-comment">배포 코멘트</label> <input class="form-control form-control-sm"
+										id="publish-comment" type="text" placeholder="배포 코멘트">
+									</div>
+									<div class="row">
+										<button class="btn btn-danger w-100">배포하기</button>
+									</div>
+								</div>
+								<!-- card-body end -->
+							</div>
+							<!-- Card End -->
+						</div>
+					</div>
+					<h5>배포 대기 문서 확인</h5>
+
+					<!-- Row -->
+					<div class="row">
+						<div class="col-sm-12">
+							<div id="filtered-table_wrapper"
+								class="dataTables_wrapper dt-bootstrap4">
+								<table id="table-filtered"
+									class="bg-white table table-hover table-bordered dataTable dtr-inline">
+									<thead>
+									</thead>
+									<tbody></tbody>
+								</table>
+							</div>
+						</div>
+					</div>
+					<!-- Row End -->
+
+					
+				</div>
+				<!-- /.container-fluid -->
+			</section>
+			<!-- /.content -->
+		</div>
+		<!-- /.content-wrapper -->
+
+		<th:block th:replace="~{fragments/footer :: footer}" />
+
+		<!-- Control Sidebar -->
+		<aside class="control-sidebar control-sidebar-dark">
+			<!-- Control sidebar content goes here -->
+		</aside>
+		<!-- /.control-sidebar -->
+	</div>
+	<!-- ./wrapper -->
+
+	<th:block th:replace="~{fragments/footer_link :: footer_link}" />
+
+	<!-- select2 js 파일 -->
+	<script src="/admin/plugins/select2/js/select2.full.min.js"></script>
+	<!-- datatables js 파일 -->
+	<script src="/admin/plugins/datatables/jquery.dataTables.min.js"></script>
+	<script
+		src="/admin/plugins/datatables-bs4/js/dataTables.bootstrap4.min.js"></script>
+	<script
+		src="/admin/plugins/datatables-responsive/js/dataTables.responsive.min.js"></script>
+	<script
+		src="/admin/plugins/datatables-responsive/js/responsive.bootstrap4.min.js"></script>
+	<script
+		src="/admin/plugins/datatables-buttons/js/dataTables.buttons.min.js"></script>
+	<script
+		src="/admin/plugins/datatables-buttons/js/buttons.bootstrap4.min.js"></script>
+	<script src="/admin/plugins/jszip/jszip.min.js"></script>
+	<script src="/admin/plugins/pdfmake/pdfmake.min.js"></script>
+	<script src="/admin/plugins/pdfmake/vfs_fonts.js"></script>
+	<script src="/admin/plugins/datatables-buttons/js/buttons.html5.min.js"></script>
+	<script src="/admin/plugins/datatables-buttons/js/buttons.print.min.js"></script>
+	<script
+		src="/admin/plugins/datatables-buttons/js/buttons.colVis.min.js"></script>
+	<!-- duallistbox -->
+	<script
+		src="/admin/plugins/bootstrap4-duallistbox/jquery.bootstrap-duallistbox.min.js"></script>
+	<script>
+		/* 데이터테이블 한국어 */
+		var datatable_ko = {
+			"decimal" : "",
+			"emptyTable" : "데이터가 없습니다.",
+			"info" : "_START_ - _END_ (총 _TOTAL_ 개)",
+			"infoEmpty" : "0개",
+			"infoFiltered" : "(전체 _MAX_ 개 중 검색결과)",
+			"infoPostFix" : "",
+			"thousands" : ",",
+			"lengthMenu" : "_MENU_ 개씩 보기",
+			"loadingRecords" : "로딩중...",
+			"processing" : "처리중...",
+			"search" : "검색 : ",
+			"zeroRecords" : "검색된 데이터가 없습니다.",
+			"paginate" : {
+				"first" : "첫 페이지",
+				"last" : "마지막 페이지",
+				"next" : "다음",
+				"previous" : "이전"
+			},
+			"aria" : {
+				"sortAscending" : " :  오름차순 정렬",
+				"sortDescending" : " :  내림차순 정렬"
+			}
+		};
+
+		/* 배포 완료 문서 목록 가져오기 */
+		function getFilteredData() {
+			// url 쿼리 스트링 설정
+			let statusList = ["리뷰 완료", "배포 완료"];
+			let url = "/dashboard/list/entire?statusList=" + statusList;
+			
+			// 데이터 테이블 적용
+			$("#table-filtered").DataTable({
+				ordering: true,
+				serverSide: false,
+				language : datatable_ko,
+				autoWidth: true,
+				responsive: true,
+				destroy: true,
+				columns: [
+					{ data: "projectName", title: "프로젝트", width: '10%'},
+					{ data: "folderName", title: "폴더", width: '10%'},
+					{ data: "title", title: "제목", width: '15%'},
+					{ data: "version" , title: "버전", width: '5%'},
+					{ data: "deptName" , title: "부서", width: '10%'},
+					{ data: "empName" , title: "사원", width: '10%'},
+					{ data: "statusName" , title: "상태", width: '10%'},
+					{ data: "comments" , title: "코멘트", width: '20%'},
+					{ data: "regdate" , title: "일자", width: '10%'}
+				],
+				ajax: {
+					url: url,
+					type: "GET",
+					"dataSrc": function (result) {
+						return result;
+		            }, 	error: function(xhr, status, err) {
+		            	alert('통신 실패!!!');
+					}
+				}
+			});
+		}
+
+		$(function() {
+			getFilteredData();
+		});
+	</script>
+
+</body>
+
+</html>
