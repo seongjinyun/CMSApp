@@ -61,16 +61,16 @@ public class DocumentsController {
 //			model.addAttribute("documentListSelect", documentList);
 //			model.addAttribute("folderIdx", folderIdx);
 //		}else {
-//			HashMap<String, Integer> map = new HashMap<>();
-//			map.put("folderIdx", folderIdx);	
-//			//폴더 -> 파일 리스트
-//			List documentListSelect = documentService.documentListSelect(map);
-//			
-//			model.addAttribute("documentListSelect", documentListSelect);
-//			log.debug("model= " + model);
-//			
-//			model.addAttribute("folderIdx", folderIdx);
-//			
+			HashMap<String, Integer> map = new HashMap<>();
+			map.put("folderIdx", folderIdx);	
+			//폴더 -> 파일 리스트
+			List documentListSelect = documentService.documentListSelect(map);
+			
+			model.addAttribute("documentListSelect", documentListSelect);
+			log.debug("model= " + model);
+			
+			model.addAttribute("folderIdx", folderIdx);
+			
 //		}
 	return "documents/list";
 	} 

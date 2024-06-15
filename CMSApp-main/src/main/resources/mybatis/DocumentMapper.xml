@@ -53,7 +53,7 @@
 			<result property="regdate" column="regdate"/>
 		</association>
 		
-		<association property="statusCode" javaType="MasterCode">
+		<association property="masterCode" javaType="MasterCode">
 			<id property="statusCode" column="status_code"/>
 			<result property="statusName" column="status_name"/>
 		</association>

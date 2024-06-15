@@ -111,8 +111,8 @@
 					                  <div class="timeline-body">
 					                    <p th:text="'comments : ' + ${versionLog.comments}"><b>v1.0</b></p>
 					                  </div>
-					                  <div class="timeline-footer">
-					                    <a class="btn btn-primary btn-sm" onclick="versionUpdate();">열기</a>
+					                  <div class="timeline-footer"> 
+					                    <a class="btn btn-primary btn-sm" th:onclick="versionUpdate([[${versionLog.versionLogIdx}]])">열기</a>
 					                    <a class="btn btn-danger btn-sm">삭제</a>
 					                  </div>
 					                </div>
@@ -204,9 +204,7 @@
   }
   
   //다른 버전 열기
-  function versionUpdate(){
-	  var $versionLogIdInput = $('[id^="versionLogIdx_"]');
-	  var versionLogIdx = $versionLogIdInput.attr('id').split('_')[1];
+  function versionUpdate(versionLogIdx){
 		console.log(versionLogIdx);
 
 	  $.ajax({
@@ -216,6 +214,7 @@
 		    			documentIdx: $("#documentIdx").val()},
 			success:function(result, status, xhr){ //200
 				alert("버전 불러오기 성공");
+			    window.location.href = window.location.href;
 
 		    },
 		    error: function(xhr, status, error) {
