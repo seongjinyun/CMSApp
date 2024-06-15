@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.sds.cmsapp.common.FileManager;
+import com.sds.cmsapp.domain.Emp;
 import com.sds.cmsapp.domain.EmpDetail;
 
 @Service
@@ -35,4 +36,12 @@ public class EmpDetailServiceImpl implements EmpDetailService {
 		fileManager.save(empDetail);
 		empDetailDAO.update(empDetail);
 	}
+
+	@Override
+	public Emp selectByLoginData(EmpDetail empDetail) {
+		// TODO Auto-generated method stub
+		return empDetailDAO.selectByLoginData(empDetail);
+	}
+
+
 }
