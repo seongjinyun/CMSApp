@@ -4,10 +4,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.sds.cmsapp.domain.Emp;
-import com.sds.cmsapp.exception.JwtException;
-import com.sds.cmsapp.model.emp.EmpDAO;
+import com.sds.cmsapp.model.emp.EmpService;
 
 import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.JwtException;
 import io.jsonwebtoken.Jwts;
 import lombok.extern.slf4j.Slf4j;
 
@@ -24,7 +24,7 @@ public class JwtValidService {
 	private JwtUtil jwtUtil;
 	
 	@Autowired
-	private EmpDAO empDAO;
+	private EmpService empService;
 	
 	// 토큰을 넘겨받아, 유효할 경우 Emp 자체를 반환하는 메서드
 	public Emp getEmpFromJwt(String token) throws JwtException {
@@ -36,6 +36,7 @@ public class JwtValidService {
 		
 		try {
 			claims = Jwts.parser().setSigningKey(jwtUtil.getPublicKeyFromString(publicKey)).parseClaimsJws(token).getBody();
+			log.debug("JWT 인증 성공");
 		} catch (Exception e) {
 			log.debug("JWT 인증실패");
 			throw new JwtException("로그인이 필요한 서비스입니다");
@@ -45,9 +46,9 @@ public class JwtValidService {
 //		Member member=memberDAO.selectByUid(uid);	
 		
 		int empIdx = (int)claims.get("empIdx"); // JWT의 body의 제목에 넣어 둔 empIdx를 꺼내자
-		System.out.println(empIdx);
+		log.debug("empIdx at JWTValidService: "+empIdx);
 		
-		Emp emp = empDAO.selectByEmpIdx(empIdx);		
+		Emp emp = empService.selectByEmpIdx(empIdx);		
 		return emp;
 	} 
 }

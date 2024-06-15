@@ -1,5 +1,6 @@
 package com.sds.cmsapp.jwt;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
@@ -15,13 +16,16 @@ import lombok.extern.slf4j.Slf4j;
 @Service
 public class KeyService {
 	
+    @Value("${auth.server.url}")
+    private String authServerUrl;
+	
 	public String getPublicKey() {
 		// 현재 어플리케이션이 아닌, 외부의 어플리케이션과 비동기로 통신하기 위해서 RestTemplate 사용해보자
 		HttpHeaders headers = new HttpHeaders();
 		HttpEntity entity   = new HttpEntity(headers);
 		
 		// 비동기 GET요청 
-		String url="/jwt/key";
+		String url=authServerUrl+"/jwt/key";
 		RestTemplate restTemplate=new RestTemplate();
 		ResponseEntity<String> response=restTemplate.exchange(url, HttpMethod.GET, entity, String.class);
 		log.debug("외부사이트로 부터 가져온 공개키는 "+response.getBody());

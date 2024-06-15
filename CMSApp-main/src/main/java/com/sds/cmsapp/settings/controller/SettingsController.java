@@ -6,10 +6,11 @@ import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import com.sds.cmsapp.common.Pager;
@@ -17,6 +18,7 @@ import com.sds.cmsapp.domain.Authority;
 import com.sds.cmsapp.domain.Emp;
 import com.sds.cmsapp.domain.EmpDetail;
 import com.sds.cmsapp.domain.Role;
+import com.sds.cmsapp.jwt.JwtValidService;
 import com.sds.cmsapp.model.authority.AuthorityService;
 import com.sds.cmsapp.model.dept.DeptService;
 import com.sds.cmsapp.model.emp.EmpDetailService;
@@ -25,6 +27,10 @@ import com.sds.cmsapp.model.relationship.DeptProjectService;
 import com.sds.cmsapp.model.relationship.RoleAuthorityService;
 import com.sds.cmsapp.model.role.RoleService;
 
+import io.jsonwebtoken.JwtException;
+import lombok.extern.slf4j.Slf4j;
+
+@Slf4j
 @Controller
 public class SettingsController {	
 	
@@ -52,17 +58,13 @@ public class SettingsController {
 	@Autowired
 	private RoleAuthorityService roleAuthorityService;
 	
+    @Autowired
+    private JwtValidService jwtValidService;
+	
 	@GetMapping("/loginForm")
 	public String getLoginForm() {
 		System.out.println("로그인 폼 요청");
 		return "/login/loginForm";
-	}
-	
-	// 로그인 요청
-	// Spring boot security가 로그인 검증을 알아서 하므로, 로그인 성공시 보여질 페이지만 명시하자
-	@PostMapping("/emp/login")
-	public String login(Emp emp) {
-		return "redirect:/settings/mypage";
 	}
 	
 	@GetMapping("/settings/general")
@@ -96,8 +98,12 @@ public class SettingsController {
 		return "settings/dept_project";
 	}
 	
+//	public String getMypageInfo(@RequestParam("empIdx") int empIdx, Model model) {
 	@GetMapping("/settings/mypage")
-	public String getMypageInfo(@RequestParam("empIdx") int empIdx, Model model) {
+	public String getMypageInfo(@RequestParam(value="token") String token, Model model) {
+		
+		// 로그 추가
+	    log.debug("Received token: " + token);		
 		
 		// 부서 이름과 index 가져오기
 		List deptList = deptService.selectAll();
@@ -107,17 +113,19 @@ public class SettingsController {
 		List roleList = roleService.selectAll();
 		model.addAttribute("roleList", roleList);
 		
-		Emp emp = empService.selectByEmpIdx(45);
-		EmpDetail empDetail = empDetailService.selectByEmpIdx(emp.getEmpIdx());
-		model.addAttribute("emp", emp);
-		model.addAttribute("empDetail", empDetail);
-		System.out.println("DB에서 전달받은 프로필 이미지 url: "+empDetail.getEmpProfileUrl());
-		String profileImgUrl = "/profileImg/" + empDetail.getEmpProfileUrl();
-	    model.addAttribute("profile_img_url", profileImgUrl);
-	    System.out.println("File exists: " + new File("src/main/resources/static/profileImg/" + empDetail.getEmpProfileUrl()).exists());
-	    // System.out.println("html로 전달되는 경로: "+profileImgUrl);
-		
-		return "settings/mypage";
+		// JWT 토큰에서 Emp 객체를 추출
+        Emp emp = jwtValidService.getEmpFromJwt(token);
+        EmpDetail empDetail = empDetailService.selectByEmpIdx(emp.getEmpIdx());
+        model.addAttribute("emp", emp);
+        model.addAttribute("empDetail", empDetail);
+        System.out.println("DB에서 전달받은 프로필 이미지 url: " + empDetail.getEmpProfileUrl());
+
+        String profileImgUrl = "/profileImg/" + empDetail.getEmpProfileUrl();
+        model.addAttribute("profile_img_url", profileImgUrl);
+
+        System.out.println("File exists: " + new File("src/main/resources/static/profileImg/" + empDetail.getEmpProfileUrl()).exists());
+        
+        return "settings/mypage";
 	}
 	
 	@GetMapping("/settings/user")

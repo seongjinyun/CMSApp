@@ -14,17 +14,14 @@ import lombok.Data;
 @Data
 //회원의 상세정보를 가진 객체. 단 스프링이 지원하는 기술을 구현
 public class CustomUserDetails implements UserDetails{
-	
-	//우리가 이미 정의해놓은 Member DTO 정보를 참고하여, 아래의 메서드들에서 정보들을 처리 
+	 
 	private Emp emp;
 	
-	///////////////////////////////////////////////////////////////////////
-	@Autowired
-	private EmpDetailService empDetailService;
-	///////////////////////////////////////////////////////////////////////
+	private EmpDetail empDetail;
 	
-	public CustomUserDetails(Emp emp) {
+	public CustomUserDetails(Emp emp, EmpDetail empDetail) {
 		this.emp = emp;
+		this.empDetail = empDetail;
 	}
 	
 	@Override
@@ -39,11 +36,7 @@ public class CustomUserDetails implements UserDetails{
 	}
 
 	@Override
-	public String getPassword() {
-		
-		int empIdx = emp.getEmpIdx();
-		EmpDetail empDetail = empDetailService.selectByEmpIdx(empIdx);
-		
+	public String getPassword() {		
 		return empDetail.getEmpPw();
 	}
 	
@@ -53,7 +46,7 @@ public class CustomUserDetails implements UserDetails{
 
 	@Override
 	public String getUsername() {
-		return emp.getEmpName();
+		return empDetail.getEmpId();
 	}
 
 	@Override
