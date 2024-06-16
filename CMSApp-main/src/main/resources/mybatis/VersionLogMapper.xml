@@ -7,8 +7,22 @@
 	</select> -->
 
 		<!-- branched_version_log 컬럼은 보류 -->
+	<resultMap type="VersionLog" id="VersionLogMap">
+		<id 			column="version_log_idx" 	property="versionLogIdx"/>
+		<result 		column="title" 				property="title"/>
+		<result 		column="content" 		property="content"/>
+		<result 		column="comments" 				property="comments"/>
+		<result 		column="regdate" 				property="regdate"/>
+		
+		<!-- resultType Emp는 성공 -->
+		<association column="emp_idx" property="emp" javaType="Emp" select="com.sds.cmsapp.model.emp.EmpDAO.selectByEmpIdx"/>
+		<association column="document_idx" property="document" javaType="Document" select="com.sds.cmsapp.model.document.DocumentDAO.select"/>
+
+		<!-- branched_version_log 컬럼은 보류 -->
 		
 	</resultMap>
+		
+	
 	
 	<insert id="insert" parameterType="versionLog">
 		insert into version_log(title, content, comments, emp_idx, document_idx)
@@ -18,11 +32,6 @@
 	<!-- 하나 조회 by version_log_idx  -->
 	<select id="selectByVersionLogIdx" parameterType="int" resultMap="VersionLogMap">
 		select * from version_log where version_log_idx=#{versionLogIdx}
-	</select>
-	
-	<!-- 0603 추가 -->
-	<select id="select" parameterType="int" resultType="VersionLog">
-				select * from version_log where version_log_idx=#{versionLogIdx}
 	</select>
 	
 	<delete id="delete" parameterType="int">

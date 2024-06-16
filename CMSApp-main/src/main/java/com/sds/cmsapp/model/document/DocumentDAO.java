@@ -48,7 +48,7 @@ public interface DocumentDAO {
 	public int update(Document document);
 	
 	
-	// 문서 삭제 (임시로 만들어뒀습니다 -박준형)
+	// 문서 삭제
 	public int delete(int documentIdx);
 	
 }

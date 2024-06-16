@@ -11,10 +11,15 @@ import com.sds.cmsapp.domain.ResponseDocDTO;
 import com.sds.cmsapp.domain.VersionLog;
 
 public interface DocumentService {
-
+	
+	// 일반적인 select
+	public Document select(final int documentIdx);
 	
 	// 범위만큼만 가져오기
 	public List<Document> selectAllByRange(final Map<String, Integer> map);
+	
+	// 기존 selectAll
+	public List<DocumentVersion> selectAllOrigin();
 	
 	/* 모든 문서 조회 */
 	public List<Document> selectAll();

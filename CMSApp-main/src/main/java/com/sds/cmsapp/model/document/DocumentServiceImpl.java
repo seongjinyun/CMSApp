@@ -67,6 +67,10 @@ public class DocumentServiceImpl implements DocumentService {
 	@Autowired
 	private FolderDAO folderDAO;
 
+	@Override
+	public Document select(int documentIdx) {
+		return documentDAO.select(documentIdx);
+	}
 	
 	// 모든 문서 조회
 	public List<DocumentVersion> selectAllOrigin() {
@@ -274,7 +278,7 @@ public class DocumentServiceImpl implements DocumentService {
 		return documentDAO.delete(documentIdx);
 	}
 	
-	@Override // 박준형 추가
+	@Override
 	public List<Document> selectByFolderIdx(int folderIdx) {
 		return documentDAO.selectByFolderIdx(folderIdx);
 	}

@@ -68,7 +68,6 @@ public class RestDocumentController {
 		documentService.documentInsert(versionLog);
 
 		ResponseEntity entity = ResponseEntity.ok("DB 입력 성공");
-
 		return entity;
     }
 	
@@ -103,11 +102,11 @@ public class RestDocumentController {
 		List<Integer> folderIdxList = trashService.seperateObjectList(objectIdxList, 'f');
 		Set<Integer> removeCandidateSet = new HashSet<>(); // 제외시킬 folderIdx를 담을 set
 		for(int documentIdx : documentIdxList) { // 문서먼저 삭제, 삭제할수 없는 문서인 경우 상위 폴더도 삭제목록에서 제거.
-			int statusCode = documentVersionService.selectByDocumentIdx(documentIdx).getStatusCode().getStatusCode();
+			int statusCode = documentVersionService.selectByDocumentIdx(documentIdx).getMasterCode().getStatusCode();
 			if(documentService.isPublished(documentIdx)) { // 배포된 버전이라면
 				countFail++;
-				System.out.println("restDoc" + documentService.selectByDocumentIdx(documentIdx) + documentService.selectByDocumentIdx(documentIdx).getFolder());
-				int removeCandidate = documentService.selectByDocumentIdx(documentIdx).getFolder().getFolderIdx();
+				System.out.println("restDoc" + documentService.select(documentIdx) + documentService.select(documentIdx).getFolder());
+				int removeCandidate = documentService.select(documentIdx).getFolder().getFolderIdx();
 				for(Folder folder : folderService.selectParentList(removeCandidate)) {
 					removeCandidateSet.add(folder.getFolderIdx());
 				};

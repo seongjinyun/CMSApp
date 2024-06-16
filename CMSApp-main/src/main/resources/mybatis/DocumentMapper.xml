@@ -91,10 +91,7 @@
 	<select id="selectAllWithRange" parameterType="java.util.Map" resultMap="DocumentListSelectMap">
 		select * from document limit  #{startIndex} , #{rowCount}
 	</select>
-	
-	<select id="selectAll" resultMap="DocumentListSelectMap">
-		select * from document
-	</select>
+
 	
 	<select id="selectDocumentIdxListInFolder" parameterType="java.util.List" resultType="Integer">
 		select document_idx from document

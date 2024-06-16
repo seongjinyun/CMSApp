@@ -69,7 +69,7 @@ public class DocumentsController {
 			List<Folder> subFolderList = folderService.selectTopFolder();
 			List<Folder> parentFolderList = new ArrayList<>();
 			parentFolderList.add(folder);
-			List<DocumentVersion> documentList = documentService.selectAll();
+			List<DocumentVersion> documentList = documentService.selectAllOrigin();
 			model.addAttribute("documentListSelect", documentList);
 			model.addAttribute("folderIdx", folderIdx);
 			model.addAttribute("folder", folder);
