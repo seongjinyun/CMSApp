@@ -20,8 +20,8 @@ import com.sds.cmsapp.model.document.DocumentVersionDAO;
 import com.sds.cmsapp.model.document.OneditDAO;
 import com.sds.cmsapp.model.emp.EmpDAO;
 import com.sds.cmsapp.model.folder.FolderDAO;
+import com.sds.cmsapp.model.publishing.PublishedVersionDAO;
 import com.sds.cmsapp.model.statuslog.StatusLogDAO;
-import com.sds.cmsapp.model.versionlog.PublishedVersionDAO;
 import com.sds.cmsapp.model.versionlog.VersionLogDAO;
 
 @Service

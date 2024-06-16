@@ -5,7 +5,7 @@
 	<resultMap type="DocumentVersion" id="DocumentVersionMap">
 		<id column="document_version_idx" property="documentVersionIdx" />
 		<association column="document_idx" property="document" javaType="Document"
-			select="com.sds.cmsapp.model.document.DocumentDAO.select" /> <!-- ResultType -->
+			select="com.sds.cmsapp.model.document.DocumentDAO.selectByDocumentIdx" /> <!-- ResultType -->
 		<association column="version_log_idx" property="versionLog" javaType="VersionLog"
 			select="com.sds.cmsapp.model.versionlog.VersionLogDAO.select" /> <!-- ResultType -->
 		<association column="status_code" property="masterCode" javaType="MasterCode"
@@ -18,6 +18,16 @@
 		select * from document_version where document_idx = #{document_idx}
 	</select>  -->
 	
+	<select id="selectCountByStatus" parameterType="int" resultType="ResultDocCountDTO">
+		SELECT COUNT(dv.document_idx) AS doc_count, status_code
+		FROM document_version dv
+		LEFT JOIN trash t 
+		ON dv.document_idx = t.document_idx
+		WHERE t.trash_idx IS NULL
+		GROUP BY status_code
+		HAVING status_code = #{statusCode}
+	</select>
+	
 	<insert id="insert" parameterType="DocumentVersion">
 		insert into document_version(document_idx, version_log_idx)
 		values (#{document.documentIdx}, #{version.versionLogIdx})
@@ -26,4 +36,8 @@
 	<delete id="delete" parameterType="int">
 		delete from document_version where document_version_idx = #{documentVersionIdx}
 	</delete>
+	
+	<update id="updateStatusByDocumentIdx" parameterType="DocumentVersion">
+		update document_version set status_code = #{masterCode.statusCode} where document_idx = #{document.documentIdx}
+	</update>
 </mapper>

@@ -2,11 +2,11 @@ package com.sds.cmsapp.domain;
 
 import java.sql.Timestamp;
 
+import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
 
-// Setter가 필요하다
-@Getter @Setter
+@Data
 public class Document {
 	
 	private int documentIdx;

@@ -1,10 +1,20 @@
 package com.sds.cmsapp.model.document;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
+import com.sds.cmsapp.domain.DocStatus;
+import com.sds.cmsapp.domain.Document;
 import com.sds.cmsapp.domain.DocumentVersion;
+import com.sds.cmsapp.domain.MasterCode;
+import com.sds.cmsapp.domain.PublishedVersion;
 
+import lombok.extern.slf4j.Slf4j;
+
+@Slf4j
 @Service
 public class DocumentVersionServiceImpl implements DocumentVersionService {
 	
@@ -16,8 +26,22 @@ public class DocumentVersionServiceImpl implements DocumentVersionService {
 		return documentVersionDAO.selectByDocumentIdx(document_idx);
 	}
 	
-	public Integer countByStatus(int statusCode) {
-		return documentVersionDAO.countByStatus(statusCode);
-	};
+	@Transactional
+	public void changeStatusOfPublishedDoc(List<PublishedVersion> publishedVersionList) {
+		
+		for (PublishedVersion publishedVer : publishedVersionList) {
+			Document doc = publishedVer.getDocument();
+			DocumentVersion docVer = new DocumentVersion(doc, new MasterCode(DocStatus.PUBLISHED.getStatusCode()));
+			
+			// 상태 업데이트
+			int resultOfUpdatingStatus = documentVersionDAO.updateStatusByDocumentIdx(docVer);
+			if (resultOfUpdatingStatus > 0) {
+				log.debug("document_version 테이블의 상태 업데이트 성공");
+			}
+		}
+		
+		
+		
+	}
 
 }

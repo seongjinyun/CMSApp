@@ -1,10 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "mybatis-3-mapper.dtd">
-<mapper namespace="com.sds.cmsapp.model.versionlog.PublishedVersionNameDAO">
+<mapper namespace="com.sds.cmsapp.model.publishing.PublishedVersionNameDAO">
 	
 	<insert id="insert" parameterType="PublishedVersionName">
-		insert into published_version(publishedVersionName)
+		insert into published_version_name(published_version_name)
 		values(#{publishedVersionName})
+		<selectKey
+			keyColumn="published_version_name_idx" resultType="int"
+			keyProperty="publishedVersionNameIdx" order="BEFORE">
+			select IFNULL(MAX(published_version_name_idx), 0) + 1
+			FROM published_version_name
+		</selectKey>
 	</insert>
 	
 	<delete id="delete" parameterType="int">

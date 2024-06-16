@@ -87,13 +87,5 @@
 	<select id="selectByFolderIdx" parameterType="int" resultType="Document">
 		select * from document where folder_idx = #{folderIdx}
 	</select>
-	
-	<select id="selectDocumentIdxListInFolder" parameterType="java.util.List" resultType="Integer">
-		select document_idx from document
-		<if test="list != null">
-			WHERE folder_idx 
-			IN <foreach collection="list" item="folderIdx" open="(" close=")" separator="," >#{folderIdx}</foreach>
-		</if>
-	</select>
     
 </mapper>

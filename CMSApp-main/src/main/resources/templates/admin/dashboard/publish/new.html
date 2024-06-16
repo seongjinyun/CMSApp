@@ -108,13 +108,15 @@ div.table-detail, span.table-detail {
 								<div class="card-body">
 									<div class="row">
 									<!-- <div><button>프리뷰 보기(가능할 경우))</button></div> -->
-									<label for="publish-version">배포판 이름</label> <input class="form-control form-control-sm"
-										id="publish-version" type="text" placeholder="배포판 이름">
-									<label for="published-comment">배포 코멘트</label> <input class="form-control form-control-sm"
+									<label for="publish-version-name">배포판 이름</label> 
+									<input class="form-control form-control-sm"
+										id="publish-version-name" type="text" placeholder="배포판 이름">
+									<label for="published-comment">배포 코멘트</label> 
+									<input class="form-control form-control-sm"
 										id="publish-comment" type="text" placeholder="배포 코멘트">
 									</div>
 									<div class="row">
-										<button class="btn btn-danger w-100">배포하기</button>
+										<button class="btn btn-danger w-100" id="btn-publish">배포하기</button>
 									</div>
 								</div>
 								<!-- card-body end -->
@@ -214,7 +216,7 @@ div.table-detail, span.table-detail {
 		/* 배포 완료 문서 목록 가져오기 */
 		function getFilteredData() {
 			// url 쿼리 스트링 설정
-			let statusList = ["리뷰 완료", "배포 완료"];
+			let statusList = ["Published", "Reviewed"];
 			let url = "/dashboard/list/entire?statusList=" + statusList;
 			
 			// 데이터 테이블 적용
@@ -241,15 +243,47 @@ div.table-detail, span.table-detail {
 					type: "GET",
 					"dataSrc": function (result) {
 						return result;
-		            }, 	error: function(xhr, status, err) {
+		            }, error: function(xhr, status, err) {
 		            	alert('통신 실패!!!');
 					}
 				}
 			});
 		}
+		
+		/* 문서 배포하기 */
+		function publishDocument(publishedVersionName, comments) {
+			$.ajax({
+	            type: "POST",
+	            url: "/admin/dashboard/publish/new",
+	            data: {
+	            	'publishedVersionName' : publishedVersionName,
+	            	'comments': comments
+	            },
+	            success: function(result) {
+					alert("배포판 생성 성공!");
+	            }, error: function(xhr, status, error) {
+	            	alert("통신 실패")
+	                console.log(status);
+	            }
+	        });
+		}
 
 		$(function() {
-			getFilteredData();
+			//getFilteredData();
+			
+			$("#btn-publish").click(function(){
+				
+				let publishedVersionName = $("#publish-version-name").val();
+				let comments = $("#publish-comment").val();
+				
+				if (publishedVersionName == null || publishedVersionName == "") {
+					alert('배포판 이름을 입력해 주세요.');
+					return 0;
+				} 
+				
+				
+				publishDocument(publishedVersionName, comments);
+			})
 		});
 	</script>
 

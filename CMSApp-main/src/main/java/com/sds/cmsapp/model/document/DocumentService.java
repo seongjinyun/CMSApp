@@ -5,7 +5,6 @@ import java.util.Map;
 
 import com.sds.cmsapp.domain.Document;
 import com.sds.cmsapp.domain.RequestDocFilterDTO;
-import com.sds.cmsapp.domain.ResponseDocCountDTO;
 import com.sds.cmsapp.domain.DocumentVersion;
 import com.sds.cmsapp.domain.ResponseDocDTO;
 import com.sds.cmsapp.domain.VersionLog;
@@ -16,10 +15,10 @@ public interface DocumentService {
 	public List<Document> selectAll();
 	
 	/* 결재 상태별 문서 수 조회 */
-	public ResponseDocCountDTO countByStatus();
+	public Map<String, Integer> countByStatus();
 	
 	/* 결재 상태에 따라 문서 목록 조회 */
-	public List<ResponseDocDTO> selectFilteredList(RequestDocFilterDTO requestDTO);
+	public List<ResponseDocDTO> getFilteredList(RequestDocFilterDTO requestDTO);
 
 	// 문서생성 + 버전
 	public void documentInsert(VersionLog versionLog);

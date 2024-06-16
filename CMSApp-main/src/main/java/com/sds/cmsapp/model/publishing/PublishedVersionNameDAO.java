@@ -1,4 +1,4 @@
-package com.sds.cmsapp.model.versionlog;
+package com.sds.cmsapp.model.publishing;
 
 import java.util.List;
 
