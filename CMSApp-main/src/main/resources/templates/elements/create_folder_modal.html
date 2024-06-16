@@ -29,10 +29,10 @@
 const folderName = $("#folderName").val();
 const parentFolderIdx = $("input[name=folderIdx]").val()
 function createFolder(){
-	console.log($("#folderName").val());
-	console.log($("input[name=folderIdx]").val());
-	console.log(typeof(folderName));
-	console.log(typeof(parentFolderIdx));
+	if(parentFolderIdx == 0){
+		alert("최상위 폴더는 프로젝트로 생성해주세요.");
+		return;
+	}
 	$.ajax({
 		url: "/document/folder",
 		method: "POST",
@@ -43,6 +43,7 @@ function createFolder(){
 		},
 		success: function(result, status, xhr){
 			alert("폴더를 성공적으로 생성했어요.");
+			location.reload(true);
 		},
 		error: function(status, xhr, err){
 			alert("폴더를 생성하는데 실패했어요.");

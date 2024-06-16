@@ -66,6 +66,8 @@
 		HAVING status_code = #{statusCode}
 	</select> -->
 	
-	<delete id="deleteBy"></delete>
+	<delete id="deleteByDocumentIdx" parameterType="int">
+		delete from status_log where document_idx = #{document_idx}
+	</delete>
 	
 </mapper>

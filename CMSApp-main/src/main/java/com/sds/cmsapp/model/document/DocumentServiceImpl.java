@@ -79,8 +79,11 @@ public class DocumentServiceImpl implements DocumentService {
 		for(Folder folder : topFolderList) {
 			Map<String, Integer> map = new HashMap<>();
 			map.put("folderIdx", folder.getFolderIdx());
-			resultList.addAll(documentDAO.documentListSelect(map));
+			resultList.addAll(documentListSelect(map));
 		}
+		log.warn("기존의 배열의 길이는" + resultList.size());
+		
+		log.warn("필터링 후 배열의 길이는" + resultList.size());
 		return resultList;
 	};
 	
@@ -257,8 +260,17 @@ public class DocumentServiceImpl implements DocumentService {
     }
 
 	@Override
-	public List documentListSelect(Map map) {
-		return documentDAO.documentListSelect(map);
+	public List<DocumentVersion> documentListSelect(final Map<String, Integer> map) {
+		List<DocumentVersion> resultList = documentDAO.documentListSelect(map);
+		List<Integer> documentIdxInTrashList = trashDAO.selectDocumentIdx();
+
+		for(int i = 0; i < resultList.size(); i++) {
+			DocumentVersion dto = resultList.get(i);
+			if(documentIdxInTrashList.contains(dto.getDocument().getDocumentIdx())){
+				resultList.remove(i);
+			}
+		}
+		return resultList;
 	}
 	
 	//document/detail 문서 상세보기 
@@ -339,7 +351,7 @@ public class DocumentServiceImpl implements DocumentService {
 	@Override
 	public boolean isPublished(int doucmentIdx) {
 		boolean flag = false;
-		if(publishedVersionDAO.selectByDocumentIdx(doucmentIdx) == null) {
+		if(publishedVersionDAO.selectByDocumentIdx(doucmentIdx) != null) {
 			flag = true;
 		}
 		return flag;

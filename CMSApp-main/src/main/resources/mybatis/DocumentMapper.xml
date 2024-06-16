@@ -6,6 +6,8 @@
 		<id column="document_idx" property="documentIdx"/>
 		<association column="folder_idx" property="folder" javaType="Folder"
 			select="com.sds.cmsapp.model.folder.FolderDAO.select"/>
+		<association column="emp_idx" property="emp" javaType="Emp"
+			select="com.sds.cmsapp.model.emp.EmpDAO.selectByEmpIdx"/>
 	</resultMap>
 	
     <!-- 문서 삽입 -->
@@ -84,7 +86,7 @@
 		delete from document where document_idx = #{documentIdx}
 	</delete>
 	
-	<select id="selectByFolderIdx" parameterType="int" resultType="Document">
+	<select id="selectByFolderIdx" parameterType="int" resultMap="DocumentMap">
 		select * from document where folder_idx = #{folderIdx}
 	</select>
 	
@@ -100,5 +102,19 @@
 			IN <foreach collection="list" item="folderIdx" open="(" close=")" separator="," >#{folderIdx}</foreach>
 		</if>
 	</select>
+	
+	<update id="update" parameterType="Document">
+		update document
+			<set>
+				<if test="hit != null"> 
+					hit = #{hit},
+				</if>
+				<if test="emp != null">
+					emp_idx = #{emp.empIdx},
+				</if>
+				folder_idx = #{folder.folderIdx}
+			</set>
+		where document_idx = #{documentIdx}
+	</update>
     
 </mapper>

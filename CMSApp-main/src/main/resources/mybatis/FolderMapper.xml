@@ -17,13 +17,13 @@
 	<update id="update" parameterType="Folder">
 		update folder
 			<set>
-				<if test="parentFolderIdx != null"> 
+				<if test="parentFolder.folderIdx != null"> 
 					parent_folder_idx = #{parentFolder.folderIdx},
 				</if>
 				<if test="folderName != null">
 					folder_name = #{folderName},
 				</if>
-				<if test="projectIdx != null">
+				<if test="project.projectIdx != null">
 					project_idx = #{project.projectIdx}
 				</if>
 			</set>

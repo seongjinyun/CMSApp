@@ -66,6 +66,11 @@ public class FolderServiceImpl implements FolderService {
 		List<Document> documentList = documentDAO.selectByFolderIdx(folderIdx);
 		if(documentList != null) {
 			for(Document document : documentList) {
+				Folder folder = document.getFolder();
+				folder.setFolderIdx(null);
+				System.out.println(folder);
+				document.setFolder(folder); // document의 folder를 restored로
+				documentDAO.update(document);
 				Trash trash = new Trash();
 				trash.setDocument(document);
 				trash.setEmp(empDAO.selectByEmpIdx(empIdx));
@@ -282,5 +287,10 @@ public class FolderServiceImpl implements FolderService {
 		Collections.reverse(folderList);
 		
 		return folderList;
+	}
+	
+	@Override
+	public Folder selectRestoreFolder() {
+		return folderDAO.selectRestoreFolder();
 	}
 }

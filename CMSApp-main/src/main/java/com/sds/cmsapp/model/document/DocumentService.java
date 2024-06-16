@@ -37,7 +37,7 @@ public interface DocumentService {
 	public int delete(int documentIdx);
 
 	//document/list 파일 조회
-	public List documentListSelect(Map map);
+	public List<DocumentVersion> documentListSelect(final Map<String, Integer> map);
 	
 	// 폴더 안의 문서들을 조회합니다
 	public List<Document> selectByFolderIdx(int folder_idx); 

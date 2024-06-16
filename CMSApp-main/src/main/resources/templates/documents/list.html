@@ -75,7 +75,7 @@
                   <button type="button" class="btn btn-default btn-sm">
                     <i class="fas fa-share"></i>
                   </button>
-	              <button type="button" class="btn btn-default btn-sm">
+	              <button type="button" class="btn btn-default btn-sm" onclick="location.reload(true);">
 	                <i class="fas fa-sync-alt"></i>
 	              </button>
 	              <!-- 디렉토리 변경 버튼 -->
@@ -83,7 +83,7 @@
    					<i class="fas fa-folder"></i>
 				  </button>
                   <!-- /.디렉토리 변경 버튼 -->
-                  <button type="button" class="btn btn-default btn-sm" data-toggle="modal" data-target="#createFolder">
+                  <button type="button" class="btn btn-default btn-sm" id="createFolderButton"> <!-- data-toggle="modal" data-target="#createFolder">-->
    					새 폴더
 				  </button>
                 </div>
@@ -198,6 +198,7 @@ $(function(){
     searchFile();
     initializeOpenMoveDirectoryModal();
     del();
+    openCreateFolderModal();
   });
   
   function checkBoxAll(){
@@ -212,6 +213,10 @@ $(function(){
   
   function write(){
 	  $("#write").click(function() {
+		  if($("input[name='folderIdx']").val() == 0){
+			  alert("글 작성은 하위 디렉토리에서 가능합니다");
+			  return;
+		  }
 			//글쓰기 폼 요청
 			location.href="/document/writeform?folderIdx="+$("input[name='folderIdx']").val();
 		});
@@ -230,20 +235,21 @@ $(function(){
     function del() {
       $("#trash_btn").click(function(){
 	      if (checkSelected()){
-	        if (confirm("선택한 항목들을 휴지통으로 보낼까요?")) {
-	          let selectedIdxList = [];
+	        if (confirm("선택한 항목들을 휴지통으로 보낼까요?\n주의: 폴더는 휴지통으로 보내지지 않고 바로 삭제돼요.")) {
+	          let selectedIdxList = new Array();
 	          $('input[name="objectSelect"]:checked').each(function () {
 	            selectedIdxList.push($(this).val());
 	          });
 	          $.ajax({
 	            method: "POST",
 	            url: "/document/list/trash",
-	            data: {
-	              selectedIdxList: selectedIdxList,
+	            contentType: "application/json",
+	            data: JSON.stringify(selectedIdxList)
 	              //empIdx: empIdx
-	            },
+	            ,
 	            success: function(result, status, xhr){
-	              alert("성공적으로 휴지통에 보냈습니다.");
+	              alert("성공적으로 휴지통에 보냈습니다.\n폴더는 성공적으로 삭제됐습니다.");
+	              location.reload(true);
 	            },
 	            error: function(status, xhr, err){
 	              alert("휴지통에 보내는데 실패했어요.");
@@ -281,7 +287,16 @@ $(function(){
       $('#openMoveDirectoryModalButton').on('click', openMoveDirectoryModal);
     }
 
-
+	function openCreateFolderModal(){
+		$("#createFolderButton").on("click", function(){
+			if($("input[name='folderIdx']").val() == 0){
+				alert("최상위 폴더는 프로젝트 메뉴에서 생성해주세요");
+			} else{
+				$("#createFolder").modal("show");
+			}
+			
+		});
+	}
 
 
   </script>
