@@ -92,22 +92,22 @@
                     <th>제목</th>
                     <th>문서 버전</th>
                     <th>삭제된 날짜</th>
-                    <th>상태</th>
+                    <th>삭제한사람</th>
                   </tr>
                   <!-- ./소제목 -->
                   <tbody>
                   <tr th:each="trash : ${trashList}">
                     <td>
                       <div class="icheck-primary">
-                        <input type="checkbox" name="trashIdx" th:value="${trash.trashIdx}" id="check1">
-                        <label for="check1"></label>
+                        <input type="checkbox" name="trashIdx" th:value="${trash.trashIdx}" th:id="${trash.trashIdx}">
+                        <label th:for="${trash.trashIdx}"></label>
                       </div>
                     </td>
                     <td class="mailbox-star"><a href="#"><i class="fas fa-star-o" aria-hidden="true"></i></a></td>
                     <td class="mailbox-subject" th:text="${trash.versionLog.title}"><a href="/document/detail"></a></td>
                     <td class="mailbox-name" th:text="${trash.versionLog.version}"></td>
                     <td class="mailbox-date" th:text="${trash.regdate}"></td>
-                    <td class="mailbox-attachment" th:text="${trash.document.latestRegisteredStatusLog}"></td>
+                    <td class="mailbox-attachment" th:text="${trash.document.emp.empName}"></td>
                   </tr>
                  </tbody>
                 </table>
@@ -168,12 +168,12 @@ $(function(){
 	  }
   function restore(){
 	  if(confirm("선택된 문서를 복원하시겠습니까?")){
-		  let selectedTrashIdx = [];
+		  let trashIdxList = [];
           $('input[name="trashIdx"]:checked').each(function() {
-              selectedTrashIdx.push($(this).val());
+              trashIdxList.push($(this).val());
           });
           
-          if (selectedTrashIdx.length < 1){
+          if (trashIdxList.length < 1){
         	  alert("하나 이상의 문서를 선택해주세요");
         	  return;
           }
@@ -182,9 +182,10 @@ $(function(){
               type: 'POST',
               url: '/document/trash',
               contentType: 'application/json',
-              data: JSON.stringify(selectedTrashIdx),
+              data: JSON.stringify(trashIdxList),
               success: function(result, status, xhr) {
                   alert('복원에 성공했어요');
+                  location.reload(true);
               },
               error: function(status, xhr, err) {
                   alert('복원에 실패했어요');
@@ -197,12 +198,12 @@ $(function(){
   function deleteTrash(){
 	  if(confirm("선택된 문서를 영구삭제하시겠습니까?")){
 		  
-		  let selectedTrashIdx = [];
+		  let trashIdxList = [];
           $('input[name="trashIdx"]:checked').each(function() {
-              selectedDocumentIdx.push($(this).val());
+              trashIdxList.push($(this).val());
           });
           
-          if (selectedTrashIdx.length < 1){
+          if (trashIdxList.length < 1){
         	  alert("하나 이상의 문서를 선택해주세요");
         	  return;
           }
@@ -211,9 +212,10 @@ $(function(){
               type: 'DELETE',
               url: '/document/trash',
               contentType: 'application/json',
-              data: JSON.stringify(selectedTrashIdx),
+              data: JSON.stringify(trashIdxList),
               success: function(result, status, xhr) {
                   alert('문서가 삭제됐어요');
+                  location.reload(true);
               },
               error: function(status, xhr, err) {
                   alert('문서 삭제에 실패했어요');

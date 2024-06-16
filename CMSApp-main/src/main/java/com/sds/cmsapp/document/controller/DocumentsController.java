@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -11,9 +12,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
-import com.mysql.cj.x.protobuf.MysqlxCrud.Collection;
 import com.sds.cmsapp.common.Pager;
-import com.sds.cmsapp.domain.Document;
 import com.sds.cmsapp.domain.DocumentVersion;
 import com.sds.cmsapp.domain.Folder;
 import com.sds.cmsapp.domain.Trash;
@@ -58,7 +57,7 @@ public class DocumentsController {
 	//파일목록
 	@GetMapping("/document/list")
 
-	public String getDocumentList(Model model, DocumentVersion documentVersion, @RequestParam(value="folderIdx", defaultValue = "0") int folderIdx) {
+	public String getDocumentList(Model model, DocumentVersion documentVersion, @RequestParam(value="folderIdx", defaultValue = "0") final int folderIdx) {
 		if (folderIdx == 0) {
 			HashMap<String, Integer> map=new HashMap<String, Integer>();
 			map.put("startIndex", pager.getStartIndex());
@@ -81,7 +80,7 @@ public class DocumentsController {
 			map.put("folderIdx", folderIdx);
 			Folder folder = folderService.completeFolderWithDocument(folderIdx);
 			//폴더 -> 파일 리스트
-			List documentListSelect = documentService.documentListSelect(map);
+			List<DocumentVersion> documentListSelect = documentService.documentListSelect(map);
 			List<Folder> parentFolderList = folderService.selectParentList(folderIdx);
 			List<Folder> subFolderList = folderService.selectSub(folderIdx);
 			
@@ -93,7 +92,6 @@ public class DocumentsController {
 			Collections.reverse(parentFolderList);
 			model.addAttribute("parentFolderList", parentFolderList);
 			model.addAttribute("subFolderList", subFolderList);
-			System.out.println("요청받은 folderIdx: " + folderIdx + "길이: " + subFolderList + "하위 폴더: " + subFolderList);
 			return "documents/list";
 		}
 	} 
@@ -102,6 +100,11 @@ public class DocumentsController {
 	@GetMapping("/document/trash")
 	public String getTrash(Model model, @RequestParam(value="currentPage", defaultValue="1") int currentPage) {
 		pager.init(trashService.selectCount(), currentPage);
+		Map<String, Integer> map = new HashMap<>();
+		map.put("startIndex", pager.getStartIndex());
+		map.put("rowCount", pager.getPageSize());
+		List<Trash> trashList = trashService.selectAllWithRange(map);
+		model.addAttribute(trashList);
 		return "documents/trash";
 	}
 	

@@ -1,7 +1,5 @@
 package com.sds.cmsapp.domain;
 
-import java.sql.Timestamp;
-
 import lombok.Getter;
 import lombok.Setter;
 

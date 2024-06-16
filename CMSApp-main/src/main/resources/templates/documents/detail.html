@@ -261,7 +261,7 @@
 				method: "POST",
 				contentType: "application/json",
 				success: function(result, status, xhr){
-					alert("문서를 성공적으로 휴지통에 보냈어요");
+					alert("문서를 성공적으로 휴지통에 보냈어요" + result);
 				},
 				error: function(status, xhr, err){
 					alert("문서를 휴지통으로 보내는데 실패했어요");
