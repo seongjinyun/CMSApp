@@ -66,7 +66,7 @@
             <div class="card-body p-0">
               <div class="mailbox-controls">
                 <div class="btn-group">
-                  <button type="button" class="btn btn-default btn-sm" onClick="goToTrash();">
+                  <button type="button" class="btn btn-default btn-sm" id="trash_btn">
                     <i class="far fa-trash-alt"></i>
                   </button>
                   <button type="button" class="btn btn-default btn-sm">
@@ -138,7 +138,7 @@
 				        <td>
 					        <div class="icheck-primary">
 		                        <input type="checkbox" name="objectSelect" th:value="|d${documentVersion.document.documentIdx}|" th:id="|d${documentVersion.document.documentIdx}|">
-		                        <label for="|d${documentVersion.document.documentIdx}|"></label>
+		                        <label th:for="|d${documentVersion.document.documentIdx}|"></label>
                      		</div>
 				        </td>
 				        <td class="mailbox-star"><a href="#"><i class="fa fa-star-o" aria-hidden="true"></i></a></td>
@@ -197,7 +197,7 @@ $(function(){
     write();
     searchFile();
     initializeOpenMoveDirectoryModal();
-    goToTrash();
+    del();
   });
   
   function checkBoxAll(){
@@ -225,11 +225,10 @@ $(function(){
 			});
 		});
 	  }
-
-////////////////////////////////////////////////////
     
 
-    function goToTrash() {
+    function del() {
+    	  console.log("goToTrash() 함수 호출됨")
       $("#trash_btn").click(function(){
 	      if (checkSelected()){
 	        if (confirm("선택한 항목들을 휴지통으로 보낼까요?")) {

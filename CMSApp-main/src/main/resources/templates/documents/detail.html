@@ -214,10 +214,15 @@
   	function del(){
 	  	if(confirm("문서를 휴지통으로 보낼까요?")){
 			let objectIdx = "d" + $("input[name='documentIdx']").val();
+			console.log(objectIdx);
+			let objectIdxList = new Array();
+			objectIdxList.push(objectIdx);
+			console.log(objectIdxList);
 			$.ajax({
 				url: "/document/list/trash",
-				data: JSON.stringify([objectIdx]),
+				data: JSON.stringify(objectIdxList),
 				method: "POST",
+				contentType: "application/json",
 				success: function(result, status, xhr){
 					alert("문서를 성공적으로 휴지통에 보냈어요");
 				},

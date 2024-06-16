@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -91,9 +92,10 @@ public class RestDocumentController {
 	
 	// 삭제할 때 문서일 경우 "d" + documentIdx, 폴더일 경우 "f" + folderIdx 로 넘겨주세요
 	@PostMapping("/document/list/trash")
-	public ResponseEntity<String> goToTrash(final List<String> objectIdxList, final int empIdx) {
+	public ResponseEntity<String> goToTrash(@RequestBody final List<String> objectIdxList){//, final int empIdx) {
 		int countAll = objectIdxList.size();
 		int countFail = 0;
+		int empIdx = 1; //테스트용
 		List<Integer> documentIdxList = trashService.seperateObjectList(objectIdxList, 'd');
 		List<Integer> folderIdxList = trashService.seperateObjectList(objectIdxList, 'f');
 		Set<Integer> removeCandidateSet = new HashSet<>(); // 제외시킬 folderIdx를 담을 set
@@ -101,7 +103,8 @@ public class RestDocumentController {
 			int statusCode = documentVersionService.selectByDocumentIdx(documentIdx).getStatusCode().getStatusCode();
 			if(documentService.isPublished(documentIdx)) { // 배포된 버전이라면
 				countFail++;
-				int removeCandidate = documentService.select(documentIdx).getFolder().getFolderIdx();
+				System.out.println("restDoc" + documentService.selectByDocumentIdx(documentIdx) + documentService.selectByDocumentIdx(documentIdx).getFolder());
+				int removeCandidate = documentService.selectByDocumentIdx(documentIdx).getFolder().getFolderIdx();
 				for(Folder folder : folderService.selectParentList(removeCandidate)) {
 					removeCandidateSet.add(folder.getFolderIdx());
 				};
