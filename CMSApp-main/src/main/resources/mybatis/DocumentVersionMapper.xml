@@ -26,4 +26,8 @@
 	<delete id="delete" parameterType="int">
 		delete from document_version where document_version_idx = #{documentVersionIdx}
 	</delete>
+	
+	<delete id="deleteByDocumentIdx" parameterType="int">
+		delete from document_version where document_idx = #{documentIdx}
+	</delete>
 </mapper>

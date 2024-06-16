@@ -29,12 +29,12 @@
 	      <div class="container-fluid">
 	        <div class="row mb-2">
 	          <div class="col-sm-6">
-	            <h1>폴더 명</h1>
+	            <h1 th:text="${folder.folderName}"></h1>
 	          </div>
 	          <div class="col-sm-6">
-	            <ol class="breadcrumb float-sm-right">
-	              <li class="breadcrumb-item"><a href="#">폴더 명1</a></li>
-	              <li class="breadcrumb-item active">폴더 명2</li>
+	            <ol th:each="folder, i : ${parentFolderList}"class="breadcrumb float-sm-right">
+	              <li th:if="${i.index == 0}" class="breadcrumb-item active ml-1 mr-1" th:text="| ${folder.folderName}|"></li>
+	              <li th:unless="${i.index == 0}" class="breadcrumb-item ml-1 mr-1"><a th:href="|/document/list?folderIdx=${folder.folderIdx}|" th:text="|${folder.folderName} / |"></a></li>
 	            </ol>
 	          </div>
 	        </div>
@@ -66,7 +66,7 @@
             <div class="card-body p-0">
               <div class="mailbox-controls">
                 <div class="btn-group">
-                  <button type="button" class="btn btn-default btn-sm" onClick="goToTrash();">
+                  <button type="button" class="btn btn-default btn-sm" id="trash_btn">
                     <i class="far fa-trash-alt"></i>
                   </button>
                   <button type="button" class="btn btn-default btn-sm">
@@ -83,7 +83,7 @@
    					<i class="fas fa-folder"></i>
 				  </button>
                   <!-- /.디렉토리 변경 버튼 -->
-                  <button type="button" class="btn btn-default btn-sm">
+                  <button type="button" class="btn btn-default btn-sm" data-toggle="modal" data-target="#createFolder">
    					새 폴더
 				  </button>
                 </div>
@@ -121,11 +121,24 @@
                   </tr>
                   <!-- ./소제목 -->
                   <tbody>
+                  	<tr th:each="folder: ${subFolderList}">
+                  		<td>
+					        <div class="icheck-primary">
+		                        <input type="checkbox" name="objectSelect" th:value="|f${folder.folderIdx}|" th:id="|f${folder.folderIdx}|">
+		                        <label th:for="|f${folder.folderIdx}|"></label>
+                     		</div>
+				        </td>
+				        <td class="mailbox-star"><a href="#"><i class="fa fa-star-o" aria-hidden="true"></i></a></td>
+				        <td><i class="far fa-folder mr-3"></i><a th:href="|/document/list?folderIdx=${folder.folderIdx}|" th:text="${folder.folderName}"></a></td>
+				        <td>폴더</td>
+				        <td th:text="${folder.regdate}"></td>
+				        <td></td>
+                  	</tr>
 				    <tr th:each="documentVersion, i : ${documentListSelect}">
 				        <td>
 					        <div class="icheck-primary">
-		                        <input type="checkbox" value="" id="check1">
-		                        <label for="check1"></label>
+		                        <input type="checkbox" name="objectSelect" th:value="|d${documentVersion.document.documentIdx}|" th:id="|d${documentVersion.document.documentIdx}|">
+		                        <label th:for="|d${documentVersion.document.documentIdx}|"></label>
                      		</div>
 				        </td>
 				        <td class="mailbox-star"><a href="#"><i class="fa fa-star-o" aria-hidden="true"></i></a></td>
@@ -171,6 +184,9 @@
   	<!-- 디렉토리 변경 모달 스크립트 -->
 	<th:block th:replace="~{elements/folder_modal_script :: folder_modal_script}"/>
 	<!-- /.디렉토리 변경 모달 스크립트 -->
+	<!-- 새 폴더 모달 -->
+	<th:block th:replace="~{elements/create_folder_modal :: create_folder_modal}"/>	
+	<!-- /.새 폴더 모달 -->
 	<!-- 사이드바 디렉토리 관련 로직 -->
   	<th:block th:replace="~{elements/sidebar_script :: sidebar_script}"/>
   	<!-- /.사이드바 디렉토리 관련 로직 -->
@@ -181,7 +197,7 @@ $(function(){
     write();
     searchFile();
     initializeOpenMoveDirectoryModal();
-    goToTrash();
+    del();
   });
   
   function checkBoxAll(){
@@ -209,27 +225,25 @@ $(function(){
 			});
 		});
 	  }
-
-////////////////////////////////////////////////////
     
 
-    function goToTrash() {
+    function del() {
       $("#trash_btn").click(function(){
 	      if (checkSelected()){
 	        if (confirm("선택한 항목들을 휴지통으로 보낼까요?")) {
-	          let documentIdxList = [];
-	          $('input[name="documentIdx"]:checked').each(function () {
-	            documentIdxList.push($(this).val());
+	          let selectedIdxList = [];
+	          $('input[name="objectSelect"]:checked').each(function () {
+	            selectedIdxList.push($(this).val());
 	          });
 	          $.ajax({
 	            method: "POST",
 	            url: "/document/list/trash",
 	            data: {
-	              documentIdxList: documentIdxList,
+	              selectedIdxList: selectedIdxList,
 	              //empIdx: empIdx
 	            },
 	            success: function(result, status, xhr){
-	              alert("성공적으로 휴지통에 보냈습니다");
+	              alert("성공적으로 휴지통에 보냈습니다.");
 	            },
 	            error: function(status, xhr, err){
 	              alert("휴지통에 보내는데 실패했어요.");
@@ -242,7 +256,7 @@ $(function(){
 
     function checkSelected(){
       let selectedDocumentIdx = [];
-      $('input[name="documentIdx"]:checked').each(function () {
+      $('input[name="objectSelect"]:checked').each(function () {
         selectedDocumentIdx.push($(this).val());
       });
 

@@ -88,6 +88,11 @@
 		select * from document where folder_idx = #{folderIdx}
 	</select>
 	
+	<select id="selectAllWithRange" parameterType="java.util.Map" resultMap="DocumentListSelectMap">
+		select * from document limit  #{startIndex} , #{rowCount}
+	</select>
+
+	
 	<select id="selectDocumentIdxListInFolder" parameterType="java.util.List" resultType="Integer">
 		select document_idx from document
 		<if test="list != null">

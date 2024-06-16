@@ -267,4 +267,20 @@ public class FolderServiceImpl implements FolderService {
 		}
 		return result;
 	}
+	
+	// 조상부터 시작해서 자기까지
+	public List<Folder> selectParentList(final int folderIdx){
+		int count = 0;
+		Folder folder = folderDAO.select(folderIdx);
+		List<Folder> folderList = new ArrayList<>();
+		Folder parentFolder = folder;
+		while(parentFolder != null) {
+			folderList.add(parentFolder);
+			parentFolder = parentFolder.getParentFolder();
+			log.debug("selectParentList: "+count++);
+		}
+		Collections.reverse(folderList);
+		
+		return folderList;
+	}
 }

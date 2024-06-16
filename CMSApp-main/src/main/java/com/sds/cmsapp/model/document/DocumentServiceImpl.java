@@ -1,5 +1,6 @@
 package com.sds.cmsapp.model.document;
 
+import java.util.ArrayList;
 import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -20,6 +21,7 @@ import com.sds.cmsapp.domain.DocumentStatus;
 import com.sds.cmsapp.domain.RequestDocFilterDTO;
 import com.sds.cmsapp.domain.ResponseDocCountDTO;
 import com.sds.cmsapp.domain.DocumentVersion;
+import com.sds.cmsapp.domain.Folder;
 import com.sds.cmsapp.domain.Emp;
 import com.sds.cmsapp.domain.Folder;
 import com.sds.cmsapp.domain.MasterCode;
@@ -34,6 +36,8 @@ import com.sds.cmsapp.exception.FolderException;
 import com.sds.cmsapp.exception.StatusLogException;
 import com.sds.cmsapp.exception.TrashException;
 import com.sds.cmsapp.exception.VersionLogException;
+import com.sds.cmsapp.model.folder.FolderDAO;
+import com.sds.cmsapp.model.versionlog.PublishedVersionDAO;
 import com.sds.cmsapp.model.statuslog.StatusLogDAO;
 import com.sds.cmsapp.model.trash.TrashDAO;
 
@@ -56,8 +60,37 @@ public class DocumentServiceImpl implements DocumentService {
 	
 	@Autowired
 	private DocumentDetailDAO documentDetailDAO;
-
 	
+	@Autowired
+	private PublishedVersionDAO publishedVersionDAO;
+	
+	@Autowired
+	private FolderDAO folderDAO;
+
+	@Override
+	public Document select(int documentIdx) {
+		return documentDAO.select(documentIdx);
+	}
+	
+	// 모든 문서 조회
+	public List<DocumentVersion> selectAllOrigin() {
+		List<DocumentVersion> resultList = new ArrayList<>();
+		List<Folder> topFolderList = folderDAO.selectTopFolder();
+		for(Folder folder : topFolderList) {
+			Map<String, Integer> map = new HashMap<>();
+			map.put("folderIdx", folder.getFolderIdx());
+			resultList.addAll(documentDAO.documentListSelect(map));
+		}
+		return resultList;
+	};
+	
+	public List<Document> selectAllByRange(final Map<String, Integer> map){
+		return documentDAO.selectAllByRange(map);
+	}
+	
+	public List selectAllForDashboard(Map map) {
+		return documentDAO.selectAllForDashboard(map);
+	};
 	/* 모든 문서 조회 */
 	public List<Document> selectAll() {
 		return documentDAO.selectAll();
@@ -245,7 +278,7 @@ public class DocumentServiceImpl implements DocumentService {
 		return documentDAO.delete(documentIdx);
 	}
 	
-	@Override // 박준형 추가
+	@Override
 	public List<Document> selectByFolderIdx(int folderIdx) {
 		return documentDAO.selectByFolderIdx(folderIdx);
 	}
@@ -302,5 +335,13 @@ public class DocumentServiceImpl implements DocumentService {
 		document.setVersionLog(versionLog);
 		return document;
 	}
-
+	
+	@Override
+	public boolean isPublished(int doucmentIdx) {
+		boolean flag = false;
+		if(publishedVersionDAO.selectByDocumentIdx(doucmentIdx) == null) {
+			flag = true;
+		}
+		return flag;
+	}
 }

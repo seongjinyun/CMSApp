@@ -14,6 +14,15 @@ import com.sds.cmsapp.domain.VersionLog;
 @Mapper
 public interface DocumentDAO {
 
+
+	
+	public List<Document> selectAllByRange(Map<String,Integer> map);
+	
+	public List selectAllForDashboard(Map map);
+	
+	// 결재 상태별 문서 수
+	public int countForDashboard(int statusCode);
+	
 	@Select("SELECT * FROM DOCUMENT")
 	@ResultMap("DocumentMap")
 	public List<Document> selectAll(); // 전체 문서 목록 조회
@@ -33,13 +42,13 @@ public interface DocumentDAO {
 	public int documentVersionInsert(DocumentVersion documentVersion);
 	
 	//파일 리스트 조회
-	public List documentListSelect(Map map);
+	public List<DocumentVersion> documentListSelect(final Map<String, Integer> map);
 	
 	// 문서 수정
 	public int update(Document document);
 	
 	
-	// 문서 삭제 (임시로 만들어뒀습니다 -박준형)
+	// 문서 삭제
 	public int delete(int documentIdx);
 	
 }
