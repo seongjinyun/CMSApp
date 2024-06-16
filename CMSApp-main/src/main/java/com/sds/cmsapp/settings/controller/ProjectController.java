@@ -38,10 +38,10 @@ public class ProjectController {
 			int projectIdx = projectService.insert(project);
 			
 			// 빈 폴더 초기화
-//			Folder folder = new Folder();
-//			folder.setProject(project);
-//			folder.setFolderName(project.getProjectName());
-//			folderService.createFolder(folder);
+			Folder folder = new Folder();
+			folder.setProject(project);
+			folder.setFolderName(project.getProjectName());
+			folderService.createFolder(folder);
 			
 			// 부서들을 추가한 프로젝트의 담당으로 설정
 			Project projectWithIdx = projectService.selectByProjectIdx(projectIdx); // 방금 입력한 프로젝트 인덱스를 지닌 프로젝트 객체
@@ -74,6 +74,12 @@ public class ProjectController {
 		try {
 			// 프로젝트 삭제
 			projectService.delete(project);
+			
+			// 프로젝트 내부 폴더 삭제
+			int empIdx = 1; // 지금 접속한 사원 인덱스. 테스트를 위해 1로 설정
+			Folder folder = folderService.selectProjectRootFolder(project.getProjectIdx());
+			folderService.deleteFolder(folder.getFolderIdx(), empIdx);
+			
 		    redirectAttributes.addFlashAttribute("message", "프로젝트가 성공적으로 삭제되었습니다.");
 		} catch (Exception e) {
 		    e.printStackTrace();

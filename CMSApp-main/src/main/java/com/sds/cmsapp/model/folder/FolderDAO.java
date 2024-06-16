@@ -3,8 +3,10 @@ package com.sds.cmsapp.model.folder;
 import java.util.List;
 
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Select;
 
 import com.sds.cmsapp.domain.Folder;
+import com.sds.cmsapp.domain.RequestDocFilterDTO;
 
 @Mapper
 public interface FolderDAO {
@@ -33,8 +35,11 @@ public interface FolderDAO {
 	// 최상위 폴더 조회
 	public List<Folder> selectTopFolder();
 	
+	// 폴더 목록 조회
+	public List<Integer> selectFolderIdxListInProject(RequestDocFilterDTO requestDocumentDTO);
+	
 	// 프로젝트 idx로 폴더 조회
-	public List<Folder> selectByProjectIdx();
+	public List<Folder> selectByProjectIdx(int projectIdx);
 	
 	/**
 	 * 복원된 문서들이 갈 폴더 조회 메서드

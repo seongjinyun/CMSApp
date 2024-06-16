@@ -2,11 +2,6 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "mybatis-3-mapper.dtd">
 <mapper namespace="com.sds.cmsapp.model.mastercode.MasterCodeDAO">
 	
-	<!-- master_code 한 개 조회 -->
-	<!-- returnType="MasterCode" -->
-	<select id="select" parameterType="int" resultType="MasterCode">
-		select * from mastercode where status_code=#{statusCode}
-	</select>
 
 
 </mapper>

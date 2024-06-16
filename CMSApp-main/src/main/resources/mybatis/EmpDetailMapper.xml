@@ -28,4 +28,11 @@
 		where emp_idx=#{emp.empIdx} 
 	</update>
 	
+	<select id="selectByLoginData" parameterType="EmpDetail" resultType="Emp">
+		SELECT *
+        FROM emp e
+        JOIN emp_detail ed ON ed.emp_idx = e.emp_idx
+        WHERE ed.emp_id = #{empId} AND ed.emp_pw = #{empPw}
+	</select>
+	
 </mapper>

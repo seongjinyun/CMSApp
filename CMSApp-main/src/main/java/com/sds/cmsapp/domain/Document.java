@@ -1,22 +1,24 @@
 package com.sds.cmsapp.domain;
 
-import lombok.Data;
+import java.sql.Timestamp;
 
-@Data
+import lombok.Getter;
+import lombok.Setter;
+
+// Setter가 필요하다
+@Getter @Setter
 public class Document {
+	
 	private int documentIdx;
 	private int hit;
-	private Folder folder;
 	
-//	// 부모 테이블 (외래키)
 	private Emp emp;
 	
-	// 자식 테이블
-//	private List<StatusLog> statusLogList; // 상태 로그
-//	private List<VersionLog> versionLogList; // 버전 로그
+	// 참조키
+	private Folder folder; // folder_name, project_idx (folder_idx)
 	
-	private StatusLog latestRegisteredStatusLog;
-	
+	// DocumentMapper의 selectAllForDashboardList 수행 결과를 담기 위한 변
+
 	// 0603 추가
 	private DocumentVersion documentVersion; // documentVersion이 version_log_idx를 가지고 있음...
 	

@@ -17,6 +17,7 @@ import com.sds.cmsapp.domain.Document;
 import com.sds.cmsapp.domain.DocumentVersion;
 import com.sds.cmsapp.domain.Folder;
 import com.sds.cmsapp.domain.Trash;
+import com.sds.cmsapp.domain.VersionLog;
 import com.sds.cmsapp.model.document.DocumentService;
 import com.sds.cmsapp.model.folder.FolderService;
 import com.sds.cmsapp.model.trash.TrashService;
@@ -96,15 +97,11 @@ public class DocumentsController {
 			return "documents/list";
 		}
 	} 
+
 	//휴지통
 	@GetMapping("/document/trash")
 	public String getTrash(Model model, @RequestParam(value="currentPage", defaultValue="1") int currentPage) {
 		pager.init(trashService.selectCount(), currentPage);
-		HashMap<String, Integer> map=new HashMap<>();
-		map.put("startIndex", pager.getStartIndex());
-		map.put("rowCount", pager.getPageSize());
-		List<Trash> trashList = trashService.selectAllWithRange(map);
-		model.addAttribute(trashList);
 		return "documents/trash";
 	}
 	
@@ -124,13 +121,16 @@ public class DocumentsController {
 							            @RequestParam("folderIdx") int folderIdx,
 							            Model model) {
 		DocumentVersion documentVersion  = documentService.documentDetailSelect(documentIdx);
+        List<VersionLog> versionLogs = documentService.getVersionLogSelect(documentIdx);
+        
+        model.addAttribute("versionLogs", versionLogs);
         model.addAttribute("documentVersion", documentVersion);
         model.addAttribute("folderIdx", folderIdx);
         model.addAttribute("documentIdx", documentIdx);
 		return "documents/detail";
 	}
 	
-	// 글 수정하기
+	// 글 수정폼
 	@GetMapping("/document/editform")
 	public String getEdit(@RequestParam("documentIdx") int documentIdx,
             						@RequestParam("folderIdx") int folderIdx,
@@ -142,4 +142,6 @@ public class DocumentsController {
         model.addAttribute("versionLogIdx", documentVersion.getVersionLog().getVersionLogIdx());
         return "documents/editform";
 	}
+	
+
 }

@@ -26,7 +26,7 @@
 			</association>
 		</association>
 
-		<association property="statusCode" javaType="MasterCode">
+		<association property="masterCode" javaType="MasterCode">
 			<id property="statusCode" column="status_code" />
 			<result property="statusName" column="status_name" />
 		</association>
@@ -57,36 +57,62 @@
 	</select>
 
 
-<insert id="versionLogInsert" parameterType="VersionLog">
-    INSERT INTO version_log (
-        document_idx,
-        version,
-        title,
-        content,
-        comments,
-        emp_idx
-    ) VALUES (
-        #{document.documentIdx},
-        #{version},
-        #{title},
-        #{content},
-        #{comments},
-        7
-    )
-    <selectKey keyColumn="version_log_idx" keyProperty="versionLogIdx" resultType="int" order="AFTER">
-        SELECT LAST_INSERT_ID() AS version_log_idx
-    </selectKey>
-</insert>
+	<insert id="versionLogInsert" parameterType="VersionLog">
+	    INSERT INTO version_log (
+	        document_idx,
+	        version,
+	        title,
+	        content,
+	        comments,
+	        emp_idx
+	    ) VALUES (
+	        #{document.documentIdx},
+	        #{version},
+	        #{title},
+	        #{content},
+	        #{comments},
+	        7
+	    )
+	    <selectKey keyColumn="version_log_idx" keyProperty="versionLogIdx" resultType="int" order="AFTER">
+	        SELECT LAST_INSERT_ID() AS version_log_idx
+	    </selectKey>
+	</insert>
 	
-	<update id="versionUpdate" parameterType="VersionLog">
-		update version_log
-		set version = #{version}
-		where document_idx = #{document.documentIdx} and version_log_idx = #{versionLogIdx}
-	</update>
+	<!-- 문서 버전 중 가장 높은 버전 조회 -->
+	<select id="findMaxVersionByDocumentIdx" parameterType="int" resultType="int">
+	    SELECT MAX(CONVERT(version, SIGNED)) AS max_version
+	    FROM version_log
+	    WHERE document_idx = #{documentIdx}
+	</select>
 
 	<update id="documentVersionUpdate" parameterType="VersionLog">
 		UPDATE document_version
 		SET version_log_idx = #{versionLogIdx}
 		WHERE document_idx = #{document.documentIdx}
 	</update>
+	
+	<!-- 리뷰요청 -->
+	<update id="documentVersionStatusUpdate" parameterType="DocumentVersion">
+		UPDATE document_version
+		SET status_code = 200
+		WHERE document_idx = #{document.documentIdx}
+	</update>
+	
+	<!-- 버전 조회 -->
+	<select id="getVersionLogSelect" parameterType="int" resultType="com.sds.cmsapp.domain.VersionLog">
+	    SELECT 
+	    	vl.version_log_idx,
+	        vl.version,
+	        vl.title,
+	        vl.content,
+	        vl.comments,
+	        vl.regdate
+	    FROM 
+	        version_log vl
+	    WHERE 
+	        vl.document_idx = #{documentIdx}
+	    ORDER BY 
+	        vl.version DESC
+</select>
+	
 </mapper>

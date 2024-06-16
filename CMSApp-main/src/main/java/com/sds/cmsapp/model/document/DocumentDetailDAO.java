@@ -1,5 +1,7 @@
 package com.sds.cmsapp.model.document;
 
+import java.util.List;
+
 import org.apache.ibatis.annotations.Mapper;
 
 import com.sds.cmsapp.domain.DocumentVersion;
@@ -10,5 +12,10 @@ public interface DocumentDetailDAO {
 	public DocumentVersion documentDetailSelect(int documentIdx);
 	public int versionLogInsert(VersionLog versionLog);
 	public int documentVersionUpdate(VersionLog versionLog);
-	public int versionUpdate(VersionLog versionLog);
+	public void documentVersionStatusUpdate(DocumentVersion documentVersion);
+	
+    public int findMaxVersionByDocumentIdx(int documentIdx);
+    public List<VersionLog> getVersionLogSelect(int documentIdx);
+
+
 }

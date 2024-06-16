@@ -13,11 +13,13 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.sds.cmsapp.domain.Document;
 import com.sds.cmsapp.domain.DocumentRequest;
+import com.sds.cmsapp.domain.DocumentVersion;
 import com.sds.cmsapp.domain.Folder;
 import com.sds.cmsapp.domain.VersionLog;
 import com.sds.cmsapp.exception.DocumentException;
@@ -70,6 +72,7 @@ public class RestDocumentController {
 		return entity;
     }
 	
+	//수정 글 저장
 	@PostMapping("/document/edit")
 	public ResponseEntity<String> editDocument(@ModelAttribute DocumentRequest documentRequest) {
 		VersionLog versionLog = documentRequest.getVersionLog();
@@ -155,6 +158,34 @@ public class RestDocumentController {
 		return null;
 	}
 	
+	//리뷰요청
+	@PostMapping("/document/review/request")
+	public ResponseEntity reviewRequest(@RequestParam("documentIdx") int documentIdx) {
+		DocumentVersion documentVersion  = documentService.documentDetailSelect(documentIdx);
+		documentVersion.getDocument().setDocumentIdx(documentIdx);
+		log.debug("documentVersion = " + documentVersion);
+		
+		documentService.documentVersionStatusUpdate(documentVersion);
+		
+		return null;
+	}
+	
+	//버전관리
+	@PostMapping("/document/version/update")
+	public ResponseEntity getVersion(@RequestParam("versionLogIdx") int versionLogIdx, 
+														@RequestParam("documentIdx") int documentIdx) {
+		VersionLog versionLog = new VersionLog();
+		versionLog.setVersionLogIdx(versionLogIdx);
+		
+	    // Document 객체 생성 및 초기화
+	    Document document = new Document();
+	    document.setDocumentIdx(documentIdx);
+	    versionLog.setDocument(document);
+		documentService.documentVersionUpdate(versionLog);
+		
+		
+		return null;
+	}
 	
 	@ExceptionHandler({DocumentException.class, VersionLogException.class, FolderException.class})
 	public ResponseEntity handle(DocumentException e, VersionLogException e2, FolderException e3) {
@@ -170,5 +201,3 @@ public class RestDocumentController {
 	
 	
 }
-
-

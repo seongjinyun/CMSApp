@@ -6,4 +6,5 @@ import lombok.Data;
 public class DocumentRequest {
     private Document document;
     private VersionLog versionLog;
+    private DocumentVersion documentVersion;
 }
