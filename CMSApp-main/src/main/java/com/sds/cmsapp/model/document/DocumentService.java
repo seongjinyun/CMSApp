@@ -64,5 +64,8 @@ public interface DocumentService {
 
 	//문서 버전 관리
 	public int documentVersionUpdate(VersionLog versionLog);
+	
+	// 수정
+	public int update(final Document document);
 
 }
