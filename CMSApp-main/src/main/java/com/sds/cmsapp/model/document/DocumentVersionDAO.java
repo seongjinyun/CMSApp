@@ -5,25 +5,24 @@ import org.apache.ibatis.annotations.ResultMap;
 import org.apache.ibatis.annotations.Select;
 
 import com.sds.cmsapp.domain.DocumentVersion;
+import com.sds.cmsapp.domain.MasterCode;
+import com.sds.cmsapp.domain.ResultDocCountDTO;
 
 @Mapper
 public interface DocumentVersionDAO {
 	
 	@Select("SELECT * FROM document_version WHERE document_idx = #{documentIdx}")
 	@ResultMap("DocumentVersionMap")
-	public DocumentVersion selectByDocumentIdx(int document_idx);
-	
-	@Select("SELECT COUNT(dv.document_idx), status_code\n"
-			+ "FROM document_version dv\n"
-			+ "LEFT JOIN trash t ON dv.document_idx = t.document_idx\n"
-			+ "WHERE t.trash_idx IS NULL\n"
-			+ "GROUP BY status_code\n"
-			+ "HAVING status_code = #{statusCode}")
-	public Integer countByStatus(int statusCode);
+	public DocumentVersion selectByDocumentIdx(int documentIdx);
+			
+	public ResultDocCountDTO selectCountByStatus(int statusCode);
 	
 	public int insert(final DocumentVersion documentVersion);
+	
+	public int updateStatusByDocumentIdx(final DocumentVersion documentVeresion);
 	
 	public int delete(final int documentVersionIdx);
 	
 	public int deleteByDocumentIdx(final int documentIdx);
+
 }
