@@ -35,4 +35,16 @@
         WHERE ed.emp_id = #{empId} AND ed.emp_pw = #{empPw}
 	</select>
 	
+	<select id="selectByUid" parameterType="String" resultType="EmpDetail">
+		SELECT *
+		FROM emp_detail
+		WHERE emp_id = #{empId}
+	</select>
+	
+	<select id="selectEmpIdxByUid" parameterType="String" resultType="int">
+		SELECT emp_idx
+		FROM emp_detail
+		WHERE emp_id = #{empId}
+	</select>
+	
 </mapper>

@@ -1,13 +1,16 @@
 package com.sds.cmsapp.jwt;
 
 import java.io.IOException;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
 import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -23,28 +26,51 @@ import lombok.extern.slf4j.Slf4j;
 public class LoginFilter extends UsernamePasswordAuthenticationFilter {
 
     private JwtUtil jwtUtil;
+    
     private AuthenticationManager authenticationManager;
 
-    public LoginFilter(AuthenticationManager authenticationManager, JwtUtil jwtUtil) {
-        this.authenticationManager = authenticationManager;
+    public LoginFilter(JwtUtil jwtUtil, AuthenticationManager authenticationManager ) {
+    	super.setAuthenticationManager(authenticationManager);
+    	this.authenticationManager = authenticationManager;
         this.jwtUtil = jwtUtil;
+        setFilterProcessesUrl("/emp/login");
     }
 
     @Override
     public Authentication attemptAuthentication(HttpServletRequest request, HttpServletResponse response) throws AuthenticationException {
-        String empId = obtainUsername(request);
-        String empPw = obtainPassword(request);
-
+        String empId = null;
+        String empPw = null;
+        try {
+            // Read JSON from request body
+            ObjectMapper objectMapper = new ObjectMapper();
+            Map<String, String> loginRequest = objectMapper.readValue(request.getInputStream(), Map.class);
+            empId = loginRequest.get("empId");
+            empPw = loginRequest.get("empPw");
+        } catch (Exception e) {
+            log.error("Failed to parse authentication request body", e);
+        }
         log.debug("empId is ======================" + empId);
         log.debug("empPw is ======================" + empPw);
-
-        UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(empId, empPw);
-        return authenticationManager.authenticate(authToken);
+        if (empId == null || empPw == null) {
+            throw new BadCredentialsException("Missing empId or empPw in request");
+        }
+        
+        UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(empId, empPw, Collections.singletonList(new SimpleGrantedAuthority("Admin")));
+        
+        try {
+            Authentication auth = authenticationManager.authenticate(authToken);
+            log.debug("auth is " + auth);
+            return auth;
+        } catch (AuthenticationException e) {
+        	e.printStackTrace();
+            log.debug("Authentication failed: " + e.getMessage());
+            throw e;
+        }
     }
 
     @Override
     protected String obtainUsername(HttpServletRequest request) {
-        return request.getParameter("empId");
+    	return request.getParameter("empId");
     }
 
     @Override
@@ -54,11 +80,10 @@ public class LoginFilter extends UsernamePasswordAuthenticationFilter {
 
     @Override
     protected void successfulAuthentication(HttpServletRequest request, HttpServletResponse response, FilterChain chain, Authentication authentication) throws IOException, ServletException {
-        CustomUserDetails customUserDetails = (CustomUserDetails) authentication.getPrincipal();
 
-        String empName = customUserDetails.getEmp().getEmpName();
+    	CustomUserDetails customUserDetails = (CustomUserDetails) authentication.getPrincipal();
+    	log.debug("customUserDetails: "+customUserDetails);
         int empIdx = customUserDetails.getEmp().getEmpIdx();
-        int roleCode = customUserDetails.getEmp().getRole().getRoleCode();
 
         log.debug("사원정보가 존재합니다. 로그인 성공");
 

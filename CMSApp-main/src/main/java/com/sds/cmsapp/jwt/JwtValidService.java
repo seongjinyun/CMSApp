@@ -42,9 +42,6 @@ public class JwtValidService {
 			throw new JwtException("로그인이 필요한 서비스입니다");
 		}
 		
-//		String uid = claims.getSubject(); //JWT의 body의 제목에 넣어 둔 uid를 꺼내자
-//		Member member=memberDAO.selectByUid(uid);	
-		
 		int empIdx = (int)claims.get("empIdx"); // JWT의 body의 제목에 넣어 둔 empIdx를 꺼내자
 		log.debug("empIdx at JWTValidService: "+empIdx);
 		

@@ -21,5 +21,4 @@ public interface EmpDAO {
 	public Emp selectByEmpIdx(int empIdx);
 	public void update(Emp emp);
 	public void updateDept(Emp emp);
-	
 }
