@@ -17,6 +17,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.sds.cmsapp.domain.Document;
 import com.sds.cmsapp.domain.DocumentRequest;
 import com.sds.cmsapp.domain.DocumentVersion;
@@ -35,7 +37,7 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 @RestController
 public class RestDocumentController {
-
+	
 	@Autowired
 	private DocumentService documentService;
 
@@ -90,22 +92,22 @@ public class RestDocumentController {
 	
 	// 삭제할 때 문서일 경우 "d" + documentIdx, 폴더일 경우 "f" + folderIdx 로 넘겨주세요
 	@PostMapping("/document/list/trash")
-	public ResponseEntity<String> del(@RequestBody final List<String> objectIdxList){//, final int empIdx) {
-		System.out.println("Controller의 del 호출 성공");
+	public ResponseEntity<String> del(@RequestBody final Map<String, Object> request) {
+			//final List<String> objectIdxList){//, final int empIdx) {
+		List<String> objectIdxList = (List<String>)request.get("objectIdxList");
+		Integer empIdx = (Integer)request.get("empIdx");
+		
 		int countAll = objectIdxList.size();
 		int countFail = 0;
-		int empIdx = 1; //테스트용
+		//int empIdx = 1; //테스트용
 		StringBuilder sb = new StringBuilder();
 		List<Integer> documentIdxList = trashService.seperateObjectList(objectIdxList, 'd');
 		List<Integer> folderIdxList = trashService.seperateObjectList(objectIdxList, 'f');
 		Set<Integer> removeCandidateSet = new HashSet<>(); // 제외시킬 folderIdx를 담을 set
 		for(int documentIdx : documentIdxList) { // 문서먼저 삭제, 삭제할수 없는 문서인 경우 상위 폴더도 삭제목록에서 제거.
-			System.out.println("반복문 진입 ");
 			int statusCode = documentVersionService.selectByDocumentIdx(documentIdx).getMasterCode().getStatusCode();
 			if(documentService.isPublished(documentIdx)) { // 배포된 버전이라면
 				countFail++;
-				System.out.println("배포된 버전, 삭제 실패 ");
-				System.out.println("restDoc" + documentService.select(documentIdx) + documentService.select(documentIdx).getFolder());
 				int removeCandidate = documentService.select(documentIdx).getFolder().getFolderIdx();
 				for(Folder folder : folderService.selectParentList(removeCandidate)) {
 					removeCandidateSet.add(folder.getFolderIdx());
@@ -114,7 +116,6 @@ public class RestDocumentController {
 				continue;
 			}
 			if(statusCode > 150 && statusCode < 450) {
-				System.out.println("초안 상태가 아니라 실패 ");
 				countFail++;
 				int removeCandidate = documentService.select(documentIdx).getFolder().getFolderIdx();
 				for(Folder folder : folderService.selectParentList(removeCandidate)) {
@@ -127,7 +128,6 @@ public class RestDocumentController {
 		}
 		folderIdxList.removeAll(removeCandidateSet);
 		for(int folderIdx : folderIdxList) {
-			System.out.println("폴더 삭제 진행중");
 			folderService.deleteFolder(folderIdx, empIdx);
 		}
 		
@@ -139,7 +139,6 @@ public class RestDocumentController {
 	@PostMapping("/document/folder")
 	public ResponseEntity<String> createFolder(@RequestParam("folderName") final String folderName, 
 												@RequestParam("parentFolderIdx") final int parentFolderIdx) {
-		log.debug("view로부터 받은 폴더는 : " + folderName + " 부모 폴더: " + parentFolderIdx);
 		if(folderName == null || folderName.isEmpty()) {
 			throw new IllegalArgumentException("폴더 이름이 비어있습니다.");
 		}
@@ -159,7 +158,6 @@ public class RestDocumentController {
 		List<String> objectIdxList = (List<String>)request.get("objectIdxList");
 		Integer targetFolderIdx = Integer.parseInt((String)request.get("targetFolderIdx"));
 		
-		log.warn("컨트롤러 moveDocument 호출, 선택된 idx: " + objectIdxList);
 		List<Integer> documentIdxList = trashService.seperateObjectList(objectIdxList, 'd');
 		List<Integer> folderIdxList = trashService.seperateObjectList(objectIdxList, 'f');
 		
@@ -195,7 +193,6 @@ public class RestDocumentController {
 	public ResponseEntity reviewRequest(@RequestParam("documentIdx") int documentIdx) {
 		DocumentVersion documentVersion  = documentService.documentDetailSelect(documentIdx);
 		documentVersion.getDocument().setDocumentIdx(documentIdx);
-		log.debug("documentVersion = " + documentVersion);
 		
 		documentService.documentVersionStatusUpdate(documentVersion);
 		

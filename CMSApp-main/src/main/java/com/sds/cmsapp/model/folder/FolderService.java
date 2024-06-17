@@ -3,7 +3,6 @@ package com.sds.cmsapp.model.folder;
 import java.util.List;
 
 import com.sds.cmsapp.domain.Folder;
-import com.sds.cmsapp.domain.RequestDocFilterDTO;
 import com.sds.cmsapp.exception.FolderException;
 
 public interface FolderService {

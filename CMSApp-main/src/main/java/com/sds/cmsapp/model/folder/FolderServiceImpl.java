@@ -10,7 +10,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.sds.cmsapp.domain.Document;
 import com.sds.cmsapp.domain.Folder;
-import com.sds.cmsapp.domain.RequestDocFilterDTO;
 import com.sds.cmsapp.domain.Trash;
 import com.sds.cmsapp.exception.FolderException;
 import com.sds.cmsapp.model.document.DocumentDAO;
@@ -18,9 +17,6 @@ import com.sds.cmsapp.model.document.DocumentService;
 import com.sds.cmsapp.model.emp.EmpDAO;
 import com.sds.cmsapp.model.trash.TrashDAO;
 
-import lombok.extern.slf4j.Slf4j;
-
-@Slf4j
 @Service
 public class FolderServiceImpl implements FolderService {
 		
@@ -68,7 +64,6 @@ public class FolderServiceImpl implements FolderService {
 			for(Document document : documentList) {
 				Folder folder = document.getFolder();
 				folder.setFolderIdx(null);
-				System.out.println(folder);
 				document.setFolder(folder); // document의 folder를 restored로
 				documentDAO.update(document);
 				Trash trash = new Trash();
@@ -115,7 +110,6 @@ public class FolderServiceImpl implements FolderService {
 		while(true) {
 			folder = folderDAO.select(parentFolderIdx);
 			Integer index = folderDAO.selectParentIdx(folder.getFolderIdx());
-			log.debug("자식폴더: " + folder.getFolderIdx() + "부모폴더: " + index);
 			if (index == null) {
 				break;
 			}
@@ -217,13 +211,11 @@ public class FolderServiceImpl implements FolderService {
 	@Override
 	public Folder completeFolderWithDocument(final int folderIdx) throws FolderException {
 		int count = 0;
-		//log.debug("넘겨진 folderIdx: " + folderIdx);
 		Folder folder = folderDAO.select(folderIdx);
 		List<Folder> folderList1 = new ArrayList<Folder>();
 		List<Folder> folderList2 = new ArrayList<Folder>();
 		List<Document> documentList = new ArrayList<>();
 		folderList1.add(folder);
-		//log.debug("문서 조회 테스트" + documentDAO.selectByFolderIdx(1));
 		while(true) {
 			for (Folder folderDTO : folderList1) {			
 				List<Folder> subList = folderDAO.selectSub(folderDTO.getFolderIdx());				
@@ -236,8 +228,6 @@ public class FolderServiceImpl implements FolderService {
 					document.setFolder(folderDAO.select(folderDTO.getFolderIdx()));
 					subDocumentList.set(i, document);
 				}
-				//log.debug("하위문서를 조회할 폴더: " + folderDTO.getFolderIdx());
-				//log.debug("조회된 하위 문서: " + subDocumentList);
 				folderDTO.setDocumentList(subDocumentList);
 				folderList2.addAll(subList);
 				documentList.addAll(subDocumentList);
@@ -275,14 +265,12 @@ public class FolderServiceImpl implements FolderService {
 	
 	// 조상부터 시작해서 자기까지
 	public List<Folder> selectParentList(final int folderIdx){
-		int count = 0;
 		Folder folder = folderDAO.select(folderIdx);
 		List<Folder> folderList = new ArrayList<>();
 		Folder parentFolder = folder;
 		while(parentFolder != null) {
 			folderList.add(parentFolder);
 			parentFolder = parentFolder.getParentFolder();
-			log.debug("selectParentList: "+count++);
 		}
 		Collections.reverse(folderList);
 		

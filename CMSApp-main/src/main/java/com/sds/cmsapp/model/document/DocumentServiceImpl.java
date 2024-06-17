@@ -78,10 +78,7 @@ public class DocumentServiceImpl implements DocumentService {
 			Map<String, Integer> map = new HashMap<>();
 			map.put("folderIdx", folder.getFolderIdx());
 			resultList.addAll(documentListSelect(map));
-		}
-		log.warn("기존의 배열의 길이는" + resultList.size());
-		
-		log.warn("필터링 후 배열의 길이는" + resultList.size());
+		}		
 		return resultList;
 	};
 	

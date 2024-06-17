@@ -265,12 +265,16 @@ $(function(){
 	          $('input[name="objectSelect"]:checked').each(function () {
 	            selectedIdxList.push($(this).val());
 	          });
+	          let empIdx = 1;
+	          let request = {
+	          			objectIdxList: selectedIdxList,
+	          			empIdx: empIdx
+	          };
 	          $.ajax({
 	            method: "POST",
 	            url: "/document/list/trash",
 	            contentType: "application/json",
-	            data: JSON.stringify(selectedIdxList)
-	              //empIdx: empIdx
+	            data: JSON.stringify(request)
 	            ,
 	            success: function(result, status, xhr){
 	              alert("성공적으로 휴지통에 보냈습니다.\n폴더는 성공적으로 삭제됐습니다.");
@@ -294,7 +298,6 @@ $(function(){
       if (selectedDocumentIdx.length < 1) {
         alert("하나 이상의 문서를 선택해주세요");
         event.stopImmediatePropagation();
-        console.log("list.html 파일의 alert 호출");
         return false;
       } else{
         return true;
