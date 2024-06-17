@@ -1,10 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "mybatis-3-mapper.dtd">
 <mapper namespace="com.sds.cmsapp.model.versionlog.VersionLogDAO">
+	
+	<select id="select" parameterType="int" resultType="VersionLog">
+		select * from version_log where version_log_idx = #{versionLogIdx}
+	</select>
 
-<!-- 	<select id="selectByDocumentIdx" parameterType="int" resultType="VersionLog">
+	<select id="selectByDocumentIdx" parameterType="int" resultType="VersionLog">
 		select * from version_log where document_idx = #{documentIdx}
-	</select> -->
+	</select>
 
 		<!-- branched_version_log 컬럼은 보류 -->
 	<resultMap type="VersionLog" id="VersionLogMap">

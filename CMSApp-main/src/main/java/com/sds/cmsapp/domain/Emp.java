@@ -10,4 +10,12 @@ public class Emp {
 	// 부모 테이블
 	private Dept dept;
 	private Role role;
+	
+	public Emp() {
+	}
+	
+	public Emp(int empIdx) {
+		this.empIdx = empIdx;
+	}
+
 }

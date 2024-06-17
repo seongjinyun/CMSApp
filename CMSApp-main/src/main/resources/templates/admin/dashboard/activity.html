@@ -120,7 +120,7 @@ div.table-detail, span.table-detail {
 									<div id="box-in_review" class="small-box bg-success">
 										<div class="inner">
 											<h3></h3>
-											<button id="btn-in_review" class="show_list" value="in_review">
+											<button id="btn-in_review" class="show_list" value="리뷰 중">
 												리뷰 대기 문서 <i class="fas fa-arrow-circle-right"></i>
 											</button>
 										</div>
@@ -130,7 +130,7 @@ div.table-detail, span.table-detail {
 									<div id="box-reviewed" class="small-box bg-info">
 										<div class="inner">
 											<h3></h3>
-											<button id="btn-reviewed" class="show_list" value="reviewed">
+											<button id="btn-reviewed" class="show_list" value="리뷰 완료">
 												리뷰 완료 문서 <i class="fas fa-arrow-circle-right"></i>
 											</button>
 										</div>
@@ -140,7 +140,7 @@ div.table-detail, span.table-detail {
 									<div id="box-rejected" class="small-box bg-danger">
 										<div class="inner">
 											<h3></h3>
-											<button id="btn-rejected" class="show_list" value="rejected">
+											<button id="btn-rejected" class="show_list" value="반려">
 												반려 문서 <i class="fas fa-arrow-circle-right"></i>
 											</button>
 										</div>
@@ -402,12 +402,6 @@ div.table-detail, span.table-detail {
 	            "sortDescending" : " :  내림차순 정렬"        
 	            }
 			};
-			
-		let statusSet = {
-				"in_review" : "리뷰 중",
-				"reviewed" : "리뷰 완료",
-				"rejected" : "반려"
-		};
 
 		/* 결재 상태에 따른 문서 개수만 가져오기 */
 		function getSummaryCount() {
@@ -415,9 +409,9 @@ div.table-detail, span.table-detail {
 				type:"GET"  //전송타입
 				, url:"/dashboard/summary/count"
 				, success: function (result, status, xhr) {
-						$("#box-in_review h3").html(result.inReviewCount); // 리뷰 대기 문서 수 표시
-						$("#box-reviewed h3").html(result.reviewedCount); // 리뷰 완료 문서 수 표시
-						$("#box-rejected h3").html(result.rejectedCount); // 반려 문서 수 표시
+						$("#box-in_review h3").html(result['inReview']); // 리뷰 대기 문서 수 표시
+						$("#box-reviewed h3").html(result['reviewed']); // 리뷰 완료 문서 수 표시
+						$("#box-rejected h3").html(result['rejected']); // 반려 문서 수 표시
 					}, error: function (xhr, status, e) {
 					console.log("error", e);
 				}
@@ -435,9 +429,10 @@ div.table-detail, span.table-detail {
 					let preview = $("#table-preview tbody");					
 					preview.empty(); 
 
-					if (result.length == 0) {
+					let tr = "";
+/* 					if (result.length == 0) {
 						tr = "<tr><td colspan='6'>내용이 없습니다.</td></tr>";
-					}
+					} */
 					
 					// 배지 색 한번만 결정
 					// 숫자로 받지 않을 수 있는 방법 고민하기
@@ -447,7 +442,6 @@ div.table-detail, span.table-detail {
 					else if (statusName == "리뷰 완료") statusBadge = "badge-info";
 					else if (statusName == "반려") statusBadge = "badge-danger";
 					
-					let tr = "";
 					// 차후 10건까지만 보여주는 것으로 변경 예정
 					for (let i = 0; i < result.length; i++) {
 						tr += `
@@ -551,18 +545,18 @@ div.table-detail, span.table-detail {
 		$(function() {
 			/* [요약 탭] 초기화 */
 			getSummaryCount(); 	// 결재 상태별 문서 수 표시
-			getSummaryData([statusSet[$('#btn-in_review').val()]]); // 리뷰 대기 문서 목록 표시
+			getSummaryData([$('#btn-in_review').val()]); // 리뷰 대기 문서 목록 표시
 			
 			$('#btn-in_review').click(function(){ 
-				let statusList = [statusSet[$('#btn-in_review').val()]];
+				let statusList = [$('#btn-in_review').val()];
 				getSummaryData(statusList); // 리뷰 대기 문서 미리보기 버튼 클릭 시 목록 가져오기
 			});
 			$('#btn-reviewed').click(function(){ 
-				let statusList = [statusSet[$('#btn-reviewed').val()]];
+				let statusList = [$('#btn-reviewed').val()];
 				getSummaryData(statusList); // 리뷰 중 문서 미리보기 버튼 클릭 시 목록 가져오기
 			});
 			$('#btn-rejected').click(function(){ 
-				let statusList = [statusSet[$('#btn-rejected').val()]];
+				let statusList = [$('#btn-rejected').val()];
 				getSummaryData(statusList); // 리뷰 완료 문서 미리보기 버튼 클릭 시 목록 가져오기
 			});
 		
@@ -656,6 +650,7 @@ div.table-detail, span.table-detail {
 				let projectList = null; // 프로젝트 정보
 				if (filter_project == "radio-project-custom")			
 					projectList = $('#project-tag').val(); 
+				alert("선택된 프로젝트: " + projectList)
 				
 				getFilteredData(statusList, startDate, endDate, projectList); // 필터 처리된 목록 조회
 			});

@@ -62,7 +62,12 @@
 		<div class="content-wrapper">
 			<section class="content">
 				<div class="row">
-					<div class="col"><p>글 작성 글 상세보기 입니다</p></div>
+					<div class="col-6">
+						<ol th:each="folder, i : ${folderList}"class="breadcrumb float-sm-left">
+	             	 		<li th:unless="${i.index == #lists.size(folderList)}"class="breadcrumb-item ml-1 mr-1"><a th:href="|/document/list?folderIdx=${folder.folderIdx}|" th:text="|${folder.folderName} / |"></a></li>
+	              			<li th:if="${i.index + 1 == #lists.size(folderList)}" class="breadcrumb-item active ml-1 mr-1" th:text="|${documentVersion.versionLog.title}|"></li>
+	            		</ol>
+					</div>
 					<div class="col-6">
 						<div class="float-right">
 							<button type="button" class="btn btn-primary btn-sm mt-1" id="versionControlButton">

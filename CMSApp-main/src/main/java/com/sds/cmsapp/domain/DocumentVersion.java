@@ -1,8 +1,9 @@
 package com.sds.cmsapp.domain;
 
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
-@Data
+@Data 
 public class DocumentVersion {
 	private int documentVersionIdx;
 
@@ -14,4 +15,16 @@ public class DocumentVersion {
 	
 	//상태 코드
 	private MasterCode masterCode;
+	
+	public DocumentVersion() {
+		
+	}
+
+	public DocumentVersion(Document document, MasterCode masterCode) {
+		this.document = document;
+		this.masterCode = masterCode;
+	}
+	
+	
+	
 }
