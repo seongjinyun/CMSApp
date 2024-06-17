@@ -41,7 +41,7 @@ public interface FolderService {
 	public Folder selectProjectRootFolder(final int projectIdx); // 프로젝트와 동일시되는 최상위폴더 조회
 	
 	public List<Folder> selectParentList(final int folderIdx); // 부모가 1번, 인덱스를 입력한 자식이 마지막인 리스트 반환
-	
+		
 	public Folder selectRestoreFolder(); // 상위 폴더가 삭제됐을 때 임시로 가는 폴더
 
 }
