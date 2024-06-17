@@ -29,4 +29,7 @@ public interface TrashService {
 	// 총 레코드 수
 	public int selectCount();
 	
+	// 문서와 폴더를 분리
+	public List<Integer> seperateObjectList(List<String> objectIdxList, char firstLetter);
+	
 }

@@ -37,5 +37,10 @@ public interface TrashDAO {
 	// 문서번호로 휴지통 Type 한 건 조회
 	@Select("SELECT * from trash WHERE document_idx = #{documentIdx}")
 	public Trash selectTypeByDocumentIdx(final int documentIdx);
+	
+	// 휴지통 내의 모든 문서의 idx 조회
+	public List<Integer> selectDocumentIdx();
+	
+	public int deleteByDocumentIdx(final int documentIdx);
 
 }

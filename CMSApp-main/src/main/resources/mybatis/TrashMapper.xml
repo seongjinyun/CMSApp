@@ -5,7 +5,7 @@
 	<insert id="insert" parameterType="Trash">
 		insert into trash(emp_idx, document_idx)
 		values(#{emp.empIdx}, #{document.documentIdx})
-		<selectKey keyColumn="trash_idx" keyProperty="trash_idx" resultType="int" order="AFTER">
+		<selectKey keyColumn="trash_idx" keyProperty="trashIdx" resultType="int" order="AFTER">
 			select last_insert_id() as trash_idx
 		</selectKey>
 	</insert>
@@ -14,9 +14,9 @@
 		<id 	column="trash_idx" 	property="trashIdx"/>
 		<result	column="regdate" 		property="regdate"/>		
 		<association column="emp_idx" property="emp" javaType="Emp" 
-			select="com.sds.cmsapp.model.emp.EmpDAO.select"/>
+			select="com.sds.cmsapp.model.emp.EmpDAO.selectByEmpIdx"/>
 		<association column="document_idx" property="document" javaType="Document" 
-			select="com.sds.cmsapp.model.document.DocumentDAO.selectByDocumentIdx"/>
+			select="com.sds.cmsapp.model.document.DocumentDAO.select"/>
 	</resultMap>
 	
 	<delete id="delete" parameterType="int">
@@ -44,8 +44,16 @@
 		select * from trash limit  #{startIndex} , #{rowCount}
 	</select>
 	
+	<select id="selectDocumentIdx" resultType="int">
+		select document_idx from trash
+	</select>
+	
 	<delete id="deleteAll">
 		delete from trash
+	</delete>
+	
+	<delete id="deleteByDocumentIdx" parameterType="int">
+		delete from trash where document_idx = #{documentIdx}
 	</delete>
 	
 </mapper>

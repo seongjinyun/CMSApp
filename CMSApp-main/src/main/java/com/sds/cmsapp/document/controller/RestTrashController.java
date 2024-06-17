@@ -8,6 +8,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -29,7 +30,7 @@ public class RestTrashController {
 	DocumentVersionService documentVersionService;
 	
 	@PostMapping("/document/trash")
-	public ResponseEntity<String> restoreTrash(@RequestParam("trashIdxList") final List<Integer> trashIdxList) {
+	public ResponseEntity<String> restoreTrash(@RequestBody final List<Integer> trashIdxList) {
 		System.out.println("복원메서드 연결");
 		System.out.println("복원 대상" + trashIdxList);
 		trashIdxList.forEach(trashService :: restore);
@@ -39,7 +40,7 @@ public class RestTrashController {
 	}
 	
 	@DeleteMapping("/document/trash")
-	public ResponseEntity<String> deleteTrash(@RequestParam("trashIdxList") List<Integer> trashIdxList) {
+	public ResponseEntity<String> deleteTrash(@RequestBody final List<Integer> trashIdxList) {
 		System.out.println("삭제메서드 연결");
 		System.out.println("삭제 대상" + trashIdxList);
 		trashIdxList.forEach(trashService :: delete);

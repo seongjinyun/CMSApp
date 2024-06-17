@@ -24,6 +24,8 @@
 		VALUES(#{document.documentIdx}, #{masterCode.statusCode}, #{comments}, #{emp.empIdx})
 	</insert>
 	
-	<delete id="deleteBy"></delete>
+	<delete id="deleteByDocumentIdx" parameterType="int">
+		delete from status_log where document_idx = #{document_idx}
+	</delete>
 	
 </mapper>

@@ -1,6 +1,8 @@
 package com.sds.cmsapp.document.controller;
 
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -10,7 +12,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -61,7 +63,6 @@ public class RestDocumentController {
 		documentService.documentInsert(versionLog);
 
 		ResponseEntity entity = ResponseEntity.ok("DB 입력 성공");
-
 		return entity;
     }
 	
@@ -86,30 +87,69 @@ public class RestDocumentController {
 		return new ResponseEntity<>(folderList, HttpStatus.OK);
 	}
 	
+	// 삭제할 때 문서일 경우 "d" + documentIdx, 폴더일 경우 "f" + folderIdx 로 넘겨주세요
 	@PostMapping("/document/list/trash")
-	public ResponseEntity<String> goToTrash(List<Integer> documentIdxList, int empIdx) {
-		int countAll = documentIdxList.size();
+	public ResponseEntity<String> del(@RequestBody final List<String> objectIdxList){//, final int empIdx) {
+		System.out.println("Controller의 del 호출 성공");
+		int countAll = objectIdxList.size();
 		int countFail = 0;
-		for(int documentIdx : documentIdxList) {
+		int empIdx = 1; //테스트용
+		StringBuilder sb = new StringBuilder();
+		List<Integer> documentIdxList = trashService.seperateObjectList(objectIdxList, 'd');
+		List<Integer> folderIdxList = trashService.seperateObjectList(objectIdxList, 'f');
+		Set<Integer> removeCandidateSet = new HashSet<>(); // 제외시킬 folderIdx를 담을 set
+		for(int documentIdx : documentIdxList) { // 문서먼저 삭제, 삭제할수 없는 문서인 경우 상위 폴더도 삭제목록에서 제거.
+			System.out.println("반복문 진입 ");
 			int statusCode = documentVersionService.selectByDocumentIdx(documentIdx).getMasterCode().getStatusCode();
-			if(statusCode > 150 && statusCode < 450) {
+			if(documentService.isPublished(documentIdx)) { // 배포된 버전이라면
 				countFail++;
+				System.out.println("배포된 버전, 삭제 실패 ");
+				System.out.println("restDoc" + documentService.select(documentIdx) + documentService.select(documentIdx).getFolder());
+				int removeCandidate = documentService.select(documentIdx).getFolder().getFolderIdx();
+				for(Folder folder : folderService.selectParentList(removeCandidate)) {
+					removeCandidateSet.add(folder.getFolderIdx());
+				};
+				
+				continue;
+			}
+			if(statusCode > 150 && statusCode < 450) {
+				System.out.println("초안 상태가 아니라 실패 ");
+				countFail++;
+				int removeCandidate = documentService.select(documentIdx).getFolder().getFolderIdx();
+				for(Folder folder : folderService.selectParentList(removeCandidate)) {
+					removeCandidateSet.add(folder.getFolderIdx());
+				};
 				continue;
 			}
 			trashService.insert(documentIdx, empIdx);
+			
 		}
-		ResponseEntity<String> entity = ResponseEntity.ok("총 " + countAll + "개 중 " + (countAll - countFail) + "개 삭제 성공");
+		folderIdxList.removeAll(removeCandidateSet);
+		for(int folderIdx : folderIdxList) {
+			System.out.println("폴더 삭제 진행중");
+			folderService.deleteFolder(folderIdx, empIdx);
+		}
+		
+		ResponseEntity<String> entity = ResponseEntity.ok(sb.toString() + "총 " + countAll + "개 중 " + (countAll - countFail) + "개 삭제 성공");
 
 		return entity;
 	}
 	
-	@PostMapping
-	public ResponseEntity createFolder(int folderIdx, String folderName, int empIdx) {
+	@PostMapping("/document/folder")
+	public ResponseEntity<String> createFolder(@RequestParam("folderName") final String folderName, 
+												@RequestParam("parentFolderIdx") final int parentFolderIdx) {
+		log.debug("view로부터 받은 폴더는 : " + folderName + " 부모 폴더: " + parentFolderIdx);
+		if(folderName == null || folderName.isEmpty()) {
+			throw new IllegalArgumentException("폴더 이름이 비어있습니다.");
+		}
 		Folder folder = new Folder();
+		folder.setFolderName(folderName);
+		folder.setParentFolder(folderService.select(parentFolderIdx));
+		folder.setProject(folder.getParentFolder().getProject());
 		
-		folderService.createFolder(null);
+		folderService.createFolder(folder);
 		
-		ResponseEntity entity = ResponseEntity.ok("폴더 생성 성공");
+		ResponseEntity<String> entity = ResponseEntity.ok("폴더 생성 성공");
 		return entity;
 	}
 	
@@ -127,6 +167,23 @@ public class RestDocumentController {
 		log.debug("documentVersion = " + documentVersion);
 		
 		documentService.documentVersionStatusUpdate(documentVersion);
+		
+		return null;
+	}
+	
+	//버전관리
+	@PostMapping("/document/version/update")
+	public ResponseEntity getVersion(@RequestParam("versionLogIdx") int versionLogIdx, 
+														@RequestParam("documentIdx") int documentIdx) {
+		VersionLog versionLog = new VersionLog();
+		versionLog.setVersionLogIdx(versionLogIdx);
+		
+	    // Document 객체 생성 및 초기화
+	    Document document = new Document();
+	    document.setDocumentIdx(documentIdx);
+	    versionLog.setDocument(document);
+		documentService.documentVersionUpdate(versionLog);
+		
 		
 		return null;
 	}

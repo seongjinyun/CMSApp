@@ -94,24 +94,25 @@
 						<div class="version-sidebar" id="versionSidebar" style="display: none;">
 						    <!-- 사이드바 내용 -->
 						    <div class="timeline-wrapper">
-								<div class="timeline">
+								<div class="timeline" th:each="versionLog, version : ${versionLogs}">
+								<input type="hidden" th:id="'versionLogIdx_' + ${versionLog.versionLogIdx}" th:value="${versionLog.versionLogIdx}">
+								
 					              <!-- timeline time label -->
 					              <div class="time-label">
-					                <span class="bg-red">2024.05.22 14:11</span>
+					                <span class="bg-red" th:text="${versionLog.regdate}">2024.05.22 14:11</span>
 					              </div>
 					              <!-- /.timeline-label -->
 					              <!-- 버전관리 내용 -->
 					              <div>
 					                <i class="fas fa-envelope bg-blue"></i>
 					                <div class="timeline-item">
-					                  <span class="time"><i class="fas fa-clock"></i> 12:05</span>
-					                  <h3 class="timeline-header">제목</h3>
+					                  <h3 class="timeline-header" th:text="'v' + ${versionLog.version}">v1</h3>
 					
 					                  <div class="timeline-body">
-					                    <p><b>v1.0</b></p>
+					                    <p th:text="'comments : ' + ${versionLog.comments}"><b>v1.0</b></p>
 					                  </div>
-					                  <div class="timeline-footer">
-					                    <a class="btn btn-primary btn-sm">열기</a>
+					                  <div class="timeline-footer"> 
+					                    <a class="btn btn-primary btn-sm" th:onclick="versionUpdate([[${versionLog.versionLogIdx}]])">열기</a>
 					                    <a class="btn btn-danger btn-sm">삭제</a>
 					                  </div>
 					                </div>
@@ -122,6 +123,7 @@
 					              </div>
 					            </div>
 							</div>
+							<!-- ./ 사이드바 내용  반복문 끝-->
 						</div>
 					</div>
 						<div class="col-md-12">
@@ -163,11 +165,11 @@
 	</div>
 	<!-- ./wrapper -->
 	
+	<th:block th:replace="~{fragments/footer_link :: footer_link}" />
 	<!-- 사이드바 디렉토리 관련 로직 -->
   	<th:block th:replace="~{elements/sidebar_script :: sidebar_script}"/>
   	<!-- /.사이드바 디렉토리 관련 로직 -->
 
-	<th:block th:replace="~{fragments/footer_link :: footer_link}" />
 	<script>
   $(function () {
     // Summernote
@@ -193,9 +195,30 @@
 		    data: {documentIdx: $("#documentIdx").val() },
 			success:function(result, status, xhr){ //200
 				alert("리뷰 요청 성공");
+			    window.location.href = window.location.href;
 		    },
 		    error: function(xhr, status, error) {
 				alert("리뷰 요청 실패");
+		    }
+		  });
+  }
+  
+  //다른 버전 열기
+  function versionUpdate(versionLogIdx){
+		console.log(versionLogIdx);
+
+	  $.ajax({
+		    url: '/document/version/update',
+		    type: 'POST',
+		    data: {versionLogIdx: versionLogIdx,
+		    			documentIdx: $("#documentIdx").val()},
+			success:function(result, status, xhr){ //200
+				alert("버전 불러오기 성공");
+			    window.location.href = window.location.href;
+
+		    },
+		    error: function(xhr, status, error) {
+				alert("버전 불러오기 실패");
 		    }
 		  });
   }
@@ -227,7 +250,23 @@
   
   	function del(){
 	  	if(confirm("문서를 휴지통으로 보낼까요?")){
-		  
+			let objectIdx = "d" + $("input[name='documentIdx']").val();
+			console.log(objectIdx);
+			let objectIdxList = new Array();
+			objectIdxList.push(objectIdx);
+			console.log(objectIdxList);
+			$.ajax({
+				url: "/document/list/trash",
+				data: JSON.stringify(objectIdxList),
+				method: "POST",
+				contentType: "application/json",
+				success: function(result, status, xhr){
+					alert("문서를 성공적으로 휴지통에 보냈어요" + result);
+				},
+				error: function(status, xhr, err){
+					alert("문서를 휴지통으로 보내는데 실패했어요");
+				}
+			})
 	  	}
   	}
   //빈공간 클릭시 draft or version sidebar 비활성화 스크립트
@@ -243,6 +282,8 @@
 	    }
 	  });
 	});
+
+	
 </script>
 </body>
 </html>

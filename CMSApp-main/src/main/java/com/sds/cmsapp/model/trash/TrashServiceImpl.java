@@ -1,5 +1,6 @@
 package com.sds.cmsapp.model.trash;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -59,6 +60,7 @@ public class TrashServiceImpl implements TrashService{
 	
 	@Autowired
 	private PublishedVersionDAO publishedVersionDAO;
+	
 
 	@Override
 	public int insert(final Integer documentIdx, final Integer empIdx) {
@@ -86,13 +88,17 @@ public class TrashServiceImpl implements TrashService{
 	public int delete(final Integer trashIdx) throws TrashException {
 		Trash trash = trashDAO.select(trashIdx);
 		int documentIdx = trash.getDocument().getDocumentIdx();
-		if(oneditDAO.selectByDocumentIdx(documentIdx).isEmpty()) {
+		if(!oneditDAO.selectByDocumentIdx(documentIdx).isEmpty()) {
 			throw new TrashException("수정 작업중인 문서입니다");
 		};
 		oneditDAO.deleteByDocumentIdx(documentIdx);
 		trashDAO.delete(trashIdx);
 		bookmarkDAO.deleteByDocumentIdx(documentIdx);
 		statusLogDAO.deleteByDocumentIdx(documentIdx);
+		publishedVersionDAO.deleteByDocumentIdx(documentIdx);
+		documentVersionDAO.deleteByDocumentIdx(documentIdx);
+		versionLogDAO.deleteByDocumentIdx(documentIdx);
+		
 		//publishedVersionD
 		int result = trashDAO.delete(trashIdx);
 		documentService.delete(trash.getDocument().getDocumentIdx()); // 삭제의 책임을 documentService에게
@@ -136,6 +142,30 @@ public class TrashServiceImpl implements TrashService{
 	public int selectCount() {
 		return trashDAO.selectCount();
 	}
+	
+	/**
+	 * 
+	 * @param objectIdxList 문서와 폴더의 id가 섞인 스트링 List ex) f1, f2, d1...
+	 * @param firstLetter 폴더는 f, 문서는 d
+	 * @return 두번째 param이 f 일 경우 폴더의 Integer idxList, 문서일 경우 문서의 Integer idxList
+	 */
+	@Override
+	public List<Integer> seperateObjectList(List<String> objectIdxList, char firstLetter) throws TrashException {
+		if(firstLetter != 'f' && firstLetter != 'd') {
+			throw new TrashException("두번째 인수가 'f' 또는 'd' 가 아닙니다.");
+		}
+		List<Integer> resultIdxList = new ArrayList<>();
+		for(String object : objectIdxList) {
+			if(object.charAt(0) == firstLetter) {
+				String str = object.substring(1);
+				Integer documentIdx = Integer.parseInt(str);
+				resultIdxList.add(documentIdx);
+			}
+		}
+		
+		return resultIdxList;
+	}
+	
 	
 
 }

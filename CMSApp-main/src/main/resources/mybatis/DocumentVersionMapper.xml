@@ -40,4 +40,9 @@
 	<update id="updateStatusByDocumentIdx" parameterType="DocumentVersion">
 		update document_version set status_code = #{masterCode.statusCode} where document_idx = #{document.documentIdx}
 	</update>
+
+	<delete id="deleteByDocumentIdx" parameterType="int">
+		delete from document_version where document_idx = #{documentIdx}
+	</delete>
+
 </mapper>

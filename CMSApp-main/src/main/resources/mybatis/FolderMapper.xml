@@ -4,7 +4,7 @@
 
 	<insert id="insert" parameterType="Folder">
 		insert into folder (parent_folder_idx, folder_name, project_idx)
-		values (#{parentFolder.parentFolderIdx}, #{folderName}, #{project.projectIdx})
+		values (#{parentFolder.folderIdx}, #{folderName}, #{project.projectIdx})
 		<selectKey keyColumn="folder_idx" keyProperty="folderIdx" resultType="int" order="AFTER">
 			select last_insert_id() as folder_idx
 		</selectKey>
@@ -17,13 +17,13 @@
 	<update id="update" parameterType="Folder">
 		update folder
 			<set>
-				<if test="parentFolderIdx != null"> 
+				<if test="parentFolder.folderIdx != null"> 
 					parent_folder_idx = #{parentFolder.folderIdx},
 				</if>
 				<if test="folderName != null">
 					folder_name = #{folderName},
 				</if>
-				<if test="projectIdx != null">
+				<if test="project.projectIdx != null">
 					project_idx = #{project.projectIdx}
 				</if>
 			</set>

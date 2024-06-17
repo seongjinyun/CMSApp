@@ -19,7 +19,10 @@ public interface DocumentVersionDAO {
 	
 	public int insert(final DocumentVersion documentVersion);
 	
+	public int updateStatusByDocumentIdx(final DocumentVersion documentVeresion);
+	
 	public int delete(final int documentVersionIdx);
 	
-	public int updateStatusByDocumentIdx(final DocumentVersion documentVersion);
+	public int deleteByDocumentIdx(final int documentIdx);
+
 }

@@ -11,6 +11,15 @@ import com.sds.cmsapp.domain.VersionLog;
 
 public interface DocumentService {
 	
+	// 일반적인 select
+	public Document select(final int documentIdx);
+	
+	// 범위만큼만 가져오기
+	public List<Document> selectAllByRange(final Map<String, Integer> map);
+	
+	// 기존 selectAll
+	public List<DocumentVersion> selectAllOrigin();
+	
 	/* 모든 문서 조회 */
 	public List<Document> selectAll();
 	
@@ -27,7 +36,7 @@ public interface DocumentService {
 	public int delete(int documentIdx);
 
 	//document/list 파일 조회
-	public List documentListSelect(Map map);
+	public List<DocumentVersion> documentListSelect(final Map<String, Integer> map);
 	
 	// 폴더 안의 문서들을 조회합니다
 	public List<Document> selectByFolderIdx(int folder_idx); 
@@ -41,6 +50,19 @@ public interface DocumentService {
 	// DocumentDTO 안에 versionLog 채워넣기(제목 출력)
 	public Document fillVersionLog(Document document);
 	
+	/**
+	 * 배포된 버전인지 확인 후 boolean 반환
+	 * @Return 배포됐으면 True 아니면 false
+	 */
+	public boolean isPublished(final int doucmentIdx);
+	
 	//DocumentVersion 의 상태 ( 리뷰요청 )
 	public void documentVersionStatusUpdate(DocumentVersion documentVersion);
+	
+	//버전 조회
+	public List<VersionLog> getVersionLogSelect(int documentIdx);
+
+	//문서 버전 관리
+	public int documentVersionUpdate(VersionLog versionLog);
+
 }

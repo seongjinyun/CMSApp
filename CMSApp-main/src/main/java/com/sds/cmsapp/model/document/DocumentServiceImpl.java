@@ -1,8 +1,8 @@
 package com.sds.cmsapp.model.document;
 
+import java.util.ArrayList;
 import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -18,8 +18,8 @@ import com.sds.cmsapp.domain.DocStatus;
 import com.sds.cmsapp.domain.Document;
 import com.sds.cmsapp.domain.RequestDocFilterDTO;
 import com.sds.cmsapp.domain.DocumentVersion;
-import com.sds.cmsapp.domain.Emp;
 import com.sds.cmsapp.domain.Folder;
+import com.sds.cmsapp.domain.Emp;
 import com.sds.cmsapp.domain.ResponseDocDTO;
 import com.sds.cmsapp.domain.StatusLog;
 import com.sds.cmsapp.domain.VersionLog;
@@ -30,6 +30,8 @@ import com.sds.cmsapp.exception.FolderException;
 import com.sds.cmsapp.exception.StatusLogException;
 import com.sds.cmsapp.exception.TrashException;
 import com.sds.cmsapp.exception.VersionLogException;
+import com.sds.cmsapp.model.folder.FolderDAO;
+import com.sds.cmsapp.model.publishing.PublishedVersionDAO;
 import com.sds.cmsapp.model.statuslog.StatusLogDAO;
 import com.sds.cmsapp.model.trash.TrashDAO;
 import com.sds.cmsapp.model.versionlog.VersionLogDAO;
@@ -56,8 +58,40 @@ public class DocumentServiceImpl implements DocumentService {
 	
 	@Autowired
 	private DocumentDetailDAO documentDetailDAO;
-
 	
+	@Autowired
+	private PublishedVersionDAO publishedVersionDAO;
+	
+	@Autowired
+	private FolderDAO folderDAO;
+
+	@Override
+	public Document select(int documentIdx) {
+		return documentDAO.select(documentIdx);
+	}
+	
+	// 모든 문서 조회
+	public List<DocumentVersion> selectAllOrigin() {
+		List<DocumentVersion> resultList = new ArrayList<>();
+		List<Folder> topFolderList = folderDAO.selectTopFolder();
+		for(Folder folder : topFolderList) {
+			Map<String, Integer> map = new HashMap<>();
+			map.put("folderIdx", folder.getFolderIdx());
+			resultList.addAll(documentListSelect(map));
+		}
+		log.warn("기존의 배열의 길이는" + resultList.size());
+		
+		log.warn("필터링 후 배열의 길이는" + resultList.size());
+		return resultList;
+	};
+	
+	public List<Document> selectAllByRange(final Map<String, Integer> map){
+		return documentDAO.selectAllByRange(map);
+	}
+	
+	public List selectAllForDashboard(Map map) {
+		return documentDAO.selectAllForDashboard(map);
+	};
 	/* 모든 문서 조회 */
 	public List<Document> selectAll() {
 		return documentDAO.selectAll();
@@ -266,8 +300,17 @@ public class DocumentServiceImpl implements DocumentService {
     }
 
 	@Override
-	public List documentListSelect(Map map) {
-		return documentDAO.documentListSelect(map);
+	public List<DocumentVersion> documentListSelect(final Map<String, Integer> map) {
+		List<DocumentVersion> resultList = documentDAO.documentListSelect(map);
+		List<Integer> documentIdxInTrashList = trashDAO.selectDocumentIdx();
+
+		for(int i = 0; i < resultList.size(); i++) {
+			DocumentVersion dto = resultList.get(i);
+			if(documentIdxInTrashList.contains(dto.getDocument().getDocumentIdx())){
+				resultList.remove(i);
+			}
+		}
+		return resultList;
 	}
 	
 	//document/detail 문서 상세보기 
@@ -287,7 +330,7 @@ public class DocumentServiceImpl implements DocumentService {
 		return documentDAO.delete(documentIdx);
 	}
 	
-	@Override // 박준형 추가
+	@Override
 	public List<Document> selectByFolderIdx(int folderIdx) {
 		return documentDAO.selectByFolderIdx(folderIdx);
 	}
@@ -326,9 +369,17 @@ public class DocumentServiceImpl implements DocumentService {
 	
 	public void documentVersionStatusUpdate(DocumentVersion documentVersion) {
 		documentDetailDAO.documentVersionStatusUpdate(documentVersion);
-		
 	}
 	
+	//버전관리
+    public List<VersionLog> getVersionLogSelect(int documentIdx) {
+        return documentDetailDAO.getVersionLogSelect(documentIdx);
+    }
+	
+    public int documentVersionUpdate(VersionLog versionLog) {
+    	return documentDetailDAO.documentVersionUpdate(versionLog);
+    }
+    
 	@Override
 	public Document fillVersionLog(final Document document) {
 		DocumentVersion documentVersion = documentVersionDAO.selectByDocumentIdx(document.getDocumentIdx());
@@ -337,4 +388,12 @@ public class DocumentServiceImpl implements DocumentService {
 		return document;
 	}
 	
+	@Override
+	public boolean isPublished(int doucmentIdx) {
+		boolean flag = false;
+		if(publishedVersionDAO.selectByDocumentIdx(doucmentIdx) != null) {
+			flag = true;
+		}
+		return flag;
+	}
 }
