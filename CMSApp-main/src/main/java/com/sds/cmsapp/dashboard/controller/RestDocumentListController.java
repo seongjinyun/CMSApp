@@ -1,8 +1,11 @@
 package com.sds.cmsapp.dashboard.controller;
 
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -12,7 +15,6 @@ import org.springframework.web.servlet.ModelAndView;
 import com.sds.cmsapp.domain.MasterCode;
 import com.sds.cmsapp.domain.Project;
 import com.sds.cmsapp.domain.RequestDocFilterDTO;
-import com.sds.cmsapp.domain.ResponseDocCountDTO;
 import com.sds.cmsapp.domain.ResponseDocDTO;
 import com.sds.cmsapp.exception.DocumentException;
 import com.sds.cmsapp.exception.FolderException;
@@ -38,7 +40,7 @@ public class RestDocumentListController {
 	
 	/* 결재 진행 상태별 문서 수 조회 (휴지통에 있는 문서 제외) */
 	@GetMapping("/dashboard/summary/count")
-	public ResponseDocCountDTO getCountByStatus() {
+	public Map<String, Integer> getCountByStatus() {
 		return documentService.countByStatus();
 	}
 	
@@ -46,7 +48,7 @@ public class RestDocumentListController {
 	@GetMapping("/dashboard/list/entire")
 	public List<ResponseDocDTO> getFilteredList(RequestDocFilterDTO filterDTO) {
 		log.debug("입력받은 상태 코드: " + filterDTO.getStatusList());
-		return documentService.selectFilteredList(filterDTO);
+		return documentService.getFilteredList(filterDTO);
 	}
 	
 	/* 전체 프로젝트 목록 조회 */
@@ -62,10 +64,8 @@ public class RestDocumentListController {
 	}
 	
 	@ExceptionHandler({DocumentException.class, FolderException.class, StatusLogException.class})
-	public ModelAndView handle(RuntimeException e) {
-		ModelAndView mav = new ModelAndView("adminn/error/result");
-		mav.addObject("e", e);
-		return mav;
+	public ResponseEntity<String> handle(RuntimeException e) {
+		return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
 	}
 
 }

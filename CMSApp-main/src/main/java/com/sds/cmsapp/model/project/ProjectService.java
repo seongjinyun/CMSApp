@@ -11,7 +11,7 @@ public interface ProjectService {
 
 	public Project selectByProjectIdx(int projectIdx);
 	public Project selectByProjectName(String projectName);
-	public List selectAll();
+	public List<Project> selectAll();
 	
 	public void delete(Project project);
 }

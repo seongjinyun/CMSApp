@@ -31,6 +31,9 @@ public interface DocumentDAO {
 	@ResultMap("DocumentMap")
 	public Document select(int documentIdx); // 선택 문서 조회
 	
+	@Select("SELECT * FROM document WHERE document_idx = #{documentIdx}")
+	public Document selectByDocumentIdx(int documentIdx);
+	
 	public List<Document> selectByFolderIdx(int folderIdx); // mybatis 연결 부탁드려요~ (박준형)
 
 	public int documentInsert(Document document);

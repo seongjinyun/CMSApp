@@ -2,23 +2,15 @@ package com.sds.cmsapp.model.statuslog;
 
 import java.util.List;
 
-import com.sds.cmsapp.domain.FilterItemDTO;
-import com.sds.cmsapp.domain.RequestDocFilterDTO;
-import com.sds.cmsapp.domain.ResponseDocCountDTO;
-import com.sds.cmsapp.domain.StatusLog;
+import com.sds.cmsapp.domain.PublishedVersion;
 
 public interface StatusLogService {
 	
-//	public StatusLog select(int document_idx);
+	//public StatusLog select(int documentIdx);
 	
-	/* 상태별 문서 수 조회 */
-	//public Integer countByStatus(int statusCode);
+	//public void regist(StatusLog statusLog);
 	
-	/* 필터 조건에 따라 결재 진행 중인 문서 목록 조회 */
-	//public List<StatusLog> selectFilteredListOfLatestRegisteredLog(FilterItemDTO filterItemDTO);
-	
-	/* 결재 상태에 따라 문서 목록 조회 (10개만) */
-	//public List<StatusLog> selectSummaryListOfLatestRegisteredLog(int statusCode);
+	public void registPublishedLog(List<PublishedVersion> publishedVerList, String comments);
 
-	public StatusLog select(int documentIdx);
+	
 }

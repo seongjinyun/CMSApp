@@ -131,30 +131,7 @@ public class SettingsController {
 	public String getMypage() {
 		return "settings/mypage";
 	}
-	
-//	@GetMapping("/settings/mypage/data")
-//	@ResponseBody
-//	public Map<String, Object> getMypageData(@RequestHeader("Authorization") String header, Model model) {
-//	    		
-//		String token = header.replace("Bearer ", "");
-//	    log.debug("Received token: " + token);
-//
-//	    // JWT 토큰에서 Emp 객체를 추출
-//	    Emp emp = jwtValidService.getEmpFromJwt(token);
-//	    EmpDetail empDetail = empDetailService.selectByEmpIdx(emp.getEmpIdx());
-//
-//	    System.out.println("DB에서 전달받은 프로필 이미지 url: " + empDetail.getEmpProfileUrl());
-//	    
-//	    Map<String, Object> data = new HashMap<>();
-//	    data.put("empIdx", emp.getEmpIdx());
-//	    data.put("empName", emp.getEmpName());
-//	    data.put("empId", empDetail.getEmpId());
-//	    data.put("empPw", empDetail.getEmpPw());
-//	    data.put("profileImgUrl", "/profileImg/" + empDetail.getEmpProfileUrl());
-//
-//	    return data;
-//	}
-		
+
 	@GetMapping("/settings/user")
 	public String getUserInfo(@RequestParam(value="currentPage", defaultValue="1") int currentPage, Model model) {
 		

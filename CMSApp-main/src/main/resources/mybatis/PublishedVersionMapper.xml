@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "mybatis-3-mapper.dtd">
-<mapper namespace="com.sds.cmsapp.model.versionlog.PublishedVersionDAO">
+<mapper namespace="com.sds.cmsapp.model.publishing.PublishedVersionDAO">
 
 	<resultMap type="PublishedVersion" id="PublishedVersionMap">
 		<id		column="published_version_idx"		property="publishedVersionIdx"/>
@@ -14,7 +14,7 @@
 	
 	<insert id="insert" parameterType="PublishedVersion">
 		insert into published_version(document_idx, version_log_idx, published_version_name_idx)
-		values(#{document.documentIdx}, #{versionLog.versionLogIdx}, #{publishedVersionName.publishedVersionNameIdx)
+		values(#{document.documentIdx}, #{versionLog.versionLogIdx}, #{publishedVersionName.publishedVersionNameIdx})
 	</insert>
 	
 	<update id="update" parameterType="PublishedVersion">

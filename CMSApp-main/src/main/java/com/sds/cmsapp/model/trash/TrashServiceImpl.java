@@ -21,8 +21,8 @@ import com.sds.cmsapp.model.document.DocumentVersionDAO;
 import com.sds.cmsapp.model.document.OneditDAO;
 import com.sds.cmsapp.model.emp.EmpDAO;
 import com.sds.cmsapp.model.folder.FolderDAO;
+import com.sds.cmsapp.model.publishing.PublishedVersionDAO;
 import com.sds.cmsapp.model.statuslog.StatusLogDAO;
-import com.sds.cmsapp.model.versionlog.PublishedVersionDAO;
 import com.sds.cmsapp.model.versionlog.VersionLogDAO;
 
 @Service
@@ -76,7 +76,7 @@ public class TrashServiceImpl implements TrashService{
 	public int restore(final Integer trashIdx) {
 		Trash trash = trashDAO.select(trashIdx);
 		Document document = trash.getDocument();
-		if(folderDAO.select(document.getFolder().getFolderIdx()) == null) { // 복원됐는데 돌아갈 곳이 없다면
+		if(document.getFolder() == null) { // 복원됐는데 돌아갈 곳이 없다면
 			document.setFolder(folderDAO.selectRestoreFolder());
 			documentDAO.update(document);
 		}

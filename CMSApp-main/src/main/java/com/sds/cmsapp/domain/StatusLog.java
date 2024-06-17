@@ -14,4 +14,16 @@ public class StatusLog {
 	private Document document;
 	private Emp emp;
 	private MasterCode masterCode;
+	
+	public StatusLog() {
+		
+	}
+	
+	public StatusLog(Emp emp, Document document, MasterCode masterCode, String comments) {
+		this.emp = emp;
+		this.document = document;
+		this.masterCode = masterCode;
+		this.comments = comments;
+	}
+	
 }

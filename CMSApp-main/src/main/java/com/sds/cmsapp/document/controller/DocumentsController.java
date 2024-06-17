@@ -125,7 +125,8 @@ public class DocumentsController {
 							            Model model) {
 		DocumentVersion documentVersion  = documentService.documentDetailSelect(documentIdx);
         List<VersionLog> versionLogs = documentService.getVersionLogSelect(documentIdx);
-        
+        List<Folder> folderList = folderService.selectParentList(folderIdx);
+        model.addAttribute("folderList", folderList);
         model.addAttribute("versionLogs", versionLogs);
         model.addAttribute("documentVersion", documentVersion);
         model.addAttribute("folderIdx", folderIdx);
