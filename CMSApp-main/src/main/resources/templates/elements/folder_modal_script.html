@@ -85,25 +85,35 @@
 				var selectedFolderIdx = selectedNode[0].id;
 				console.log('Selected Directory ID:', selectedFolderIdx);
 				
-				let selectedDocumentIdx = [];
-	          	$('input[name="documentIdx"]:checked').each(function() {
-	              selectedDocumentIdx.push($(this).val());
+				let selectedIdxList = [];
+				let folderIdx = $("input[name='folderIdx']").val();
+				
+	          	$('input[name="objectSelect"]:checked').each(function() {
+	              selectedIdxList.push($(this).val());
 	          	});
 	          
-	          	if (selectedDocumentIdx.length < 1){
+	          	if (selectedIdxList.length < 1){
 	        	  	alert("하나 이상의 문서를 선택해주세요");
 	        	  	return;
 	          	}
+	          	
+	          	let request = {
+	          			objectIdxList: selectedIdxList,
+	          			targetFolderIdx: selectedFolderIdx
+	          	};
 
 				// 서버로 folder_idx 값을 전달하는 AJAX 요청
 				$.ajax({
 					method: "PATCH",
 					url: "/document/folder",
 					contentType: "application/json",
-					data: JSON.stringify({ folderIdx: selectedFolderIdx }),
+					data: JSON.stringify(request),
 					success: function (result, status, xhr) {
+						alert("경로 변경에 성공했습니다");
+						location.reload(true);
 					},
 					error: function (status, xhr, err) {
+						alert("경로 변경에 실패했습니다");
 					}
 				});
 			} else {

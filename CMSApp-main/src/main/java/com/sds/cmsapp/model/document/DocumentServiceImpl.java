@@ -389,11 +389,16 @@ public class DocumentServiceImpl implements DocumentService {
 	}
 	
 	@Override
-	public boolean isPublished(int doucmentIdx) {
+	public boolean isPublished(final int doucmentIdx) {
 		boolean flag = false;
 		if(publishedVersionDAO.selectByDocumentIdx(doucmentIdx) != null) {
 			flag = true;
 		}
 		return flag;
 	}
+	
+	@Override
+	public int update(final Document document) {
+		return documentDAO.update(document);
+	};
 }
