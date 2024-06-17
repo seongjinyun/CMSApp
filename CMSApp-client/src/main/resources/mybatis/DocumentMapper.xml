@@ -1,13 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "mybatis-3-mapper.dtd">
 <mapper namespace="com.sds.cmsclient.model.document.DocumentDAO">
-
-
-	<select id="folderAllSelect" parameterType="int" resultType="com.sds.cmsclient.domain.Folder">
-		select * from folder where project_idx = ${projectIdx} and parent_folder_idx is null
+	
+<!-- 	<select id="folderAllSelect" parameterType="int" resultType="com.sds.cmsclient.domain.Folder">
+		select * from folder where project_idx = ${projectIdx}	
+	</select> -->
+	
+	<select id="topFolderSelect" parameterType="int" resultType="com.sds.cmsclient.domain.Folder">
+		select * from folder where project_idx = ${projectIdx}
 	</select>
 	
-	<select id="subFolderSelect" parameterType="int" resultType="int">
+<!-- 	<select id="subFolderSelect" parameterType="int" resultType="int">
 		select parent_folder_idx from folder where parent_folder_idx = #{parent_folder_idx}
-	</select>
+	</select> -->
 </mapper>
