@@ -14,9 +14,12 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 @Configuration
 public class SecurityConfig {
 
-    @Autowired
-    private JwtUtil jwtUtil;
+    public JwtUtil jwtUtil;
 
+    public SecurityConfig(JwtUtil jwtUtil) {
+    	this.jwtUtil = jwtUtil;
+	}
+    
     @Bean 
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
@@ -25,20 +28,29 @@ public class SecurityConfig {
     @Autowired
     private AuthenticationConfiguration authenticationConfiguration;
 
+    
     @Bean
-    public AuthenticationManager authenticationManager() throws Exception {
-        return authenticationConfiguration.getAuthenticationManager();
+    public LoginFilter loginFilter() throws Exception{
+    	return new LoginFilter(jwtUtil, authenticationConfiguration.getAuthenticationManager());
     }
-
+    
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity) throws Exception {
-        httpSecurity
+            	
+    	httpSecurity
             .authorizeHttpRequests(auth -> auth
-                .anyRequest().permitAll()
-            )
-            .csrf(csrf -> csrf.disable())
-            .formLogin(form -> form.disable())
-            .addFilterBefore(new LoginFilter(authenticationManager(), jwtUtil), UsernamePasswordAuthenticationFilter.class);
+            	
+            	.requestMatchers("/admin/**").permitAll()  // static
+            	.requestMatchers("/loginForm").permitAll() // 로그인 폼 
+            	.requestMatchers("/emp/login").permitAll() // 로그인 과정
+            	
+            	.anyRequest().permitAll()	
+            	
+            );
+    	httpSecurity.csrf(csrf -> csrf.disable());
+    	httpSecurity.formLogin(form -> form.disable());
+    	
+    	httpSecurity.addFilterBefore(loginFilter(), UsernamePasswordAuthenticationFilter.class);
 
         return httpSecurity.build();
     }

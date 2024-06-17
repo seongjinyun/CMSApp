@@ -1,17 +1,16 @@
 package com.sds.cmsapp.settings.controller;
 
-import java.io.File;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.sds.cmsapp.common.Pager;
 import com.sds.cmsapp.domain.Authority;
@@ -27,7 +26,6 @@ import com.sds.cmsapp.model.relationship.DeptProjectService;
 import com.sds.cmsapp.model.relationship.RoleAuthorityService;
 import com.sds.cmsapp.model.role.RoleService;
 
-import io.jsonwebtoken.JwtException;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
@@ -98,36 +96,42 @@ public class SettingsController {
 		return "settings/dept_project";
 	}
 	
-//	public String getMypageInfo(@RequestParam("empIdx") int empIdx, Model model) {
-	@GetMapping("/settings/mypage")
-	public String getMypageInfo(@RequestParam(value="token") String token, Model model) {
-		
-		// 로그 추가
-	    log.debug("Received token: " + token);		
-		
-		// 부서 이름과 index 가져오기
-		List deptList = deptService.selectAll();
-		model.addAttribute("deptList", deptList);
-		
-		// 역할 이름과 index 가져오기
-		List roleList = roleService.selectAll();
-		model.addAttribute("roleList", roleList);
-		
-		// JWT 토큰에서 Emp 객체를 추출
-        Emp emp = jwtValidService.getEmpFromJwt(token);
-        EmpDetail empDetail = empDetailService.selectByEmpIdx(emp.getEmpIdx());
-        model.addAttribute("emp", emp);
-        model.addAttribute("empDetail", empDetail);
-        System.out.println("DB에서 전달받은 프로필 이미지 url: " + empDetail.getEmpProfileUrl());
+	@GetMapping("/settings/mypage/info")
+	@ResponseBody
+	public Map<String, Object> getMypageInfo(@RequestHeader(name="Authorization") String header) {
+	    String token = header.replace("Bearer ", "");
+	    log.debug("Received token: " + token);
 
-        String profileImgUrl = "/profileImg/" + empDetail.getEmpProfileUrl();
-        model.addAttribute("profile_img_url", profileImgUrl);
+	    // 부서 이름과 index 가져오기
+	    List deptList = deptService.selectAll();
+	    
+	    // 역할 이름과 index 가져오기
+	    List roleList = roleService.selectAll();
+	    
+	    // JWT 토큰에서 Emp 객체를 추출
+	    Emp emp = jwtValidService.getEmpFromJwt(token);
+	    EmpDetail empDetail = empDetailService.selectByEmpIdx(emp.getEmpIdx());
 
-        System.out.println("File exists: " + new File("src/main/resources/static/profileImg/" + empDetail.getEmpProfileUrl()).exists());
-        
-        return "settings/mypage";
+	    String profileImgUrl = "/profileImg/" + empDetail.getEmpProfileUrl();
+
+	    Map<String, Object> response = new HashMap<>();
+	    response.put("empIdx", emp.getEmpIdx());
+	    response.put("empName", emp.getEmpName());
+	    response.put("empId", empDetail.getEmpId());
+	    response.put("empPw", empDetail.getEmpPw());
+	    response.put("deptList", deptList);
+	    response.put("roleList", roleList);
+	    response.put("profileImgUrl", profileImgUrl);
+	    response.put("emp", emp);
+
+	    return response;
 	}
-	
+
+	@GetMapping("/settings/mypage")
+	public String getMypage() {
+		return "settings/mypage";
+	}
+
 	@GetMapping("/settings/user")
 	public String getUserInfo(@RequestParam(value="currentPage", defaultValue="1") int currentPage, Model model) {
 		

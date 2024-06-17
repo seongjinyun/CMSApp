@@ -10,4 +10,6 @@ public interface EmpDetailService {
 	public void update(EmpDetail empDetail);
 	
 	public Emp selectByLoginData(EmpDetail empDetail);
+	public EmpDetail selectByUid(String empd);
+	public int selectEmpIdxByUid(String empId);
 }

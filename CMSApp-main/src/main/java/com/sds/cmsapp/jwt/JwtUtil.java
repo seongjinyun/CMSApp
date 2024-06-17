@@ -15,10 +15,12 @@ import org.springframework.stereotype.Component;
 
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
+import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 @Component
+@Data
 public class JwtUtil {
 	
 	private PrivateKey privateKey; // 개인키 - 서명에 사용할 예정 
