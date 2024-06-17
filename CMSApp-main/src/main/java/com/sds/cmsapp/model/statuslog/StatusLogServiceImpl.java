@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.sds.cmsapp.domain.DocStatus;
@@ -12,6 +13,7 @@ import com.sds.cmsapp.domain.Emp;
 import com.sds.cmsapp.domain.MasterCode;
 import com.sds.cmsapp.domain.PublishedVersion;
 import com.sds.cmsapp.domain.StatusLog;
+import com.sds.cmsapp.exception.StatusLogException;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -26,8 +28,9 @@ public class StatusLogServiceImpl implements StatusLogService {
 //		return statusLogDAO.select(documentIdx);
 //	};
 	
-	@Transactional
-	public void registPublishedLog(List<PublishedVersion> publishedVerList, String comments) {
+	@Transactional(propagation = Propagation.REQUIRED)
+	public void registPublishedLog(List<PublishedVersion> publishedVerList, String comments)
+		throws StatusLogException {
 		
 		for (PublishedVersion publishedVer : publishedVerList) {
 			
@@ -38,9 +41,8 @@ public class StatusLogServiceImpl implements StatusLogService {
 			StatusLog statusLog = new StatusLog(emp, doc, masterCode, comments);
 			
 			int result = statusLogDAO.insert(statusLog);
-			if (result > 0) {
-				log.debug("상태 로그 삽입 성공");
-			}
+			if (result > 0) log.debug("상태 로그 삽입 성공");
+			else throw new StatusLogException("status_log 테이블에 배포 문서 로그 추가 실패");
 			
 		}
 	}

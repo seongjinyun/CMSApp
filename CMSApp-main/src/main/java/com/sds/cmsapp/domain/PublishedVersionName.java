@@ -1,17 +1,15 @@
 package com.sds.cmsapp.domain;
 
-import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Data
+@NoArgsConstructor
 public class PublishedVersionName {
 	private int publishedVersionNameIdx;
 	private String publishedVersionName;
 	
-	 @Builder
-	public PublishedVersionName(int publishedVersionNameIdx, String publishedVersionName) {
-		super();
-		this.publishedVersionNameIdx = publishedVersionNameIdx;
+	public PublishedVersionName(String publishedVersionName) {
 		this.publishedVersionName = publishedVersionName;
 	}
 	

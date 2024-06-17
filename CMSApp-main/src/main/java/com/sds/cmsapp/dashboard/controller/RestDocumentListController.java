@@ -4,6 +4,8 @@ import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -62,10 +64,8 @@ public class RestDocumentListController {
 	}
 	
 	@ExceptionHandler({DocumentException.class, FolderException.class, StatusLogException.class})
-	public ModelAndView handle(RuntimeException e) {
-		ModelAndView mav = new ModelAndView("adminn/error/result");
-		mav.addObject("e", e);
-		return mav;
+	public ResponseEntity<String> handle(RuntimeException e) {
+		return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
 	}
 
 }

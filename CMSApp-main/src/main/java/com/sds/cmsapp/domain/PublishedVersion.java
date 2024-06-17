@@ -1,23 +1,26 @@
 package com.sds.cmsapp.domain;
 
-import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
+
 
 @Data
+@NoArgsConstructor
 public class PublishedVersion {
 	private int publishedVersionIdx;
 	private Document document;
 	private VersionLog versionLog;
 	private PublishedVersionName publishedVersionName;
 	
-	@Builder
-	public PublishedVersion(int publishedVersionIdx, Document document, VersionLog versionLog,
-			PublishedVersionName publishedVersionName) {
-		this.publishedVersionIdx = publishedVersionIdx;
+	public PublishedVersion(Document document, VersionLog versionLog) {
+		this.document = document;
+		this.versionLog = versionLog;
+	}
+	
+	public PublishedVersion(Document document, VersionLog versionLog, PublishedVersionName publishedVersionName) {
 		this.document = document;
 		this.versionLog = versionLog;
 		this.publishedVersionName = publishedVersionName;
 	}
-	
 	
 }

@@ -214,10 +214,9 @@ div.table-detail, span.table-detail {
 		};
 
 		/* 배포 완료 문서 목록 가져오기 */
-		function getFilteredData() {
+		function getWaitingList() {
 			// url 쿼리 스트링 설정
-			let statusList = ["Published", "Reviewed"];
-			let url = "/dashboard/list/entire?statusList=" + statusList;
+			let url = "/admin/dashboard/publishing/waiting-list";
 			
 			// 데이터 테이블 적용
 			$("#table-filtered").DataTable({
@@ -228,15 +227,8 @@ div.table-detail, span.table-detail {
 				responsive: true,
 				destroy: true,
 				columns: [
-					{ data: "projectName", title: "프로젝트", width: '10%'},
-					{ data: "folderName", title: "폴더", width: '10%'},
-					{ data: "title", title: "제목", width: '15%'},
-					{ data: "version" , title: "버전", width: '5%'},
-					{ data: "deptName" , title: "부서", width: '10%'},
-					{ data: "empName" , title: "사원", width: '10%'},
-					{ data: "statusName" , title: "상태", width: '10%'},
-					{ data: "comments" , title: "코멘트", width: '20%'},
-					{ data: "regdate" , title: "일자", width: '10%'}
+					{ data: "document.documentIdx", title: "문서 번호", width: '30%'},
+					{ data: "versionLog.versionLogIdx", title: "버전 로그 idx", width: '70%'},
 				],
 				ajax: {
 					url: url,
@@ -254,7 +246,7 @@ div.table-detail, span.table-detail {
 		function publishDocument(publishedVersionName, comments) {
 			$.ajax({
 	            type: "POST",
-	            url: "/admin/dashboard/publish/new",
+	            url: "/admin/dashboard/publishing/new",
 	            data: {
 	            	'publishedVersionName' : publishedVersionName,
 	            	'comments': comments
@@ -269,7 +261,7 @@ div.table-detail, span.table-detail {
 		}
 
 		$(function() {
-			//getFilteredData();
+			getWaitingList();
 			
 			$("#btn-publish").click(function(){
 				

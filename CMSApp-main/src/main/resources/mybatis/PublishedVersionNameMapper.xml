@@ -7,9 +7,8 @@
 		values(#{publishedVersionName})
 		<selectKey
 			keyColumn="published_version_name_idx" resultType="int"
-			keyProperty="publishedVersionNameIdx" order="BEFORE">
-			select IFNULL(MAX(published_version_name_idx), 0) + 1
-			FROM published_version_name
+			keyProperty="publishedVersionNameIdx" order="AFTER">
+				select last_insert_id() as product_idx 
 		</selectKey>
 	</insert>
 	

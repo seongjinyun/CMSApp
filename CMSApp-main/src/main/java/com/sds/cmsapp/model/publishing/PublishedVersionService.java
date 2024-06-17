@@ -8,7 +8,7 @@ import com.sds.cmsapp.domain.PublishedVersionName;
 
 public interface PublishedVersionService {
 	
-	//public List<PublishedVersion> selectWaitingQueue();
+	public List<PublishedVersion> selectWaitingQueue();
 	
 	public List<PublishedVersion> selectWaitingQueue(PublishedVersionName publishedVersionName);
 	

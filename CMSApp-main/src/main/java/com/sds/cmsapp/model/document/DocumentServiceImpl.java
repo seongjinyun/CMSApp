@@ -76,6 +76,7 @@ public class DocumentServiceImpl implements DocumentService {
 		Integer inReviewCount = 0;
 		Integer reviewedCount = 0;
 		Integer rejectedCount = 0;
+		Integer publishedCount = 0;
 		
 		if (documentVersionDAO.selectCountByStatus(DocStatus.IN_REVIEW.getStatusCode()) != null) 
 			inReviewCount = documentVersionDAO.selectCountByStatus(DocStatus.IN_REVIEW.getStatusCode()).getDocCount();
@@ -83,10 +84,13 @@ public class DocumentServiceImpl implements DocumentService {
 			inReviewCount = documentVersionDAO.selectCountByStatus(DocStatus.REVIEWED.getStatusCode()).getDocCount();
 		if (documentVersionDAO.selectCountByStatus(DocStatus.REJECTED.getStatusCode()) != null) 
 			inReviewCount = documentVersionDAO.selectCountByStatus(DocStatus.REJECTED.getStatusCode()).getDocCount();
+		if (documentVersionDAO.selectCountByStatus(DocStatus.PUBLISHED.getStatusCode()) != null) 
+			publishedCount = documentVersionDAO.selectCountByStatus(DocStatus.PUBLISHED.getStatusCode()).getDocCount();
 		
 		map.put(DocStatus.IN_REVIEW.getStatusNameEn(), inReviewCount);
 		map.put(DocStatus.REVIEWED.getStatusNameEn(), reviewedCount);
 		map.put(DocStatus.REJECTED.getStatusNameEn(), rejectedCount);
+		map.put(DocStatus.PUBLISHED.getStatusNameEn(), publishedCount);
 		log.debug("map의 크기: " + map.size());
 		return map;
 	}
