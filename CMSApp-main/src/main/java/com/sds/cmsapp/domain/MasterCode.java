@@ -16,4 +16,8 @@ public class MasterCode {
 		this.statusCode = statusCode;
 	}
 	
+	public MasterCode(String statusName) {
+		this.statusName = statusName;
+	}
+	
 }

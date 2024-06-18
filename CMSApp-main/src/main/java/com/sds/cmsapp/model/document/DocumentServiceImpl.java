@@ -115,9 +115,9 @@ public class DocumentServiceImpl implements DocumentService {
 		if (documentVersionDAO.selectCountByStatus(DocStatus.IN_REVIEW.getStatusCode()) != null) 
 			inReviewCount = documentVersionDAO.selectCountByStatus(DocStatus.IN_REVIEW.getStatusCode()).getDocCount();
 		if (documentVersionDAO.selectCountByStatus(DocStatus.REVIEWED.getStatusCode()) != null) 
-			inReviewCount = documentVersionDAO.selectCountByStatus(DocStatus.REVIEWED.getStatusCode()).getDocCount();
+			reviewedCount = documentVersionDAO.selectCountByStatus(DocStatus.REVIEWED.getStatusCode()).getDocCount();
 		if (documentVersionDAO.selectCountByStatus(DocStatus.REJECTED.getStatusCode()) != null) 
-			inReviewCount = documentVersionDAO.selectCountByStatus(DocStatus.REJECTED.getStatusCode()).getDocCount();
+			rejectedCount = documentVersionDAO.selectCountByStatus(DocStatus.REJECTED.getStatusCode()).getDocCount();
 		if (documentVersionDAO.selectCountByStatus(DocStatus.PUBLISHED.getStatusCode()) != null) 
 			publishedCount = documentVersionDAO.selectCountByStatus(DocStatus.PUBLISHED.getStatusCode()).getDocCount();
 		

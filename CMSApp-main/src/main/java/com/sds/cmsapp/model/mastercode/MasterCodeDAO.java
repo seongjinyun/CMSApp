@@ -16,6 +16,9 @@ public interface MasterCodeDAO {
 	@Select("SELECT * FROM mastercode WHERE status_code = #{statusCode}")
 	public MasterCode select(int statusCode); 
 	
+	@Select("SELECT * FROM mastercode WHERE status_name = #{statusName}")
+	public MasterCode selectByStatusName(String statusName);
+	
 	@Select("SELECT * FROM mastercode")
 	public List<MasterCode> selectAll();
 

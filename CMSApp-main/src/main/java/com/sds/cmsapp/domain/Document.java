@@ -20,4 +20,12 @@ public class Document {
 	
 	// 제목을 출력하기 위한 객체
 	private VersionLog versionLog;
+	
+	public Document() {
+
+	}
+	
+	public Document(int documentIdx) {
+		this.documentIdx = documentIdx;
+	}
 }

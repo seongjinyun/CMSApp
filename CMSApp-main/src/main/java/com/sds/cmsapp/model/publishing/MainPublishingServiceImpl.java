@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.sds.cmsapp.domain.Emp;
 import com.sds.cmsapp.domain.PublishedVersion;
 import com.sds.cmsapp.domain.PublishedVersionName;
 import com.sds.cmsapp.domain.RequestPublishingDTO;
@@ -44,11 +45,11 @@ public class MainPublishingServiceImpl implements MainPublishingService {
 		publishedVersionService.registPublishedVersion(publishedVerList);
 		
 		// document_version 테이블에서 배포한 문서의 상태 변경하기
-		documentVersionService.changeStatusOfPublishedDoc(publishedVerList);
+		documentVersionService.changeStatusOfPublishedDocList(publishedVerList);
 		
 		// status_log 테이블에 배포한 문서 로그 쌓기
-		// 사원 세션 정보 불러오고 나면 사원 정보도 추가하기
-		statusLogService.registPublishedLog(publishedVerList, publishingDTO.getComments());
+		// 사원 세션 정보 불러오고 나면 사원 정보도 추가하기. 지금은 임시로 1번 사원 넣어놓았음
+		statusLogService.registPublishedLog(publishedVerList, publishingDTO.getComments(), new Emp(1));
 		
 	}
 }

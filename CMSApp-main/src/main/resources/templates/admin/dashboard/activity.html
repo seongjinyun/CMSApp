@@ -50,6 +50,7 @@ div.table-detail, span.table-detail {
 	color: gray;
 }
 
+
 </style>
 </head>
 
@@ -402,13 +403,63 @@ div.table-detail, span.table-detail {
 	            "sortDescending" : " :  내림차순 정렬"        
 	            }
 			};
+			
+			let statusList = {
+					"inReview" : "리뷰 중",
+					"reviewed" : "리뷰 완료",
+					"rejected" : "반려"
+ 			}
+			
+
+			function expandRow(obj) {
+				obj.parentNode.parentNode.nextSibling.style.display = "table-row";						
+			}
+			
+			function changeStatus(obj, toStatus) {
+				let isContinue = true;
+				let documentIdx = obj.parentNode.parentNode.querySelector("input[name='documentIdx']").value.trim();
+				let comments = obj.parentNode.parentNode.querySelector("input[name='comments']").value.trim();
+				if (comments == "") {
+					isContinue = alert("코멘트를 입력하지 않았습니다. 그래도 진행하시겠습니까??");
+				}
+				
+				if (isContinue) {
+					alert(comments);
+					alert(statusList[toStatus]);
+					
+					let formData = {
+							"comments": comments,
+							"statusName": statusList[toStatus]
+					}
+					
+					
+					$.ajax({
+						type: "POST",
+						url: "/admin/document/" + documentIdx + "/status",
+						data: formData,
+						success: function(result, status, xhr) {
+							alert("상태 변경 성공!");
+							
+						}
+					})
+					
+					
+				}
+				
+				//let form = obj.parentNode.parentNode.parentNode
+				//test = form;
+				
+				
+			}
+
+			
 
 		/* 결재 상태에 따른 문서 개수만 가져오기 */
 		function getSummaryCount() {
 			$.ajax({
-				type:"GET"  //전송타입
-				, url:"/dashboard/summary/count"
-				, success: function (result, status, xhr) {
+				type:"GET", //전송타입
+				url:"/dashboard/summary/count",
+				success: function (result, status, xhr) {
 						$("#box-in_review h3").html(result['inReview']); // 리뷰 대기 문서 수 표시
 						$("#box-reviewed h3").html(result['reviewed']); // 리뷰 완료 문서 수 표시
 						$("#box-rejected h3").html(result['rejected']); // 반려 문서 수 표시
@@ -433,36 +484,56 @@ div.table-detail, span.table-detail {
 /* 					if (result.length == 0) {
 						tr = "<tr><td colspan='6'>내용이 없습니다.</td></tr>";
 					} */
-					
-					// 배지 색 한번만 결정
-					// 숫자로 받지 않을 수 있는 방법 고민하기
-					let statusName = statusList[0];
-					let statusBadge = null;
-					if (statusName == "리뷰 중") statusBadge = "badge-success";
-					else if (statusName == "리뷰 완료") statusBadge = "badge-info";
-					else if (statusName == "반려") statusBadge = "badge-danger";
+						
+					let badgeCol = {
+							"리뷰 중" : "badge-success",
+							"리뷰 완료" : "badge-info",
+							"반려" : "badge-danger"
+					};
 					
 					// 차후 10건까지만 보여주는 것으로 변경 예정
+					let isAble = {
+							"리뷰 중" : "",
+							"리뷰 완료" : "disabled",
+							"반려" : "disabled"
+					}
 					for (let i = 0; i < result.length; i++) {
-						tr += `
-							<tr>
+						tr += `<tr>
 								<td>${i+1}</td>
 								<td>
-									<a href="/document/detail?documentIdx=${result[i].documentIdx}&folderIdx=${result[i].folderIdx}">${result[i].title}</a> <span class="table-detail">ver.${result[i].version}</span>
+									<a href="/document/detail?documentIdx=${result[i].documentIdx}&folderIdx=${result[i].folderIdx}">${result[i].title}</a> 
+									<span class="table-detail">ver.${result[i].version}</span>
 									<div class="table-detail">${result[i].projectName} > ${result[i].folderName}</div>
 								</td>
-								<td>
-									${result[i].empName}
-									<div class="table-detail">${result[i].deptName}</div>
-								</td>
-								<td><span class="badge ${statusBadge}">${result[i].statusName}</span></td>
-								<td>${result[i].comments}
-								</td>
+								<td>${result[i].empName}<div class="table-detail">${result[i].deptName}</div></td>
+								<td><span class="badge ${badgeCol[result[i].statusName]}">${result[i].statusName}</span></td>
+								<td>${result[i].comments}</td>
 								<td>${result[i].regdate}</td>
-							</tr>
-						`;
+								<td><button id="${result[i].documentIdx}" type="button" class="btn btn-sm btn-primary ${isAble[result[i].statusName]}" onClick="expandRow(this)">상태 변경</button></td>
+							</tr>`;
+						
+						if (result[i].statusName == "리뷰 중") {
+							tr += `<tr style="display: none">
+									<td colspan="7">
+										<form class="form-status-change">
+										<div class="row pl-2 pr-2">
+												<div class="col-md-10">
+													<input type="hidden" name="documentIdx" value="${result[i].documentIdx}">
+													<label for="status-comments">코멘트</label>
+													<input class="d-inline form-control w-75" type="text" id="comments" name="comments">
+												</div>
+												<div class="col-md-2">
+													<button type="button" class="btn btn-sm btn-primary btn-to-reviewed" onClick="changeStatus(this, 'reviewed')">리뷰 완료하기</button>
+													<button type="button" class="btn btn-sm btn-primary btn-to-rejected" onClick="changeStatus(this, 'rejected')">반려하기</button>
+												</div>
+										</div>
+										</form>
+									</td>
+								</tr>`;
+						}
 					}
 					preview.html(tr);
+					
 				}, error: function (xhr, status, e) {
 					console.log("error", e);
 				}
@@ -504,7 +575,7 @@ div.table-detail, span.table-detail {
 		            }, 	error: function(xhr, status, err) {
 		            	alert('통신 실패!!!');
 					}
-				}
+				} 
 			});
 		}
 
@@ -658,6 +729,8 @@ div.table-detail, span.table-detail {
 /* 			setTimeout(function(){
 	           	getFilteredData(null, null, null, null); // 초기화
 			}, 2000); */
+			
+			
 		});
 	</script>
 

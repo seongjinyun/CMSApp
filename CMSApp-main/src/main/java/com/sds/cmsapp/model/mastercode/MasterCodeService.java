@@ -8,4 +8,6 @@ public interface MasterCodeService {
 
 	public List<MasterCode> selectAll();
 	
+	public MasterCode selectByStatusName(String statusName);
+	
 }
