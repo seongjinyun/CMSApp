@@ -28,8 +28,9 @@
 	<select id="selectEmptyDept" resultType="Dept">
 		SELECT *
 		FROM dept d
+		LEFT JOIN emp e ON d.dept_idx = e.dept_idx
 		LEFT JOIN dept_project dp ON d.dept_idx = dp.dept_idx
-		WHERE dp.project_idx IS NULL
+		WHERE e.emp_idx IS NULL AND dp.project_idx IS NULL;
 	</select>
 	
 	<!-- 어느 부서도 관리하지 않는 프로젝트 조회 -->

@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -58,7 +59,7 @@ public class SettingsController {
 	
     @Autowired
     private JwtValidService jwtValidService;
-	
+    
 	@GetMapping("/loginForm")
 	public String getLoginForm() {
 		System.out.println("로그인 폼 요청");

@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "mybatis-3-mapper.dtd">
+<mapper namespace="com.sds.cmssettings.model.project.ProjectDAO">
+
+	<!-- 프로젝트 추가 -->
+	<insert id="insert" parameterType="Project">
+	    insert into project(project_name)
+	    values(#{projectName});
+	    <selectKey keyColumn="project_idx" keyProperty="projectIdx" resultType="int" order="AFTER">
+	        select last_insert_id() as project_idx
+	    </selectKey>
+	</insert>
+	
+	<!-- project_idx가 가리키는 프로젝트 조회 -->
+	<select id="selectByProjectIdx" parameterType="int" resultType="Project">
+		select * from project where project_idx=#{projectIdx}
+	</select>
+	
+	<!-- admin dashboard의 프로젝트 필터를 위한 select -->
+	<select id="selectAll" resultType="Project">
+		select * from project
+	</select> 
+	
+	<delete id="delete" parameterType="Project">
+		delete from project where project_idx=#{projectIdx}
+	</delete>
+	
+</mapper>
