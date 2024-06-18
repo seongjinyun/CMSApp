@@ -1,60 +1,69 @@
 package com.sds.cmssettings.common;
 
-/*
-import java.io.File;
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
 
-import javax.servlet.ServletContext;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
-import com.sds.cmssettings.domain.Movie;
+import com.sds.cmssettings.domain.EmpDetail;
 import com.sds.cmssettings.exception.UploadException;
 
-// 파일과 관련된 업무 전담
-@Component
+//파일과 관련된 업무를 전담하는 객체 
+@Service
 public class FileManager {
 	
-	// jsp에서 application 내장 객체에 해당하는 servletContext 자료형을 스프링이 메모리에서 관리
-	// autowired로 자동 주입
-	@Autowired
-	private ServletContext servletContext;
+	@Value("${file.upload-dir}")
+    private String savePath;
 	
-	@Autowired
-	private String savePath;
-	
-	// 확장자 반환
+	// 확장자 반환 
 	public String getExt(String path) {
-		return path.substring(path.lastIndexOf(".")+1, path.length());
+		return path.substring(path.lastIndexOf(".")+1 , path.length());
 	}
 	
-	// 파일명 생성
+	// 파일명 생성 
 	public String createFilename(String filename) {
-		long time = System.currentTimeMillis();
+		// 파일명 만들기 
+		long time = System.currentTimeMillis(); //34234234234
 		String ext = getExt(filename);
+		
 		return time+"."+ext;
 	}
 	
-	// 파일 저장, 파일명 반환
-	public String save(Movie movie) throws UploadException { // Movie 내의 MultipartFile 사용
-		MultipartFile file = movie.getFile(); // 업로드된 파일이 저장된 객체
-		String realPath = null;
-		String newName = null;
+	// 파일저장(웹서버에 저장)
+	public String save(EmpDetail empDetail) throws UploadException{
+		// MultipartFile을 꺼내어, 하드디스크에 저장 
+		MultipartFile file = empDetail.getFile(); //업로드된 파일이 저장된 객체 꺼내기
+		String newName = createFilename(file.getOriginalFilename());
+		
 		try {
-			realPath = servletContext.getRealPath(savePath);
-			// System.out.println(realPath);
-			newName = createFilename(file.getOriginalFilename());
-			file.transferTo(new File(realPath+newName));
-		} catch (IllegalStateException | IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-			throw new UploadException("업로드 실패", e);
-		}
-		return realPath+newName;
+			System.out.println("Save Path: "+savePath);
+			Path path = Paths.get(savePath);
+			
+			// 저장 경로가 존재하지 않으면 생성
+            if (!Files.exists(path)) {
+                Files.createDirectories(path);
+            }
+			
+            // 파일을 저장할 경로 설정
+            Path filePath = Paths.get(savePath, newName);
+            // 파일을 지정된 경로에 저장
+            Files.copy(file.getInputStream(), filePath, StandardCopyOption.REPLACE_EXISTING);
+			// file.transferTo(new File(savePath + File.separator + newName));
+            // 파일에 접근할 URL 생성
+            String fileUrl = newName;
+            
+            System.out.println("DB에 입력되는 파일 url 값: "+fileUrl);
+            return fileUrl;
+            
+		} catch (IOException e) {
+            e.printStackTrace();
+            throw new UploadException("파일 업로드 실패", e);
+        }
 	}
 	
 }
-
-*/

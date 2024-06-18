@@ -61,7 +61,7 @@
 	<update id="update" parameterType="Emp">
 		update emp
 		set
-		emp_name=#{emp_name}, dept_idx=#{dept.deptIdx},
+		emp_name=#{empName}, dept_idx=#{dept.deptIdx},
 		role_code=#{role.roleCode}
 		where emp_idx=#{empIdx}
 	</update>

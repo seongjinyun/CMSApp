@@ -1,0 +1,19 @@
+package com.sds.cmssettings.domain;
+
+import lombok.Data;
+
+@Data
+public class MasterCode {
+	private int masterCodeIdx;
+	private String statusName;
+	private int statusCode;
+	
+	public MasterCode() {
+		
+	}
+	
+	public MasterCode(int statusCode) {
+		this.statusCode = statusCode;
+	}
+	
+}
