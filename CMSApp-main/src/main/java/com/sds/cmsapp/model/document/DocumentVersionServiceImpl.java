@@ -28,8 +28,16 @@ public class DocumentVersionServiceImpl implements DocumentVersionService {
 		return documentVersionDAO.selectByDocumentIdx(document_idx);
 	}
 	
+	@Transactional
+	public void changeStatusOne(DocumentVersion documentVersion) throws DocumentVersionException {
+		int result = documentVersionDAO.updateStatusByDocumentIdx(documentVersion);
+		if (result > 0) log.debug("document_version 테이블의 상태 업데이트 성공");
+		else throw new DocumentVersionException("document_version 테이블 상태 업데이트 실패");
+		
+	}
+	
 	@Transactional(propagation = Propagation.REQUIRED)
-	public void changeStatusOfPublishedDoc(List<PublishedVersion> publishedVersionList)
+	public void changeStatusOfPublishedDocList(List<PublishedVersion> publishedVersionList)
 		throws DocumentVersionException{
 		
 		for (PublishedVersion publishedVer : publishedVersionList) {
@@ -41,9 +49,6 @@ public class DocumentVersionServiceImpl implements DocumentVersionService {
 			if (resultOfUpdatingStatus > 0) log.debug("document_version 테이블의 상태 업데이트 성공");
 			else throw new DocumentVersionException("document_version 테이블 상태 업데이트 실패");
 		}
-		
-		
-		
 	}
 
 }

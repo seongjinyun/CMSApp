@@ -28,14 +28,20 @@ public class StatusLogServiceImpl implements StatusLogService {
 //		return statusLogDAO.select(documentIdx);
 //	};
 	
+	@Transactional
+	public void registOne(StatusLog statusLog) throws StatusLogException {
+		int result = statusLogDAO.insert(statusLog);
+		if (result > 0) log.debug("상태 로그 삽입 성공");
+		else throw new StatusLogException("status_log 테이블에 배포 문서 로그 추가 실패");
+	}
+	
 	@Transactional(propagation = Propagation.REQUIRED)
-	public void registPublishedLog(List<PublishedVersion> publishedVerList, String comments)
+	public void registPublishedLog(List<PublishedVersion> publishedVerList, String comments, Emp emp)
 		throws StatusLogException {
 		
 		for (PublishedVersion publishedVer : publishedVerList) {
 			
 			Document doc = publishedVer.getDocument();
-			Emp emp = new Emp(1); // 임시로 지정
 			MasterCode masterCode = new MasterCode(DocStatus.PUBLISHED.getStatusCode());
 			
 			StatusLog statusLog = new StatusLog(emp, doc, masterCode, comments);

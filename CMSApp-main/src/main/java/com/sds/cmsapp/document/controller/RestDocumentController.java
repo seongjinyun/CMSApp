@@ -20,7 +20,9 @@ import org.springframework.web.bind.annotation.RestController;
 import com.sds.cmsapp.domain.Document;
 import com.sds.cmsapp.domain.DocumentRequest;
 import com.sds.cmsapp.domain.DocumentVersion;
+import com.sds.cmsapp.domain.Emp;
 import com.sds.cmsapp.domain.Folder;
+import com.sds.cmsapp.domain.MasterCode;
 import com.sds.cmsapp.domain.VersionLog;
 import com.sds.cmsapp.exception.DocumentException;
 import com.sds.cmsapp.exception.FolderException;
@@ -29,6 +31,7 @@ import com.sds.cmsapp.model.document.DocumentService;
 import com.sds.cmsapp.model.document.DocumentVersionService;
 import com.sds.cmsapp.model.folder.FolderService;
 import com.sds.cmsapp.model.trash.TrashService;
+import com.sds.cmsapp.model.updating.MainUpdatingStatusService;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -47,6 +50,9 @@ public class RestDocumentController {
 	
 	@Autowired
 	private DocumentVersionService documentVersionService;
+	
+	@Autowired
+	private MainUpdatingStatusService mainUpdatingStatusService;
 	
 
 	@PostMapping("/document/save")
@@ -192,12 +198,15 @@ public class RestDocumentController {
 	
 	//리뷰요청
 	@PostMapping("/document/review/request")
-	public ResponseEntity reviewRequest(@RequestParam("documentIdx") int documentIdx) {
-		DocumentVersion documentVersion  = documentService.documentDetailSelect(documentIdx);
-		documentVersion.getDocument().setDocumentIdx(documentIdx);
+	public ResponseEntity reviewRequest(@RequestParam("documentIdx") int documentIdx,
+														@RequestParam("comments") String comments) {
+		Emp emp = new Emp(1); // 임시 지정
+		Document document = new Document(documentIdx);
+		MasterCode masterCode = new MasterCode(200);
+		DocumentVersion documentVersion = new DocumentVersion(document, masterCode);
 		log.debug("documentVersion = " + documentVersion);
-		
-		documentService.documentVersionStatusUpdate(documentVersion);
+
+		mainUpdatingStatusService.changeStatus(document, emp, masterCode, comments);
 		
 		return null;
 	}
