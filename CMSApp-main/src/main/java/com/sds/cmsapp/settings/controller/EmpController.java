@@ -3,6 +3,8 @@ package com.sds.cmsapp.settings.controller;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -29,6 +31,9 @@ public class EmpController {
 	@Autowired
 	private EmpDetailService empDetailService;
 	
+	@Autowired
+	private PasswordEncoder passwordEncoder;
+	
 	@PostMapping("/emp/regist")
 	public String regist(Emp emp, EmpDetail empDetail, @RequestParam("deptIdx") int deptIdx, @RequestParam("roleCode") int roleCode) {
 		try {
@@ -49,6 +54,7 @@ public class EmpController {
             // EmpDetail 객체를 DB에 저장하는 로직	        
 	        empService.insert(emp);
 	        empDetail.setEmp(emp);
+	        empDetail.setEmpPw(passwordEncoder.encode(empDetail.getEmpPw())); 
 	        empDetailService.insert(empDetail);
 
             System.out.println("Employee added successfully");

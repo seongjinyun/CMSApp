@@ -2,6 +2,7 @@ package com.sds.cmsapp.document.controller;
 
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -160,9 +161,39 @@ public class RestDocumentController {
 	}
 	
 	@PatchMapping("/document/folder")
-	public ResponseEntity moveDocuement(@RequestParam("documentIdxList")List<Integer> documentIdxList) {
-		log.debug("컨트롤러 moveDocument 호출, 선택된 idx: " + documentIdxList);
-		return null;
+	public ResponseEntity<String> moveDocuement(@RequestBody final Map<String, Object> request) {
+		List<String> objectIdxList = (List<String>)request.get("objectIdxList");
+		Integer targetFolderIdx = Integer.parseInt((String)request.get("targetFolderIdx"));
+		
+		log.warn("컨트롤러 moveDocument 호출, 선택된 idx: " + objectIdxList);
+		List<Integer> documentIdxList = trashService.seperateObjectList(objectIdxList, 'd');
+		List<Integer> folderIdxList = trashService.seperateObjectList(objectIdxList, 'f');
+		
+		for(Integer documentIdx : documentIdxList) { // 문서의 부모 폴더idx를 변경
+			Document document = documentService.select(documentIdx);
+			Folder folder = document.getFolder();
+			folder.setFolderIdx(targetFolderIdx);
+			document.setFolder(folder);
+			documentService.update(document);
+		}
+		
+		for (Integer folderIdx : folderIdxList) { // 폴더의 부모 폴더idx를 변경
+			Folder folder = folderService.select(folderIdx);
+			Folder ParentFolder = new Folder();
+			ParentFolder.setFolderIdx(targetFolderIdx);
+			folder.setParentFolder(ParentFolder);
+			folderService.updateFolder(folder);
+		}
+		
+		return ResponseEntity.ok("폴더 이동 완료");
+	}
+	
+	@PatchMapping("/document/folder/name")
+	public ResponseEntity<String> renameFolder(@RequestParam("folderIdx") final int folderIdx,@RequestParam("folderName") final String folderName) {
+		Folder folder = folderService.select(folderIdx);
+		folder.setFolderName(folderName);
+		folderService.updateFolder(folder);
+		return ResponseEntity.ok("폴더 이름 변경 완료");
 	}
 	
 	//리뷰요청

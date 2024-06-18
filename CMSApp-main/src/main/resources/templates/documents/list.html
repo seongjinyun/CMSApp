@@ -28,8 +28,11 @@
 	  <section class="content-header">
 	      <div class="container-fluid">
 	        <div class="row mb-2">
-	          <div class="col-sm-6">
-	            <h1 th:text="${folder.folderName}"></h1>
+	          <div class="col-sm-6 d-inline">
+	            <h1 th:text="${folder.folderName}" class="d-inline"></h1>
+	            <button type="button" class="btn btn-default btn-sm" data-toggle="modal" data-target="#renameFolderModal">
+	              <i class="fa fa-pen d-inline"></i>
+	            </button>
 	          </div>
 	          <div class="col-sm-6">
 	            <ol th:each="folder, i : ${parentFolderList}"class="breadcrumb float-sm-right">
@@ -56,7 +59,7 @@
                     </div>
                   </div>
                   <input type="button" class="btn btn-default btn-sm" value="글 작성" id="write">
-                  <input type="hidden" name="folderIdx" th:value="${folderIdx}">
+                  <input type="hidden" id=folderIdx name="folderIdx" th:value="${folderIdx}">
                 </div>
                 
               </div>
@@ -80,11 +83,11 @@
 	              </button>
 	              <!-- 디렉토리 변경 버튼 -->
                   <button type="button" class="btn btn-default btn-sm" data-toggle="modal" data-target="#moveDirectory">
-   					<i class="fas fa-folder"></i>
+   					<i class="fa fa-folder"></i>
 				  </button>
                   <!-- /.디렉토리 변경 버튼 -->
                   <button type="button" class="btn btn-default btn-sm" id="createFolderButton"> <!-- data-toggle="modal" data-target="#createFolder">-->
-   					새 폴더
+   					<i class="fa fa-folder-plus"></i>
 				  </button>
                 </div>
                 <!-- /.btn-group -->
@@ -175,6 +178,28 @@
   <!-- /.control-sidebar -->
 </div>
 <!-- ./wrapper -->
+<!-- 폴더명 변경 모달 -->
+<div class="modal fade" id="renameFolderModal" tabindex="-1" aria-labelledby="renameFolderModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="renameFolderModalLabel">폴더명 변경</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        입력된 문자열로 폴더명을 변경합니다.<br>
+        <input type="text" class="form-control" id="folderNameForRename" placeholder="폴더명 입력">
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">취소</button>
+        <button type="button" class="btn btn-primary" onclick="renameFolder();">변경</button>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- /.폴더명 변경 모달 -->
 	
 	<th:block th:replace="~{fragments/footer_link :: footer_link}"/>
 	
@@ -278,9 +303,9 @@ $(function(){
 
     function openMoveDirectoryModal() {
       let selectedDocumentIdx = [];
-     // if(checkSelected()){
+      if(checkSelected()){
         $('#moveDirectory').modal('show');
-      //}
+      }
     }
 
     function initializeOpenMoveDirectoryModal() {
@@ -296,6 +321,30 @@ $(function(){
 			}
 			
 		});
+	}
+	
+	function renameFolder(){
+		const folderNameForRename = $("#folderNameForRename").val();
+		if (folderNameForRename.length < 1){
+			alert("1자 이상의 이름을 입력해 주세요");
+		} else {
+      $.ajax({
+        url: "/document/folder/name",
+        method: "PATCH",
+        data: {
+          folderIdx: $("#folderIdx").val(),
+          folderName: folderNameForRename
+        },
+        success: function(result, status, xhr){
+          alert("폴더명 변경 성공");
+          location.reload(true);
+        },
+        error: function(status, xhr, err){
+          alert("폴더명 변경 실패");
+        }
+        
+      });
+    }
 	}
 
 

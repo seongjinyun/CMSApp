@@ -13,4 +13,6 @@ public interface EmpDetailDAO {
 	public void update(EmpDetail empDetail);
 	
 	public Emp selectByLoginData(EmpDetail empDetail);
+	public EmpDetail selectByUid(String empId);
+	public int selectEmpIdxByUid(String empId);
 }

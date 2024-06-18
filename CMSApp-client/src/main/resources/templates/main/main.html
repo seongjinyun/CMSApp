@@ -37,36 +37,23 @@
 
   <div class="container">
     <div class="row">
-      <div class="col-md-4 exercise-card">
+    
+    <!-- 반복문 -->
+      <div class="col-md-4 exercise-card" th:each="project, i: ${project}">
         <div class="card">
           <div class="card-body">
-            <h5 class="card-title">HTML Basics</h5>
-            <p class="card-text">Learn the basics of HTML and create your first web page.</p>
-            <a href="#" class="btn btn-primary">Start Exercise</a>
+            <h5 class="card-title" th:text="${project.projectName}">HTML Basics</h5>
+        	<a th:href="@{/document/project(projectIdx=${project.projectIdx})}" class="btn btn-primary">열기</a>
+            
           </div>
         </div>
       </div>
-      <div class="col-md-4 exercise-card">
-        <div class="card">
-          <div class="card-body">
-            <h5 class="card-title">HTML Elements</h5>
-            <p class="card-text">Explore the different HTML elements and their uses.</p>
-            <a href="#" class="btn btn-primary">Start Exercise</a>
-          </div>
-        </div>
-      </div>
-      <div class="col-md-4 exercise-card">
-        <div class="card">
-          <div class="card-body">
-            <h5 class="card-title">HTML Attributes</h5>
-            <p class="card-text">Learn how to use HTML attributes to enhance your web pages.</p>
-            <a href="#" class="btn btn-primary">Start Exercise</a>
-          </div>
-        </div>
-      </div>
+      
+      
     </div>
   </div>
+  
+  
   <th:block th:replace="~{fragments/footer_link :: footer_link}" />
-
 </body>
 </html>
