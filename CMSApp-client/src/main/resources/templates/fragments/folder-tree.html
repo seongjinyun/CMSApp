@@ -1,0 +1,32 @@
+<div th:fragment="folder-tree(folderList, folderIdx)">
+<div class="nav-folder" th:each="folder : ${folderList}" th:if="${#lists.contains(folderIdx, folder.folderIdx)}">
+    <a class="nav-link nav-folder-title" th:text="${folder.folderName}" th:data-folder-id="${folder.folderIdx}" th:data-parent-folder-id="${folder.parentFolder?.folderIdx}">
+        <span class="toggle-btn">+</span>
+    </a>
+    <div th:if="${not #lists.isEmpty(folder.childFolders) or not #lists.isEmpty(folder.publishedVersionList)}" class="folder-content" style="display: none;">
+        <div th:if="${not #lists.isEmpty(folder.childFolders)}" class="childFolder">
+            <div th:each="childFolder : ${folder.childFolders}">
+                <a th:text="${childFolder.folderName}" th:data-folder-id="${childFolder.folderIdx}" class="nav-link nav-folder-title">
+                    <span class="toggle-btn">+</span>
+                </a>
+                <div th:if="${not #lists.isEmpty(childFolder.childFolders) or not #lists.isEmpty(childFolder.publishedVersionList)}" class="folder-content" style="display: none;">
+                    <div th:if="${not #lists.isEmpty(childFolder.childFolders)}">
+						<div th:replace="~{fragments/folder-tree :: folder-tree(folderList=${childFolder.childFolders}, folderIdx=${childFolder.folderIdx})}"></div>
+                    </div>
+                    <div th:if="${not #lists.isEmpty(childFolder.publishedVersionList)}" class="document-list">
+                        <div th:each="publishedVersion : ${childFolder.publishedVersionList}">
+							<a th:text="${publishedVersion.versionLog.title}" th:id="${publishedVersion.document.documentIdx}" class="document-link"></a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div th:if="${not #lists.isEmpty(folder.publishedVersionList)}" class="document-list">
+            <div th:each="publishedVersion : ${folder.publishedVersionList}">
+				<a th:text="${publishedVersion.versionLog.title}" th:id="${publishedVersion.document.documentIdx}" class="document-link"></a>
+            </div>
+        </div>
+    </div>
+</div>
+
+</div>
