@@ -41,16 +41,6 @@ public class PublishingController {
 	@Autowired
 	MainPublishingService mainPublishingService;
 	
-	@GetMapping("/admin/dashboard/activity")
-	public String getAdminDashboardActivity() {
-		return "admin/dashboard/activity";
-	}
-	
-	@GetMapping("/admin/dashboard/publishing/new")
-	public String getAdminDashboardPublishing() {
-		return "admin/dashboard/publishing/new";
-	}
-	
 	/////////두 서비스의 트랜잭션 처리 진행 중
 	/// 배포된 버전인지 확인하려면 published_version과 조인해야 함
 	// 현재 status_log와 version_log_idx와의 관계가 애매함

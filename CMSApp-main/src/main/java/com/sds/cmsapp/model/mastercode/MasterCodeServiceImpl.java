@@ -17,5 +17,9 @@ public class MasterCodeServiceImpl implements MasterCodeService {
 	public List<MasterCode> selectAll() {
 		return masterCodeDAO.selectAll();
 	}
+	
+	public MasterCode selectByStatusName(String statusName) {
+		return masterCodeDAO.selectByStatusName(statusName);
+	};
 		
 }

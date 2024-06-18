@@ -24,6 +24,14 @@ public class CustomUserDetails implements UserDetails{
 		this.empDetail = empDetail;
 	}
 	
+    public Emp getUser() {
+        return emp;
+    }
+    
+	public int getEmpIdx() {
+		return emp.getEmpIdx();
+	}
+	
 	@Override
 	public Collection<? extends GrantedAuthority> getAuthorities() {
 		Collection<GrantedAuthority> authList = new ArrayList();
@@ -38,10 +46,6 @@ public class CustomUserDetails implements UserDetails{
 	@Override
 	public String getPassword() {		
 		return empDetail.getEmpPw();
-	}
-	
-	public int getEmpIdx() {
-		return emp.getEmpIdx();
 	}
 
 	@Override

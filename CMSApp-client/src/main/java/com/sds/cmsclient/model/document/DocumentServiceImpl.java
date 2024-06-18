@@ -13,10 +13,10 @@ public class DocumentServiceImpl implements DocumentService{
 	@Autowired
 	private DocumentDAO documentDAO;
 	
-	public List<Folder> folderAllSelect(int projectIdx) {
-		return documentDAO.folderAllSelect(projectIdx);
+	public List<Folder> topFolderSelect(int projectIdx) {
+		return documentDAO.topFolderSelect(projectIdx);
 	}
-	public int subFolderSelect(int folderIdx) {
-		return documentDAO.subFolderSelect(folderIdx);
-	}
+//	public int subFolderSelect(int folderIdx) {
+//		return documentDAO.subFolderSelect(folderIdx);
+//	}
 }

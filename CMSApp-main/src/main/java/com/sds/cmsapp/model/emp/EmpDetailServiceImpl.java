@@ -43,5 +43,17 @@ public class EmpDetailServiceImpl implements EmpDetailService {
 		return empDetailDAO.selectByLoginData(empDetail);
 	}
 
+	@Override
+	public EmpDetail selectByUid(String empId) {
+		// TODO Auto-generated method stub
+		return empDetailDAO.selectByUid(empId);
+	}
+
+	@Override
+	public int selectEmpIdxByUid(String empId) {
+		// TODO Auto-generated method stub
+		return empDetailDAO.selectEmpIdxByUid(empId);
+	}
+
 
 }

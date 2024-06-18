@@ -51,8 +51,8 @@
         <nav class="nav flex-column">
         
         
-          <div class="nav-folder">
-            <a class="nav-link nav-folder-title">HTML Basics</a>
+          <div class="nav-folder" th:each="folder, i : ${subFolders}">
+            <a class="nav-link nav-folder-title"  th:text="${folder.folderName}">HTML Basics</a>
             <div class="folder-content">
               <a class="nav-link" href="#">HTML Basics</a>
               <a class="nav-link" href="#">HTML Elements</a>

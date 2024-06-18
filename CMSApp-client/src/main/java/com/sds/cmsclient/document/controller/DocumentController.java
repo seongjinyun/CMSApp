@@ -25,16 +25,16 @@ public class DocumentController {
 	public String getFolderList(@RequestParam("projectIdx") int projectIdx, Model model) {
 		
 	     // 현재 프로젝트의 최상위폴더
-        List<Folder> subFolders = documentService.folderAllSelect(projectIdx);
+        List<Folder> subFolders = documentService.topFolderSelect(projectIdx);
         
         log.debug("subFolders = " + subFolders);
         
         
         //현재 프로젝트 하위 폴더
-        int parentFolderIdx = documentService.subFolderSelect(projectIdx);
+       // int parentFolderIdx = documentService.subFolderSelect(projectIdx);
 
         model.addAttribute("subFolders", subFolders);
-        model.addAttribute("parentFolderIdx", parentFolderIdx);
+        //model.addAttribute("parentFolderIdx", parentFolderIdx);
         
         return "document/document";
 	}
