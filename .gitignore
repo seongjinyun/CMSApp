@@ -158,3 +158,5 @@ $RECYCLE.BIN/
 
 # profile Img Url
 CMSApp-main/src/main/resources/static/profileImg/
+CMSApp-settings/src/main/resources/static/profileImg/
+CMSApp-main/src/main/resources/static/profileImg/

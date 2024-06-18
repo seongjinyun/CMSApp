@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "mybatis-3-mapper.dtd">
+<mapper namespace="com.sds.cmssettings.model.relationship.RoleAuthorityDAO">
+
+	<!-- 권한 - 역할 연결 -->
+	<insert id="insertAuthorityIntoRole" parameterType="RoleAuthority">
+        INSERT INTO role_authority (role_code, authority_code)
+        VALUES (#{role.roleCode}, #{authority.authorityCode})
+    </insert>
+	
+	<!-- role_code에 해당하는 authority_code 목록 가져오기 -->
+    <select id="selectAuthoritiesByRoleCode" parameterType="int" resultType="Authority">
+        SELECT a.*
+        FROM authority a
+        JOIN role_authority ra ON a.authority_code = ra.authority_code
+        WHERE ra.role_code=#{roleCode}
+    </select>
+    
+    <!-- role에 기존 authority 삭제 -->
+    <delete id="deleteAuthoritiesByRoleCode" parameterType="int">
+	    DELETE
+	    FROM role_authority
+	    WHERE role_code=#{role.roleCode}
+	</delete>
+	
+	<!-- 연동 테스트용: 테이블 지우기 -->
+    <delete id="deleteAll">
+	    DELETE *
+	    FROM role_authority
+	</delete>
+	
+</mapper>

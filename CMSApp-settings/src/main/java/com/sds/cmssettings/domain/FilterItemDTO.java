@@ -1,4 +1,4 @@
-package com.sds.cmsapp.domain;
+package com.sds.cmssettings.domain;
 
 import java.sql.Timestamp;
 import java.util.List;
