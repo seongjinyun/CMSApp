@@ -151,7 +151,7 @@
 													th:attr="onclick=${documentVersion.versionLog.version != versionLog.version && documentVersion.masterCode.statusCode != 200} ? 'versionUpdate(' + ${versionLog.versionLogIdx} + ')' : 'alert(\'리뷰 요청 중인 문서이거나, 현재 버전과 같은 버전의 문서입니다.\'); return false;'">
 													열기 </a> <a class="btn btn-danger btn-sm"
 													th:if="${documentVersion.versionLog.version != versionLog.version}"
-													th:attr="onclick='versionLogDelete(\'' + ${documentVersion.versionLog.versionLogIdx} + '\')'">
+													th:attr="onclick='versionLogDelete(\'' + ${versionLog.versionLogIdx} + '\')'">
 													삭제 </a> <a class="btn btn-danger btn-sm"
 													th:if="${documentVersion.versionLog.version == versionLog.version}"
 													th:onclick="alert('현재 사용 중인 파일입니다'); return false;"> 삭제
@@ -347,6 +347,7 @@
 		}
 
 		function versionLogDelete(versionLogIdx) {
+			console.log(versionLogIdx);
 			if (confirm("정말로 삭제하시겠습니까?")) {
 				$.ajax({
 					url : '/document/version/delete',
