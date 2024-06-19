@@ -34,6 +34,11 @@ public class MainUpdatingStatusServiceImpl implements MainUpdatingStatusService 
 	@Transactional
 	public void changeStatus(Document document,  Emp emp, MasterCode masterCode, String comments)
 			throws DocumentVersionException, StatusLogException {
+		if(masterCode.getStatusCode() == 200) {
+			
+		}else if(masterCode.getStatusCode()== 300) {
+			
+		}
 		
 		DocumentVersion documentVersion = new DocumentVersion(document, masterCode);
 		StatusLog statusLog = new StatusLog(emp, document, masterCode, comments);

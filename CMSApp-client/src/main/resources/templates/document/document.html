@@ -1,88 +1,100 @@
 <!DOCTYPE html>
 <html lang="zxx" xmlns:th="http://www.thymeleaf.org">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>HTML Exercises</title>
-  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
-  <style>
-    body {
-      padding-top: 70px;
-    }
-    .exercise-card {
-      margin-bottom: 30px;
-    }
-    .nav-folder {
-      background-color: #f1f1f1;
-      padding: 10px;
-      border-bottom: 1px solid #ddd;
-      cursor: pointer;
-    }
-    .nav-folder .folder-content {
-      display: none;
-      padding-left: 20px;
-    }
-    .nav-folder.open .folder-content {
-      display: block;
-    }
-    .nav-folder.open {
-      background-color: #e6e6e6;
-    }
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>HTML Exercises</title>
+<link rel="stylesheet"
+	href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+<style>
+body {
+	padding-top: 70px;
+}
 
-    .nav-link {
-      display: block;
-      padding: 5px 0;
-      color: #333;
-      text-decoration: none;
-    }
+.exercise-card {
+	margin-bottom: 30px;
+}
 
-    .nav-link:hover {
-      background-color: #ddd;
-    }
+.nav-folder {
+	background-color: #f1f1f1;
+	padding: 10px;
+	border-bottom: 1px solid #ddd;
+	cursor: pointer;
+}
 
-    .document-link {
-      display: block;
-      padding: 5px 0 5px 20px;
-      color: blue;
-      text-decoration: none;
-    }
+.nav-folder .folder-content {
+	display: none;
+	padding-left: 20px;
+}
 
-    .document-link:hover {
-      background-color: #ddd;
-    }
-  </style>
+.nav-folder.open .folder-content {
+	display: block;
+}
+
+.nav-folder.open {
+	background-color: #e6e6e6;
+}
+
+.nav-link {
+	display: block;
+	padding: 5px 0;
+	color: #333;
+	text-decoration: none;
+}
+
+.nav-link:hover {
+	background-color: #ddd;
+}
+
+.document-link {
+	display: block;
+	padding: 5px 0 5px 20px;
+	color: blue;
+	text-decoration: none;
+}
+
+.document-link:hover {
+	background-color: #ddd;
+}
+</style>
 </head>
 <body>
-  <th:block th:replace="~{fragments/header :: header}" />
+	<th:block th:replace="~{fragments/header :: header}" />
 
-  <div class="container-fluid">
-    <div class="row">
-      <!-- Exercise List Column -->
-      <div class="col-lg-2 col-md-3 col-sm-4 col-12 exercise-list bg-light">
-          <nav class="nav flex-column">
-	          <div style="text-align:center; font-weight:bold;">
-	          		프로젝트 명 <h1 th:text="${projectName}"></h1>
-	          </div>
-          <div th:replace="~{fragments/folder-tree :: folder-tree(folderList=${folderList}, folderIdx=${folderIdx})}"></div>
-        </nav>
-      </div>
+	<div class="container-fluid">
+		<div class="row">
+			<!-- Exercise List Column -->
+			<div class="col-lg-2 col-md-3 col-sm-4 col-12 exercise-list bg-light">
+				<nav class="nav flex-column">
+					<div style="text-align: center; font-weight: bold;">
+						프로젝트 명
+						<h1 th:text="${projectName}"></h1>
+					</div>
+					<div
+						th:replace="~{fragments/folder-tree :: folder-tree(folderList=${folderList}, folderIdx=${folderIdx})}"></div>
+				</nav>
+			</div>
 
-      <!-- Exercise Content Column -->
-		<div class="col-lg-10 col-md-9 col-sm-8 col-12 exercise-content" th:with="publishedVersion=${publishedVersion}">
-		  <h1 th:text="${publishedVersion?.versionLog?.title ?: '◀ 문서를 선택해주세요'}"></h1>
-		  <p th:utext="${publishedVersion?.versionLog?.content ?: 'No content'}"></p>
+			<!-- Exercise Content Column -->
+			<div class="col-lg-10 col-md-9 col-sm-8 col-12 exercise-content"
+				th:with="publishedVersion=${publishedVersion}">
+				<h1
+					th:text="${publishedVersion?.versionLog?.title ?: '◀ 문서를 선택해주세요'}"></h1>
+				<p
+					th:utext="${publishedVersion?.versionLog?.content ?: 'No content'}"></p>
+			</div>
+
 		</div>
+	</div>
 
-    </div>
-  </div>
+	<!-- Project Index Input -->
+	<input type="hidden" name="projectIdx" id="projectIdx"
+		th:value="${projectIdx}">
 
-  <!-- Project Index Input -->
-  <input type="hidden" name="projectIdx" id="projectIdx" th:value="${projectIdx}">
+	<th:block th:replace="~{fragments/footer_link :: footer_link}" />
 
-  <th:block th:replace="~{fragments/footer_link :: footer_link}" />
-
-  <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
-  <script>
+	<script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+	<script>
     document.querySelectorAll('.nav-folder-title').forEach(folderTitle => {
       folderTitle.addEventListener('click', (event) => {
         event.preventDefault();

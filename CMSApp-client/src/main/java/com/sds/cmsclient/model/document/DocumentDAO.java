@@ -11,6 +11,7 @@ import com.sds.cmsclient.domain.PublishedVersion;
 @Mapper
 public interface DocumentDAO {
 	public List<Folder> getFolderListByProjectIdx(int projectIdx);
+	public List<PublishedVersion> getPublishedVersionIdx(int folderIdx);
 	public List<PublishedVersion> getPublishedVersionByDocumentIdx(int documentIdx);
 	public String projectNameSelect(int projectIdx);
 }
