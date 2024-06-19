@@ -72,14 +72,14 @@ public class ProjectController {
 		Project project = projectService.selectByProjectIdx(Integer.parseInt(projectIdx));
  
 		try {
-			// 프로젝트 삭제
-			projectService.delete(project);
-			
 			// 프로젝트 내부 폴더 삭제
 			int empIdx = 1; // 지금 접속한 사원 인덱스. 테스트를 위해 1로 설정
 			Folder folder = folderService.selectProjectRootFolder(project.getProjectIdx());
 			folderService.deleteFolder(folder.getFolderIdx(), empIdx);
-			
+
+			// 프로젝트 삭제
+			projectService.delete(project);
+						
 		    redirectAttributes.addFlashAttribute("message", "프로젝트가 성공적으로 삭제되었습니다.");
 		} catch (Exception e) {
 		    e.printStackTrace();

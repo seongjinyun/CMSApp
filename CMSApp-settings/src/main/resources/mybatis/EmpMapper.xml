@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "mybatis-3-mapper.dtd">
+<mapper namespace="com.sds.cmssettings.model.emp.EmpDAO">
+
+	<!-- 사원 추가 -->
+	<insert id="insert" parameterType="Emp">
+		insert into emp(emp_name, dept_idx, role_code)
+		values(#{empName},
+		#{dept.deptIdx}, #{role.roleCode})
+		<!-- emp_detail에 상세 정보를 insert 하기 위해 부모테이블 emp의 index 값 추출 -->
+		<selectKey keyColumn="emp_idx" keyProperty="empIdx"
+			resultType="int" order="AFTER">
+			select last_insert_id() as emp_idx
+		</selectKey>
+	</insert>
+
+	<!-- Mybatis 객체 간 Association -->
+	<resultMap type="Emp" id="EmpMap">
+		<id column="emp_idx" property="empIdx" />
+		<result column="emp_name" property="empName" />
+
+		<!-- 외래키: dept_idx -->
+		<association column="dept_idx" property="dept"
+			javaType="Dept"
+			select="com.sds.cmssettings.model.dept.DeptDAO.selectByDeptIdx" />
+
+		<!-- 외래키: role_code -->
+		<association column="role_code" property="role"
+			javaType="Role"
+			select="com.sds.cmssettings.model.role.RoleDAO.selectByRoleCode" />
+
+	</resultMap>
+
+	<!-- emp_idx가 가리키는 사원 조회 -->
+	<select id="selectByEmpIdx" parameterType="int"
+		resultMap="EmpMap">
+		select * from emp where emp_idx=#{empIdx}
+	</select>
+	
+	<!-- 사원 이름 전체 출력 -->
+	<select id="selectAllEmpName" resultType="Emp">
+		select emp_idx,
+		emp_name from emp
+	</select>
+	
+	<select id="selectAll" resultType="Emp">
+		select * from emp
+	</select>
+	
+	<!-- 사원 수 -->
+	<select id="getTotalCount" resultType="int">
+        select count(*) from emp
+    </select>
+    
+    <!-- pagination이 적용된 사원 리스트를 조회 -->
+    <select id="selectEmpPage" parameterType="java.util.Map" resultMap="EmpMap">
+		select * from emp limit #{startIndex}, #{rowCount}
+	</select>
+
+	<!-- emp_idx가 가리키는 사원 정보의 변경 -->
+	<update id="update" parameterType="Emp">
+		update emp
+		set
+		emp_name=#{empName}, dept_idx=#{dept.deptIdx},
+		role_code=#{role.roleCode}
+		where emp_idx=#{empIdx}
+	</update>
+
+	<!-- emp_idx가 가리키는 사원의 부서 변경 -->
+	<update id="updateDept" parameterType="Emp">
+		update emp
+		set
+		dept_idx=#{dept.deptIdx}
+		where emp_idx=#{empIdx}
+	</update>
+
+</mapper>

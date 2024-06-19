@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="zxx" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>AdminLTE 3 | Log in (v2)</title>
+  <th:block th:replace="~{fragments/header_link :: header_link}"/>
+</head>
+<body class="hold-transition login-page">
+<div class="login-box">
+  <div class="card card-outline card-primary">
+    <div class="card-header text-center">
+      <a href="../../index2.html" class="h1"><b>Admin</b>LTE</a>
+    </div>
+    <div class="card-body">
+      <p class="login-box-msg">Sign in to start your session</p>
+      <form id="loginForm" method="post">
+        <div class="input-group mb-3">
+          <input type="text" class="form-control" placeholder="Employee ID" name="empId">
+          <div class="input-group-append">
+            <div class="input-group-text">
+              <span class="fas fa-user"></span>
+            </div>
+          </div>
+        </div>
+        <div class="input-group mb-3">
+          <input type="password" class="form-control" placeholder="Password" name="empPw">
+          <div class="input-group-append">
+            <div class="input-group-text">
+              <span class="fas fa-lock"></span>
+            </div>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-12">
+            <button type="button" class="btn btn-primary btn-block" id="bt_login">Sign In</button>
+          </div>
+        </div>
+      </form>
+      <p class="mb-1">
+        <a href="forgot-password.html">I forgot my password</a>
+      </p>
+      <p class="mb-0">
+        <a href="register.html" class="text-center">Register a new membership</a>
+      </p>
+    </div>
+  </div>
+</div>
+  <th:block th:replace="~{fragments/footer_link :: footer_link}"/>
+<script>
+    function loginCheck(){
+    	$.ajax({
+            url: "/emp/login",
+            type: "post",
+            data: JSON.stringify({ 
+                empId: $("input[name='empId']").val(),
+                empPw: $("input[name='empPw']").val()
+            }),
+            contentType: "application/x-www-form-urlencoded; charset=utf-8",
+            success: function(result, status, xhr){
+                console.log("서버가 보낸 jwt 토큰은 ", result.token);
+                localStorage.setItem("token", result.token);
+                alert("로그인 성공입니다");
+                window.location.href = window.location.origin + "/settings/mypage";
+            },
+            error: function(xhr, status, err){
+                alert("로그인 정보가 올바르지 않습니다");
+            }
+        });
+    }
+    
+    $(function(){
+        $("#bt_login").click(function(){
+            loginCheck();
+        });
+    });
+</script>
+</body>
+</html>
