@@ -17,8 +17,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.fasterxml.jackson.core.type.TypeReference;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.sds.cmsapp.domain.Document;
 import com.sds.cmsapp.domain.DocumentRequest;
 import com.sds.cmsapp.domain.DocumentVersion;
@@ -28,6 +26,7 @@ import com.sds.cmsapp.domain.MasterCode;
 import com.sds.cmsapp.domain.VersionLog;
 import com.sds.cmsapp.exception.DocumentException;
 import com.sds.cmsapp.exception.FolderException;
+import com.sds.cmsapp.exception.TrashException;
 import com.sds.cmsapp.exception.VersionLogException;
 import com.sds.cmsapp.model.document.DocumentService;
 import com.sds.cmsapp.model.document.DocumentVersionService;
@@ -110,6 +109,20 @@ public class RestDocumentController {
 		List<Integer> documentIdxList = trashService.seperateObjectList(objectIdxList, 'd');
 		List<Integer> folderIdxList = trashService.seperateObjectList(objectIdxList, 'f');
 		Set<Integer> removeCandidateSet = new HashSet<>(); // 제외시킬 folderIdx를 담을 set
+		if(documentIdxList.size() == 1) {
+			Integer documentIdxForOne = documentIdxList.get(0);
+			int statusCodeForOne = documentVersionService
+					.selectByDocumentIdx(documentIdxForOne)
+					.getMasterCode()
+					.getStatusCode();
+			if(statusCodeForOne > 150 && statusCodeForOne < 450) {
+				throw new TrashException("초안 상태가 아닙니다");
+			}
+			
+			if(documentService.isPublished(documentIdxForOne)) {
+				throw new TrashException("배포중인 문서입니다");
+			}
+		}
 		for(int documentIdx : documentIdxList) { // 문서먼저 삭제, 삭제할수 없는 문서인 경우 상위 폴더도 삭제목록에서 제거.
 			int statusCode = documentVersionService.selectByDocumentIdx(documentIdx).getMasterCode().getStatusCode();
 			if(documentService.isPublished(documentIdx)) { // 배포된 버전이라면

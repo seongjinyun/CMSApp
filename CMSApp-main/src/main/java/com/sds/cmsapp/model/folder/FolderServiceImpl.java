@@ -279,6 +279,14 @@ public class FolderServiceImpl implements FolderService {
 	
 	@Override
 	public Folder selectRestoreFolder() {
-		return folderDAO.selectRestoreFolder();
+		
+		Folder restoreFolder = folderDAO.selectRestoreFolder();
+		if (restoreFolder == null) {
+			Folder folder = new Folder();
+			folder.setFolderName("restored");
+			folderDAO.insert(folder);
+			restoreFolder = folderDAO.selectRestoreFolder();
+		}
+		return restoreFolder;
 	}
 }
