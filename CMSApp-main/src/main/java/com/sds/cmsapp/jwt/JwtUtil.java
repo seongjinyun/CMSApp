@@ -13,6 +13,7 @@ import java.util.Map;
 
 import org.springframework.stereotype.Component;
 
+import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import lombok.Data;
@@ -55,15 +56,16 @@ public class JwtUtil {
 	JWT에 서명된 토큰 생성 (JWT+privateKey) 
 	JWT에는 왠만해서는, 보안상 민감한 정보는 절대로 넣지말자!!
 	 ---------------------------------*/
-	public String generateToken(int empIdx, Long expireTime) throws Exception {
+	public String generateToken(int empIdx, Long expireTime, String role) throws Exception {
 		
 		Map<String, Object> claims = new HashMap<>();
         claims.put("empIdx", empIdx);
+        claims.put("role", role);
 		
 		//jwt 생성 
 		return Jwts.builder()
+			.setSubject(Integer.toString(empIdx))
 			.setClaims(claims)
-            .setSubject(Integer.toString(empIdx))
             .setIssuedAt(new Date(System.currentTimeMillis()))
             .setExpiration(new Date(System.currentTimeMillis() + expireTime))
 			.signWith(SignatureAlgorithm.RS256, privateKey)
@@ -81,4 +83,5 @@ public class JwtUtil {
 		
 		return encodedPublicKey;
 	}
+
 }

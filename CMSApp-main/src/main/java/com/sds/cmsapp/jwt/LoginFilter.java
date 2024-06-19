@@ -55,7 +55,7 @@ public class LoginFilter extends UsernamePasswordAuthenticationFilter {
             throw new BadCredentialsException("Missing empId or empPw in request");
         }
         
-        UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(empId, empPw, Collections.singletonList(new SimpleGrantedAuthority("Admin")));
+        UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(empId, empPw);
         
         try {
             Authentication auth = authenticationManager.authenticate(authToken);
@@ -84,13 +84,14 @@ public class LoginFilter extends UsernamePasswordAuthenticationFilter {
     	CustomUserDetails customUserDetails = (CustomUserDetails) authentication.getPrincipal();
     	log.debug("customUserDetails: "+customUserDetails);
         int empIdx = customUserDetails.getEmp().getEmpIdx();
+        String role = customUserDetails.getRole();
 
         log.debug("사원정보가 존재합니다. 로그인 성공");
 
         long expireTime = (1 * 1000 * 60) * 10; // 10분
         String token = null;
         try {
-            token = jwtUtil.generateToken(empIdx, expireTime);
+            token = jwtUtil.generateToken(empIdx, expireTime, role);
         } catch (Exception e) {
         	log.error("JWT 생성 중 오류 발생", e);
             e.printStackTrace();

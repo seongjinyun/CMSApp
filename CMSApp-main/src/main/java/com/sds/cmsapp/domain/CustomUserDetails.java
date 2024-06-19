@@ -19,9 +19,12 @@ public class CustomUserDetails implements UserDetails{
 	
 	private EmpDetail empDetail;
 	
-	public CustomUserDetails(Emp emp, EmpDetail empDetail) {
+	private String role;
+	
+	public CustomUserDetails(Emp emp, EmpDetail empDetail, String role) {
 		this.emp = emp;
 		this.empDetail = empDetail;
+		this.role = role;
 	}
 	
     public Emp getUser() {
