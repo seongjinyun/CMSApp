@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 @Service
 public class DocumentEditingServiceImpl implements DocumentEditingService{
 	
+	//수정 중인 문서를 담음
     private Set<Integer> editingDocuments = new HashSet<>();
 	
     public boolean isDocumentBeingEdited(int documentIdx) {
