@@ -33,7 +33,7 @@ public class LoginFilter extends UsernamePasswordAuthenticationFilter {
     	super.setAuthenticationManager(authenticationManager);
     	this.authenticationManager = authenticationManager;
         this.jwtUtil = jwtUtil;
-        setFilterProcessesUrl("/emp/login");
+        //setFilterProcessesUrl("/emp/login");
     }
 
     @Override
