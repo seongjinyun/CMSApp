@@ -8,6 +8,7 @@ import java.util.Set;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -15,6 +16,7 @@ import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.sds.cmsapp.domain.Document;
@@ -27,6 +29,7 @@ import com.sds.cmsapp.domain.VersionLog;
 import com.sds.cmsapp.exception.DocumentException;
 import com.sds.cmsapp.exception.FolderException;
 import com.sds.cmsapp.exception.VersionLogException;
+import com.sds.cmsapp.model.document.DocumentEditingService;
 import com.sds.cmsapp.model.document.DocumentService;
 import com.sds.cmsapp.model.document.DocumentVersionService;
 import com.sds.cmsapp.model.folder.FolderService;
@@ -38,7 +41,10 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 @RestController
 public class RestDocumentController {
-
+	
+    @Autowired
+    private DocumentEditingService editingService;
+    
 	@Autowired
 	private DocumentService documentService;
 
@@ -78,9 +84,27 @@ public class RestDocumentController {
 	public ResponseEntity<String> editDocument(@ModelAttribute DocumentRequest documentRequest) {
 		VersionLog versionLog = documentRequest.getVersionLog();
 		
+        // 다른 사용자가 수정 중인 경우 예외 처리 또는 처리 로직 추가
+        if (!editingService.isDocumentBeingEdited(versionLog.getDocument().getDocumentIdx())) {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).body("다른 사용자가 수정 중인 문서입니다.");
+        }
+        
+        // 수정 완료 후 해당 문서의 수정 중 표시를 제거
+        editingService.removeEditingDocument(versionLog.getDocument().getDocumentIdx());
+
 		documentService.versionUpdate(versionLog);
-		ResponseEntity<String> entity = ResponseEntity.ok("DB입력 성공");
-		return entity;
+		
+        return ResponseEntity.ok("DB 입력 성공");
+	}
+	
+	// AJAX 요청을 받아 수정 중인 상태를 해제하는 컨트롤러 메서드
+	@PostMapping("/document/releaseEditing")
+	@ResponseBody
+	public ResponseEntity<String> releaseEditing(@RequestParam("documentIdx") int documentIdx) {
+	    editingService.removeEditingDocument(documentIdx);
+	    
+	    System.out.println("releaseEditing 실행");
+	    return ResponseEntity.ok("수정 중 상태 해제 완료");
 	}
 	
 	@GetMapping("/document/folder/list")
@@ -226,6 +250,15 @@ public class RestDocumentController {
 		
 		
 		return null;
+	}
+	
+	//버전삭제
+	@DeleteMapping("/document/version/delete")
+	public ResponseEntity<String> deleteVersionLog(@RequestParam("versionLogIdx") int versionLogIdx){
+		
+        documentService.versionLogDelete(versionLogIdx);
+		
+		return ResponseEntity.ok("버전 로그를 삭제했습니다.");
 	}
 	
 	@ExceptionHandler({DocumentException.class, VersionLogException.class, FolderException.class})

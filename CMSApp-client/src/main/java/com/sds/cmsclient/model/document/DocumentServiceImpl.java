@@ -43,7 +43,7 @@ public class DocumentServiceImpl implements DocumentService {
             parent.setChildFolders(childFolders);
             setChildFoldersAndDocuments(childFolders, allFolders);
             // 해당 폴더의 문서 목록 설정
-            List<PublishedVersion> publishedVersions = documentDAO.getPublishedVersionByDocumentIdx(parent.getFolderIdx());
+            List<PublishedVersion> publishedVersions = documentDAO.getPublishedVersionIdx(parent.getFolderIdx());
             parent.setPublishedVersionList(publishedVersions);
         }
     }

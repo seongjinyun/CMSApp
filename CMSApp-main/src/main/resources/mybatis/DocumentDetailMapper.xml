@@ -87,7 +87,7 @@
 
 	<update id="documentVersionUpdate" parameterType="VersionLog">
 		UPDATE document_version
-		SET version_log_idx = #{versionLogIdx}
+		SET version_log_idx = #{versionLogIdx}, status_code=100
 		WHERE document_idx = #{document.documentIdx}
 	</update>
 	
@@ -113,6 +113,14 @@
 	        vl.document_idx = #{documentIdx}
 	    ORDER BY 
 	        vl.version DESC
-</select>
+	</select>
 	
+	<!-- 버전 삭제 -->
+	<delete id="versionLogDelete" parameterType="int">
+        DELETE FROM version_log
+        WHERE version_log_idx = #{versionLogIdx}
+    </delete>
+
+	<!-- 문서 수정 상태 여부 확인 -->
+	<select id=""></select>
 </mapper>

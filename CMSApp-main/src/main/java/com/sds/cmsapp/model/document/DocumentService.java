@@ -67,5 +67,9 @@ public interface DocumentService {
 	
 	// 수정
 	public int update(final Document document);
+	
+	// 버전 삭제
+    public void versionLogDelete(int versionLog);
+
 
 }

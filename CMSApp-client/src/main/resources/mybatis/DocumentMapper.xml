@@ -53,26 +53,32 @@
         </association>
     </resultMap>
 
-    <select id="getPublishedVersionByDocumentIdx" parameterType="int" resultMap="publishedVersionResultMap">
+    <select id="getPublishedVersionIdx" parameterType="int" resultMap="publishedVersionResultMap">
         SELECT
             p.published_version_idx,
             p.document_idx,
             p.version_log_idx,
             p.published_version_name_idx,
-            d.document_idx,
-            d.hit,
             d.folder_idx,
-            v.version_log_idx,
-            v.document_idx,
-            v.version,
-            v.regdate,
-            v.title,
-            v.content,
-            v.comments
+            v.title
         FROM published_version p
         JOIN document d ON p.document_idx = d.document_idx
         JOIN version_log v ON p.version_log_idx = v.version_log_idx
-        WHERE d.folder_idx = #{folder.folderIdx} OR p.document_idx = #{documentIdx}
+        WHERE d.folder_idx = #{folder.folderIdx}
     </select>
 	
+	<select id="getPublishedVersionByDocumentIdx" parameterType="int" resultMap="publishedVersionResultMap">
+        SELECT
+            p.published_version_idx,
+            p.document_idx,
+            p.version_log_idx,
+            p.published_version_name_idx,
+            d.folder_idx,
+            v.title,
+            v.content
+        FROM published_version p
+        JOIN document d ON p.document_idx = d.document_idx
+        JOIN version_log v ON p.version_log_idx = v.version_log_idx
+        WHERE p.document_idx = #{documentIdx}
+    </select>
 </mapper>

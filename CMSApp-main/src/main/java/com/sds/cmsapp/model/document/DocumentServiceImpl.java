@@ -401,4 +401,9 @@ public class DocumentServiceImpl implements DocumentService {
 	public int update(final Document document) {
 		return documentDAO.update(document);
 	};
+	
+	@Override
+	public void versionLogDelete(int versionLog) {
+		documentDetailDAO.versionLogDelete(versionLog);
+	}
 }

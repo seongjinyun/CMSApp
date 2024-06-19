@@ -3,8 +3,10 @@ package com.sds.cmsapp.document.controller;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -14,9 +16,11 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import com.sds.cmsapp.common.Pager;
 import com.sds.cmsapp.domain.DocumentVersion;
+import com.sds.cmsapp.domain.Emp;
 import com.sds.cmsapp.domain.Folder;
 import com.sds.cmsapp.domain.Trash;
 import com.sds.cmsapp.domain.VersionLog;
+import com.sds.cmsapp.model.document.DocumentEditingService;
 import com.sds.cmsapp.model.document.DocumentService;
 import com.sds.cmsapp.model.folder.FolderService;
 import com.sds.cmsapp.model.trash.TrashService;
@@ -27,6 +31,9 @@ import lombok.extern.slf4j.Slf4j;
 @Controller
 public class DocumentsController {
 	
+    @Autowired
+    private DocumentEditingService editingService;
+    
 	@Autowired
 	private Pager pager;
 
@@ -124,6 +131,11 @@ public class DocumentsController {
 							            @RequestParam("folderIdx") int folderIdx,
 							            Model model) {
 		DocumentVersion documentVersion  = documentService.documentDetailSelect(documentIdx);
+		documentVersion.getVersionLog().setEmp(new Emp());
+		documentVersion.getVersionLog().getEmp().setEmpIdx(3); //empIdx 넘어올 자리
+		System.out.println(documentVersion.getVersionLog().getEmp().getEmpIdx());
+
+		
         List<VersionLog> versionLogs = documentService.getVersionLogSelect(documentIdx);
         List<Folder> folderList = folderService.selectParentList(folderIdx);
         model.addAttribute("folderList", folderList);
@@ -139,6 +151,15 @@ public class DocumentsController {
 	public String getEdit(@RequestParam("documentIdx") int documentIdx,
             						@RequestParam("folderIdx") int folderIdx,
             						Model model) {
+        // 이미 다른 사용자가 수정 중이면 접근을 막음
+        if (editingService.isDocumentBeingEdited(documentIdx)) {
+            model.addAttribute("serverMessage", "다른 사용자가 수정 중인 문서입니다.");
+            return "redirect:/document/list"; // 예시로 리스트 페이지로 리다이렉트
+        }
+        
+        // 해당 문서를 수정 중으로 표시
+        editingService.addEditingDocument(documentIdx);
+        
 		DocumentVersion documentVersion  = documentService.documentDetailSelect(documentIdx);
 		model.addAttribute("documentVersion", documentVersion);
         model.addAttribute("folderIdx", folderIdx);
