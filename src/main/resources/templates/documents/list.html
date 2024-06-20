@@ -1,0 +1,357 @@
+<!DOCTYPE html>
+<html lang="zxx" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>CMS Application</title>
+
+	<th:block th:replace="~{fragments/header_link :: header_link}"/>
+	
+</head>
+<body class="hold-transition sidebar-mini layout-fixed"> 
+<div class="wrapper">
+
+	<!-- Preloader -->
+	<th:block th:replace="~{fragments/preloader :: preloader}"/>
+	
+  <!-- Navbar -->
+	<th:block th:replace="~{fragments/navi :: navi}"/>
+  <!-- /.navbar -->
+
+  <!-- Main Sidebar Container -->
+	<th:block th:replace="~{fragments/sidebar :: sidebar}"/>
+  
+  <!-- /.sidebar -->
+
+  <!-- Content Wrapper. Contains page content -->
+  <div class="content-wrapper">
+	  <section class="content-header">
+	      <div class="container-fluid">
+	        <div class="row mb-2">
+	          <div class="col-sm-6 d-inline">
+	            <h1 th:text="${folder.folderName}" class="d-inline"></h1>
+	            <button type="button" class="btn btn-default btn-sm" data-toggle="modal" data-target="#renameFolderModal">
+	              <i class="fa fa-pen d-inline"></i>
+	            </button>
+	          </div>
+	          <div class="col-sm-6">
+	            <ol th:each="folder, i : ${parentFolderList}"class="breadcrumb float-sm-right">
+	              <li th:if="${i.index == 0}" class="breadcrumb-item active ml-1 mr-1" th:text="| ${folder.folderName}|"></li>
+	              <li th:unless="${i.index == 0}" class="breadcrumb-item ml-1 mr-1"><a th:href="|/document/list?folderIdx=${folder.folderIdx}|" th:text="|${folder.folderName} / |"></a></li>
+	            </ol>
+	          </div>
+	        </div>
+	      </div><!-- /.container-fluid -->
+	    </section>
+	  <section class="content">
+      <div class="row">
+        <div class="col-md-12">
+          <div class="card card-primary card-outline">
+            <div class="card-header">
+              <h3 class="card-title"></h3>
+
+              <div class="card-tools">
+                <div class="input-group input-group-sm">
+                  <input type="text" class="form-control" id="searchFileInput" placeholder="Search File">
+                  <div class="input-group-append">
+                    <div class="btn btn-primary">
+                      <i class="fas fa-search"></i>
+                    </div>
+                  </div>
+                  <input type="button" class="btn btn-default btn-sm" value="글 작성" id="write">
+                  <input type="hidden" id=folderIdx name="folderIdx" th:value="${folderIdx}">
+                </div>
+                
+              </div>
+              <!-- /.card-tools -->
+            </div>
+            <!-- /.card-header -->
+            <div class="card-body p-0">
+              <div class="mailbox-controls">
+                <div class="btn-group">
+                  <button type="button" class="btn btn-default btn-sm" id="trash_btn">
+                    <i class="far fa-trash-alt"></i>
+                  </button>
+                  <button type="button" class="btn btn-default btn-sm">
+                    <i class="fas fa-reply"></i>
+                  </button>
+                  <button type="button" class="btn btn-default btn-sm">
+                    <i class="fas fa-share"></i>
+                  </button>
+	              <button type="button" class="btn btn-default btn-sm" onclick="location.reload(true);">
+	                <i class="fas fa-sync-alt"></i>
+	              </button>
+	              <!-- 디렉토리 변경 버튼 -->
+                  <button type="button" class="btn btn-default btn-sm" data-toggle="modal" data-target="#moveDirectory">
+   					<i class="fa fa-folder"></i>
+				  </button>
+                  <!-- /.디렉토리 변경 버튼 -->
+                  <button type="button" class="btn btn-default btn-sm" id="createFolderButton"> <!-- data-toggle="modal" data-target="#createFolder">-->
+   					<i class="fa fa-folder-plus"></i>
+				  </button>
+                </div>
+                <!-- /.btn-group -->
+                <div class="float-right">
+                  1-50/200
+                  <div class="btn-group">
+                    <button type="button" class="btn btn-default btn-sm">
+                      <i class="fas fa-chevron-left"></i>
+                    </button>
+                    <button type="button" class="btn btn-default btn-sm">
+                      <i class="fas fa-chevron-right"></i>
+                    </button>
+                  </div>
+                  <!-- /.btn-group -->
+                </div>
+                <!-- /.float-right -->
+              </div>
+              
+              <div class="table-responsive mailbox-messages">
+                <table class="table table-hover table-striped">
+                  <!-- 소제목 -->
+                  <tr class="subtitle">
+                    <th>
+                      <div class="icheck-primary">
+                        <input type="checkbox" value="" id="checkall">
+                        <label for="checkall"></label>
+                      </div>
+                    </th>
+                    <th class="mailbox-star"><a href="#"></a></th>
+                    <th>제목</th>
+                    <th>문서 버전</th>
+                    <th>업데이트 날짜</th>
+                    <th>상태</th>
+                  </tr>
+                  <!-- ./소제목 -->
+                  <tbody>
+                  	<tr th:each="folder: ${subFolderList}">
+                  		<td>
+					        <div class="icheck-primary">
+		                        <input type="checkbox" name="objectSelect" th:value="|f${folder.folderIdx}|" th:id="|f${folder.folderIdx}|">
+		                        <label th:for="|f${folder.folderIdx}|"></label>
+                     		</div>
+				        </td>
+				        <td class="mailbox-star"><a href="#"><i class="fa fa-star-o" aria-hidden="true"></i></a></td>
+				        <td><i class="far fa-folder mr-3"></i><a th:href="|/document/list?folderIdx=${folder.folderIdx}|" th:text="${folder.folderName}"></a></td>
+				        <td>폴더</td>
+				        <td th:text="${folder.regdate}"></td>
+				        <td></td>
+                  	</tr>
+				    <tr th:each="documentVersion, i : ${documentListSelect}">
+				        <td>
+					        <div class="icheck-primary">
+		                        <input type="checkbox" name="objectSelect" th:value="|d${documentVersion.document.documentIdx}|" th:id="|d${documentVersion.document.documentIdx}|">
+		                        <label th:for="|d${documentVersion.document.documentIdx}|"></label>
+                     		</div>
+				        </td>
+				        <td class="mailbox-star"><a href="#"><i class="fa fa-star-o" aria-hidden="true"></i></a></td>
+				        <!-- title, 업데이트 날짜, document가 아닌 versionLog에서 가져와야함.\ -->
+				        <td><a th:href="@{/document/detail(documentIdx=${documentVersion.document.documentIdx}, folderIdx=${documentVersion.document.folder.folderIdx})}" th:text="${documentVersion.versionLog.title}">튜토리얼</a></td>
+				        <td th:text="'v' + ${documentVersion.versionLog.version}">v2.1</td>
+				        <td th:text="${documentVersion.versionLog.regdate}">2024.05.23 16:44</td>
+				        <!-- 상태는 masterCode 에서 가져와야함  -->
+				        <td th:text="${documentVersion.masterCode.statusName}">리뷰 중</td>
+				    </tr>
+				</tbody>
+                </table>
+                <!-- /.table -->
+              </div>
+              <!-- /.mail-box-messages -->
+            </div>
+            <!-- /.card-body -->
+           </div>
+          <!-- /.card -->
+        </div>
+        <!-- /.col -->
+      </div>
+      <!-- /.row -->
+    </section>
+  </div>
+  <!-- /.content-wrapper -->
+  
+	<th:block th:replace="~{fragments/footer :: footer}"/>
+
+  <!-- Control Sidebar -->
+  <aside class="control-sidebar control-sidebar-dark">
+    <!-- Control sidebar content goes here -->
+  </aside>
+  <!-- /.control-sidebar -->
+</div>
+<!-- ./wrapper -->
+<!-- 폴더명 변경 모달 -->
+<div class="modal fade" id="renameFolderModal" tabindex="-1" aria-labelledby="renameFolderModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="renameFolderModalLabel">폴더명 변경</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        입력된 문자열로 폴더명을 변경합니다.<br>
+        <input type="text" class="form-control" id="folderNameForRename" placeholder="폴더명 입력">
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">취소</button>
+        <button type="button" class="btn btn-primary" onclick="renameFolder();">변경</button>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- /.폴더명 변경 모달 -->
+	
+	<th:block th:replace="~{fragments/footer_link :: footer_link}"/>
+	
+  	<!-- 디렉토리 변경 모달창 -->
+	<th:block th:replace="~{elements/folder_modal :: folder_modal}"/>
+	<!-- /.디렉토리 변경 모달창 -->
+  	<!-- 디렉토리 변경 모달 스크립트 -->
+	<th:block th:replace="~{elements/folder_modal_script :: folder_modal_script}"/>
+	<!-- /.디렉토리 변경 모달 스크립트 -->
+	<!-- 새 폴더 모달 -->
+	<th:block th:replace="~{elements/create_folder_modal :: create_folder_modal}"/>	
+	<!-- /.새 폴더 모달 -->
+	<!-- 사이드바 디렉토리 관련 로직 -->
+  	<th:block th:replace="~{elements/sidebar_script :: sidebar_script}"/>
+  	<!-- /.사이드바 디렉토리 관련 로직 -->
+
+<script>
+$(function(){
+    checkBoxAll();
+    write();
+    searchFile();
+    initializeOpenMoveDirectoryModal();
+    del();
+    openCreateFolderModal();
+  });
+  
+  function checkBoxAll(){
+	  $("#checkall").click(function(){
+	      if($("#checkall").prop("checked")) {
+	        $("input[type=checkbox]").prop("checked",true);
+	      } else {
+	        $("input[type=checkbox]").prop("checked",false);
+	      }
+	    });
+  }
+  
+  function write(){
+	  $("#write").click(function() {
+		  if($("input[name='folderIdx']").val() == 0){
+			  alert("글 작성은 하위 디렉토리에서 가능합니다");
+			  return;
+		  }
+			//글쓰기 폼 요청
+			location.href="/document/writeform?folderIdx="+$("input[name='folderIdx']").val();
+		});
+  }
+	  
+	  function searchFile(){
+		 $('#searchFileInput').on('keyup', function(){
+			 var value = $(this).val().toLowerCase();
+			 $("tbody tr:not(.subtitle)").filter(function() {
+			 	$(this).toggle($(this).find(".mailbox-subject").text().toLowerCase().indexOf(value) > -1)
+			});
+		});
+	  }
+    
+
+    function del() {
+      $("#trash_btn").click(function(){
+	      if (checkSelected()){
+	        if (confirm("선택한 항목들을 휴지통으로 보낼까요?\n주의: 폴더는 휴지통으로 보내지지 않고 바로 삭제돼요.")) {
+	          let selectedIdxList = new Array();
+	          $('input[name="objectSelect"]:checked').each(function () {
+	            selectedIdxList.push($(this).val());
+	          });
+	          let empIdx = 1;
+	          let request = {
+	          			objectIdxList: selectedIdxList,
+	          			empIdx: empIdx
+	          };
+	          $.ajax({
+	            method: "POST",
+	            url: "/document/list/trash",
+	            contentType: "application/json",
+	            data: JSON.stringify(request)
+	            ,
+	            success: function(result, status, xhr){
+	              alert("성공적으로 휴지통에 보냈습니다.\n폴더는 성공적으로 삭제됐습니다.");
+	              location.reload(true);
+	            },
+	            error: function(status, xhr, err){
+	              alert("휴지통에 보내는데 실패했어요.");
+	            }
+	          });
+	        }
+	      }  
+      })
+    }
+
+    function checkSelected(){
+      let selectedDocumentIdx = [];
+      $('input[name="objectSelect"]:checked').each(function () {
+        selectedDocumentIdx.push($(this).val());
+      });
+
+      if (selectedDocumentIdx.length < 1) {
+        alert("하나 이상의 문서를 선택해주세요");
+        event.stopImmediatePropagation();
+        return false;
+      } else{
+        return true;
+      }
+    }
+
+    function openMoveDirectoryModal() {
+      let selectedDocumentIdx = [];
+      if(checkSelected()){
+        $('#moveDirectory').modal('show');
+      }
+    }
+
+    function initializeOpenMoveDirectoryModal() {
+      $('#openMoveDirectoryModalButton').on('click', openMoveDirectoryModal);
+    }
+
+	function openCreateFolderModal(){
+		$("#createFolderButton").on("click", function(){
+			if($("input[name='folderIdx']").val() == 0){
+				alert("최상위 폴더는 프로젝트 메뉴에서 생성해주세요");
+			} else{
+				$("#createFolder").modal("show");
+			}
+			
+		});
+	}
+	
+	function renameFolder(){
+		const folderNameForRename = $("#folderNameForRename").val();
+		if (folderNameForRename.length < 1){
+			alert("1자 이상의 이름을 입력해 주세요");
+		} else {
+      $.ajax({
+        url: "/document/folder/name",
+        method: "PATCH",
+        data: {
+          folderIdx: $("#folderIdx").val(),
+          folderName: folderNameForRename
+        },
+        success: function(result, status, xhr){
+          alert("폴더명 변경 성공");
+          location.reload(true);
+        },
+        error: function(status, xhr, err){
+          alert("폴더명 변경 실패");
+        }
+        
+      });
+    }
+	}
+
+
+  </script>
+</body>
+
+</html>

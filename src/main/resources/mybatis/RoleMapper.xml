@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "mybatis-3-mapper.dtd">
+<mapper namespace="com.sds.cmsdocument.model.role.RoleDAO">
+	
+	<!-- deprecated -->
+	<!-- 역할 추가 -->
+	<insert id="insert" parameterType="Role">
+		insert into role(role_name)
+		values(#{roleName});
+	</insert>
+	<!-- deprecated -->
+	
+	<!-- 새로운 role을 삽입: code와 함께 -->
+    <insert id="insertRole" parameterType="Role">
+        INSERT INTO role (role_name, role_code)
+        VALUES (#{roleName}, #{roleCode})
+    </insert>
+	
+	<!-- 가장 최신의 role_code 값을 가져오기 -->
+    <select id="getMaxRoleCode" resultType="Integer">
+        SELECT COALESCE(MAX(role_code), 0) FROM role
+    </select>
+	
+	<!-- deprecated -->
+	<!-- role_idx가 가리키는 부서 조회 -->
+	<select id="selectByRoleIdx" parameterType="int" resultType="Role">
+		select * from role where role_idx=#{roleIdx}
+	</select>
+	<!-- deprecated -->
+	
+	<!-- role_code가 가리키는 부서 조회 -->
+	<select id="selectByRoleCode" parameterType="int" resultType="Role">
+		select * from role where role_code=#{roleCode}
+	</select>
+	
+	<!-- 모든 role 정보 조회 -->
+	<select id="selectAll" resultType="Role">
+		select * from role
+	</select>
+	
+</mapper>

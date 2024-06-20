@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html lang="zxx" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>CMS | Setting</title>
+
+  <th:block th:replace="~{fragments/header_link :: header_link}"/>
+  <th:block th:replace="~{elements/datatables_header_link :: datatables_header_link}"/>
+  <th:block th:replace="~{elements/advanced_forms_header_link :: advanced_forms_header_link}"/>
+  
+  <style>
+    /* 스타일 정의 */
+    input[type="file"] {
+        display: none;
+    }
+    
+    .inputFileButton {
+        padding: 6px 25px;
+        background-color: #FFFFFF;
+        border-radius: 4px;
+        color: black;
+        cursor: pointer;
+        display: inline-block;
+        margin: 15px auto;
+        text-align: center;
+    }
+    
+    .addImage {
+        width: 45%;
+        height: 45%;
+        background-color: lightgray;
+        border-radius: 20px 20px / 20px 20px;
+        overflow: hidden;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+    
+    .addImage img {
+        width: 100%;
+        height: 100%;
+        max-width: 100%;
+        max-height: 100%;
+        object-fit: cover;
+    }
+  </style>
+
+</head>
+<body class="hold-transition sidebar-mini layout-fixed">
+<div class="wrapper">
+
+  <!-- Preloader -->
+  <th:block th:replace="~{fragments/preloader :: preloader}"/>
+  
+  <!-- Navbar -->
+  <th:block th:replace="~{fragments/navi :: navi}"/>
+  <!-- /.navbar -->
+
+  <!-- Main Sidebar Container -->
+  <th:block th:replace="~{fragments/sidebar :: sidebar}"/>
+  <!-- /.sidebar -->
+
+  <!-- Content Wrapper. Contains page content -->
+  <div class="content-wrapper">
+    <!-- Content Header (Page header) -->
+    <div class="content-header">
+      <div class="container-fluid">
+        <div class="row mb-2">
+          <div class="col-sm-6">
+            <h1 class="m-0" style="font-weight: bold;">계정 정보 변경</h1>
+          </div><!-- /.col -->
+          <div class="col-sm-6">
+            <ol class="breadcrumb float-sm-right">
+              <li class="breadcrumb-item"><a th:href="@{general}">Settings</a></li>
+              <li class="breadcrumb-item active">Mypage</li>
+            </ol>
+          </div><!-- /.col -->
+        </div><!-- /.row -->
+      </div><!-- /.container-fluid -->
+    </div>
+    <!-- /.content-header -->
+
+    <!-- Main content -->
+    <h6 style="color: gray; margin-left: 50px; margin-bottom: 20px;">나의 정보를 변경할 수 있습니다.</h6>
+    <section class="content">
+      <div class="container-fluid">
+        <div class="row">
+          <div class="col-md-12">
+            <div class="card">
+              <div class="card-header">
+                <h3 class="card-title" style="font-weight: bold;">내 정보</h3>
+              </div>
+              <div class="card-body">
+                <form class="form-horizontal" id="empAccount">
+                  <input type="hidden" id="empIdx" name="empIdx">
+                  <div class="form-group row">
+                    <label for="inputName" class="col-sm-2 col-form-label">Name</label>
+                    <div class="col-sm-10">
+                      <input type="text" class="form-control" name="empName">
+                    </div>
+                  </div>
+                  <div class="form-group row">
+                    <label for="inputID" class="col-sm-2 col-form-label">ID</label>
+                    <div class="col-sm-10">
+                      <input type="text" class="form-control" name="empId">
+                    </div>
+                  </div>
+                  <!-- BCrypt로 해시화되어 있어 복호화 출력은 불가하다
+                  <div class="form-group row">
+                    <label for="inputPW" class="col-sm-2 col-form-label">PW</label>
+                    <div class="col-sm-10">
+                      <input type="password" class="form-control" name="empPw">
+                    </div>
+                  </div>
+                  -->
+                  <div class="form-group row">
+                    <label for="inputDepartment" class="col-sm-2 col-form-label">Department</label>
+                    <div class="col-sm-10">
+                      <div class="form-group">
+                        <select id="inputDeptIdx" name="deptIdx" class="select1 form-control" data-placeholder="부서 선택" style="width: 100%;" disabled="disabled">
+                          <!-- 부서 리스트는 JavaScript로 채워넣기 -->
+                        </select>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="form-group row">
+                    <label for="inputRole" class="col-sm-2 col-form-label">Role</label>
+                    <div class="col-sm-10">
+                      <div class="form-group">
+                        <select id="inputRoleCode" name="roleCode" class="select1 form-control" data-placeholder="역할 선택" style="width: 100%;" disabled="disabled">
+                          <!-- 역할 리스트는 JavaScript로 채워넣기 -->
+                        </select>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="form-group row">
+                    <label for="inputImage" class="col-sm-2 col-form-label">Profile Image</label>
+                    <div class="col-sm-8 row">
+                      <div class="col">
+                        <div class="form-group">
+                          <div class="addImage" id="image-show" style="width: 200px; height: 200px;">
+                            <img id="profileImg" alt="Profile Image">
+                          </div>
+                          <label class="inputFileButton" for="inputFile">이미지 첨부</label>
+                          <input type="file" name="file" id="inputfile" accept="image/*" onchange="loadFile(this)" style="margin-top: 15px; display: block;">
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="form-group">
+                    <button type="button" id="updateEmpAccount" class="btn btn-success float-right" style="height: 38px">Save Changes</button>
+                  </div>
+                </form>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>    
+    </section>
+    <!-- /.content -->
+  </div>
+  <!-- /.content-wrapper -->
+  
+  <th:block th:replace="~{fragments/footer :: footer}"/>
+  <!-- Control Sidebar -->
+  <aside class="control-sidebar control-sidebar-dark">
+    <!-- Control sidebar content goes here -->
+  </aside>
+  <!-- /.control-sidebar -->
+</div>
+<!-- ./wrapper -->
+  
+  <th:block th:replace="~{fragments/footer_link :: footer_link}"/>
+  <th:block th:replace="~{elements/datatables_footer_link :: datatables_footer_link}"/>
+  <th:block th:replace="~{elements/advanced_forms_footer_link :: advanced_forms_footer_link}"/>
+
+  <!-- 사이드바 디렉토리 관련 로직 -->
+  <th:block th:replace="~{elements/sidebar_script :: sidebar_script}"/>
+  <!-- /.사이드바 디렉토리 관련 로직 -->
+</body>
+</html>
+
+<script type="text/javascript">
+  function updateEmpAccount() {
+    $("#empAccount").attr({
+      action: "/setting/mypage/update",
+      method: "post",
+      enctype: "multipart/form-data"
+    });
+    $("#empAccount").submit();
+  }
+
+  $(function() {
+    $("#updateEmpAccount").click(function() {
+      $("select[name=deptIdx]").removeAttr('disabled');
+      $("select[name=roleCode]").removeAttr('disabled');
+      updateEmpAccount();
+    });
+
+    // 토큰을 사용하여 사원 정보를 불러오는 AJAX 요청
+    function loadEmpInfo() {
+      const token = localStorage.getItem('token');
+      $.ajax({
+        url: "/setting/mypage/info",
+        type: "get",
+        headers: {
+          "Authorization": "Bearer " + token
+        },
+        success: function(result) {
+          // 결과를 페이지에 반영하는 코드 작성
+          $("input[name='empIdx']").val(result.empIdx);
+          $("input[name='empName']").val(result.empName);
+          $("input[name='empId']").val(result.empId);
+          $("input[name='empPw']").val(result.empPw);
+          $("#profileImg").attr("src", result.profileImgUrl);
+
+          // 부서 리스트 채우기
+          let deptOptions = "";
+          result.deptList.forEach(dept => {
+            deptOptions += `<option value="${dept.deptIdx}" ${dept.deptIdx === result.emp.dept.deptIdx ? 'selected' : ''}>${dept.deptName}</option>`;
+          });
+          $("select[name='deptIdx']").html(deptOptions);
+
+          // 역할 리스트 채우기
+          let roleOptions = "";
+          result.roleList.forEach(role => {
+            roleOptions += `<option value="${role.roleCode}" ${role.roleCode === result.emp.role.roleCode ? 'selected' : ''}>${role.roleName}</option>`;
+          });
+          $("select[name='roleCode']").html(roleOptions);
+        },
+        error: function(xhr, status, err) {
+          alert("정보를 불러오는데 실패했습니다.");
+        }
+      });
+    }
+
+    // 페이지 로드 시 사원 정보 로드
+    loadEmpInfo();
+  });
+</script>

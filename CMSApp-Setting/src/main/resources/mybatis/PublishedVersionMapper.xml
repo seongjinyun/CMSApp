@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "mybatis-3-mapper.dtd">
+<mapper namespace="com.sds.cmssetting.model.publishing.PublishedVersionDAO">
+
+	<resultMap type="PublishedVersion" id="PublishedVersionMap">
+		<id		column="published_version_idx"		property="publishedVersionIdx"/>
+		<association column="document_idx" property="document" javaType="Document"
+			select="com.sds.cmssetting.model.document.DocumentDAO.select"/>
+		<association column="version_log_idx" property="versionLog" javaType="VersionLog"
+			select="com.sds.cmssetting.model.versionlog.VersionLogDAO.select"/>
+		<association column="published_version_name_idx" property="publishedVersionName"
+			select="com.sds.cmssetting.model.versionlog.PublishedVersionNameDAO.select"/>
+	</resultMap>
+	
+	<insert id="insert" parameterType="PublishedVersion">
+		insert into published_version(document_idx, version_log_idx, published_version_name_idx)
+		values(#{document.documentIdx}, #{versionLog.versionLogIdx}, #{publishedVersionName.publishedVersionNameIdx})
+	</insert>
+	
+	<update id="update" parameterType="PublishedVersion">
+		update published_version
+			<set>
+				<if test="documentIdx != null"> 
+					document_idx = #{document.documentIdx},
+				</if>
+				<if test="versionLog != null">
+					version_log_idx = #{versionLog.versionLogIdx},
+				</if>
+				<if test="publishedVersionName != null">
+					published_version_name_idx = #{PublishedVersionName.PublishedVersionNameIdx}
+				</if>
+			</set>
+	</update>
+	
+	<delete id="delete" parameterType="int">
+		delete from published_version
+		where published_version_idx = #{publishedVersionIdx}
+	</delete>
+	
+	<delete id="deleteByDocumentIdx" parameterType="int">
+		delete from published_version
+		where document_idx = #{document.documentIdx}
+	</delete>
+	
+	<select id="select" parameterType="int" resultMap="PublishedVersionMap">
+		select * from published_version
+		where published_version_idx = #{publishedVersionIdx}
+	</select>
+	
+	<select id="selectAll" resultMap="PublishedVersionMap">
+		select * from published_version
+	</select>
+	
+	<select id="selectByDocumentIdx" resultMap="PublishedVersionMap">
+		select * from published_version
+		where document_idx = #{document.documentIdx}
+	</select>
+	
+</mapper>
