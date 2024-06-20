@@ -8,17 +8,20 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
 
+import com.sds.cmsapp.domain.Dept;
 import com.sds.cmsapp.domain.DocStatus;
 import com.sds.cmsapp.domain.Document;
 import com.sds.cmsapp.domain.RequestDocFilterDTO;
 import com.sds.cmsapp.domain.DocumentVersion;
 import com.sds.cmsapp.domain.Folder;
+import com.sds.cmsapp.domain.Project;
 import com.sds.cmsapp.domain.Emp;
 import com.sds.cmsapp.domain.ResponseDocDTO;
 import com.sds.cmsapp.domain.StatusLog;
@@ -30,9 +33,9 @@ import com.sds.cmsapp.exception.FolderException;
 import com.sds.cmsapp.exception.StatusLogException;
 import com.sds.cmsapp.exception.TrashException;
 import com.sds.cmsapp.exception.VersionLogException;
+import com.sds.cmsapp.model.dept.DeptDAO;
 import com.sds.cmsapp.model.folder.FolderDAO;
 import com.sds.cmsapp.model.publishing.PublishedVersionDAO;
-import com.sds.cmsapp.model.statuslog.StatusLogDAO;
 import com.sds.cmsapp.model.trash.TrashDAO;
 import com.sds.cmsapp.model.versionlog.VersionLogDAO;
 
@@ -48,10 +51,7 @@ public class DocumentServiceImpl implements DocumentService {
 	private TrashDAO trashDAO; // 휴지통에 있는 문서 조회
 	
 	@Autowired
-	private DocumentVersionDAO documentVersionDAO; // 버전 조회
-	
-	@Autowired
-	private StatusLogDAO statusLogDAO; // 가장 최신 로그의 코멘트, 사원 정보 조회
+	private DocumentVersionDAO documentVersionDAO; // 버전, 상태 코드, 상태 변경 메시지, 상태 변경 사원, 상태 변경일자 조회
 	
 	@Autowired
 	private VersionLogDAO versionLogDAO; // 문서 제목, 버전명 조회
@@ -86,20 +86,12 @@ public class DocumentServiceImpl implements DocumentService {
 		return documentDAO.selectAllByRange(map);
 	}
 	
-	public List selectAllForDashboard(Map map) {
-		return documentDAO.selectAllForDashboard(map);
-	};
 	/* 모든 문서 조회 */
 	public List<Document> selectAll() {
 		return documentDAO.selectAll();
 	};
 	
-////////////////////////////// 전체적으로 exception 점검하기, dao의 수행 결과 null로 나오게 될 경우 어떻게 되는지 확인하기
-	
-	/* 결재 상태별 문서 목록 수 조회------------------------------------
-	 	* Builder 패턴을 이용하여 응답 DTO에 DAO의 수행 결과 설정
-	 	* 결재 상태 코드 상수를 enum으로 관리
-	 ----------------------------------------------------------*/ 
+	/* 결재 상태별 문서 목록 수 조회 */ //결재 상태 코드 상수를 enum으로 관리 // 현재 exception이 발견될 경우, 목록이 뜨지 않음
 	public Map<String, Integer> countByStatus() throws DocumentVersionException {
 		
 		Map<String, Integer> map = new HashMap<String, Integer>();
@@ -107,7 +99,6 @@ public class DocumentServiceImpl implements DocumentService {
 		Integer inReviewCount = 0;
 		Integer reviewedCount = 0;
 		Integer rejectedCount = 0;
-		Integer publishedCount = 0;
 		
 		if (documentVersionDAO.selectCountByStatus(DocStatus.IN_REVIEW.getStatusCode()) != null) 
 			inReviewCount = documentVersionDAO.selectCountByStatus(DocStatus.IN_REVIEW.getStatusCode()).getDocCount();
@@ -115,13 +106,10 @@ public class DocumentServiceImpl implements DocumentService {
 			reviewedCount = documentVersionDAO.selectCountByStatus(DocStatus.REVIEWED.getStatusCode()).getDocCount();
 		if (documentVersionDAO.selectCountByStatus(DocStatus.REJECTED.getStatusCode()) != null) 
 			rejectedCount = documentVersionDAO.selectCountByStatus(DocStatus.REJECTED.getStatusCode()).getDocCount();
-		if (documentVersionDAO.selectCountByStatus(DocStatus.PUBLISHED.getStatusCode()) != null) 
-			publishedCount = documentVersionDAO.selectCountByStatus(DocStatus.PUBLISHED.getStatusCode()).getDocCount();
 		
 		map.put(DocStatus.IN_REVIEW.getStatusNameEn(), inReviewCount);
 		map.put(DocStatus.REVIEWED.getStatusNameEn(), reviewedCount);
 		map.put(DocStatus.REJECTED.getStatusNameEn(), rejectedCount);
-		map.put(DocStatus.PUBLISHED.getStatusNameEn(), publishedCount);
 		log.debug("map의 크기: " + map.size());
 		return map;
 	}
@@ -130,70 +118,54 @@ public class DocumentServiceImpl implements DocumentService {
 	 	* 필터: 날짜, 결재 상태, 프로젝트
 	 	* 조건: 휴지통에 있는 문서 제외
 	 	* 중첩 resultMap을 지양. 두 번 타고 가는 것까지 허용함 (가독성, 유지보수성, 재귀적 문제 방지를 위해)
-	 	* 남아 있는 문제: 상태 변경 일자 순으로 정렬하는 기능이 없다. (documentVersion 테이블에 regdate 추가하기?)
 	 	* 리미트 거는 과정이 없다. summary / detail 요청에 따른 파라미터 유효성 검증
 	  --------------------------------------------------------------------------------------------*/
 	@Transactional(readOnly = true)
 	public List<ResponseDocDTO> getFilteredList(RequestDocFilterDTO requestDTO) 
-			throws DocumentException, TrashException, DocumentVersionException, StatusLogException, EmpException {
-		List<ResponseDocDTO> responseList = new ArrayList<ResponseDocDTO>(); // 응답 DTO 리스트 생성
+			throws DocumentException, TrashException, DocumentVersionException, VersionLogException, EmpException {
+		List<ResponseDocDTO> responseList = new ArrayList<ResponseDocDTO>(); // 응답 DTO를 담을 리스트 생성
+		List<Document> errorDocList = new ArrayList<Document>(); // 문서 조회 시 에러가 발생한 문서를 담을 리스트 생성
 		
-		// 문서 목록 전체 조회
+		// 문서 목록 전체 조회 // 문서가 0개 있을 경우 빈 리스트가 반환됨
 		List<Document> documentList = documentDAO.selectAll();			// DocumentDAO 수행 결과: DocumentMap > FolderMap > ProjectMap
-		if (documentList == null) return responseList; 					// 문서 목록이 비어 있을 경우 비어 있는 응답 리스트를 반환
-		 
+
 		// 문서 정보 조회 시작
 		for (Document doc : documentList) {
 			// 폴더 정보와 프로젝트 정보를 가지고 있는 Document 한 건 조회
-			int docIdx = doc.getDocumentIdx(); // 문서 번호
+			int docIdx = doc.getDocumentIdx(); // 문서 번호 // 문서 번호가 null일 경우의 수는 없으므로 예외 처리 생략
 			Folder folder = doc.getFolder();
-			if (folder == null) throw new FolderException("document 테이블에서 폴더 정보를 찾을 수 없습니다.");
+			if (folder == null) throw new FolderException("[java.lang.NullPointerErrorException] document 테이블에서 폴더 정보를 찾을 수 없습니다.");
+			
 			Integer folderIdx = folder.getFolderIdx(); // 폴더 번호
 			String folderName = folder.getFolderName();  // 폴더명
-			if (folder.getProject() == null) throw new FolderException("document 테이블에서 프로젝트 정보를 찾을 수 없습니다.");
-			String projectName = doc.getFolder().getProject().getProjectName(); // 프로젝트명
+			// folder table의 project_idx는 not null이기 때문에 null 값이 들어올 가능성은 없지만 예외 처리
+			// throw new FolderException("[java.lang.NullPointerErrorException] document 테이블에서 프로젝트 정보를 찾을 수 없습니다.");
+			if (folder.getProject() == null) throw new FolderException("[java.lang.NullPointerErrorException] document 테이블에서 프로젝트 정보를 찾을 수 없습니다.");
+			String projectName = folder.getProject().getProjectName();
+			//String projectName =  Optional.ofNullable(folder.getProject()).map(Project::getProjectName).orElse("N/A");
 			
-			// 문서결재 상태와 버전 정보를 가지고 있는 DocumentVersion 한 건 조회
-			DocumentVersion docVer = documentVersionDAO.selectByDocumentIdx(docIdx); // DocumentVersionDAO 수행 결과: DocumentVersionMap > MasterCode, VersionLog
+			// 문서결재 상태, 버전 정보, 상태 변경 사원, 상태 변경 코멘트, 상태 변경 메시지를 가지고 있는 DocumentVersion 한 건 조회
+			DocumentVersion docVer = documentVersionDAO.selectByDocumentIdx(docIdx); // DocumentVersionDAO 수행 결과: DocumentVersionMap > MasterCode, Emp, VersionLog
 			if (docVer == null)	throw new DocumentVersionException("document_version 테이블에서 해당 문서를 찾을 수 없습니다.");
-			if (docVer.getMasterCode() == null) throw new DocumentVersionException("document_version에서 결재 상태 정보를 찾을 수 없습니다.");
-			int statusCode = docVer.getMasterCode().getStatusCode(); // 상태 코드
+			
+			if (docVer.getMasterCode() == null)  throw new DocumentVersionException("document_version에서 결재 상태 정보를 찾을 수 없습니다.");
 			String statusName = docVer.getMasterCode().getStatusName(); // 상태명
+			String statusComments = docVer.getStatusComments(); // 상태 변경 코멘트
+			Timestamp statusRegdate = docVer.getStatusRegdate(); // 상태 변경일자
+			Long timeRegdate = statusRegdate.getTime(); // 비교 가능한 long 타입으로 변환
+			String stringRegdate = new SimpleDateFormat("yyyy년 M월 dd HH:mm:ss", Locale.KOREA).format(new Date(timeRegdate)); // 문자열 포맷팅
+			
+			Emp emp = docVer.getEmp();
+			if (emp == null) throw new DocumentVersionException("document_version에서 사원 정보를 찾을 수 없습니다.");
+			String empName = emp.getEmpName(); // 상태 변경 사원명
+			
+			Dept dept = emp.getDept();
+			String deptName =  Optional.ofNullable(dept).map(Dept::getDeptName).orElse("N/A");
 			
 			VersionLog selectedVersionLog = versionLogDAO.select(docVer.getVersionLog().getVersionLogIdx()); // VersionLogDAO 수행 결과: VersionLog
-			if (selectedVersionLog == null)	throw new DocumentVersionException("document_Version 테이블에서 버전 정보를 찾을 수 없습니다.");
+			if (selectedVersionLog == null) throw new DocumentVersionException("document_Version 테이블에서 버전 정보를 찾을 수 없습니다.");
 			String version = selectedVersionLog.getVersion(); // 버전명
 			String title = selectedVersionLog.getTitle(); // 제목
-			
-			// 상태 변경 정보를 가지고 있는 StatusLog 한 건 조회
-			StatusLog statusLog = statusLogDAO.selectLatestLogByDocumentIdx(docIdx); // StatusLogDAO 수행 결과: EmpMap > Dept / MasterCode
-			if (statusLog == null) throw new StatusLogException("status_log 테이블에서 해당 문서를 찾을 수 없습니다.");
-			if (statusLog.getMasterCode().getStatusCode() != statusCode) throw new StatusLogException("document_version 테이블의 status_code가 status_log의 최신 status_code와 불일치합니다.");
-			String statusComments = statusLog.getComments();
-			Timestamp regdate = statusLog.getRegdate(); 
-			Long timeRegdate = regdate.getTime();
-			String stringRegdate = new SimpleDateFormat("yyyy년 M월 dd HH:mm:ss", Locale.KOREA).format(new Date(timeRegdate));
-			Emp emp = statusLog.getEmp(); 
-			if (emp == null) throw new StatusLogException("status_log 테이블에서 사원 정보를 찾을 수 없습니다.");
-			//int empIdx = emp.getEmpIdx(); // 상태 변경 사원 번호
-			String empName = emp.getEmpName(); // 상태 변경 사원명
-			if (emp.getDept() == null) throw new EmpException("status_log 테이블에서 부서 정보를 찾을 수 없습니다.");
-			//int deptIdx = emp.getDept().getDeptIdx(); // 상태 변경 사원의 부서 번호
-			String deptName = emp.getDept().getDeptName(); // 상태 변경 사원의 부서명
-						
-			log.debug(new StringBuilder()
-					.append("문서 번호: " + docIdx)
-					.append(", 프로젝트명: " + projectName)
-					.append(", 폴더명: " + folderName)
-					.append(", 버전명: " + version)
-					.append(", 제목: " + title)
-					.append("\n상태 코드: " + statusCode)
-					.append(", 상태명: " + statusName)
-					.append(", 상태 변경 코멘트: " + statusComments)
-					.append(", 상태 변경일자: " + stringRegdate)
-					.append("\n부서명: " + deptName)
-					.append(", 사원명: " + empName)
-					.toString());
 			
 			ResponseDocDTO responseDocDTO = ResponseDocDTO.builder()
 					.documentIdx(docIdx) // 문서 번호
@@ -216,41 +188,22 @@ public class DocumentServiceImpl implements DocumentService {
 			/* 필터 1번) 결재 상태 ---------------------------------------------------------------------------
 			 	* 문서 목록 중 필터에서 선택된 결재 상태에 있지 않은 문서는 응답 리스트에서 제외
 			 	* '전체 보기'를 선택한 경우(requestDTO.getStatusList() == null) 문서를 응답 리스트에 포함
-			 	* 검토 중
-			 		* deprecated 상태인 문서를 포함시킬지 말지
-			 		* '직접 선택'을 클릭한 후 아무것도 선택하지 않았을 때의 처리 (현재 null이 아닌 값으로 들어와서 문제는 없음)
 			 --------------------------------------------------------------------------------------------*/
-			if (requestDTO.getStatusList() != null 
-					&& !requestDTO.getStatusList().contains(statusName)) {
-				log.debug("결재 상태 코드" + statusCode + ", 결재 상태명: " + statusName + "는 선택되지 않았습니다.");
-				continue;
-			}
+			if (requestDTO.getStatusList() != null && !requestDTO.getStatusList().contains(statusName)) continue;
 			
 			/* 필터 2번) 프로젝트 ---------------------------------------------------------------------------
-		 		* 문서 목록 중 필터에서 선택된 프로젝트에 있지 않은 문서는 응답 리스트에서 제외
-		 		* '전체 보기'를 선택한 경우(requestDTO.getProjectList() == null) 문서를 응답 리스트에 포함
-		 		* 검토 중
-			 		* '직접 선택'을 클릭한 후 아무것도 선택하지 않았을 때의 처리 (현재 null이 아닌 값으로 들어와서 문제는 없음)
 		 	--------------------------------------------------------------------------------------------*/
-			if (requestDTO.getProjectList() != null 
-					&& !requestDTO.getProjectList().contains(projectName)) {
-				log.debug("프로젝트명: " + projectName + ", 폴더명: " + folderName + ", 문서 번호: " + docIdx + "는 선택되지 않았습니다.");
-				continue;
-			}
+			if (requestDTO.getProjectList() != null && !requestDTO.getProjectList().contains(projectName)) continue;
 			
 			/* 필터 3번) 상태 변경일 ---------------------------------------------------------------------------
-	 			* 문서 목록 중 필터에서 선택된 기간에 최신 상태 로그가 등록되지 않은 문서는 응답 리스트에서 제외
-	 			* '전체 보기'를 선택한 경우(requestDTO.getStartDate() == null, requestDTO.getEndDate() == null) 문서를 응답 리스트에 포함
-	 			* 검토 중
-		 		* '직접 선택'을 클릭한 후 아무것도 선택하지 않았을 때의 처리 (현재 null이 아닌 값으로 들어와서 문제는 없음)
 	 		--------------------------------------------------------------------------------------------*/
 			if ( requestDTO.getStartDate() != null && requestDTO.getEndDate() != null &&
 					(timeRegdate < requestDTO.getStartDate().getTime() || timeRegdate > requestDTO.getEndDate().getTime())) {
-				log.debug("해당 문서의 최신 상태 로그는 사용자가 입력한 기간에 등록되지 않았습니다.");
 				continue;
 			}
 			responseList.add(responseDocDTO);
 		}
+		// 조회된 문서 수 출력
 		log.debug("조회된 문서 수: " + responseList.size());
 		return responseList;
 	}
@@ -286,6 +239,8 @@ public class DocumentServiceImpl implements DocumentService {
 		DocumentVersion documentVersion = new DocumentVersion();
 		documentVersion.setDocument(versionLog.getDocument());
 		documentVersion.setVersionLog(versionLog);
+		documentVersion.setEmp(new Emp(1)); // 임시
+		documentVersion.setStatusComments(""); // 임시 코멘트
 		
 		//log.debug("document_version is " + documentVersion);
 		

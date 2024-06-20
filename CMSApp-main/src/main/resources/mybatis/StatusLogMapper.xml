@@ -7,8 +7,8 @@
 		<result column="comments" property="comments"/>
 		<result column="regdate" property="regdate"/>
 		<association column="emp_idx" property="emp" javaType="Emp"
-			select="com.sds.cmsapp.model.emp.EmpDAO.selectByEmpIdx"/> <!-- EmpMap -->
-		<!-- DocumentMap을 추가하면 재귀적인 문제가 발생할 수 있으므로 생략 -->
+			select="com.sds.cmsapp.model.emp.EmpDAO.selectByEmpIdx"/> <!-- EmpMap
+		DocumentMap을 추가하면 재귀적인 문제가 발생할 수 있으므로 생략 -->
 		<association column="status_code" property="masterCode" javaType="MasterCode"
 			select="com.sds.cmsapp.model.mastercode.MasterCodeDAO.select"/> <!-- Type -->
 	</resultMap>
@@ -28,4 +28,4 @@
 		delete from status_log where document_idx = #{document_idx}
 	</delete>
 	
-</mapper>
+</mapper> 

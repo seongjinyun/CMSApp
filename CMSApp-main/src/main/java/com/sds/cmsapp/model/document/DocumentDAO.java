@@ -13,8 +13,6 @@ import com.sds.cmsapp.domain.VersionLog;
 
 @Mapper
 public interface DocumentDAO {
-
-
 	
 	public List<Document> selectAllByRange(Map<String,Integer> map);
 	

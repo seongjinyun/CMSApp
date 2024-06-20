@@ -22,7 +22,6 @@ import com.sds.cmsapp.model.document.OneditDAO;
 import com.sds.cmsapp.model.emp.EmpDAO;
 import com.sds.cmsapp.model.folder.FolderDAO;
 import com.sds.cmsapp.model.publishing.PublishedVersionDAO;
-import com.sds.cmsapp.model.statuslog.StatusLogDAO;
 import com.sds.cmsapp.model.versionlog.VersionLogDAO;
 
 @Service
@@ -52,9 +51,6 @@ public class TrashServiceImpl implements TrashService{
 	@Autowired
 	private BookmarkDAO bookmarkDAO;
 	
-	@Autowired
-	private StatusLogDAO statusLogDAO;
-
 	@Autowired
 	private VersionLogDAO versionLogDAO;
 	
@@ -94,7 +90,6 @@ public class TrashServiceImpl implements TrashService{
 		oneditDAO.deleteByDocumentIdx(documentIdx);
 		trashDAO.delete(trashIdx);
 		bookmarkDAO.deleteByDocumentIdx(documentIdx);
-		statusLogDAO.deleteByDocumentIdx(documentIdx);
 		publishedVersionDAO.deleteByDocumentIdx(documentIdx);
 		documentVersionDAO.deleteByDocumentIdx(documentIdx);
 		versionLogDAO.deleteByDocumentIdx(documentIdx);

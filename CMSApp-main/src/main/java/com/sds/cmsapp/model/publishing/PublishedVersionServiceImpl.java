@@ -84,7 +84,15 @@ public class PublishedVersionServiceImpl implements PublishedVersionService {
 				continue;
 			}
 			
-			log.debug("배포 대기 목록으로 이동");
+			if (statusCode == 100 
+					&& versionLogIdx == publishedVersionDAO.selectByDocumentIdx(docIdx).getVersionLog().getVersionLogIdx() 
+					&& publishedVersionDAO.selectByDocumentIdx(docIdx) != null) {
+				log.debug("기 배포 목록");
+			}
+			
+			if(statusCode == 300) {
+				log.debug("리뷰 완료 목록");
+			}
 			PublishedVersion publishedVer = new PublishedVersion(doc, versionLog);
 			publishedVerList.add(publishedVer);
 		}
@@ -121,7 +129,15 @@ public class PublishedVersionServiceImpl implements PublishedVersionService {
 				continue;
 			}
 			
-			log.debug("배포 대기 목록으로 이동");
+			if (statusCode == 100 
+					&& versionLogIdx == publishedVersionDAO.selectByDocumentIdx(docIdx).getVersionLog().getVersionLogIdx() 
+					&& publishedVersionDAO.selectByDocumentIdx(docIdx) != null) {
+				log.debug("기 배포 목록");
+			}
+			
+			if(statusCode == 300) {
+				log.debug("리뷰 완료 목록");
+			}
 			PublishedVersion publishedVer = new PublishedVersion(doc, versionLog, publishedVersionName);
 			publishedVerList.add(publishedVer);
 		}

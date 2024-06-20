@@ -14,7 +14,6 @@ import com.sds.cmsapp.exception.StatusLogException;
 import com.sds.cmsapp.model.document.DocumentService;
 import com.sds.cmsapp.model.document.DocumentVersionService;
 import com.sds.cmsapp.model.mastercode.MasterCodeDAO;
-import com.sds.cmsapp.model.statuslog.StatusLogService;
 
 @Service
 public class MainUpdatingStatusServiceImpl implements MainUpdatingStatusService {
@@ -22,8 +21,6 @@ public class MainUpdatingStatusServiceImpl implements MainUpdatingStatusService 
 	@Autowired
 	DocumentVersionService documentVersionService;
 
-	@Autowired
-	StatusLogService statusLogService;
 
 	@Autowired
 	DocumentService documentService;
@@ -34,17 +31,17 @@ public class MainUpdatingStatusServiceImpl implements MainUpdatingStatusService 
 	@Transactional
 	public void changeStatus(Document document,  Emp emp, MasterCode masterCode, String comments)
 			throws DocumentVersionException, StatusLogException {
-		if(masterCode.getStatusCode() == 200) {
-			
-		}else if(masterCode.getStatusCode()== 300) {
-			
-		}
+//		if(masterCode.getStatusCode() == 200) {
+//			
+//		}else if(masterCode.getStatusCode()== 300) {
+//			
+//		}
 		
-		DocumentVersion documentVersion = new DocumentVersion(document, masterCode);
-		StatusLog statusLog = new StatusLog(emp, document, masterCode, comments);
-
+		DocumentVersion documentVersion = new DocumentVersion(document, masterCode, emp, comments);
 		documentVersionService.changeStatusOne(documentVersion);
-		statusLogService.registOne(statusLog);
+		
+		//StatusLog statusLog = new StatusLog(emp, document, masterCode, comments);
+		//statusLogService.registOne(statusLog);
 
 	}
 

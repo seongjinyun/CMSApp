@@ -51,13 +51,13 @@ public class RestDocumentListController {
 		return documentService.getFilteredList(filterDTO);
 	}
 	
-	/* 전체 프로젝트 목록 조회 */
+	/* 필터를 위해 전체 프로젝트 목록 조회 */
 	@GetMapping("/admin/project/list")
 	public List<Project> getProjectList() {
 		return projectService.selectAll();
 	}
 	
-	/* 전체 상태 목록 조회 */
+	/* 필터를 위해 전체 상태 목록 조회 */
 	@GetMapping("/admin/status/list")
 	public List<MasterCode> getStatusList() {
 		return masterCodeService.selectAll();
