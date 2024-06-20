@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "mybatis-3-mapper.dtd">
+<mapper namespace="com.sds.cmsdocument.model.versionlog.VersionLogDAO">
+	
+	<select id="select" parameterType="int" resultType="VersionLog">
+		select * from version_log where version_log_idx = #{versionLogIdx}
+	</select>
+
+	<select id="selectByDocumentIdx" parameterType="int" resultType="VersionLog">
+		select * from version_log where document_idx = #{documentIdx}
+	</select>
+
+		<!-- branched_version_log 컬럼은 보류 -->
+	<resultMap type="VersionLog" id="VersionLogMap">
+		<id 			column="version_log_idx" 	property="versionLogIdx"/>
+		<result 		column="title" 				property="title"/>
+		<result 		column="content" 		property="content"/>
+		<result 		column="comments" 				property="comments"/>
+		<result 		column="regdate" 				property="regdate"/>
+		
+		<!-- resultType Emp는 성공 -->
+		<association column="emp_idx" property="emp" javaType="Emp" select="com.sds.cmsdocument.model.emp.EmpDAO.selectByEmpIdx"/>
+		<association column="document_idx" property="document" javaType="Document" select="com.sds.cmsdocument.model.document.DocumentDAO.select"/>
+
+		<!-- branched_version_log 컬럼은 보류 -->
+		
+	</resultMap>
+		
+	
+	
+	<insert id="insert" parameterType="versionLog">
+		insert into version_log(title, content, comments, emp_idx, document_idx)
+		values(#{title}, #{content}, #{comments}, #{emp.empIdx}, #{document.documentIdx})
+	</insert>
+	
+	<!-- 하나 조회 by version_log_idx  -->
+	<select id="selectByVersionLogIdx" parameterType="int" resultMap="VersionLogMap">
+		select * from version_log where version_log_idx=#{versionLogIdx}
+	</select>
+	
+	<delete id="delete" parameterType="int">
+		delete from version_log where version_log_idx = #{versionLogIdx}
+	</delete>
+	
+	<delete id="deleteByDocumentIdx" parameterType="int">
+		delete from version_log where document_idx = #{document.documentIdx}
+	</delete>
+</mapper>

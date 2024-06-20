@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "mybatis-3-mapper.dtd">
+<mapper namespace="com.sds.cmsdocument.model.emp.EmpDetailDAO">
+
+	<!-- emp_idx가 가리키는 사원의 상세 정보 추가 -->
+	<insert id="insert" parameterType="EmpDetail">
+		insert into emp_detail(emp_idx, emp_id, emp_pw, emp_profile_url)
+		values(#{emp.empIdx}, #{empId}, #{empPw}, #{empProfileUrl})
+	</insert>
+	
+	<resultMap type="EmpDetail" id="EmpDetailMap">
+		<id column="emp_detail_idx" property="empDetailIdx"/>
+		<result column="emp_id" property="empId"/>
+		<result column="emp_pw" property="empPw"/>
+		<result column="emp_profile_url" property="empProfileUrl"/>
+		<association column="emp_idx" property="emp" javaType="Emp" select="com.sds.cmsdocument.model.emp.EmpDAO.selectByEmpIdx"/>
+	</resultMap>
+		
+	<!-- emp_idx가 가리키는 사원의 상세정보 가져오기  -->
+	<select id="selectByEmpIdx" parameterType="int" resultMap="EmpDetailMap">
+		select * from emp_detail where emp_idx=#{empIdx}
+	</select>
+	
+	<!-- emp_idx가 가리키는 사원의 상세 정보 변경 -->
+	<update id="update" parameterType="EmpDetail">
+		update emp_detail
+		set emp_id=#{empId}, emp_pw=#{empPw}, emp_profile_url=#{empProfileUrl}
+		where emp_idx=#{emp.empIdx} 
+	</update>
+	
+	<select id="selectByLoginData" parameterType="EmpDetail" resultType="Emp">
+		SELECT *
+        FROM emp e
+        JOIN emp_detail ed ON ed.emp_idx = e.emp_idx
+        WHERE ed.emp_id = #{empId} AND ed.emp_pw = #{empPw}
+	</select>
+	
+	<select id="selectByUid" parameterType="String" resultType="EmpDetail">
+		SELECT *
+		FROM emp_detail
+		WHERE emp_id = #{empId}
+	</select>
+	
+	<select id="selectEmpIdxByUid" parameterType="String" resultType="int">
+		SELECT emp_idx
+		FROM emp_detail
+		WHERE emp_id = #{empId}
+	</select>
+	
+</mapper>

@@ -10,10 +10,6 @@ import com.sds.cmsapp.domain.ResultDocCountDTO;
 
 @Mapper
 public interface DocumentVersionDAO {
-	
-	@Select("SELECT * FROM document_version WHERE document_idx = #{documentIdx}")
-	@ResultMap("DocumentVersionMap")
-	public DocumentVersion selectByDocumentIdx(int documentIdx);
 			
 	public ResultDocCountDTO selectCountByStatus(int statusCode);
 	
@@ -24,5 +20,8 @@ public interface DocumentVersionDAO {
 	public int delete(final int documentVersionIdx);
 	
 	public int deleteByDocumentIdx(final int documentIdx);
+	
+	// DocumentVersionMap 반환
+	public DocumentVersion selectByDocumentIdx(int documentIdx);
 
 }

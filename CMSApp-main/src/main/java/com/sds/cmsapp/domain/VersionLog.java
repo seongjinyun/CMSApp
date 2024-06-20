@@ -16,6 +16,4 @@ public class VersionLog {
 	private Emp emp;
 	private Document document;
 	
-	private VersionLog versionLog;
-	
 }

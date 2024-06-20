@@ -11,6 +11,7 @@ import org.springframework.transaction.annotation.Transactional;
 import com.sds.cmsapp.domain.Document;
 import com.sds.cmsapp.domain.DocumentVersion;
 import com.sds.cmsapp.domain.Emp;
+import com.sds.cmsapp.domain.Folder;
 import com.sds.cmsapp.domain.Trash;
 import com.sds.cmsapp.domain.VersionLog;
 import com.sds.cmsapp.exception.TrashException;
@@ -22,7 +23,6 @@ import com.sds.cmsapp.model.document.OneditDAO;
 import com.sds.cmsapp.model.emp.EmpDAO;
 import com.sds.cmsapp.model.folder.FolderDAO;
 import com.sds.cmsapp.model.publishing.PublishedVersionDAO;
-import com.sds.cmsapp.model.statuslog.StatusLogDAO;
 import com.sds.cmsapp.model.versionlog.VersionLogDAO;
 
 @Service
@@ -53,9 +53,6 @@ public class TrashServiceImpl implements TrashService{
 	private BookmarkDAO bookmarkDAO;
 	
 	@Autowired
-	private StatusLogDAO statusLogDAO;
-
-	@Autowired
 	private VersionLogDAO versionLogDAO;
 	
 	@Autowired
@@ -77,6 +74,11 @@ public class TrashServiceImpl implements TrashService{
 		Trash trash = trashDAO.select(trashIdx);
 		Document document = trash.getDocument();
 		if(document.getFolder() == null) { // 복원됐는데 돌아갈 곳이 없다면
+			if(folderDAO.selectRestoreFolder() == null) {
+				Folder folder = new Folder();
+				folder.setFolderName("restored");
+				folderDAO.insert(folder);
+			}
 			document.setFolder(folderDAO.selectRestoreFolder());
 			documentDAO.update(document);
 		}
@@ -94,7 +96,6 @@ public class TrashServiceImpl implements TrashService{
 		oneditDAO.deleteByDocumentIdx(documentIdx);
 		trashDAO.delete(trashIdx);
 		bookmarkDAO.deleteByDocumentIdx(documentIdx);
-		statusLogDAO.deleteByDocumentIdx(documentIdx);
 		publishedVersionDAO.deleteByDocumentIdx(documentIdx);
 		documentVersionDAO.deleteByDocumentIdx(documentIdx);
 		versionLogDAO.deleteByDocumentIdx(documentIdx);

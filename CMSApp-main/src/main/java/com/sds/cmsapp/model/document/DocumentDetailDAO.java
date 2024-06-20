@@ -17,5 +17,5 @@ public interface DocumentDetailDAO {
     public int findMaxVersionByDocumentIdx(int documentIdx);
     public List<VersionLog> getVersionLogSelect(int documentIdx);
 
-
+    public void versionLogDelete(int versionLog);
 }
