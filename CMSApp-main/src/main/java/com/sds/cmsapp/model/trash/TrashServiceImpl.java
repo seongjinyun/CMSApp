@@ -11,6 +11,7 @@ import org.springframework.transaction.annotation.Transactional;
 import com.sds.cmsapp.domain.Document;
 import com.sds.cmsapp.domain.DocumentVersion;
 import com.sds.cmsapp.domain.Emp;
+import com.sds.cmsapp.domain.Folder;
 import com.sds.cmsapp.domain.Trash;
 import com.sds.cmsapp.domain.VersionLog;
 import com.sds.cmsapp.exception.TrashException;
@@ -73,6 +74,11 @@ public class TrashServiceImpl implements TrashService{
 		Trash trash = trashDAO.select(trashIdx);
 		Document document = trash.getDocument();
 		if(document.getFolder() == null) { // 복원됐는데 돌아갈 곳이 없다면
+			if(folderDAO.selectRestoreFolder() == null) {
+				Folder folder = new Folder();
+				folder.setFolderName("restored");
+				folderDAO.insert(folder);
+			}
 			document.setFolder(folderDAO.selectRestoreFolder());
 			documentDAO.update(document);
 		}
