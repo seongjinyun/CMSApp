@@ -44,7 +44,7 @@ public class SecurityConfig {
             	.requestMatchers("/loginForm").permitAll() // 로그인 폼 
             	.requestMatchers("/emp/login").permitAll() // 로그인 과정
             	
-            	.anyRequest().permitAll()	
+            	.anyRequest().permitAll()
             	
             );
     	httpSecurity.csrf(csrf -> csrf.disable());

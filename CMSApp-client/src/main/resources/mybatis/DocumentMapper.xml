@@ -2,15 +2,83 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "mybatis-3-mapper.dtd">
 <mapper namespace="com.sds.cmsclient.model.document.DocumentDAO">
 	
-<!-- 	<select id="folderAllSelect" parameterType="int" resultType="com.sds.cmsclient.domain.Folder">
-		select * from folder where project_idx = ${projectIdx}	
-	</select> -->
-	
-	<select id="topFolderSelect" parameterType="int" resultType="com.sds.cmsclient.domain.Folder">
-		select * from folder where project_idx = ${projectIdx}
+	<select id="projectNameSelect" parameterType="int">
+		select project_name from project where project_idx=#{projectIdx}
 	</select>
 	
-<!-- 	<select id="subFolderSelect" parameterType="int" resultType="int">
-		select parent_folder_idx from folder where parent_folder_idx = #{parent_folder_idx}
-	</select> -->
+	
+	<select id="getFolderListByProjectIdx" parameterType="int" resultMap="folderResultMap">
+	    SELECT
+	        folder_idx,
+	        folder_name,
+	        parent_folder_idx,
+	        project_idx
+	    FROM folder
+	    WHERE project_idx = #{projectIdx}
+	    ORDER BY parent_folder_idx, folder_idx
+	</select>
+	
+	<resultMap id="folderResultMap" type="com.sds.cmsclient.domain.Folder">
+	    <id property="folderIdx" column="folder_idx"/>
+	    <result property="folderName" column="folder_name"/>
+	    <result property="parentFolderId" column="parent_folder_idx"/>
+	    <result property="project.projectIdx" column="project_idx"/>
+	    <collection property="childFolders" ofType="com.sds.cmsclient.domain.Folder" select="getFolderListByProjectIdx" column="folder_idx">
+	        <id property="folderIdx" column="folder_idx"/>
+	        <result property="folderName" column="folder_name"/>
+	        <result property="parentFolderId" column="parent_folder_idx"/>
+	        <result property="project.projectIdx" column="project_idx"/>
+	    </collection>
+	</resultMap>
+
+    <resultMap id="publishedVersionResultMap" type="com.sds.cmsclient.domain.PublishedVersion">
+        <id property="publishedVersionIdx" column="published_version_idx"/>
+        <result property="documentIdx" column="document_idx"/>
+        <result property="versionLogIdx" column="version_log_idx"/>
+        <result property="publishedVersionNameIdx" column="published_version_name_idx"/>
+        <association property="document" javaType="com.sds.cmsclient.domain.Document">
+            <id property="documentIdx" column="document_idx"/>
+            <result property="hit" column="hit"/>
+			<association property="folder" javaType="com.sds.cmsclient.domain.Folder">
+				<id property="folderIdx" column="folder_idx"/>
+			</association>        
+		</association>
+        <association property="versionLog" javaType="com.sds.cmsclient.domain.VersionLog">
+            <id property="versionLogIdx" column="version_log_idx"/>
+            <result property="version" column="version"/>
+            <result property="regdate" column="regdate"/>
+            <result property="title" column="title"/>
+            <result property="content" column="content"/>
+            <result property="comments" column="comments"/>
+        </association>
+    </resultMap>
+
+    <select id="getPublishedVersionIdx" parameterType="int" resultMap="publishedVersionResultMap">
+        SELECT
+            p.published_version_idx,
+            p.document_idx,
+            p.version_log_idx,
+            p.published_version_name_idx,
+            d.folder_idx,
+            v.title
+        FROM published_version p
+        JOIN document d ON p.document_idx = d.document_idx
+        JOIN version_log v ON p.version_log_idx = v.version_log_idx
+        WHERE d.folder_idx = #{folder.folderIdx}
+    </select>
+	
+	<select id="getPublishedVersionByDocumentIdx" parameterType="int" resultMap="publishedVersionResultMap">
+        SELECT
+            p.published_version_idx,
+            p.document_idx,
+            p.version_log_idx,
+            p.published_version_name_idx,
+            d.folder_idx,
+            v.title,
+            v.content
+        FROM published_version p
+        JOIN document d ON p.document_idx = d.document_idx
+        JOIN version_log v ON p.version_log_idx = v.version_log_idx
+        WHERE p.document_idx = #{documentIdx}
+    </select>
 </mapper>

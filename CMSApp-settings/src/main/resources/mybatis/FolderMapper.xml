@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "mybatis-3-mapper.dtd">
+<mapper namespace="com.sds.cmssettings.model.folder.FolderDAO">
+
+	<insert id="insert" parameterType="Folder">
+		insert into folder (parent_folder_idx, folder_name, project_idx)
+		values (#{parentFolder.folderIdx}, #{folderName}, #{project.projectIdx})
+		<selectKey keyColumn="folder_idx" keyProperty="folderIdx" resultType="int" order="AFTER">
+			select last_insert_id() as folder_idx
+		</selectKey>
+	</insert>
+	
+	<delete id="delete" parameterType="int">
+		delete from folder where folder_idx = #{folderIdx}
+	</delete>
+	
+	<update id="update" parameterType="Folder">
+		update folder
+			<set>
+				<if test="parentFolder.folderIdx != null"> 
+					parent_folder_idx = #{parentFolder.folderIdx},
+				</if>
+				<if test="folderName != null">
+					folder_name = #{folderName},
+				</if>
+				<if test="project.projectIdx != null">
+					project_idx = #{project.projectIdx}
+				</if>
+			</set>
+		where folder_idx = #{folderIdx}
+	</update>
+	
+	<resultMap type="Folder" id="FolderMap">
+		<id 	column="folder_idx"	property="folderIdx"/>
+		<result	column="regdate"	property="regdate"/>
+		<association column="parent_folder_idx" property="parentFolder" javaType="Folder"
+			select="com.sds.cmssettings.model.folder.FolderDAO.select"/>
+		<association column="project_idx" property="project" javaType="Project"
+			select="com.sds.cmssettings.model.project.ProjectDAO.selectByProjectIdx"/>
+	</resultMap>
+	
+	<select id="select" parameterType="int" resultMap="FolderMap">
+		select * from folder
+		where folder_idx = #{folderIdx}
+	</select>
+	
+	<select id="selectAll" resultMap="FolderMap">
+		select * from folder
+	</select>
+	
+	<select id="selectSub" parameterType="int" resultMap="FolderMap">
+		select * from folder
+		where parent_folder_idx = #{parentFolderIdx}
+	</select>
+	
+	<select id="selectParentIdx" parameterType="int" resultType="int">
+		select parent_folder_idx from folder
+		where folder_idx = #{folderIdx}
+	</select>
+	
+	<select id="selectTopFolder" resultMap="FolderMap">
+		select * from folder
+		where parent_folder_idx is null
+	</select>
+	
+	<select id="selectByProjectIdx" resultMap="FolderMap">
+		select * from folder
+		where project_idx = #{project.projectIdx}
+	</select>
+	
+	<select id="selectRestoreFolder" resultMap="FolderMap">
+    	<![CDATA[
+    	SELECT * FROM folder WHERE folder_name = 'restored'
+    	]]>
+	</select>
+
+</mapper>

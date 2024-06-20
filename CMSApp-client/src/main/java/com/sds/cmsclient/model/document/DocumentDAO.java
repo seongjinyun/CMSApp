@@ -6,10 +6,12 @@ import java.util.Map;
 import org.apache.ibatis.annotations.Mapper;
 
 import com.sds.cmsclient.domain.Folder;
+import com.sds.cmsclient.domain.PublishedVersion;
 
 @Mapper
 public interface DocumentDAO {
-	//public List folderAllSelect(Map map);
-    public List<Folder> topFolderSelect(int projectIdx);
-//    public int subFolderSelect(int folderIdx);
+	public List<Folder> getFolderListByProjectIdx(int projectIdx);
+	public List<PublishedVersion> getPublishedVersionIdx(int folderIdx);
+	public List<PublishedVersion> getPublishedVersionByDocumentIdx(int documentIdx);
+	public String projectNameSelect(int projectIdx);
 }

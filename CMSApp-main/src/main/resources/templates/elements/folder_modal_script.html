@@ -83,7 +83,6 @@
 			var selectedNode = $('#jstree_demo_div').jstree("get_selected", true);
 			if (selectedNode.length > 0) {
 				var selectedFolderIdx = selectedNode[0].id;
-				console.log('Selected Directory ID:', selectedFolderIdx);
 				
 				let selectedIdxList = [];
 				let folderIdx = $("input[name='folderIdx']").val();

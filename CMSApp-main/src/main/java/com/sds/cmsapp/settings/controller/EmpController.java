@@ -1,9 +1,11 @@
 package com.sds.cmsapp.settings.controller;
 
+import java.nio.file.Files;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.core.io.ResourceLoader;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -19,9 +21,18 @@ import com.sds.cmsapp.exception.UploadException;
 import com.sds.cmsapp.model.emp.EmpDetailService;
 import com.sds.cmsapp.model.emp.EmpService;
 
+import lombok.extern.slf4j.Slf4j;
+
+@Slf4j
 @Controller
 public class EmpController {
 
+//	@Autowired
+//	private ResourceLoader resourceLoader;
+//	
+//	@Value("${upload.location}")
+//	private String uploadLocation;
+	
 	@Autowired
 	private FileManager fileManager;
 	
@@ -38,8 +49,16 @@ public class EmpController {
 	public String regist(Emp emp, EmpDetail empDetail, @RequestParam("deptIdx") int deptIdx, @RequestParam("roleCode") int roleCode) {
 		try {
 			 MultipartFile file = empDetail.getFile();
+			 // log.debug("title: "+empDetail.getFile());
+			 // log.debug("original Filename: "+file.getOriginalFilename());
+			 // File directory = resourceLoader.getResource("classpath:/static/profileImg/").getFile();
+			 // log.debug("파일을 저장할 경로는 "+directory.getAbsolutePath());			 
 	            if (file != null && !file.isEmpty()) {            // 파일이 존재한다면 
 	                String fileUrl = fileManager.save(empDetail); // 서버에 저장
+	                // Path path = Paths.get(directory.getAbsolutePath());
+	                // Path savePath = path.resolve(file.getOriginalFilename());
+	                // Files.copy(file.getInputStream(), savePath);
+	                // log.debug(savePath.toString());
 	                empDetail.setEmpProfileUrl(fileUrl);
 	            } 
 	        

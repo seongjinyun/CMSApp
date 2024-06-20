@@ -8,6 +8,12 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class PublishedVersion {
 	private int publishedVersionIdx;
+	
+	private int documentIdx;
+	private int versionLogIdx;
+	private int publishedVersionNameIdx;
+	
+	
 	private Document document;
 	private VersionLog versionLog;
 	private PublishedVersionName publishedVersionName;

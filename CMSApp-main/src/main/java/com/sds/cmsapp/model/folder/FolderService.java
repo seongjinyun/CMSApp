@@ -3,7 +3,6 @@ package com.sds.cmsapp.model.folder;
 import java.util.List;
 
 import com.sds.cmsapp.domain.Folder;
-import com.sds.cmsapp.domain.RequestDocFilterDTO;
 import com.sds.cmsapp.exception.FolderException;
 
 public interface FolderService {
@@ -30,7 +29,7 @@ public interface FolderService {
 	
 	public List<Folder> selectTopFolder(); // 최상위폴더 반환
 	
-	public Folder completeFolder(final int folderIdx) throws FolderException; // 폴더 하나를 끝까지 채우기
+	public Folder completeFolder(final int folderIdx) throws FolderException; // 폴더 하나의 하위폴더를 끝까지 채우기
 	
 	public Folder fillDocument(final int folderIdx); // 해당 폴더 DTO에 존재하는 문서들을 List로 추가합니다.
 	
