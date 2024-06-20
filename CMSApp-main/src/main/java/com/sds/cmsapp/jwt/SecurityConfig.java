@@ -18,13 +18,7 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 @EnableWebSecurity
 @EnableMethodSecurity
 public class SecurityConfig {
-
-    @Autowired
-    private UserDetailsService userDetailsService;
 	
-    @Autowired
-    public JwtAuthenticationFilter jwtAuthenticationFilter;
-
     public JwtUtil jwtUtil;
     
     public SecurityConfig(JwtUtil jwtUtil) {
@@ -38,7 +32,6 @@ public class SecurityConfig {
 
     @Autowired
     private AuthenticationConfiguration authenticationConfiguration;
-
     
     @Bean
     public LoginFilter loginFilter() throws Exception{
@@ -55,11 +48,8 @@ public class SecurityConfig {
             	.requestMatchers("/admin/**").permitAll()  // static
             	.requestMatchers("/loginForm").permitAll() // 로그인 폼 
             	.requestMatchers("/emp/login").permitAll() // 로그인 과정
-            	
-            	//.requestMatchers("/settings/test").hasAuthority("Admin")
-            	
+                      	
             	.anyRequest().permitAll()
-            	//.anyRequest().authenticated()
             	
             );
     	
@@ -68,7 +58,6 @@ public class SecurityConfig {
     	httpSecurity.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
     	
     	httpSecurity.addFilterBefore(loginFilter(), UsernamePasswordAuthenticationFilter.class);
-    	httpSecurity.addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
     	
         return httpSecurity.build();
     }

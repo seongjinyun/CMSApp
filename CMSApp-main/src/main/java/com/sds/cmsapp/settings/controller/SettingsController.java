@@ -1,15 +1,12 @@
 package com.sds.cmsapp.settings.controller;
 
-import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -19,7 +16,6 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.sds.cmsapp.common.Pager;
 import com.sds.cmsapp.domain.Authority;
-import com.sds.cmsapp.domain.CustomUserDetails;
 import com.sds.cmsapp.domain.Emp;
 import com.sds.cmsapp.domain.EmpDetail;
 import com.sds.cmsapp.domain.Role;
@@ -71,6 +67,9 @@ public class SettingsController {
 		return "/login/loginForm";
 	}
 	
+	/*----------------------------------------------------
+	 * 더이상 사용하지 않음
+
 	@GetMapping("/settings/general")
 	public String getGeneral() {
 		return "settings/general";
@@ -80,6 +79,7 @@ public class SettingsController {
 	public String getLog() {
 		return "settings/log";
 	}
+	----------------------------------------------------*/
 	
 	@GetMapping("/settings/dept_project")
 	public String getAccess(Model model) {
@@ -133,35 +133,27 @@ public class SettingsController {
 	    return response;
 	}
 
-	//@PreAuthorize("hasRole('Admin')")
-	//@PreAuthorize("hasRole('ROLE_Admin')")
-	//@PreAuthorize("hasAuthority('role.authority.Admin')")
-	//@PreAuthorize("hasAuthority('ROLE_Admin')")
 	@GetMapping("/settings/mypage")
 	public String getMypage() {
-		try {
-			return "settings/mypage";
-		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			log.warn("컨트롤러에서 에러 발생 ");
-			e.printStackTrace();
-			return null;
-		}
+		return "settings/mypage";
 	}
 	
 	//----------------------------------------------------------------------------------------
-	@GetMapping("/settings/test")
-    @PreAuthorize("hasAuthority('Admin')")
-    public String getEmployeeInfo(@AuthenticationPrincipal UserDetails userDetails) {
-        // userDetails에서 empIdx 추출
-        // 예를 들어, userDetails가 CustomUserDetails인 경우
-        CustomUserDetails customUserDetails = (CustomUserDetails) userDetails;
-        int empIdx = customUserDetails.getEmpIdx();
-        Collection<? extends GrantedAuthority> authority = customUserDetails.getAuthorities();
-        // empIdx를 이용해 사원 정보를 조회하고 반환
-        log.warn("사원 인덱스: " + empIdx + ", 역할: " + authority); //userDetails.getAuthorities()
-        return "settings/test";
-    }
+	@GetMapping("/checkAuthority/mypage")
+	public ResponseEntity<?> getEmployeeInfo(@RequestHeader(name="Authorization") String header) {
+	    String token = header.replace("Bearer ", "");
+	    Emp emp = jwtValidService.getEmpFromJwt(token);
+	    String roleName = emp.getRole().getRoleName();
+	    
+	    Map<String, String> response = new HashMap<>();
+	    if(roleName.equals("Admin") || roleName.equals("Draft Writer")) {
+	        response.put("url", "/settings/mypage");
+	        return ResponseEntity.ok(response);
+	    } else {
+	        response.put("url", "/error");
+	        return ResponseEntity.status(HttpStatus.FORBIDDEN).body(response);
+	    }
+	}
 	//----------------------------------------------------------------------------------------	
 
 	@GetMapping("/settings/user")
