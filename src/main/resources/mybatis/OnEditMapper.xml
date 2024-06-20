@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "mybatis-3-mapper.dtd">
+<mapper namespace="com.sds.cmsdocument.model.document.OneditDAO">
+<!-- 
+	public Onedit select(final int onEditIdx);
+	
+	public void insert(final Onedit onEdit);
+	
+	public void delete(final int onEdit);
+	
+	public List<Onedit> selectAll();
+	 -->
+	<resultMap type="Onedit" id="OneditMap">
+		<id		column="onedit_idx"		property="oneditIdx"/>
+		<result	column="regdate"		property="regdate"/>
+		<association column="emp_idx"	property="emp" javaType="Emp"
+			select="com.sds.cmsdocument.model.emp.EmpDAO.selectByEmpIdx"/>
+		<association column="document_idx"	property="document" javaType="Document"
+			select="com.sds.cmsdocument.model.document.DocumentDAO.select"/>
+	</resultMap>
+	 
+	<select id="select" parameterType="int" resultMap="OneditMap">
+		select * from onedit where onedit_idx = #{oneditIdx}
+	</select>
+	
+	<insert id="insert" parameterType="Onedit">
+		insert into onedit (emp_idx, document_idx)
+		values (#{emp.empIdx}, #{document.documentIdx})
+	</insert>
+	
+	<delete id="delete" parameterType="int">
+		delete from onedit where onedit_idx = #{oneditIdx}
+	</delete>
+	
+	<delete id="deleteByDocumentIdx" parameterType="int">
+		delete from onedit where document_idx = #{document.documentIdx}
+	</delete>
+	
+	<select id="selectAll" resultMap="OneditMap">
+		select * from onedit
+	</select>
+	
+	<select id="selectByDocumentIdx">
+		select * from onedit where document_idx = #{document.documentIdx}
+	</select>
+	
+	<select id="selectByEmpIdx">
+		select * from onedit where emp_idx = #{emp.empIdx}
+	</select>
+	
+</mapper>
