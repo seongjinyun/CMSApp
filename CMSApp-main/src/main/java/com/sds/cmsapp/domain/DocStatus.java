@@ -4,9 +4,7 @@ public enum DocStatus {
 	DRAFT(100, "초안", "draft"),
     IN_REVIEW(200, "리뷰 중", "inReview"),
     REVIEWED(300, "리뷰 완료", "reviewed"),
-    PUBLISHED(400, "배포 완료", "published"),
-    REJECTED(500, "반려", "rejected"),
-	DEPRECATED(600, "deprecated", "deprecated");
+    REJECTED(500, "반려", "rejected");
 
     private final int statusCode;
     private final String statusName;

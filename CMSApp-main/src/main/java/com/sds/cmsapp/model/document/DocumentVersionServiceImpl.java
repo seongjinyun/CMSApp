@@ -10,6 +10,7 @@ import org.springframework.transaction.annotation.Transactional;
 import com.sds.cmsapp.domain.DocStatus;
 import com.sds.cmsapp.domain.Document;
 import com.sds.cmsapp.domain.DocumentVersion;
+import com.sds.cmsapp.domain.Emp;
 import com.sds.cmsapp.domain.MasterCode;
 import com.sds.cmsapp.domain.PublishedVersion;
 import com.sds.cmsapp.exception.DocumentVersionException;
@@ -37,12 +38,12 @@ public class DocumentVersionServiceImpl implements DocumentVersionService {
 	}
 	
 	@Transactional(propagation = Propagation.REQUIRED)
-	public void changeStatusOfPublishedDocList(List<PublishedVersion> publishedVersionList)
+	public void changeStatusOfPublishedDocList(List<PublishedVersion> publishedVersionList, Emp emp, String comments)
 		throws DocumentVersionException{
 		
 		for (PublishedVersion publishedVer : publishedVersionList) {
 			Document doc = publishedVer.getDocument();
-			DocumentVersion docVer = new DocumentVersion(doc, new MasterCode(DocStatus.PUBLISHED.getStatusCode()));
+			DocumentVersion docVer = new DocumentVersion(doc, new MasterCode(DocStatus.DRAFT.getStatusCode()), emp, comments);
 			
 			// 상태 업데이트
 			int resultOfUpdatingStatus = documentVersionDAO.updateStatusByDocumentIdx(docVer);

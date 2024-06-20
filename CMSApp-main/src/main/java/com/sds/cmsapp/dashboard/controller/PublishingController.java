@@ -21,7 +21,6 @@ import com.sds.cmsapp.exception.PublishedVersionNameException;
 import com.sds.cmsapp.model.document.DocumentVersionService;
 import com.sds.cmsapp.model.publishing.MainPublishingService;
 import com.sds.cmsapp.model.publishing.PublishedVersionService;
-import com.sds.cmsapp.model.statuslog.StatusLogService;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -35,8 +34,6 @@ public class PublishingController {
 	@Autowired
 	DocumentVersionService documentVersionService;
 	
-	@Autowired
-	StatusLogService statusLogService;
 	
 	@Autowired
 	MainPublishingService mainPublishingService;
