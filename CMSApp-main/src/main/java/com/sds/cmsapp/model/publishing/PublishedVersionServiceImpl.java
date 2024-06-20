@@ -78,17 +78,17 @@ public class PublishedVersionServiceImpl implements PublishedVersionService {
 			VersionLog versionLog = versionLogDAO.select(versionLogIdx);
 			log.debug(docIdx + "번, 결재 상태 코드: " + statusCode + ", 버전 로그 번호: " + versionLogIdx);
 			
-			// 상태 코드가 300(리뷰 완료) 또는 400(배포 완료)가 아닌 문서 제외
-			if (statusCode != 300 && statusCode != 400) {
+			// 상태 코드가 300(리뷰 완료)가 아닌 문서 제외
+			if (statusCode == 200 && statusCode == 500 && statusCode == 0) {
 				log.debug("배포 대기 목록에서 제외");
 				continue;
 			}
 			
-			if (statusCode == 100 
-					&& versionLogIdx == publishedVersionDAO.selectByDocumentIdx(docIdx).getVersionLog().getVersionLogIdx() 
-					&& publishedVersionDAO.selectByDocumentIdx(docIdx) != null) {
-				log.debug("기 배포 목록");
-			}
+//			if (statusCode == 100 
+//					&& versionLogIdx == publishedVersionDAO.selectByDocumentIdx(docIdx).getVersionLog().getVersionLogIdx() 
+//					&& publishedVersionDAO.selectByDocumentIdx(docIdx) != null) {
+//				log.debug("기 배포 목록");
+//			}
 			
 			if(statusCode == 300) {
 				log.debug("리뷰 완료 목록");
@@ -123,17 +123,17 @@ public class PublishedVersionServiceImpl implements PublishedVersionService {
 			VersionLog versionLog = versionLogDAO.select(versionLogIdx);
 			log.debug(docIdx + "번, 결재 상태 코드: " + statusCode + ", 버전 로그 번호: " + versionLogIdx);
 			
-			// 상태 코드가 300(리뷰 완료) 또는 400(배포 완료)가 아닌 문서 제외
-			if (statusCode != 300 && statusCode != 400) {
+			// 상태 코드가 300(리뷰 완료)이 아닌 문서 제외
+			if (statusCode == 200 && statusCode == 500 && statusCode == 0) {
 				log.debug("배포 대기 목록에서 제외");
 				continue;
 			}
 			
-			if (statusCode == 100 
-					&& versionLogIdx == publishedVersionDAO.selectByDocumentIdx(docIdx).getVersionLog().getVersionLogIdx() 
-					&& publishedVersionDAO.selectByDocumentIdx(docIdx) != null) {
-				log.debug("기 배포 목록");
-			}
+//			if (statusCode == 100 
+//					&& versionLogIdx == publishedVersionDAO.selectByDocumentIdx(docIdx).getVersionLog().getVersionLogIdx() 
+//					&& publishedVersionDAO.selectByDocumentIdx(docIdx) != null) {
+//				log.debug("기 배포 목록");
+//			}
 			
 			if(statusCode == 300) {
 				log.debug("리뷰 완료 목록");
