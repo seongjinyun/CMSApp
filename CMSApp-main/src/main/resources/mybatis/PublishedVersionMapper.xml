@@ -5,7 +5,7 @@
 	<resultMap type="PublishedVersion" id="PublishedVersionMap">
 		<id		column="published_version_idx"		property="publishedVersionIdx"/>
 		<association column="document_idx" property="document" javaType="Document"
-			select="com.sds.cmsapp.model.document.DocumentrDAO.select"/>
+			select="com.sds.cmsapp.model.document.DocumentDAO.select"/>
 		<association column="version_log_idx" property="versionLog" javaType="VersionLog"
 			select="com.sds.cmsapp.model.versionlog.VersionLogDAO.select"/>
 		<association column="published_version_name_idx" property="publishedVersionName"
