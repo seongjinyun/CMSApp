@@ -1,11 +1,15 @@
 package com.sds.cmsapp.settings.controller;
 
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -15,6 +19,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.sds.cmsapp.common.Pager;
 import com.sds.cmsapp.domain.Authority;
+import com.sds.cmsapp.domain.CustomUserDetails;
 import com.sds.cmsapp.domain.Emp;
 import com.sds.cmsapp.domain.EmpDetail;
 import com.sds.cmsapp.domain.Role;
@@ -128,10 +133,36 @@ public class SettingsController {
 	    return response;
 	}
 
+	//@PreAuthorize("hasRole('Admin')")
+	//@PreAuthorize("hasRole('ROLE_Admin')")
+	//@PreAuthorize("hasAuthority('role.authority.Admin')")
+	//@PreAuthorize("hasAuthority('ROLE_Admin')")
 	@GetMapping("/settings/mypage")
 	public String getMypage() {
-		return "settings/mypage";
+		try {
+			return "settings/mypage";
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			log.warn("컨트롤러에서 에러 발생 ");
+			e.printStackTrace();
+			return null;
+		}
 	}
+	
+	//----------------------------------------------------------------------------------------
+	@GetMapping("/settings/test")
+    @PreAuthorize("hasAuthority('Admin')")
+    public String getEmployeeInfo(@AuthenticationPrincipal UserDetails userDetails) {
+        // userDetails에서 empIdx 추출
+        // 예를 들어, userDetails가 CustomUserDetails인 경우
+        CustomUserDetails customUserDetails = (CustomUserDetails) userDetails;
+        int empIdx = customUserDetails.getEmpIdx();
+        Collection<? extends GrantedAuthority> authority = customUserDetails.getAuthorities();
+        // empIdx를 이용해 사원 정보를 조회하고 반환
+        log.warn("사원 인덱스: " + empIdx + ", 역할: " + authority); //userDetails.getAuthorities()
+        return "settings/test";
+    }
+	//----------------------------------------------------------------------------------------	
 
 	@GetMapping("/settings/user")
 	public String getUserInfo(@RequestParam(value="currentPage", defaultValue="1") int currentPage, Model model) {
@@ -162,7 +193,6 @@ public class SettingsController {
 		return "settings/user";
 	}
 
-	// 0610
 	@GetMapping("/settings/role")
 	public String getRole(Model model) {
 		

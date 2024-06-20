@@ -61,7 +61,8 @@
                 console.log("서버가 보낸 jwt 토큰은 ", result.token);
                 localStorage.setItem("token", result.token);
                 alert("로그인 성공입니다");
-                window.location.href = window.location.origin + "/settings/mypage";
+                // window.location.href = window.location.origin + "/settings/mypage";
+                window.location.href = window.location.origin + "/settings/test";
             },
             error: function(xhr, status, err){
                 alert("로그인 정보가 올바르지 않습니다");

@@ -201,6 +201,7 @@
     // 토큰을 사용하여 사원 정보를 불러오는 AJAX 요청
     function loadEmpInfo() {
       const token = localStorage.getItem('token');
+      // alert(token);      
       $.ajax({
         url: "/settings/mypage/info",
         type: "get",
