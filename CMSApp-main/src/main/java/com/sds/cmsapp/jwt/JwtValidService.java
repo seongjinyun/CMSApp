@@ -48,4 +48,5 @@ public class JwtValidService {
 		Emp emp = empService.selectByEmpIdx(empIdx);		
 		return emp;
 	} 
+
 }

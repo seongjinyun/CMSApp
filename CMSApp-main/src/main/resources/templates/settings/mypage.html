@@ -180,7 +180,7 @@
   <!-- /.사이드바 디렉토리 관련 로직 -->
 </body>
 </html>
-
+  <th:block th:replace="~{fragments/footer_script :: footer_script}"/>
 <script type="text/javascript">
   function updateEmpAccount() {
     $("#empAccount").attr({
@@ -201,6 +201,7 @@
     // 토큰을 사용하여 사원 정보를 불러오는 AJAX 요청
     function loadEmpInfo() {
       const token = localStorage.getItem('token');
+      // alert(token);      
       $.ajax({
         url: "/settings/mypage/info",
         type: "get",
