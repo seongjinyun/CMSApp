@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "mybatis-3-mapper.dtd">
+<mapper namespace="com.sds.cmsdocument.model.statuslog.StatusLogDAO">
+	
+	<resultMap type="StatusLog" id="StatusLogMap">
+		<id column="status_log_idx" property="statusLogIdx"/>
+		<result column="comments" property="comments"/>
+		<result column="regdate" property="regdate"/>
+		<association column="emp_idx" property="emp" javaType="Emp"
+			select="com.sds.cmsdocument.model.emp.EmpDAO.selectByEmpIdx"/> <!-- EmpMap
+		DocumentMap을 추가하면 재귀적인 문제가 발생할 수 있으므로 생략 -->
+		<association column="status_code" property="masterCode" javaType="MasterCode"
+			select="com.sds.cmsdocument.model.mastercode.MasterCodeDAO.select"/> <!-- Type -->
+	</resultMap>
+
+	<select id="selectLatestLogByDocumentIdx" parameterType="int" resultMap="StatusLogMap">
+		SELECT * FROM status_log
+		WHERE (document_idx, status_log_idx) IN (SELECT document_idx, MAX(status_log_idx)
+		FROM status_log WHERE document_idx = #{documentIdx})
+	</select>
+
+	<insert id="insert" parameterType="StatusLog">
+		INSERT INTO status_log(document_idx, status_code, comments, emp_idx)
+		VALUES(#{document.documentIdx}, #{masterCode.statusCode}, #{comments}, #{emp.empIdx})
+	</insert>
+	
+	<delete id="deleteByDocumentIdx" parameterType="int">
+		delete from status_log where document_idx = #{document_idx}
+	</delete>
+	
+</mapper> 
