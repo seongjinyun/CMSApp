@@ -102,6 +102,24 @@ public class SettingsController {
 		return "settings/dept_project";
 	}
 	
+	//----------------------------------------------------------------------------------------
+	@GetMapping("/checkAuthority/settings/dept_project")
+	public ResponseEntity<?> checkAuthorityForDeptProject(@RequestHeader(name="Authorization") String header) {
+	    String token = header.replace("Bearer ", "");
+	    Emp emp = jwtValidService.getEmpFromJwt(token);
+	    String roleName = emp.getRole().getRoleName();
+	    
+	    Map<String, String> response = new HashMap<>();
+	    if(roleName.equals("Admin")) {
+	        response.put("url", "/settings/dept_project");
+	        return ResponseEntity.ok(response);
+	    } else {
+	        response.put("url", "/error");
+	        return ResponseEntity.status(HttpStatus.FORBIDDEN).body(response);
+	    }
+	}
+	//----------------------------------------------------------------------------------------	
+	
 	@GetMapping("/settings/mypage/info")
 	@ResponseBody
 	public Map<String, Object> getMypageInfo(@RequestHeader(name="Authorization") String header) {
@@ -139,8 +157,8 @@ public class SettingsController {
 	}
 	
 	//----------------------------------------------------------------------------------------
-	@GetMapping("/checkAuthority/mypage")
-	public ResponseEntity<?> getEmployeeInfo(@RequestHeader(name="Authorization") String header) {
+	@GetMapping("/checkAuthority/settings/mypage")
+	public ResponseEntity<?> checkAuthorityForMypage(@RequestHeader(name="Authorization") String header) {
 	    String token = header.replace("Bearer ", "");
 	    Emp emp = jwtValidService.getEmpFromJwt(token);
 	    String roleName = emp.getRole().getRoleName();
@@ -184,6 +202,24 @@ public class SettingsController {
 		
 		return "settings/user";
 	}
+	
+	//----------------------------------------------------------------------------------------
+	@GetMapping("/checkAuthority/settings/user")
+	public ResponseEntity<?> checkAuthorityForUser(@RequestHeader(name="Authorization") String header) {
+	    String token = header.replace("Bearer ", "");
+	    Emp emp = jwtValidService.getEmpFromJwt(token);
+	    String roleName = emp.getRole().getRoleName();
+	    
+	    Map<String, String> response = new HashMap<>();
+	    if(roleName.equals("Admin")) {
+	        response.put("url", "/settings/user");
+	        return ResponseEntity.ok(response);
+	    } else {
+	        response.put("url", "/error");
+	        return ResponseEntity.status(HttpStatus.FORBIDDEN).body(response);
+	    }
+	}
+	//----------------------------------------------------------------------------------------
 
 	@GetMapping("/settings/role")
 	public String getRole(Model model) {
@@ -208,4 +244,22 @@ public class SettingsController {
 		
 		return "settings/role";
 	}
+	
+	//----------------------------------------------------------------------------------------
+	@GetMapping("/checkAuthority/settings/role")
+	public ResponseEntity<?> checkAuthorityForRole(@RequestHeader(name="Authorization") String header) {
+	    String token = header.replace("Bearer ", "");
+	    Emp emp = jwtValidService.getEmpFromJwt(token);
+	    String roleName = emp.getRole().getRoleName();
+	    
+	    Map<String, String> response = new HashMap<>();
+	    if(roleName.equals("Admin")) {
+	        response.put("url", "/settings/role");
+	        return ResponseEntity.ok(response);
+	    } else {
+	        response.put("url", "/error");
+	        return ResponseEntity.status(HttpStatus.FORBIDDEN).body(response);
+	    }
+	}
+	//----------------------------------------------------------------------------------------
 }

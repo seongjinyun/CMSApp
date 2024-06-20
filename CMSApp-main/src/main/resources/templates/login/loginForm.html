@@ -47,6 +47,7 @@
   </div>
 </div>
   <th:block th:replace="~{fragments/footer_link :: footer_link}"/>
+  <th:block th:replace="~{fragments/footer_script :: footer_script}"/>
 <script>
     function loginCheck(){
         $.ajax({
@@ -79,7 +80,7 @@
     function redirectPage() {
         const token = localStorage.getItem('token');
         $.ajax({
-            url: "/checkAuthority/mypage",
+            url: "/checkAuthority/settings/mypage",
             type: "get",
             headers: {
                 "Authorization": "Bearer " + token

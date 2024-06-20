@@ -1,0 +1,20 @@
+<th:block th:fragment="footer_script">
+	<script>
+		function redirectPage(pageUrl) {
+		    const token = localStorage.getItem('token');
+		    $.ajax({
+		        url: "/checkAuthority" + pageUrl,
+		        type: "get",
+		        headers: {
+		            "Authorization": "Bearer " + token
+		        },
+		        success: function(result) {
+		            window.location.href = pageUrl;
+		        },
+		        error: function(xhr, status, err) {
+		            alert("권한이 없습니다.");
+		        }
+		    });
+		}
+	</script>
+</th:block>
