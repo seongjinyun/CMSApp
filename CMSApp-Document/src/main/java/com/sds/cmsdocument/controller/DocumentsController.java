@@ -154,7 +154,7 @@ public class DocumentsController {
         // 이미 다른 사용자가 수정 중이면 접근을 막음
         if (editingService.isDocumentBeingEdited(documentIdx)) {
             model.addAttribute("serverMessage", "다른 사용자가 수정 중인 문서입니다.");
-            return "redirect:/document/list"; // 예시로 리스트 페이지로 리다이렉트
+            return "document/list"; // 예시로 리스트 페이지로 리다이렉트
         }
         
         // 해당 문서를 수정 중으로 표시

@@ -16,6 +16,8 @@ public class CmsAppGatewayApplication {
         return builder.routes()
     	        .route("CMSApp-Document", r -> r.path("/file/**")
     	        		.filters(f -> f.stripPrefix(1)).uri("http://localhost:9997"))
+    	        .route("CMSApp-Setting", r -> r.path("/setting/**")
+    	        		.filters(f -> f.stripPrefix(1)).uri("http://localhost:9996"))
     	        .route("CMSApp-Client", r -> r.path("/client/**")
     	        		.filters(f -> f.stripPrefix(1)).uri("http://localhost:9998"))
                 .build();

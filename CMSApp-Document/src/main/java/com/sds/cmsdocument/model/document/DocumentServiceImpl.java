@@ -21,6 +21,7 @@ import com.sds.cmsdocument.domain.Document;
 import com.sds.cmsdocument.domain.DocumentVersion;
 import com.sds.cmsdocument.domain.Emp;
 import com.sds.cmsdocument.domain.Folder;
+import com.sds.cmsdocument.domain.MasterCode;
 import com.sds.cmsdocument.domain.RequestDocFilterDTO;
 import com.sds.cmsdocument.domain.ResponseDocDTO;
 import com.sds.cmsdocument.domain.VersionLog;
@@ -264,7 +265,11 @@ public class DocumentServiceImpl implements DocumentService {
 	
 	//document/detail 문서 상세보기 
 	public DocumentVersion documentDetailSelect(int documentIdx) {
-	    
+		DocumentVersion documentVersion = new DocumentVersion();
+		documentVersion.setDocumentVersionIdx(documentIdx);
+		MasterCode masterCode = new MasterCode();
+		
+		
         return documentDetailDAO.documentDetailSelect(documentIdx);
 	}
 	
