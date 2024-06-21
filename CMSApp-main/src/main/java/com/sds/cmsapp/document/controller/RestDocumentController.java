@@ -185,6 +185,9 @@ public class RestDocumentController {
 		if(folderName == null || folderName.isEmpty()) {
 			throw new IllegalArgumentException("폴더 이름이 비어있습니다.");
 		}
+		if(parentFolderIdx == folderService.selectRestoreFolder().getFolderIdx()) {
+			throw new FolderException("복원 폴더에서는 폴더를 생성할 수 없습니다.");
+		}
 		Folder folder = new Folder();
 		folder.setFolderName(folderName);
 		folder.setParentFolder(folderService.select(parentFolderIdx));
@@ -200,6 +203,9 @@ public class RestDocumentController {
 	public ResponseEntity<String> moveDocuement(@RequestBody final Map<String, Object> request) {
 		List<String> objectIdxList = (List<String>)request.get("objectIdxList");
 		Integer targetFolderIdx = Integer.parseInt((String)request.get("targetFolderIdx"));
+		if(targetFolderIdx == folderService.selectRestoreFolder().getFolderIdx()) {
+			throw new FolderException("복원 폴더로는 옮길 수 없습니다");
+		}
 		
 		List<Integer> documentIdxList = trashService.seperateObjectList(objectIdxList, 'd');
 		List<Integer> folderIdxList = trashService.seperateObjectList(objectIdxList, 'f');
@@ -214,9 +220,12 @@ public class RestDocumentController {
 		
 		for (Integer folderIdx : folderIdxList) { // 폴더의 부모 폴더idx를 변경
 			Folder folder = folderService.select(folderIdx);
-			Folder ParentFolder = new Folder();
-			ParentFolder.setFolderIdx(targetFolderIdx);
-			folder.setParentFolder(ParentFolder);
+			Folder parentFolder = folderService.select(targetFolderIdx);
+			parentFolder.getProject();
+			folder.setParentFolder(parentFolder);
+			//folder.setProject(parentFolder.getProject());
+			log.warn("프로젝트" + parentFolder.getProject());
+			log.warn("폴더" + folder);
 			folderService.updateFolder(folder);
 		}
 		
