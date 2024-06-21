@@ -21,15 +21,10 @@ public interface DocumentDAO {
 	// 결재 상태별 문서 수
 	public int countForDashboard(int statusCode);
 	
-	@Select("SELECT * FROM DOCUMENT")
-	@ResultMap("DocumentMap")
 	public List<Document> selectAll(); // 전체 문서 목록 조회
 
-	@Select("SELECT * FROM document WHERE document_idx = #{documentIdx}")
-	@ResultMap("DocumentMap")
 	public Document select(int documentIdx); // 선택 문서 조회
 	
-	@Select("SELECT * FROM document WHERE document_idx = #{documentIdx}")
 	public Document selectByDocumentIdx(int documentIdx);
 	
 	public List<Document> selectByFolderIdx(int folderIdx); // mybatis 연결 부탁드려요~ (박준형)

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "mybatis-3-mapper.dtd">
-<mapper namespace="com.sds.cmsapp.model.document.DocumentVersionDAO">
+<mapper namespace="com.sds.cmsdocument.model.document.DocumentVersionDAO">
 	
 	<insert id="insert" parameterType="DocumentVersion">
 		insert into document_version(document_idx, version_log_idx)
@@ -51,13 +51,13 @@
 	<resultMap type="DocumentVersion" id="DocumentVersionMap">
 		<id column="document_version_idx" property="documentVersionIdx" />
 		<association column="document_idx" property="document" javaType="Document"
-			select="com.sds.cmsapp.model.document.DocumentDAO.selectByDocumentIdx" /> <!-- ResultType -->
+			select="com.sds.cmsdocument.model.document.DocumentDAO.selectByDocumentIdx" /> <!-- ResultType -->
 		<association column="version_log_idx" property="versionLog" javaType="VersionLog"
-			select="com.sds.cmsapp.model.versionlog.VersionLogDAO.select" /> <!-- ResultType -->
+			select="com.sds.cmsdocument.model.versionlog.VersionLogDAO.select" /> <!-- ResultType -->
 		<association column="status_code" property="masterCode" javaType="MasterCode"
-			select="com.sds.cmsapp.model.mastercode.MasterCodeDAO.select"/> <!-- ResultType -->
+			select="com.sds.cmsdocument.model.mastercode.MasterCodeDAO.select"/> <!-- ResultType -->
 		<association column="emp_idx" property="emp" javaType="Emp"
-			select="com.sds.cmsapp.model.emp.EmpDAO.selectByEmpIdx"/> <!-- EmpMap -->
+			select="com.sds.cmsdocument.model.emp.EmpDAO.selectByEmpIdx"/> <!-- EmpMap -->
 	</resultMap>
 
 

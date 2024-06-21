@@ -6,9 +6,9 @@ import org.springframework.web.bind.annotation.GetMapping;
 @Controller(value="dashboardMainController")
 public class MainController {
 
-	@GetMapping("/admin/dashboard")
+	@GetMapping("/dashboard")
 	public String getMain() {
-		return "admin/dashboard/activity";
+		return "dashboard/activity";
 	}
 	
 }
