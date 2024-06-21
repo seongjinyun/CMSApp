@@ -17,6 +17,8 @@ public interface DocumentVersionDAO {
 	
 	public int updateStatusByDocumentIdx(final DocumentVersion documentVeresion);
 	
+	public int updateStatusByDocumentIdxForPublishing(final DocumentVersion documentVeresion);
+	
 	public int delete(final int documentVersionIdx);
 	
 	public int deleteByDocumentIdx(final int documentIdx);

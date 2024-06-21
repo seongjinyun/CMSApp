@@ -16,7 +16,6 @@ public class StatusLog {
 	private Timestamp regdate;
 	
 	public StatusLog(int documentIdx, int versionLogIdx, int empIdx, int statusCode, String comments) {
-		super();
 		this.documentIdx = documentIdx;
 		this.versionLogIdx = versionLogIdx;
 		this.empIdx = empIdx;

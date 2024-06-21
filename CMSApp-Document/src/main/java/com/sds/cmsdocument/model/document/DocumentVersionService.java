@@ -12,5 +12,8 @@ public interface DocumentVersionService {
 
 	public void changeStatusOne(DocumentVersion documentVersion);
 	
-	public void changeStatusOfPublishedDocList(List<PublishedVersion> publishedVerList, Emp emp, String comments);
+	public void changeStatusRejectedToDraft(DocumentVersion documentVersion);
+
+	public void changeStatusOfPublishedDocList(List<DocumentVersion> publishingWaitingList);
+	
 }

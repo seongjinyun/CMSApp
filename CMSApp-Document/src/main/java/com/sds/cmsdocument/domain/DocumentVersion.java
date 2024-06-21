@@ -43,6 +43,10 @@ public class DocumentVersion {
 		this.statusComments = statusComments;
 	}
 	
-	
+	public DocumentVersion(Document document, Emp emp, String statusComments) {
+		this.document = document;
+		this.emp = emp;
+		this.statusComments = statusComments;
+	}
 	
 }
