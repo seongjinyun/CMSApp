@@ -72,7 +72,7 @@
           </div><!-- /.col -->
           <div class="col-sm-6">
             <ol class="breadcrumb float-sm-right">
-              <li class="breadcrumb-item"><a th:href="@{general}">Settings</a></li>
+              <li class="breadcrumb-item"><a th:href="">Settings</a></li>
               <li class="breadcrumb-item active">Mypage</li>
             </ol>
           </div><!-- /.col -->
@@ -178,13 +178,15 @@
   <!-- 사이드바 디렉토리 관련 로직 -->
   <th:block th:replace="~{elements/sidebar_script :: sidebar_script}"/>
   <!-- /.사이드바 디렉토리 관련 로직 -->
+  
 </body>
 </html>
 
+<th:block th:replace="~{fragments/footer_script :: footer_script}"/>
 <script type="text/javascript">
   function updateEmpAccount() {
     $("#empAccount").attr({
-      action: "/setting/mypage/update",
+      action: "/setting/setting/mypage/update",
       method: "post",
       enctype: "multipart/form-data"
     });
@@ -202,7 +204,7 @@
     function loadEmpInfo() {
       const token = localStorage.getItem('token');
       $.ajax({
-        url: "/setting/mypage/info",
+        url: "/setting/setting/mypage/info",
         type: "get",
         headers: {
           "Authorization": "Bearer " + token

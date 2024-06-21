@@ -92,6 +92,13 @@
 		select * from document limit  #{startIndex} , #{rowCount}
 	</select>
 
+	<select id="selectAll" resultMap="DocumentMap">
+		SELECT * FROM DOCUMENT
+	</select>
+	
+	<select id="select" parameterType="int" resultMap="DocumentMap">
+		SELECT * FROM document WHERE document_idx =#{documentIdx}
+	</select>
 	
 	<select id="selectDocumentIdxListInFolder" parameterType="java.util.List" resultType="Integer">
 		select document_idx from document

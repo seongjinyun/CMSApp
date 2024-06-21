@@ -1,7 +1,7 @@
 package com.sds.cmssetting.jwt;
 
 import java.io.IOException;
-import java.util.Collections;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -10,7 +10,7 @@ import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -33,7 +33,7 @@ public class LoginFilter extends UsernamePasswordAuthenticationFilter {
     	super.setAuthenticationManager(authenticationManager);
     	this.authenticationManager = authenticationManager;
         this.jwtUtil = jwtUtil;
-        //setFilterProcessesUrl("/emp/login");
+        setFilterProcessesUrl("/emp/login");
     }
 
     @Override
@@ -55,11 +55,11 @@ public class LoginFilter extends UsernamePasswordAuthenticationFilter {
             throw new BadCredentialsException("Missing empId or empPw in request");
         }
         
-        UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(empId, empPw, Collections.singletonList(new SimpleGrantedAuthority("Admin")));
+        UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(empId, empPw);
         
         try {
             Authentication auth = authenticationManager.authenticate(authToken);
-            log.debug("auth is " + auth);
+            log.warn("auth is " + auth);
             return auth;
         } catch (AuthenticationException e) {
         	e.printStackTrace();
@@ -84,13 +84,15 @@ public class LoginFilter extends UsernamePasswordAuthenticationFilter {
     	CustomUserDetails customUserDetails = (CustomUserDetails) authentication.getPrincipal();
     	log.debug("customUserDetails: "+customUserDetails);
         int empIdx = customUserDetails.getEmp().getEmpIdx();
+        String empId = customUserDetails.getEmpDetail().getEmpId();
+        Collection<? extends GrantedAuthority> role = customUserDetails.getAuthorities();
 
-        log.debug("사원정보가 존재합니다. 로그인 성공");
+        log.warn("사원정보가 존재합니다. 로그인 성공");
 
         long expireTime = (1 * 1000 * 60) * 10; // 10분
         String token = null;
         try {
-            token = jwtUtil.generateToken(empIdx, expireTime);
+            token = jwtUtil.generateToken(empId, empIdx, expireTime, role);
         } catch (Exception e) {
         	log.error("JWT 생성 중 오류 발생", e);
             e.printStackTrace();
