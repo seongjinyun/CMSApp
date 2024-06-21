@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "mybatis-3-mapper.dtd">
+<mapper namespace="com.sds.cmsdocument.model.bookmark.BookmarkDAO">
+	
+	<insert id="insert" parameterType="Bookmark">
+		insert into bookmark(emp_idx, document_idx)
+		values(#{emp.empIdx}, #{document.documentIdx})
+		<selectKey keyColumn="bookmark_idx" keyProperty="bookmarkIdx" resultType="int" order="AFTER">
+			select last_insert_id() as bookmark_idx
+		</selectKey>
+	</insert>
+	
+	<resultMap type="Bookmark" id="BookmarkMap">
+		<id 	column="bookmark_idx" 	property="bookmarkIdx"/>
+		<result	column="regdate" 		property="regdate"/>		
+		<association column="emp_idx" property="emp" javaType="Emp" 
+			select="com.sds.cmsdocument.model.emp.EmpDAO.select"/>
+		<association column="document_idx" property="document" javaType="Document" 
+			select="com.sds.cmsdocument.model.document.DocumentDAO.selectByDocumentIdx"/>
+	</resultMap>
+	
+	<delete id="delete" parameterType="Bookmark">
+		delete from bookmark
+		where emp_idx = #{emp_idx}
+		and document_idx = #{documentIdx}
+	</delete>
+	
+	<delete id="deleteByBookmarkIdx" parameterType="int">
+		delete from bookmark
+		where bookmark_idx = #{bookmarkIdx}
+	</delete>
+	
+	<delete id="deleteByDocumentIdx" parameterType="int">
+		delete from bookmark
+		where document_idx = #{document.documentIdx}
+	</delete>
+	
+	<select id="select" parameterType="int" resultMap="BookmarkMap">
+		select * from bookmark
+		where bookmark_idx = #{bookmarkIdx}
+	</select>
+	
+	<select id="selectByEmpIdx" parameterType="int" resultMap="BookmarkMap">
+		select * from bookmark
+		where emp_idx = #{empIdx}
+		limit #{startIndex}, #{rowCount}
+	</select>
+	
+	<select id="selectCountByEmpIdx" parameterType="int" resultType="int">
+		select Count(*) from bookmark
+		where emp_idx = #{empIdx}
+	</select>
+	
+	<select id="selectCountByDocumentIdx" parameterType="int" resultType="int">
+		select Count(*) from bookmark
+		where document_idx = #{documentIdx}
+	</select>
+	
+	<select id="isBookmark" parameterType="Bookmark" resultMap="BookmarkMap">
+		select * from bookmark
+		where emp_idx = #{emp_idx}
+		and document_idx = #{documentIdx}
+	</select>
+	
+	
+</mapper>

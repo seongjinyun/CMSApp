@@ -31,6 +31,7 @@ public class CustomUserDetailsService implements UserDetailsService{
 		EmpDetail empDetail = empDetailDAO.selectByUid(empId);
 		int empIdx = empDetailDAO.selectEmpIdxByUid(empId);
 		Emp emp = empDAO.selectByEmpIdx(empIdx);
+		String role = emp.getRole().getRoleName();
 		
 		log.debug("emp: "+emp);
 		log.debug("empIdx: "+empIdx);
@@ -40,7 +41,7 @@ public class CustomUserDetailsService implements UserDetailsService{
 			throw new EmpException("일치하는 회원정보가 없습니다");
 		}
 		
-		return new CustomUserDetails(emp, empDetail);
+		return new CustomUserDetails(emp, empDetail, role);
 	}
 
 }
