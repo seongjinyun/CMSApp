@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "mybatis-3-mapper.dtd">
-<mapper namespace="com.sds.cmsapp.model.statuslog.StatusLogDAO">
+<mapper namespace="com.sds.cmsdocument.model.statuslog.StatusLogDAO">
 	
 	<insert  id="insert" parameterType="StatusLog">
 		insert into status_log(document_idx, version_log_idx, emp_idx, status_code, comments) 

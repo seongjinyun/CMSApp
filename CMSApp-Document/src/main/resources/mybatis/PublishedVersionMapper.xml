@@ -1,15 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "mybatis-3-mapper.dtd">
-<mapper namespace="com.sds.cmsapp.model.publishing.PublishedVersionDAO">
+<mapper namespace="com.sds.cmsdocument.model.publishing.PublishedVersionDAO">
 
 	<resultMap type="PublishedVersion" id="PublishedVersionMap">
 		<id		column="published_version_idx"		property="publishedVersionIdx"/>
 		<association column="document_idx" property="document" javaType="Document"
-			select="com.sds.cmsapp.model.document.DocumentDAO.select"/>
+			select="com.sds.cmsdocument.model.document.DocumentDAO.select"/>
 		<association column="version_log_idx" property="versionLog" javaType="VersionLog"
-			select="com.sds.cmsapp.model.versionlog.VersionLogDAO.select"/>
+			select="com.sds.cmsdocument.model.versionlog.VersionLogDAO.select"/>
 		<association column="published_version_name_idx" property="publishedVersionName"
-			select="com.sds.cmsapp.model.publishing.PublishedVersionNameDAO.select"/>
+			select="com.sds.cmsdocument.model.publishing.PublishedVersionNameDAO.select"/>
 	</resultMap>
 	
 	<insert id="insert" parameterType="PublishedVersion">
