@@ -1,12 +1,12 @@
 package com.sds.cmsapp.model.updating;
 
-import com.sds.cmsapp.domain.Document;
-import com.sds.cmsapp.domain.Emp;
-import com.sds.cmsapp.domain.MasterCode;
+import com.sds.cmsapp.domain.DocumentVersion;
 
 public interface MainUpdatingStatusService {
 
-		public void changeStatus(Document document, Emp emp, MasterCode masterCode, String comments);
+		public void changeStatusOne(DocumentVersion documentVersion);
+		
+		public void changeStatusRejectedToDraft(DocumentVersion documentVersion);
 			
 }
 		

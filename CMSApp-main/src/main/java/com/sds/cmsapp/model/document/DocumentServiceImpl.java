@@ -32,6 +32,7 @@ import com.sds.cmsapp.exception.TrashException;
 import com.sds.cmsapp.exception.VersionLogException;
 import com.sds.cmsapp.model.folder.FolderDAO;
 import com.sds.cmsapp.model.publishing.PublishedVersionDAO;
+import com.sds.cmsapp.model.statuslog.StatusLogDAO;
 import com.sds.cmsapp.model.trash.TrashDAO;
 import com.sds.cmsapp.model.versionlog.VersionLogDAO;
 
@@ -60,6 +61,9 @@ public class DocumentServiceImpl implements DocumentService {
 	
 	@Autowired
 	private FolderDAO folderDAO;
+	
+	@Autowired
+	private StatusLogDAO statusLogDAO;
 
 	@Override
 	public Document select(int documentIdx) {
@@ -149,7 +153,7 @@ public class DocumentServiceImpl implements DocumentService {
 			String statusComments = docVer.getStatusComments(); // 상태 변경 코멘트
 			Timestamp statusRegdate = docVer.getStatusRegdate(); // 상태 변경일자
 			Long timeRegdate = statusRegdate.getTime(); // 비교 가능한 long 타입으로 변환
-			String stringRegdate = new SimpleDateFormat("yyyy년 M월 dd HH:mm:ss", Locale.KOREA).format(new Date(timeRegdate)); // 문자열 포맷팅
+			String stringRegdate = new SimpleDateFormat("yyyy년 M월 dd일 HH:mm:ss", Locale.KOREA).format(new Date(timeRegdate)); // 문자열 포맷팅
 			
 			Emp emp = docVer.getEmp();
 			if (emp == null) throw new DocumentVersionException("document_version에서 사원 정보를 찾을 수 없습니다.");
@@ -236,7 +240,7 @@ public class DocumentServiceImpl implements DocumentService {
 		documentVersion.setDocument(versionLog.getDocument());
 		documentVersion.setVersionLog(versionLog);
 		documentVersion.setEmp(new Emp(1)); // 임시
-		documentVersion.setStatusComments(""); // 임시 코멘트
+		documentVersion.setStatusComments("새로 생성된 문서"); // 임시 코멘트
 		
 		//log.debug("document_version is " + documentVersion);
 		
@@ -245,6 +249,16 @@ public class DocumentServiceImpl implements DocumentService {
 		if(result < 1) {
 			throw new DocumentException("문서 현재 버전 insert 실패 ");
 		}
+		
+		StatusLog statusLog = new StatusLog(documentVersion.getDocument().getDocumentIdx(), 
+				documentVersion.getVersionLog().getVersionLogIdx(), documentVersion.getEmp().getEmpIdx(), 100,  
+				documentVersion.getStatusComments());
+		statusLogDAO.insert(statusLog);
+		
+		if (result < 1) {
+			throw new StatusLogException("상태 변결 로그 insert 실패");
+		}
+				
     }
 
 	@Override
@@ -305,8 +319,6 @@ public class DocumentServiceImpl implements DocumentService {
 		if(result < 1) {
 			throw new VersionLogException("문서 버전 로그 등록실패 ");
 		}
-		
-
 		
 		result = documentDetailDAO.documentVersionUpdate(documentVersion.getVersionLog());
 		
