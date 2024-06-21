@@ -97,6 +97,7 @@ public class DocumentsController {
 			Collections.reverse(parentFolderList);
 			model.addAttribute("parentFolderList", parentFolderList);
 			model.addAttribute("subFolderList", subFolderList);
+			model.addAttribute("restoredFolderIdx", folderService.selectRestoreFolder().getFolderIdx());
 			return "documents/list";
 		}
 	} 
