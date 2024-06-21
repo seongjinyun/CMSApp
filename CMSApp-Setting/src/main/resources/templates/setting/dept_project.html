@@ -4,7 +4,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>CMS | Setting</title>
+    <title>AdminLTE 3 | Dashboard</title>
 
     <th:block th:replace="~{fragments/header_link :: header_link}" />
     <th:block th:replace="~{elements/datatables_header_link :: datatables_header_link}" />
@@ -243,12 +243,13 @@
 </body>
 
 </html>
+<th:block th:replace="~{fragments/footer_script :: footer_script}"/>
 <script type="text/javascript">
     // 추가 form에 보여질 프로젝트 option 태그 채우기
     function loadOtherProjects(deptIdx) {
         $.ajax({
             type: "GET",
-            url: "/setting/deptProject/getOtherProjectsByDeptIdx/" + deptIdx, // 프로젝트를 가져올 엔드포인트 URL
+            url: "/setting/setting/deptProject/getOtherProjectsByDeptIdx/" + deptIdx, // 프로젝트를 가져올 엔드포인트 URL
             success: function(response) {
                 // 서버로부터 받은 JSON 데이터를 파싱하여 옵션으로 추가
                 $('#projectNameAdd').empty(); // 기존 옵션들을 모두 지우기
@@ -268,7 +269,7 @@
     function loadCurrentProjects(deptIdx) {
         $.ajax({
             type: "GET",
-            url: "/setting/deptProject/getProjectsByDeptIdx/" + deptIdx, // 프로젝트를 가져올 엔드포인트 URL
+            url: "/setting/setting/deptProject/getProjectsByDeptIdx/" + deptIdx, // 프로젝트를 가져올 엔드포인트 URL
             success: function(response) {
                 // 서버로부터 받은 JSON 데이터를 파싱하여 옵션으로 추가
                 $('#projectNameDelete').empty(); // 기존 옵션들을 모두 지우기
@@ -287,7 +288,7 @@
     // 새 부서 추가
     function addNewDepartment() {
         $("#addNewDept").attr({
-            action: "/setting/dept/insert",
+            action: "/setting/setting/dept/insert",
             method: "post"
         });
         $("#addNewDept").submit();
@@ -296,7 +297,7 @@
     // 새 프로젝트 추가
     function addNewProject() {
         $("#addNewProject").attr({
-            action: "/setting/project/insert",
+            action: "/setting/setting/project/insert",
             method: "post"
         });
         $("#addNewProject").submit();
@@ -305,7 +306,7 @@
     // 기존 부서에 프로젝트 추가
     function addProject() {
         $("#addDeptProject").attr({
-            action: "/setting/deptProject/insert",
+            action: "/setting/setting/deptProject/insert",
             method: "post"
         });
         $("#addDeptProject").submit();
@@ -314,7 +315,7 @@
     // 기존 부서에 프로젝트 제거
     function deleteProject() {
         $("#deleteDeptProject").attr({
-            action: "/setting/deptProject/delete",
+            action: "/setting/setting/deptProject/delete",
             method: "post"
         });
         $("#deleteDeptProject").submit();
@@ -323,7 +324,7 @@
     // 빈(어느 프로젝트 및 사원도 보유하지 않은) 부서 삭제
     function deleteEmptyDept() {
     	$("#deleteEmptyDept").attr({
-    		action: "/setting/dept/delete",
+    		action: "/setting/setting/dept/delete",
     		method: "post"
     	});
     	$("#deleteEmptyDept").submit();
@@ -332,7 +333,7 @@
  	// 빈 프로젝트 삭제
     function deleteEmptyProject() {
     	$("#deleteEmptyProject").attr({
-    		action: "/setting/project/delete",
+    		action: "/setting/setting/project/delete",
     		method: "post"
     	});
     	$("#deleteEmptyProject").submit();

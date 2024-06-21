@@ -35,7 +35,7 @@
           </div><!-- /.col -->
           <div class="col-sm-6">
             <ol class="breadcrumb float-sm-right">
-              <li class="breadcrumb-item"><a th:href="@{general}">Settings</a></li>
+              <li class="breadcrumb-item"><a th:href="">Settings</a></li>
               <li class="breadcrumb-item active">Role</li>
             </ol>
           </div><!-- /.col -->
@@ -163,6 +163,7 @@
 </body>
 </html>
 
+<th:block th:replace="~{fragments/footer_script :: footer_script}"/>
 <script>
 
 	function submitNewRole() {
@@ -183,7 +184,7 @@
 
         $.ajax({
             type: 'POST',
-            url: '/setting/roleauth/add',
+            url: '/setting/setting/roleauth/add',
             contentType: 'application/json',
             data: JSON.stringify(jsonData),
             success: function(response) {
@@ -215,7 +216,7 @@
 	    });
 		
 		$.ajax({
-            url: '/setting/roleauth/update',
+            url: '/setting/setting/roleauth/update',
             type: 'POST',
             contentType: 'application/json',
             data: JSON.stringify(data),
