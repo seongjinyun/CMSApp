@@ -1,0 +1,805 @@
+<!DOCTYPE html>
+<html lang="zxx" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<title>Dashboard | 나의 활동</title>
+
+	<!-- data-table css -->
+	<link rel="stylesheet" href="/admin/plugins/datatables-bs4/css/dataTables.bootstrap4.min.css">
+	<link rel="stylesheet" href="/admin/plugins/datatables-responsive/css/responsive.bootstrap4.min.css">
+	<link rel="stylesheet" href="/admin/plugins/datatables-buttons/css/buttons.bootstrap4.min.css">
+	<!-- select2 css -->
+	<link rel="stylesheet" href="/admin/plugins/select2/css/select2.min.css">
+	<link rel="stylesheet" href="/admin/plugins/select2-bootstrap4-theme/select2-bootstrap4.min.css">
+
+	<th:block th:replace="~{fragments/header_link :: header_link}" />
+
+	<style>
+		button.show_list {
+			border: 0;
+			background-color: transparent;
+			color: white;
+			cursor: pointer;
+		}
+
+		button.show_list:hover {
+			color: blue;
+		}
+
+		div#filter-card {
+			font-weight: 500;
+		}
+
+		/* .filter-title {
+	padding-left: 2rem;
+} */
+
+		button#daterange-btn {
+			display: inline-block;
+			line-height: 22px;
+		}
+
+		/*
+[class*=icheck-]>label,button#daterange-btn {
+	vertical-align: middle;
+} */
+
+		div.table-detail,
+		span.table-detail {
+			font-size: 0.9rem;
+			color: gray;
+		}
+	</style>
+</head>
+
+<body class="hold-transition sidebar-mini layout-fixed">
+	<div class="wrapper">
+
+		<!-- Preloader -->
+		<th:block th:replace="~{fragments/preloader :: preloader}" />
+
+		<!-- Navbar -->
+		<th:block th:replace="~{fragments/navi :: navi}" />
+		<!-- /.navbar -->
+
+		<!-- Main Sidebar Container -->
+		<th:block th:replace="~{fragments/sidebar :: sidebar}" />
+
+		<!-- /.sidebar -->
+
+		<!-- Content Wrapper. Contains page content -->
+		<div class="content-wrapper">
+			<!-- Content Header (Page header) -->
+			<div class="content-header">
+				<div class="container-fluid">
+					<div class="row mb-2">
+						<div class="col-sm-6">
+							<h1 class="m-0">나의 활동</h1>
+						</div>
+						<!-- /.col -->
+						<div class="col-sm-6">
+							<ol class="breadcrumb float-sm-right">
+								<li class="breadcrumb-item"><a href="#">Home</a></li>
+								<li class="breadcrumb-item active">Dashboard</li>
+								<li class="breadcrumb-item active">나의 활동</li>
+							</ol>
+						</div>
+						<!-- /.col -->
+					</div>
+					<!-- /.row -->
+				</div>
+				<!-- /.container-fluid -->
+			</div>
+			<!-- /.content-header -->
+
+			<!-- Main content -->
+			<section class="content">
+				<div class="container-fluid">
+					<!-- Nav tabs -->
+					<div class="row">
+						<div class="col-md-12">
+							<ul class="nav nav-tabs" id="activity-tabs">
+								<li class="nav-item"><a class="nav-link active" data-toggle="tab" href="#summary">요약</a>
+								</li>
+								<li class="nav-item"><a class="nav-link" data-toggle="tab" href="#entire-list">전체 보기</a>
+								</li>
+							</ul>
+						</div>
+					</div>
+					<!-- Nav Tabs End -->
+
+					<!-- Tab panes -->
+					<div class="tab-content mt-3">
+
+						<!-- Tab -->
+						<div class="tab-pane container-fluid active" id="summary">
+							<!-- Row -->
+							<div class="row">
+								<div class="col-lg-4 col-12">
+									<div id="box-in_review" class="small-box bg-success">
+										<div class="inner">
+											<h3></h3>
+											<button id="btn-in_review" class="show_list" value="리뷰 중">
+												리뷰 대기 문서 <i class="fas fa-arrow-circle-right"></i>
+											</button>
+										</div>
+									</div>
+								</div>
+								<div class="col-lg-4 col-12">
+									<div id="box-reviewed" class="small-box bg-info">
+										<div class="inner">
+											<h3></h3>
+											<button id="btn-reviewed" class="show_list" value="리뷰 완료">
+												리뷰 완료 문서 <i class="fas fa-arrow-circle-right"></i>
+											</button>
+										</div>
+									</div>
+								</div>
+								<div class="col-lg-4 col-12">
+									<div id="box-rejected" class="small-box bg-danger">
+										<div class="inner">
+											<h3></h3>
+											<button id="btn-rejected" class="show_list" value="반려">
+												반려 문서 <i class="fas fa-arrow-circle-right"></i>
+											</button>
+										</div>
+									</div>
+								</div>
+							</div>
+							<!-- Row end -->
+
+							<!-- Row -->
+							<div class="row">
+								<div class="col-lg-12">
+									<!-- Card -->
+									<div class="card mt-3">
+										<div class="card-header border-transparent">
+											<h3 class="card-title">목록</h3>
+											<!-- <div class="card-tools">
+												input-group
+												<div class="input-group">
+													button
+													<button type="button" class="btn btn-default float-right"
+														id="goToEntireList-btn">전체 보기</button>
+												</div>
+											</div> -->
+										</div>
+										<div class="card-body p-0">
+											<div class="table-responsive">
+												<table id="table-preview" class="table table-hover m-0">
+													<thead>
+													</thead>
+													<tbody>
+													</tbody>
+												</table>
+											</div>
+										</div>
+									</div>
+									<!-- Card End -->
+								</div>
+								<!-- Col End -->
+							</div>
+							<!-- Row End -->
+						</div>
+						<!-- Tab End -->
+
+						<!-- Tab -->
+						<div class="tab-pane container-fluid fade" id="entire-list">
+							<!-- Row -->
+							<div class="row">
+								<div class="col-md-12">
+									<!-- Card -->
+									<div class="card" id="filter-card">
+										<div class="card-header">
+											<h3 class="card-title">필터</h3>
+											<div class="card-tools">
+												<button id="btn-filtered" class="btn btn-primary">조회하기</button>
+											</div>
+										</div>
+										<div class="card-body">
+											<div class="row">
+												<div class="col-sm-2 filter-title">날짜</div>
+												<div class="col-sm-2">
+													<div class="icheck-primary d-inline">
+														<input type="radio" id="radio-date-all" name="date-filter"
+															value="radio-date-all" checked>
+														<label for="radio-date-all">전체 보기 </label>
+													</div>
+												</div>
+												<div class="col-sm-2">
+													<div class="icheck-primary d-inline">
+														<input type="radio" id="radio-date-custom" name="date-filter"
+															value="radio-date-custom">
+														<label for="radio-date-custom">직접 선택 </label>
+													</div>
+												</div>
+												<div class="col-sm-6">
+													<div class="form-group">
+														<button type="button" class="btn btn-default disabled"
+															id="daterange-btn" style="vertical-align: top">
+															<i class="far fa-calendar-alt"></i> <span>어제</span> <i
+																class="fas fa-caret-down"></i>
+														</button>
+													</div>
+												</div>
+											</div>
+											<div class="row">
+												<div class="col-sm-2 filter-title">프로젝트</div>
+												<div class="col-sm-2">
+													<div class="icheck-primary d-inline">
+														<input type="radio" id="radio-project-all" name="project-filter"
+															value="radio-project-all" checked> <label
+															for="radio-project-all">전체 보기 </label>
+													</div>
+												</div>
+												<div class="col-sm-2">
+													<div class="icheck-primary d-inline">
+														<input type="radio" id="radio-project-custom"
+															name="project-filter" value="radio-project-custom"> <label
+															for="radio-project-custom">직접 선택</label>
+													</div>
+												</div>
+												<div class="col-sm-6">
+													<div class="form-group">
+														<select id="project-tag" name="project-tag"
+															class="select2 form-control" multiple="multiple"
+															data-placeholder="추가할 프로젝트 (다중)선택" style="width: 100%;">
+														</select>
+													</div>
+												</div>
+											</div>
+											<!-- <div class="row">
+												<div class="col-sm-3">사원</div>
+												<div class="col-sm-3">
+														<div class="icheck-primary d-inline">
+															<input type="radio" id="radio-emp-all" name="emp-filter"
+																checked=""> <label for="radio-emp-all">전체 보기 </label>
+														</div>
+												</div>
+												<div class="col-sm-3">
+														<div class="icheck-primary d-inline">
+															<input type="radio" id="radio-emp-me" name="emp-filter" value=""
+																checked=""> 
+																<label for="radio-emp-me">나의
+																활동만 보기 </label>
+														</div>
+												</div>
+												<div class="col-sm-3">
+														<div class="icheck-primary d-inline">
+															<input type="radio" id="radio-emp-dept" name="emp-filter" value=""
+																checked=""> <label for="radio-emp-dept">나의
+																부서 활동 전체 보기 </label>
+														</div>
+												</div>
+											</div> -->
+
+											<div class="row">
+												<div class="col-sm-2 filter-title">결재 상태</div>
+												<div class="col-sm-2">
+													<div class="icheck-primary d-inline">
+														<input type="radio" id="radio-status-all" name="status-filter"
+															value="radio-status-all" checked> <label
+															for="radio-status-all">전체 보기 </label>
+													</div>
+												</div>
+												<div class="col-sm-2">
+													<div class="icheck-primary d-inline">
+														<input type="radio" id="radio-status-custom"
+															name="status-filter" value="radio-status-custom"> <label
+															for="radio-status-custom">직접 선택</label>
+													</div>
+												</div>
+												<div class="col-sm-6">
+													<div class="form-group">
+														<select id="status-tag" name="status-tag"
+															class="select2 form-control" multiple="multiple"
+															data-placeholder="결재 상태 (다중)선택" style="width: 100%;">
+														</select>
+													</div>
+												</div>
+											</div>
+										</div>
+										<!-- card-body end -->
+									</div>
+									<!-- Card End -->
+								</div>
+								<!-- Col End -->
+							</div>
+							<!-- Row End -->
+
+							<!-- Row -->
+							<div class="row">
+								<div class="col-sm-12">
+									<div id="filtered-table_wrapper" class="dataTables_wrapper dt-bootstrap4">
+										<table id="table-filtered" class="bg-white table table-hover table-bordered dataTable dtr-inline" width="100%">
+											<thead>
+												<tr>
+												</tr>
+											</thead>
+											<tbody></tbody>
+										</table>
+									</div>
+								</div>
+							</div>
+							<!-- Row End -->
+						</div>
+						<!-- Tab End -->
+					</div>
+					<!-- Tab panes End -->
+				</div>
+				<!-- /.container-fluid -->
+			</section>
+			<!-- /.content -->
+		</div>
+		<!-- /.content-wrapper -->
+
+		<th:block th:replace="~{fragments/footer :: footer}" />
+
+		<!-- Control Sidebar -->
+		<aside class="control-sidebar control-sidebar-dark">
+			<!-- Control sidebar content goes here -->
+		</aside>
+		<!-- /.control-sidebar -->
+	</div>
+	<!-- ./wrapper -->
+
+	<th:block th:replace="~{fragments/footer_link :: footer_link}" />
+
+	<!-- select2 js 파일 -->
+	<script src="/admin/plugins/select2/js/select2.full.min.js"></script>
+	<!-- datatables js 파일 -->
+	<script src="/admin/plugins/datatables/jquery.dataTables.min.js"></script>
+	<script src="/admin/plugins/datatables-bs4/js/dataTables.bootstrap4.min.js"></script>
+	<script src="/admin/plugins/datatables-responsive/js/dataTables.responsive.min.js"></script>
+	<script src="/admin/plugins/datatables-responsive/js/responsive.bootstrap4.min.js"></script>
+	<script src="/admin/plugins/datatables-buttons/js/dataTables.buttons.min.js"></script>
+	<script src="/admin/plugins/datatables-buttons/js/buttons.bootstrap4.min.js"></script>
+	<script src="/admin/plugins/jszip/jszip.min.js"></script>
+	<script src="/admin/plugins/pdfmake/pdfmake.min.js"></script>
+	<script src="/admin/plugins/pdfmake/vfs_fonts.js"></script>
+	<script src="/admin/plugins/datatables-buttons/js/buttons.html5.min.js"></script>
+	<script src="/admin/plugins/datatables-buttons/js/buttons.print.min.js"></script>
+	<script src="/admin/plugins/datatables-buttons/js/buttons.colVis.min.js"></script>
+	<script>
+
+		// [상태 변경 버튼] 클릭 이벤트: 상태 변경 폼이 있는 행이 추가됨
+		function controlFormRow(obj) {
+			//if (obj.disabled) return;
+			if (obj.classList.contains("expanded")) {
+				obj.innerHTML = "상태 변경";
+				obj.classList.remove("expanded");
+				obj.classList.remove("btn-secondary");
+				obj.classList.add("btn-primary");
+				obj.parentNode.parentNode.nextSibling.style.display = "none";
+			} else {
+				obj.innerHTML = "X";
+				obj.classList.remove("btn-primary");
+				obj.classList.add("expanded");
+				obj.classList.add("btn-secondary");
+				obj.parentNode.parentNode.nextSibling.style.display = "table-row";
+			}
+		}
+		
+		// [리뷰 완료], [반려], [반려 확인] 버튼의 ajax 요청 콜백 이벤트: 성공 시 상태 변경 폼이 사라짐
+		function onSuccess(obj, result, msg) {
+			alert("문서의 상태가 '" + msg + "'로 변경되었습니다.");
+			obj.parentNode.parentNode.parentNode.parentNode.previousSibling.querySelector("button").disabled = true;
+			obj.parentNode.parentNode.parentNode.innerHTML = "<span>" + msg + "된 문서입니다.</span>";
+		}
+
+		// [리뷰 완료] 버튼 클릭 이벤트
+		function changeStatusToReviewed(obj) {
+			let documentIdx = obj.parentNode.parentNode.querySelector("input[name='documentIdx']").value.trim();
+			let comments = obj.parentNode.parentNode.querySelector("input[name='comments']").value.trim();
+
+			let isContinue = true;
+			if (comments == "") isContinue = confirm("코멘트를 입력하지 않았습니다. 그래도 진행하시겠습니까?");
+			else isContinue = confirm("정말 리뷰 완료하시겠습니까?");
+			if (!isContinue) return;
+			
+			$.ajax({
+				type: "POST",
+				url: "/admin/document/" + documentIdx + "/status/reviewed",
+				data: {"comments": comments}
+				})
+				.then(function(result) {
+					onSuccess(obj, result, '리뷰 완료');
+				}, function(jqXHR, textStatus, errorThrown) {
+					alert(JSON.parse(jqXHR.responseText)['message']);
+				});
+		}
+		
+		// [반려] 버튼 클릭 이벤트
+		function changeStatusToRejected(obj) {
+			let documentIdx = obj.parentNode.parentNode.querySelector("input[name='documentIdx']").value.trim();
+			let comments = obj.parentNode.parentNode.querySelector("input[name='comments']").value.trim();
+
+			let isContinue = true;
+			if (comments == "") isContinue = confirm("코멘트를 입력하지 않았습니다. 그래도 진행하시겠습니까?");
+			else isContinue = confirm("정말 반려하시겠습니까?");
+			if (!isContinue) return;
+			
+			$.ajax({
+				type: "POST",
+				url: "/admin/document/" + documentIdx + "/status/rejected",
+				data: {"comments": comments}
+				})
+				.then(function(result) {
+					onSuccess(obj, result, '반려');
+				}, function(jqXHR, textStatus, errorThrown) {
+					alert(JSON.parse(jqXHR.responseText)['message']);
+				});
+		}
+		
+		// [반려 확인] 버튼 클릭 이벤트
+		function changeStatusBackToDraft(obj) {
+			let documentIdx = obj.parentNode.parentNode.querySelector("input[name='documentIdx']").value.trim();
+			let comments = obj.parentNode.parentNode.querySelector("input[name='comments']").value.trim();
+
+			let isContinue = true;
+			if (comments == "") isContinue = confirm("코멘트를 입력하지 않았습니다. 그래도 진행하시겠습니까?");
+			else isContinue = confirm("정말 반려를 확인하고 문서의 상태를 무상태로 변경하시겠습니까?");
+			if (!isContinue) return;
+			
+			$.ajax({
+				type: "POST",
+				url: "/admin/document/" + documentIdx + "/status/confirm",
+				data: {"comments": comments}
+				})
+				.then(function(result) {
+					onSuccess(obj, result, '반려 확인');
+				}, function(jqXHR, textStatus, errorThrown) {
+					alert(JSON.parse(jqXHR.responseText)['message']);
+				});
+		}
+		
+		/* 결재 상태에 따른 문서 개수만 가져오기 */
+		function getSummaryCount() {
+			$.ajax({
+				type: "GET", //전송타입
+				url: "/dashboard/summary/count",
+				success: function (result, status, xhr) {
+					$("#box-in_review h3").html(result['inReview']); // 리뷰 대기 문서 수 표시
+					$("#box-reviewed h3").html(result['reviewed']); // 리뷰 완료 문서 수 표시
+					$("#box-rejected h3").html(result['rejected']); // 반려 문서 수 표시
+				}, error: function (xhr, status, e) {
+					console.log("error", e);
+				}
+			});
+		}
+		
+		// summary 테이블 로딩
+		function onSuccessLoadingSummaryTable(result) {
+			// alert('문서 불러오기 성공');
+			let preview = $("#table-preview tbody"); // 테이블 초기화
+			preview.empty();
+			let tr = "";
+			
+			if (result.length == 0) {
+				tr = "<tr><td colspan='7'>조회된 문서가 없습니다.</td></tr>";
+				preview.html(tr);
+				return;
+			}
+
+			let badgeCol = {
+				"리뷰 중": "badge-success",
+				"리뷰 완료": "badge-info",
+				"반려": "badge-danger"
+			};
+
+			let isAbleProperty = {
+				"리뷰 중": "",
+				"리뷰 완료": "disabled",
+				"반려": ""
+			}
+			
+			let isAbleEvent = {
+					"리뷰 중": "controlFormRow(this)",
+					"리뷰 완료": "",
+					"반려": "controlFormRow(this)"
+			}	
+		
+			for (let i = 0; i < result.length; i++) {
+				tr += `<tr>
+						<td width="5%">${i + 1}</td>
+						<td width="20%">
+							<a href="/document/detail?documentIdx=${result[i].documentIdx}&folderIdx=${result[i].folderIdx}">${result[i].title}</a> 
+							<span class="table-detail">ver.${result[i].version}</span>
+							<div class="table-detail">${result[i].projectName} > ${result[i].folderName}</div>
+						</td>
+						<td width="15%">${result[i].empName}<div class="table-detail">${result[i].deptName}</div></td>
+						<td width="10%"><span class="badge ${badgeCol[result[i].statusName]}">${result[i].statusName}</span></td>
+						<td width="15%">${result[i].comments}</td>
+						<td width="20%">${result[i].regdate}</td>
+						<td width="15%">
+							<button id="${result[i].documentIdx}" type="button" class="w-75 btn btn-sm btn-primary" ${isAbleProperty[result[i].statusName]} onClick=${isAbleEvent[result[i].statusName]}>상태 변경</button>
+						</td>
+					</tr>`;
+
+				if (result[i].statusName == "리뷰 중") {
+					tr += `<tr style="display: none">
+							<td colspan="7">
+								<div class="row">
+										<div class="col-md-10">
+											<div class="row">
+												<div class="col-2 pl-5">
+													<input type="hidden" name="documentIdx" value="${result[i].documentIdx}">
+													<label for="status-comments">상태 변경 코멘트</label>
+												</div>
+												<div class="col-10">
+													<input class="form-control" type="text" id="comments" name="comments">
+												</div>
+												</div>
+											</div>
+										<div class="col-md-2">
+											<button type="button" class="btn btn-sm btn-info btn-to-reviewed" onClick="changeStatusToReviewed(this, 'reviewed')">리뷰 완료하기</button>
+											<button type="button" class="btn btn-sm btn-danger btn-to-rejected" onClick="changeStatusToRejected(this, 'rejected')">반려하기</button>
+										</div>
+								</div>
+								</td>
+						</tr>`;
+				}
+				
+				if (result[i].statusName == "반려") {
+					tr += `<tr style="display: none">
+							<td colspan="7">
+								<div class="row">
+										<div class="col-md-10">
+											<div class="row">
+												<div class="col-2 pl-5">
+													<input type="hidden" name="documentIdx" value="${result[i].documentIdx}">
+													<label for="status-comments">상태 변경 코멘트</label>
+												</div>
+												<div class="col-10">
+													<input class="form-control" type="text" id="comments" name="comments">
+												</div>
+												</div>
+											</div>
+										<div class="col-md-2 d-flex justify-content-center">
+											<button type="button" class="btn btn-sm btn-info btn-to-reviewed" onClick="changeStatusBackToDraft(this, 'rejected')">반려 확인하기</button>
+										</div>
+								</div>
+								</td>
+						</tr>`;
+				}
+			}
+			preview.html(tr);
+		}
+		
+		/* 결재 상태에 따라 문서 목록 데이터 가져오기 (10개까지만) */
+		function getSummaryData(statusList) {
+			$.ajax({
+				type: "GET",
+				url: "/dashboard/list/entire?statusList=" + statusList,
+			})
+			.then(function(result){
+				onSuccessLoadingSummaryTable(result);
+			}, function(xhr, status, error) {
+				alert("문서를 조회하는 과정에서 문제가 발생했습니다. 담당자에게 문의해 주세요.");
+			})
+		}
+
+		/* 필터에 따라 문서 목록 가져오기 */
+		function getFilteredData(statusList, startDate, endDate, projectList) {
+			// url 쿼리 스트링 설정
+			let url = "/dashboard/list/entire?";
+			if (statusList != null) url += "&statusList=" + statusList;
+			if (projectList != null) url += "&projectList=" + projectList;
+			if (startDate != null && endDate != null) url += "&startDate=" + startDate + "&endDate=" + endDate;
+
+			// 데이터 테이블 적용
+			$("#table-filtered").DataTable({
+				language: {
+					"decimal": "",
+					"emptyTable": "데이터가 없습니다.",
+					"info": "_START_ - _END_ (총 _TOTAL_ 개)",
+					"infoEmpty": "0개",
+					"infoFiltered": "(전체 _MAX_ 개 중 검색결과)",
+					"infoPostFix": "",
+					"thousands": ",",
+					"lengthMenu": "_MENU_ 개씩 보기",
+					"loadingRecords": "로딩중...",
+					"processing": "처리중...",
+					"search": "검색 : ",
+					"zeroRecords": "검색된 데이터가 없습니다.",
+					"paginate": {
+						"first": "첫 페이지",
+						"last": "마지막 페이지",
+						"next": "다음",
+						"previous": "이전"
+					},
+					"aria": {
+						"sortAscending": " :  오름차순 정렬",
+						"sortDescending": " :  내림차순 정렬"
+					}
+				},
+				ordering: true,
+				serverSide: false,
+				responsive: true,
+				destroy: true,
+				columns: [
+					{ data: "listIndex", title: "No.", width: '5%'},
+					{ data: "projectName", title: "프로젝트", width: '10%' },
+					{ data: "folderName", title: "폴더", width: '10%' },
+					{ data: "title", title: "제목", width: '15%' },
+					{ data: "version", title: "버전", width: '10%' },
+					{ data: "deptName", title: "부서", width: '10%' },
+					{ data: "empName", title: "사원", width: '10%' },
+					{ data: "statusName", title: "상태", width: '10%' },
+					{ data: "comments", title: "코멘트", width: '20%' },
+					{ data: "regdate", title: "일자", width: '10%' }
+				],
+				columnDefs: [
+					{ "targets": [0, 1], "visible": false }
+					/* { "targets" : 5, "render": function(data) {return "<a href=''>" + data +  "</a>"} } */
+				],
+				ajax: {
+					url: url,
+					type: "GET",
+					"dataSrc": function (result) {
+						var data = result;
+						for (let i = 0; i < data.length; i++) data[i].listIndex = i + 1; // 리스트번호 
+						return data;
+					}, error: function (xhr, status, err) {
+						alert('문서 목록을 불러오지 못했습니다.');
+					}
+				}
+			});
+		}
+
+		/* 프로젝트 목록 조회 */
+		function loadProject() {
+			$.ajax({
+				type: "GET",
+				url: "/admin/project/list",
+				success: function (result) {
+					$('#project-tag').empty(); // 기존 옵션들을 모두 지우기
+					for (let i = 0; i < result.length; i++) {
+						$('#project-tag').append('<option value="' + result[i].projectName + '">' + result[i].projectName + '</option>');
+					}
+					$('#project-tag').prop('disabled', true);
+				}, error: function (xhr, status, error) {
+					console.error("Failed to load projects: " + error);
+				}
+			});
+		}
+
+		/* 상태 목록 조회 */
+		function loadStatus() {
+			$.ajax({
+				type: "GET",
+				url: "/admin/status/list",
+				success: function (result) {
+					$('#status-tag').empty(); // 기존 옵션들을 모두 지우기
+					for (let i = 0; i < result.length; i++) {
+						$('#status-tag').append('<option value="' + result[i].statusName + '">' + result[i].statusName + '</option>');
+					}
+					$('#status-tag').prop('disabled', true);
+				}, error: function (xhr, status, error) {
+					console.error("Failed to load status list: " + error);
+				}
+			});
+		}
+
+		$(function () {
+			/* [요약 탭] 초기화 */
+			getSummaryCount(); 	// 결재 상태별 문서 수 표시
+			getSummaryData([$('#btn-in_review').val()]); // 리뷰 대기 문서 목록 표시
+
+			// [요약 탭] 클릭 이벤트
+			$('#btn-in_review').click(function () {
+				let statusList = [$('#btn-in_review').val()];
+				getSummaryCount(); 	// 결재 상태별 문서 수 표시
+				getSummaryData(statusList); // 리뷰 대기 문서 미리보기 버튼 클릭 시 목록 가져오기
+			});
+			$('#btn-reviewed').click(function () {
+				let statusList = [$('#btn-reviewed').val()];
+				getSummaryCount(); 	// 결재 상태별 문서 수 표시
+				getSummaryData(statusList); // 리뷰 중 문서 미리보기 버튼 클릭 시 목록 가져오기
+			});
+			$('#btn-rejected').click(function () {
+				let statusList = [$('#btn-rejected').val()];
+				getSummaryCount(); 	// 결재 상태별 문서 수 표시
+				getSummaryData(statusList); // 리뷰 완료 문서 미리보기 버튼 클릭 시 목록 가져오기
+			});
+
+			/* 전체보기 버튼 */
+			$("#goToEntireList-btn").click(function () {
+				$("a[href='#entire-list']").tab('show');
+			});
+
+			/* [전체보기 탭] 초기화 */
+			$('#project-tag').select2(); // 부서 선택 폼 플러그인 활성화
+			loadProject(); // 전체 부서 목록 불러오기
+			$('#status-tag').select2(); // 부서 선택 폼 플러그인 활성화
+			loadStatus(); // 전체 상태 목록 불러오기
+
+			/* 날짜 선택 폼 설정 */
+			let dateRangePicker_startDate = moment().subtract(1, 'days').hours('00').minutes('00').seconds('00').format("YYYY-MM-DD HH:mm:ss");
+			let dateRangePicker_endDate = moment().format("YYYY-MM-DD HH:mm:ss");
+
+			$('#daterange-btn').daterangepicker({ 	// 날짜 선택 폼 플러그인 활성화
+				language: 'ko',
+				locale: {
+					'seperator': '-',
+					'applyLabel': '적용',
+					'cancelLabel': '취소',
+					'customRangeLabel': '직접 선택'
+				},
+				startDate: dateRangePicker_startDate,
+				endDate: dateRangePicker_endDate,
+				ranges: {
+					'오늘': [moment(), moment()],
+					'어제': [moment().subtract(1, 'days'), moment()],
+					'지난 7일': [moment().subtract(6, 'days'), moment()],
+					'지난 30일': [moment().subtract(29, 'days'), moment()],
+				},
+				autoApply: true, // [취소], [적용] 버튼 없음
+			}, function (start, end, label) {
+				alert(label + " : " + start.format("YYYY-MM-DD HH:mm:ss") + "-" + end.format("YYYY-MM-DD HH:mm:ss")); // 날짜 선택 확인용 메시지
+				dateRangePicker_startDate = start.format("YYYY-MM-DD HH:mm:ss");
+				dateRangePicker_endDate = end.format("YYYY-MM-DD HH:mm:ss");
+				// 선택한 기간 라벨을 폼에 표시
+				if (this.chosenLabel == "오늘") $('#daterange-btn span').html("오늘");
+				else if (this.chosenLabel == "어제") $('#daterange-btn span').html("어제");
+				else $('#daterange-btn span').html(start.format('YYYY/MM/DD') + ' - ' + end.format('YYYY/MM/DD'));
+			});
+
+			/* 필터 라디오 버튼에 따른 선택 박스 활성화 조건 */
+			$("input#radio-date-all").click(function () {
+				$('#daterange-btn').addClass('disabled');
+			})
+
+			$("input#radio-date-custom").click(function () {
+				$('#daterange-btn').removeClass('disabled');
+			})
+
+			$("input#radio-project-custom").click(function () {
+				$('#project-tag').prop('disabled', false);
+			})
+			$("input#radio-project-all").click(function () {
+				$('#project-tag').prop('disabled', true);
+			})
+			$("input#radio-status-custom").click(function () {
+				$('#status-tag').prop('disabled', false);
+			})
+			$("input#radio-status-all").click(function () {
+				$('#status-tag').prop('disabled', true);
+			})
+
+			/* 필터 적용 후 조회 버튼 클릭 이벤트 */
+			$('#btn-filtered').click(function () {
+				// 선택된 라디오 버튼 값 저장
+				let filter_date = document.querySelector("input[name='date-filter']:checked").value;
+				let filter_project = document.querySelector("input[name='project-filter']:checked").value;
+				let filter_status = document.querySelector("input[name='status-filter']:checked").value;
+
+				let statusList = null; // 상태 정보
+				if (filter_status == "radio-status-custom")
+					statusList = $('#status-tag').val();
+				//alert("선택된 상태 코드: " + statusList);
+
+				let startDate = null; // 날짜 정보
+				let endDate = null
+				if (filter_date == "radio-date-custom") {
+					startDate = dateRangePicker_startDate;
+					endDate = dateRangePicker_endDate;
+				}
+				//alert("선택된 날짜: " + startDate + "-" + endDate)
+
+				let projectList = null; // 프로젝트 정보
+				if (filter_project == "radio-project-custom")
+					projectList = $('#project-tag').val();
+				//alert("선택된 프로젝트: " + projectList)
+
+				getFilteredData(statusList, startDate, endDate, projectList); // 필터 처리된 목록 조회
+			});
+
+		});
+	</script>
+
+</body>
+
+</html>
