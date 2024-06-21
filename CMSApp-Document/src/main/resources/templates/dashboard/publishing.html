@@ -8,18 +8,11 @@
 
 <!-- data-table css -->
 <link rel="stylesheet"
-	href="/admin/plugins/datatables-bs4/css/dataTables.bootstrap4.min.css">
+	href="/file/admin/plugins/datatables-bs4/css/dataTables.bootstrap4.min.css">
 <link rel="stylesheet"
-	href="/admin/plugins/datatables-responsive/css/responsive.bootstrap4.min.css">
+	href="/file/admin/plugins/datatables-responsive/css/responsive.bootstrap4.min.css">
 <link rel="stylesheet"
-	href="/admin/plugins/datatables-buttons/css/buttons.bootstrap4.min.css">
-<!-- select2 css -->
-<link rel="stylesheet" href="/admin/plugins/select2/css/select2.min.css">
-<link rel="stylesheet"
-	href="/admin/plugins/select2-bootstrap4-theme/select2-bootstrap4.min.css">
-<!-- duallistbox -->
-<link rel="stylesheet"
-	href="/admin/plugins/bootstrap4-duallistbox/bootstrap-duallistbox.min.css">
+	href="/file/admin/plugins/datatables-buttons/css/buttons.bootstrap4.min.css">
 
 <th:block th:replace="~{fragments/header_link :: header_link}" />
 
@@ -163,30 +156,20 @@ div.table-detail, span.table-detail {
 
 	<th:block th:replace="~{fragments/footer_link :: footer_link}" />
 
-	<!-- select2 js 파일 -->
-	<script src="/admin/plugins/select2/js/select2.full.min.js"></script>
 	<!-- datatables js 파일 -->
-	<script src="/admin/plugins/datatables/jquery.dataTables.min.js"></script>
-	<script
-		src="/admin/plugins/datatables-bs4/js/dataTables.bootstrap4.min.js"></script>
-	<script
-		src="/admin/plugins/datatables-responsive/js/dataTables.responsive.min.js"></script>
-	<script
-		src="/admin/plugins/datatables-responsive/js/responsive.bootstrap4.min.js"></script>
-	<script
-		src="/admin/plugins/datatables-buttons/js/dataTables.buttons.min.js"></script>
-	<script
-		src="/admin/plugins/datatables-buttons/js/buttons.bootstrap4.min.js"></script>
-	<script src="/admin/plugins/jszip/jszip.min.js"></script>
-	<script src="/admin/plugins/pdfmake/pdfmake.min.js"></script>
-	<script src="/admin/plugins/pdfmake/vfs_fonts.js"></script>
-	<script src="/admin/plugins/datatables-buttons/js/buttons.html5.min.js"></script>
-	<script src="/admin/plugins/datatables-buttons/js/buttons.print.min.js"></script>
-	<script
-		src="/admin/plugins/datatables-buttons/js/buttons.colVis.min.js"></script>
-	<!-- duallistbox -->
-	<script
-		src="/admin/plugins/bootstrap4-duallistbox/jquery.bootstrap-duallistbox.min.js"></script>
+	<script src="/file/admin/plugins/datatables/jquery.dataTables.min.js"></script>
+	<script src="/file/admin/plugins/datatables-bs4/js/dataTables.bootstrap4.min.js"></script>
+	<script src="/file/admin/plugins/datatables-responsive/js/dataTables.responsive.min.js"></script>
+	<script src="/file/admin/plugins/datatables-responsive/js/responsive.bootstrap4.min.js"></script>
+	<script src="/file/admin/plugins/datatables-buttons/js/dataTables.buttons.min.js"></script>
+	<script src="/file/admin/plugins/datatables-buttons/js/buttons.bootstrap4.min.js"></script>
+	<script src="/file/admin/plugins/jszip/jszip.min.js"></script>
+	<script src="/file/admin/plugins/pdfmake/pdfmake.min.js"></script>
+	<script src="/file/admin/plugins/pdfmake/vfs_fonts.js"></script>
+	<script src="/file/admin/plugins/datatables-buttons/js/buttons.html5.min.js"></script>
+	<script src="/file/admin/plugins/datatables-buttons/js/buttons.print.min.js"></script>
+	<script src="/file/admin/plugins/datatables-buttons/js/buttons.colVis.min.js"></script>
+	
 	<script>
 
 		/* 배포 완료 문서 목록 가져오기 */
@@ -247,14 +230,14 @@ div.table-detail, span.table-detail {
 		function publishDocument(publishedVersionName, comments) {
 			$.ajax({
 	            type: "POST",
-	            url: "/admin/dashboard/publishing",
+	            url: "/file/admin/dashboard/publishing",
 	            data: {
 	            	'publishedVersionName' : publishedVersionName,
 	            	'comments': comments
 	            },
 	            success: function(result) {
 					alert("새로운 배포판 생성 성공");
-					location.href = "/admin/dashboard/activity";
+					location.href = "/file/admin/dashboard/activity";
 	            }, error: function(xhr, status, error) {
 	            	alert("배포판 생성 실패")
 	                console.log(status);
