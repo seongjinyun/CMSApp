@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.sds.cmsapp.domain.ErrorResponse;
 import com.sds.cmsapp.domain.PublishedVersion;
 import com.sds.cmsapp.domain.PublishedVersionName;
 import com.sds.cmsapp.domain.RequestPublishingDTO;
@@ -34,16 +35,11 @@ public class PublishingController {
 	@Autowired
 	DocumentVersionService documentVersionService;
 	
-	
 	@Autowired
 	MainPublishingService mainPublishingService;
 	
-	/////////두 서비스의 트랜잭션 처리 진행 중
-	/// 배포된 버전인지 확인하려면 published_version과 조인해야 함
-	// 현재 status_log와 version_log_idx와의 관계가 애매함
-	
 	/* 문서 목록 배포 */
-	@PostMapping("/admin/dashboard/publishing/new")
+	@PostMapping("/admin/dashboard/publishing")
 	public ResponseEntity<String> publishDocumentList(RequestPublishingDTO publishingDTO) {
 		log.debug("입력받은 배포판 이름: " + publishingDTO.getPublishedVersionName());
 		log.debug("입력받은 코멘트: " + publishingDTO.getComments());
@@ -55,17 +51,16 @@ public class PublishingController {
 	
 	// 배포 대기 문서 목록 불러오기
 	@GetMapping("/admin/dashboard/publishing/waiting-list")
-	public ResponseEntity getWaitingList() {
+	public ResponseEntity<?> getWaitingList() {
 		
 		List<PublishedVersion> waitingList = publishedVersionService.selectWaitingQueue();
 		
-		ResponseEntity entity = ResponseEntity.ok(waitingList);
+		ResponseEntity<?> entity = ResponseEntity.ok(waitingList);
 		return entity;
 	}
 	
 	@ExceptionHandler({DocumentException.class, DocumentVersionException.class, PublishedVersionNameException.class, PublishedVersionException.class})
-	public ResponseEntity handle(RuntimeException e) {
-		ResponseEntity entity = ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
-		return entity;
+	public ResponseEntity<?> handle(RuntimeException e) {
+		return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new ErrorResponse("배포할 문서가 없거나 리뷰가 완료되지 않은 문서가 있습니다."));
 	}
 }
