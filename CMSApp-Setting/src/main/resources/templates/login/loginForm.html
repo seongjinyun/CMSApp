@@ -51,7 +51,7 @@
 <script>
     function loginCheck(){
         $.ajax({
-            url: "/emp/login",
+            url: "/setting/emp/login", // 로그인 폼을 setting에 두었을 경우
             type: "post",
             data: JSON.stringify({ 
                 empId: $("input[name='empId']").val(),
@@ -80,7 +80,7 @@
     function redirectPage() {
         const token = localStorage.getItem('token');
         $.ajax({
-            url: "/checkAuthority/setting/mypage",
+            url: "/setting/checkAuthority/setting/mypage",
             type: "get",
             headers: {
                 "Authorization": "Bearer " + token

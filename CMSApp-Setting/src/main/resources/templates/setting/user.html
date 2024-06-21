@@ -92,7 +92,7 @@
           </div><!-- /.col -->
           <div class="col-sm-6">
             <ol class="breadcrumb float-sm-right">
-              <li class="breadcrumb-item"><a th:href="@{general}">Setting</a></li>
+              <li class="breadcrumb-item"><a th:href="">Setting</a></li>
               <li class="breadcrumb-item active">User</li>
             </ol>
           </div><!-- /.col -->
@@ -208,13 +208,13 @@
 						        		<div class="dataTables_paginate paging_simple_numbers" id="example1_paginate">
 						        			<ul class="pagination">
 						        				<li class="paginate_button page-item previous" id="example1_previous" th:classappend="${pager.currentPage == 1} ? 'disabled'">
-						        					<a th:href="@{/setting/user(page=${pager.currentPage - 1})}" aria-controls="example1" class="page-link">Previous</a>
+						        					<a th:href="@{/setting/setting/user(page=${pager.currentPage - 1})}" aria-controls="example1" class="page-link">Previous</a>
 						        				</li>
 						        				<li class="paginate_button page-item" th:each="i : ${#numbers.sequence(pager.firstPage , pager.lastPage)}" th:classappend="${pager.currentPage == i} ? 'active'">
-						        					<a th:href="@{/setting/user(currentPage=${i})}" aria-controls="example1" th:text="${i}" tabindex="0" class="page-link" th:classappend="${pager.currentPage==i ? 'current-page':'' }">1</a>
+						        					<a th:href="@{/setting/setting/user(currentPage=${i})}" aria-controls="example1" th:text="${i}" tabindex="0" class="page-link" th:classappend="${pager.currentPage==i ? 'current-page':'' }">1</a>
 						        				</li>
 						        				<li class="paginate_button page-item next" id="example1_next" th:classappend="${pager.currentPage == pager.totalPage} ? 'disabled'">
-						        					<a th:href="@{/setting/user(page=${pager.currentPage + 1})}" aria-controls="example1" class="page-link">Next</a>
+						        					<a th:href="@{/setting/setting/user(page=${pager.currentPage + 1})}" aria-controls="example1" class="page-link">Next</a>
 						        				</li>
 						        			</ul>
 						        		</div>
@@ -270,7 +270,7 @@
 
 	function registEmp() { // 회원 등록 정보 전송
 		$("form.inputImg").attr({
-			action:"/emp/regist",
+			action:"/setting/emp/regist",
 			method:"POST",
 			// 텍스트 데이터와 바이너리 데이터가 섞여 있는 복합 데이터 전송: enctype multipart/form-data
 			enctype:"multipart/form-data"
@@ -281,12 +281,12 @@
 	function updateEmps() { // 회원 정보 변경 전송
 		var formData = $("#updateEmps").serialize();
 		 $.ajax({
-			url: '/emp/update',
+			url: '/setting/emp/update',
 	        type: 'POST',
 	        data: formData,
 	        success: function(response) {
 	            alert("Employees updated successfully");
-	            window.location.href = '/setting/user';
+	            window.location.href = '/setting/setting/user';
 	        },
 	        error: function(jqXHR, textStatus, errorThrown) {
 	            alert("Failed to update employees: " + textStatus);
