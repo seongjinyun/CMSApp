@@ -4,7 +4,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>CMS | Setting</title>
+    <title>AdminLTE 3 | Dashboard</title>
 
     <th:block th:replace="~{fragments/header_link :: header_link}" />
     <th:block th:replace="~{elements/datatables_header_link :: datatables_header_link}" />
@@ -243,6 +243,7 @@
 </body>
 
 </html>
+<th:block th:replace="~{fragments/footer_script :: footer_script}"/>
 <script type="text/javascript">
     // 추가 form에 보여질 프로젝트 option 태그 채우기
     function loadOtherProjects(deptIdx) {
