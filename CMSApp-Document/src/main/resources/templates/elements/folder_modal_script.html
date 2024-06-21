@@ -20,7 +20,7 @@
 		function getFolderJson(callback) {
 			$.ajax({
 				method: "GET",
-				url: "/document/folder/list",
+				url: "/file/document/folder/list",
 				contentType: "application/json",
 				success: function (result, status, xhr) {
 					jsonData = result;
@@ -104,7 +104,7 @@
 				// 서버로 folder_idx 값을 전달하는 AJAX 요청
 				$.ajax({
 					method: "PATCH",
-					url: "/document/folder",
+					url: "/file/document/folder",
 					contentType: "application/json",
 					data: JSON.stringify(request),
 					success: function (result, status, xhr) {

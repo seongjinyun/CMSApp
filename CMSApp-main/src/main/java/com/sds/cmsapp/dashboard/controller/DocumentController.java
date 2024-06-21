@@ -11,9 +11,14 @@ public class DocumentController {
 		return "admin/dashboard/activity";
 	}
 	
-	@GetMapping("/admin/dashboard/publishing/new")
+	@GetMapping("/admin/dashboard/publishing")
 	public String getAdminDashboardPublishing() {
-		return "admin/dashboard/publishing/new";
+		return "admin/dashboard/publishing";
 	}
+	
+//	@GetMapping("/admin/dashboard/published-edition")
+//	public String getAdminDashboardPublishedEdition() {
+//		return "admin/dashboard/published";
+//	}
 	
 }

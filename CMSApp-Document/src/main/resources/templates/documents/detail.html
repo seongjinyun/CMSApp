@@ -69,7 +69,7 @@
 							class="breadcrumb float-sm-left">
 							<li th:unless="${i.index == #lists.size(folderList)}"
 								class="breadcrumb-item ml-1 mr-1"><a
-								th:href="|/document/list?folderIdx=${folder.folderIdx}|"
+								th:href="|/file/document/list?folderIdx=${folder.folderIdx}|"
 								th:text="|${folder.folderName} / |"></a></li>
 							<li th:if="${i.index + 1 == #lists.size(folderList)}"
 								class="breadcrumb-item active ml-1 mr-1"
@@ -241,7 +241,7 @@
 
 		function reviewRequest() {
 			$.ajax({
-				url : '/document/review/request',
+				url : '/file/document/review/request',
 				type : 'POST',
 				data : {
 					documentIdx : $("#documentIdx").val(),
@@ -262,7 +262,7 @@
 			console.log(versionLogIdx);
 
 			$.ajax({
-				url : '/document/version/update',
+				url : '/file/document/version/update',
 				type : 'POST',
 				data : {
 					versionLogIdx : versionLogIdx,
@@ -294,20 +294,20 @@
 		}
 
 		function getList() {
-			location.href = "/document/list?folderIdx="
+			location.href = "/file/document/list?folderIdx="
 					+ $("input[name='folderIdx']").val();
 		}
 
 		function edit() {
 
 			if (confirm("문서를 수정하실건가요?")) {
-				location.href = "/document/editform?documentIdx="
+				location.href = "/file/document/editform?documentIdx="
 						+ $("input[name='documentIdx']").val() + "&folderIdx="
 						+ $("input[name='folderIdx']").val();
 				
 				$(window).on('unload', function() {
 				    $.ajax({
-				        url: "/document/releaseEditing",
+				        url: "/file/document/releaseEditing",
 				        type: "POST",
 				        async: true, // 비동기적 요청으로 변경
 				        data: {
@@ -332,7 +332,7 @@
 				objectIdxList.push(objectIdx);
 				console.log(objectIdxList);
 				$.ajax({
-					url : "/document/list/trash",
+					url : "/file/document/list/trash",
 					data : JSON.stringify(objectIdxList),
 					method : "POST",
 					contentType : "application/json",
@@ -350,7 +350,7 @@
 			console.log(versionLogIdx);
 			if (confirm("정말로 삭제하시겠습니까?")) {
 				$.ajax({
-					url : '/document/version/delete',
+					url : '/file/document/version/delete',
 					type : 'DELETE',
 					data : {
 						versionLogIdx : versionLogIdx

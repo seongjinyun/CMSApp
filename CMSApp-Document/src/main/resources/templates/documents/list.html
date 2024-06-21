@@ -37,7 +37,7 @@
 	          <div class="col-sm-6">
 	            <ol th:each="folder, i : ${parentFolderList}"class="breadcrumb float-sm-right">
 	              <li th:if="${i.index == 0}" class="breadcrumb-item active ml-1 mr-1" th:text="| ${folder.folderName}|"></li>
-	              <li th:unless="${i.index == 0}" class="breadcrumb-item ml-1 mr-1"><a th:href="|/document/list?folderIdx=${folder.folderIdx}|" th:text="|${folder.folderName} / |"></a></li>
+	              <li th:unless="${i.index == 0}" class="breadcrumb-item ml-1 mr-1"><a th:href="|/file/document/list?folderIdx=${folder.folderIdx}|" th:text="|${folder.folderName} / |"></a></li>
 	            </ol>
 	          </div>
 	        </div>
@@ -132,7 +132,7 @@
                      		</div>
 				        </td>
 				        <td class="mailbox-star"><a href="#"><i class="fa fa-star-o" aria-hidden="true"></i></a></td>
-				        <td><i class="far fa-folder mr-3"></i><a th:href="|/document/list?folderIdx=${folder.folderIdx}|" th:text="${folder.folderName}"></a></td>
+				        <td><i class="far fa-folder mr-3"></i><a th:href="|/file/document/list?folderIdx=${folder.folderIdx}|" th:text="${folder.folderName}"></a></td>
 				        <td>폴더</td>
 				        <td th:text="${folder.regdate}"></td>
 				        <td></td>
@@ -146,7 +146,7 @@
 				        </td>
 				        <td class="mailbox-star"><a href="#"><i class="fa fa-star-o" aria-hidden="true"></i></a></td>
 				        <!-- title, 업데이트 날짜, document가 아닌 versionLog에서 가져와야함.\ -->
-				        <td><a th:href="@{/document/detail(documentIdx=${documentVersion.document.documentIdx}, folderIdx=${documentVersion.document.folder.folderIdx})}" th:text="${documentVersion.versionLog.title}">튜토리얼</a></td>
+				        <td><a th:href="@{/file/document/detail(documentIdx=${documentVersion.document.documentIdx}, folderIdx=${documentVersion.document.folder.folderIdx})}" th:text="${documentVersion.versionLog.title}">튜토리얼</a></td>
 				        <td th:text="'v' + ${documentVersion.versionLog.version}">v2.1</td>
 				        <td th:text="${documentVersion.versionLog.regdate}">2024.05.23 16:44</td>
 				        <!-- 상태는 masterCode 에서 가져와야함  -->
@@ -243,7 +243,7 @@ $(function(){
 			  return;
 		  }
 			//글쓰기 폼 요청
-			location.href="/document/writeform?folderIdx="+$("input[name='folderIdx']").val();
+			location.href="/file/document/writeform?folderIdx="+$("input[name='folderIdx']").val();
 		});
   }
 	  
@@ -272,7 +272,7 @@ $(function(){
 	          };
 	          $.ajax({
 	            method: "POST",
-	            url: "/document/list/trash",
+	            url: "/file/document/list/trash",
 	            contentType: "application/json",
 	            data: JSON.stringify(request)
 	            ,
@@ -332,7 +332,7 @@ $(function(){
 			alert("1자 이상의 이름을 입력해 주세요");
 		} else {
       $.ajax({
-        url: "/document/folder/name",
+        url: "/file/document/folder/name",
         method: "PATCH",
         data: {
           folderIdx: $("#folderIdx").val(),

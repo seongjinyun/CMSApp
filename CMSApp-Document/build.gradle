@@ -39,10 +39,10 @@ dependencies {
 	/////////////////////////////////////////////////////////////////////////////////////////////////////
 	
 	// config server 클라이언트 등록
-	// implementation 'org.springframework.cloud:spring-cloud-starter-config'
+	implementation 'org.springframework.cloud:spring-cloud-starter-config'
 	
 	// Eureka 클라이언트로 등록
-	// implementation 'org.springframework.cloud:spring-cloud-starter-netflix-eureka-client'
+	implementation 'org.springframework.cloud:spring-cloud-starter-netflix-eureka-client'
 	
 	/////////////////////////////////////////////////////////////////////////////////////////////////////
 	
@@ -92,8 +92,6 @@ dependencies {
 	implementation 'com.sun.xml.messaging.saaj:saaj-impl:1.5.3'
 	implementation 'com.sun.xml.bind:jaxb-impl:2.3.3'	
 	
-	//config server 클라이언트 관련
-	implementation 'org.springframework.cloud:spring-cloud-starter-config'
 }
 
 dependencyManagement {

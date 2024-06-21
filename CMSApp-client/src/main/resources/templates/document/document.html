@@ -119,7 +119,7 @@ body {
       const projectIdx = $("#projectIdx").val();
 
       $.ajax({
-        url: '/document/detail?projectIdx=' + projectIdx + '&documentIdx=' + documentIdx,
+        url: '/client/document/detail?projectIdx=' + projectIdx + '&documentIdx=' + documentIdx,
         type: 'GET',
         success: function(publishedVersion, status, xhr){
           if ($('.exercise-content').length > 0) {

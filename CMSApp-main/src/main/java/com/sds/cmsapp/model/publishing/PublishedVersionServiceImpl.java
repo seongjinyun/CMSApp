@@ -60,14 +60,15 @@ public class PublishedVersionServiceImpl implements PublishedVersionService {
 	@Transactional(propagation = Propagation.REQUIRED)
 	public List<PublishedVersion> selectWaitingQueue()
 		throws PublishedVersionException {
-		List<PublishedVersion> publishedVerList = new ArrayList<PublishedVersion>(); 		// 배포판 테이블에 배포할 문서 목록 생성
+		List<PublishedVersion> newPublishedVerList = new ArrayList<PublishedVersion>(); 		// 배포판 테이블에 배포할 문서 목록 생성
+		List<Document> excludedDocList = new ArrayList<Document>(); // 배포 제외 문서 목록 생성
 		
 		List<Document> docList = documentDAO.selectAll(); // 문제..Folder 정보까지 가져오게 됨.. 
 		if (docList == null) throw new PublishedVersionException("배포할 문서가 없습니다.");
 		for (Document doc : docList) {
 			int docIdx = doc.getDocumentIdx(); // 문서 번호
 			if (trashDAO.selectTypeByDocumentIdx(docIdx) != null) {
-				log.debug(docIdx + "번 문서는 휴지통에 있는 문서입니다.");
+				log.debug(docIdx + "번 문서는 휴지통에 있는 문서입니다."); // 한 번도 배포된 적 없는 문서
 				continue;
 			}
 			
@@ -78,41 +79,65 @@ public class PublishedVersionServiceImpl implements PublishedVersionService {
 			VersionLog versionLog = versionLogDAO.select(versionLogIdx);
 			log.debug(docIdx + "번, 결재 상태 코드: " + statusCode + ", 버전 로그 번호: " + versionLogIdx);
 			
-			// 상태 코드가 300(리뷰 완료)가 아닌 문서 제외
-			if (statusCode == 200 && statusCode == 500 && statusCode == 0) {
-				log.debug("배포 대기 목록에서 제외");
-				continue;
+			// 가장 마지막 배포판의 문서 버전
+			PublishedVersion lastPublishedVersion = publishedVersionDAO.selectLastestPublishedVersionByDocumentIdx(docIdx);
+			// 무상태일 경우
+			if (statusCode == 100) {
+				// 배포된 적 있다면
+				if (lastPublishedVersion != null) {
+					if(versionLogIdx == lastPublishedVersion.getVersionLog().getVersionLogIdx()) {
+						log.debug("기 배포 목록 중 변경 사항이 없는 목록");
+						PublishedVersion newPublishedVer = new PublishedVersion(doc, versionLog);
+						newPublishedVerList.add(newPublishedVer);
+					} else {
+						log.debug("반려된 문서. 자동으로 이전 배포판의 버전이 새로운 배포판에 포함됩니다.");
+						PublishedVersion newPublishedVer = new PublishedVersion(doc, versionLog);
+						newPublishedVerList.add(newPublishedVer);
+					}
+					// 배포된 적 없다면
+				} else {
+					log.debug("아직 리뷰되지 않은 문서입니다.");
+					continue; // 안 됨
+				}
 			}
-			
-//			if (statusCode == 100 
-//					&& versionLogIdx == publishedVersionDAO.selectByDocumentIdx(docIdx).getVersionLog().getVersionLogIdx() 
-//					&& publishedVersionDAO.selectByDocumentIdx(docIdx) != null) {
-//				log.debug("기 배포 목록");
-//			}
-			
+				
+			// 리뷰 완료한 문서
 			if(statusCode == 300) {
 				log.debug("리뷰 완료 목록");
+				PublishedVersion newPublishedVer = new PublishedVersion(doc, versionLog);
+				newPublishedVerList.add(newPublishedVer);
 			}
-			PublishedVersion publishedVer = new PublishedVersion(doc, versionLog);
-			publishedVerList.add(publishedVer);
+			
+			// 변경 사항이 있는 문서
+			if (statusCode == 200 && statusCode == 500) {
+				if (lastPublishedVersion != null) {
+					log.debug("변경 사항이 있는 문서 중 리뷰 진행 중이거나 반려된 문서");
+					excludedDocList.add(doc);
+					throw new PublishedVersionException("변경된 문서 중 상태가 확정되지 않은 문서가 있습니다.");
+				}
+			}
+			
 		}
-		log.debug("배포 대기 목록의 총 문서 수: " + publishedVerList.size());
-		if (publishedVerList.size() == 0) throw new PublishedVersionException("배포할 문서가 없습니다.");
-		return publishedVerList;
+		log.debug("배포 대기 목록의 총 문서 수: " + newPublishedVerList.size());
+		log.debug("기 배포 문서 중 변경 사항이 생긴 문서" + excludedDocList.size());
+		if (newPublishedVerList.size() == 0) throw new PublishedVersionException("배포할 문서가 없습니다.");
+
+		return newPublishedVerList;
 	}
 	
 	// 배포 대기 문서 목록 생성 (오버로딩)
 	@Transactional(propagation = Propagation.REQUIRED)
 	public List<PublishedVersion> selectWaitingQueue(PublishedVersionName publishedVersionName)
 		throws PublishedVersionException {
-		List<PublishedVersion> publishedVerList = new ArrayList<PublishedVersion>(); 		// 배포판 테이블에 배포할 문서 목록 생성
+		List<PublishedVersion> newPublishedVerList = new ArrayList<PublishedVersion>(); 		// 배포판 테이블에 배포할 문서 목록 생성
+		List<Document> excludedDocList = new ArrayList<Document>(); // 배포 제외 문서 목록 생성
 		
 		List<Document> docList = documentDAO.selectAll(); // 문제..Folder 정보까지 가져오게 됨.. 
 		if (docList == null) throw new PublishedVersionException("배포할 문서가 없습니다.");
 		for (Document doc : docList) {
 			int docIdx = doc.getDocumentIdx(); // 문서 번호
 			if (trashDAO.selectTypeByDocumentIdx(docIdx) != null) {
-				log.debug(docIdx + "번 문서는 휴지통에 있는 문서입니다.");
+				log.debug(docIdx + "번 문서는 휴지통에 있는 문서입니다."); // 한 번도 배포된 적 없는 문서
 				continue;
 			}
 			
@@ -123,27 +148,49 @@ public class PublishedVersionServiceImpl implements PublishedVersionService {
 			VersionLog versionLog = versionLogDAO.select(versionLogIdx);
 			log.debug(docIdx + "번, 결재 상태 코드: " + statusCode + ", 버전 로그 번호: " + versionLogIdx);
 			
-			// 상태 코드가 300(리뷰 완료)이 아닌 문서 제외
-			if (statusCode == 200 && statusCode == 500 && statusCode == 0) {
-				log.debug("배포 대기 목록에서 제외");
-				continue;
+			// 가장 마지막 배포판의 문서 버전
+			PublishedVersion lastPublishedVersion = publishedVersionDAO.selectLastestPublishedVersionByDocumentIdx(docIdx);
+			// 무상태일 경우
+			if (statusCode == 100) {
+				// 배포된 적 있다면
+				if (lastPublishedVersion != null) {
+					if(versionLogIdx == lastPublishedVersion.getVersionLog().getVersionLogIdx()) {
+						log.debug("기 배포 목록 중 변경 사항이 없는 목록");
+						PublishedVersion newPublishedVer = new PublishedVersion(doc, versionLog, publishedVersionName);
+						newPublishedVerList.add(newPublishedVer);
+					} else {
+						log.debug("반려된 문서. 자동으로 이전 배포판의 버전이 새로운 배포판에 포함됩니다.");
+						PublishedVersion newPublishedVer = new PublishedVersion(doc, versionLog, publishedVersionName);
+						newPublishedVerList.add(newPublishedVer);
+					}
+					// 배포된 적 없다면
+				} else {
+					log.debug("아직 리뷰되지 않은 문서입니다.");
+					continue; // 안 됨
+				}
 			}
-			
-//			if (statusCode == 100 
-//					&& versionLogIdx == publishedVersionDAO.selectByDocumentIdx(docIdx).getVersionLog().getVersionLogIdx() 
-//					&& publishedVersionDAO.selectByDocumentIdx(docIdx) != null) {
-//				log.debug("기 배포 목록");
-//			}
-			
+				
+			// 리뷰 완료한 문서
 			if(statusCode == 300) {
 				log.debug("리뷰 완료 목록");
+				PublishedVersion newPublishedVer = new PublishedVersion(doc, versionLog, publishedVersionName);
+				newPublishedVerList.add(newPublishedVer);
 			}
-			PublishedVersion publishedVer = new PublishedVersion(doc, versionLog, publishedVersionName);
-			publishedVerList.add(publishedVer);
+			
+			// 변경 사항이 있는 문서
+			if (statusCode == 200 && statusCode == 500) {
+				if (lastPublishedVersion != null) {
+					log.debug("변경 사항이 있는 문서 중 리뷰 진행 중이거나 반려된 문서");
+					excludedDocList.add(doc);
+					throw new PublishedVersionException("변경된 문서 중 상태가 확정되지 않은 문서가 있습니다.");
+				}
+			}
+			
 		}
-		log.debug("배포 대기 목록의 총 문서 수: " + publishedVerList.size());
-		if (publishedVerList.size() == 0) throw new PublishedVersionException("배포할 문서가 없습니다.");
-		return publishedVerList;
+		log.debug("배포 대기 목록의 총 문서 수: " + newPublishedVerList.size());
+		log.debug("기 배포 문서 중 변경 사항이 생긴 문서" + excludedDocList.size());
+		if (newPublishedVerList.size() == 0) throw new PublishedVersionException("배포할 문서가 없습니다.");
+		return newPublishedVerList;
 	}
 	
 	// 배포 테이블에 배포 대기 문서 추가

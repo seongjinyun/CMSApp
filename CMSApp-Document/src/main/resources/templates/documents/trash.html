@@ -104,7 +104,7 @@
                       </div>
                     </td>
                     <td class="mailbox-star"><a href="#"><i class="fas fa-star-o" aria-hidden="true"></i></a></td>
-                    <td class="mailbox-subject" th:text="${trash.versionLog.title}"><a href="/document/detail"></a></td>
+                    <td class="mailbox-subject" th:text="${trash.versionLog.title}"><a href="/file/document/detail"></a></td>
                     <td class="mailbox-name" th:text="|v${trash.versionLog.version}|"></td>
                     <td class="mailbox-date" th:text="${trash.regdate}"></td>
                     <td class="mailbox-attachment" th:text="${trash.emp.empName}"></td>
@@ -180,7 +180,7 @@ $(function(){
          
           $.ajax({
               type: 'POST',
-              url: '/document/trash',
+              url: '/file/document/trash',
               contentType: 'application/json',
               data: JSON.stringify(trashIdxList),
               success: function(result, status, xhr) {
@@ -210,7 +210,7 @@ $(function(){
           
           $.ajax({
               type: 'DELETE',
-              url: '/document/trash',
+              url: '/file/document/trash',
               contentType: 'application/json',
               data: JSON.stringify(trashIdxList),
               success: function(result, status, xhr) {
@@ -228,7 +228,7 @@ $(function(){
 	  if(confirm("휴지통을 비우시겠어요?")){
 		  $.ajax({
               type: 'DELETE',
-              url: '/document/trash/list',
+              url: '/file/document/trash/list',
               contentType: 'application/json',
               success: function(result, status, xhr) {
                   alert('휴지통을 성공적으로 비웠어요');

@@ -247,10 +247,10 @@ public class RestDocumentController {
 		Emp emp = new Emp(1); // 임시 지정
 		Document document = new Document(documentIdx);
 		MasterCode masterCode = new MasterCode(200);
-		DocumentVersion documentVersion = new DocumentVersion(document, masterCode);
+		DocumentVersion documentVersion = new DocumentVersion(document, masterCode, emp, comments);
 		log.debug("documentVersion = " + documentVersion);
 
-		mainUpdatingStatusService.changeStatus(document, emp, masterCode, comments);
+		mainUpdatingStatusService.changeStatusOne(documentVersion);
 		
 		return null;
 	}

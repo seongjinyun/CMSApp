@@ -156,28 +156,20 @@
 									<!-- Card -->
 									<div class="card mt-3">
 										<div class="card-header border-transparent">
-											<h3 class="card-title">목록 *최신 10개까지 표시됩니다.</h3>
-											<div class="card-tools">
-												<!-- input-group -->
+											<h3 class="card-title">목록</h3>
+											<!-- <div class="card-tools">
+												input-group
 												<div class="input-group">
-													<!-- button -->
+													button
 													<button type="button" class="btn btn-default float-right"
 														id="goToEntireList-btn">전체 보기</button>
 												</div>
-											</div>
+											</div> -->
 										</div>
 										<div class="card-body p-0">
 											<div class="table-responsive">
 												<table id="table-preview" class="table table-hover m-0">
 													<thead>
-														<!-- <tr>
-															<th>No.</th>
-															<th>제목</th>
-															<th>사원</th>
-															<th>결재 상태</th>
-															<th>코멘트</th>
-															<th>일자</th>
-														</tr> -->
 													</thead>
 													<tbody>
 													</tbody>
@@ -321,19 +313,9 @@
 							<div class="row">
 								<div class="col-sm-12">
 									<div id="filtered-table_wrapper" class="dataTables_wrapper dt-bootstrap4">
-										<table id="table-filtered"
-											class="bg-white table table-hover table-bordered dataTable dtr-inline">
+										<table id="table-filtered" class="bg-white table table-hover table-bordered dataTable dtr-inline" width="100%">
 											<thead>
 												<tr>
-													<!-- <th>선택</th>
-													<th>No.</th>
-													<th>제목</th>
-													<th>버전</th>
-													<th>부서</th>
-													<th>사원</th>
-													<th>결재 상태</th>
-													<th>코멘트</th>
-													<th>일자</th> -->
 												</tr>
 											</thead>
 											<tbody></tbody>
@@ -381,116 +363,98 @@
 	<script src="/admin/plugins/datatables-buttons/js/buttons.print.min.js"></script>
 	<script src="/admin/plugins/datatables-buttons/js/buttons.colVis.min.js"></script>
 	<script>
-		/* 데이터테이블 한국어 */
-		var datatable_ko = {
-			"decimal": "",
-			"emptyTable": "데이터가 없습니다.",
-			"info": "_START_ - _END_ (총 _TOTAL_ 개)",
-			"infoEmpty": "0개",
-			"infoFiltered": "(전체 _MAX_ 개 중 검색결과)",
-			"infoPostFix": "",
-			"thousands": ",",
-			"lengthMenu": "_MENU_ 개씩 보기",
-			"loadingRecords": "로딩중...",
-			"processing": "처리중...",
-			"search": "검색 : ",
-			"zeroRecords": "검색된 데이터가 없습니다.",
-			"paginate": {
-				"first": "첫 페이지",
-				"last": "마지막 페이지",
-				"next": "다음",
-				"previous": "이전"
-			},
-			"aria": {
-				"sortAscending": " :  오름차순 정렬",
-				"sortDescending": " :  내림차순 정렬"
+
+		// [상태 변경 버튼] 클릭 이벤트: 상태 변경 폼이 있는 행이 추가됨
+		function controlFormRow(obj) {
+			//if (obj.disabled) return;
+			if (obj.classList.contains("expanded")) {
+				obj.innerHTML = "상태 변경";
+				obj.classList.remove("expanded");
+				obj.classList.remove("btn-secondary");
+				obj.classList.add("btn-primary");
+				obj.parentNode.parentNode.nextSibling.style.display = "none";
+			} else {
+				obj.innerHTML = "X";
+				obj.classList.remove("btn-primary");
+				obj.classList.add("expanded");
+				obj.classList.add("btn-secondary");
+				obj.parentNode.parentNode.nextSibling.style.display = "table-row";
 			}
-		};
-
-		let statusList = {
-			"inReview": "리뷰 중",
-			"reviewed": "리뷰 완료",
-			"rejected": "반려"
+		}
+		
+		// [리뷰 완료], [반려], [반려 확인] 버튼의 ajax 요청 콜백 이벤트: 성공 시 상태 변경 폼이 사라짐
+		function onSuccess(obj, result, msg) {
+			alert("문서의 상태가 '" + msg + "'로 변경되었습니다.");
+			obj.parentNode.parentNode.parentNode.parentNode.previousSibling.querySelector("button").disabled = true;
+			obj.parentNode.parentNode.parentNode.innerHTML = "<span>" + msg + "된 문서입니다.</span>";
 		}
 
-		function expandRow(obj) {
-			obj.parentNode.parentNode.nextSibling.style.display = "table-row";
-		}
-
-		function changeStatusToReviewed(obj, toStatus) {
+		// [리뷰 완료] 버튼 클릭 이벤트
+		function changeStatusToReviewed(obj) {
 			let documentIdx = obj.parentNode.parentNode.querySelector("input[name='documentIdx']").value.trim();
 			let comments = obj.parentNode.parentNode.querySelector("input[name='comments']").value.trim();
-			let formData = {
-				"comments": comments,
-				"statusName": statusList[toStatus]
-			}
 
 			let isContinue = true;
 			if (comments == "") isContinue = confirm("코멘트를 입력하지 않았습니다. 그래도 진행하시겠습니까?");
 			else isContinue = confirm("정말 리뷰 완료하시겠습니까?");
-
 			if (!isContinue) return;
-			alert(comments);
-			alert(statusList[toStatus]);
+			
 			$.ajax({
 				type: "POST",
 				url: "/admin/document/" + documentIdx + "/status/reviewed",
-				data: formData,
-				success: function (result, status, xhr) {
-					alert("상태 변경 성공!");
-				}
-			})
+				data: {"comments": comments}
+				})
+				.then(function(result) {
+					onSuccess(obj, result, '리뷰 완료');
+				}, function(jqXHR, textStatus, errorThrown) {
+					alert(JSON.parse(jqXHR.responseText)['message']);
+				});
 		}
 		
-		function changeStatusToRejected(obj, toStatus) {
+		// [반려] 버튼 클릭 이벤트
+		function changeStatusToRejected(obj) {
 			let documentIdx = obj.parentNode.parentNode.querySelector("input[name='documentIdx']").value.trim();
 			let comments = obj.parentNode.parentNode.querySelector("input[name='comments']").value.trim();
-			let formData = {
-				"comments": comments,
-				"statusName": statusList[toStatus]
-			}
+
 			let isContinue = true;
 			if (comments == "") isContinue = confirm("코멘트를 입력하지 않았습니다. 그래도 진행하시겠습니까?");
 			else isContinue = confirm("정말 반려하시겠습니까?");
-
 			if (!isContinue) return;
-			alert(comments);
-			alert(statusList[toStatus]);
+			
 			$.ajax({
 				type: "POST",
 				url: "/admin/document/" + documentIdx + "/status/rejected",
-				data: formData,
-				success: function (result, status, xhr) {
-					alert("상태 변경 성공!");
-				}
-			})
+				data: {"comments": comments}
+				})
+				.then(function(result) {
+					onSuccess(obj, result, '반려');
+				}, function(jqXHR, textStatus, errorThrown) {
+					alert(JSON.parse(jqXHR.responseText)['message']);
+				});
 		}
 		
-		
-/* 		function changeStatusRejectedToDraft(obj, toStatus) {
+		// [반려 확인] 버튼 클릭 이벤트
+		function changeStatusBackToDraft(obj) {
 			let documentIdx = obj.parentNode.parentNode.querySelector("input[name='documentIdx']").value.trim();
 			let comments = obj.parentNode.parentNode.querySelector("input[name='comments']").value.trim();
-			let formData = {
-				"comments": comments,
-				"statusName": statusList[toStatus]
-			}
+
 			let isContinue = true;
 			if (comments == "") isContinue = confirm("코멘트를 입력하지 않았습니다. 그래도 진행하시겠습니까?");
-			else isContinue = confirm("정말 반려를 확인하시겠습니까?");
-
+			else isContinue = confirm("정말 반려를 확인하고 문서의 상태를 무상태로 변경하시겠습니까?");
 			if (!isContinue) return;
-			alert(comments);
-			alert(statusList[toStatus]);
+			
 			$.ajax({
 				type: "POST",
-				url: "/admin/document/" + documentIdx + "/status/rejected",
-				data: formData,
-				success: function (result, status, xhr) {
-					alert("상태 변경 성공!");
-				}
-			})
-		} */
-
+				url: "/admin/document/" + documentIdx + "/status/confirm",
+				data: {"comments": comments}
+				})
+				.then(function(result) {
+					onSuccess(obj, result, '반려 확인');
+				}, function(jqXHR, textStatus, errorThrown) {
+					alert(JSON.parse(jqXHR.responseText)['message']);
+				});
+		}
+		
 		/* 결재 상태에 따른 문서 개수만 가져오기 */
 		function getSummaryCount() {
 			$.ajax({
@@ -505,78 +469,116 @@
 				}
 			});
 		}
+		
+		// summary 테이블 로딩
+		function onSuccessLoadingSummaryTable(result) {
+			// alert('문서 불러오기 성공');
+			let preview = $("#table-preview tbody"); // 테이블 초기화
+			preview.empty();
+			let tr = "";
+			
+			if (result.length == 0) {
+				tr = "<tr><td colspan='7'>조회된 문서가 없습니다.</td></tr>";
+				preview.html(tr);
+				return;
+			}
 
+			let badgeCol = {
+				"리뷰 중": "badge-success",
+				"리뷰 완료": "badge-info",
+				"반려": "badge-danger"
+			};
+
+			let isAbleProperty = {
+				"리뷰 중": "",
+				"리뷰 완료": "disabled",
+				"반려": ""
+			}
+			
+			let isAbleEvent = {
+					"리뷰 중": "controlFormRow(this)",
+					"리뷰 완료": "",
+					"반려": "controlFormRow(this)"
+			}	
+		
+			for (let i = 0; i < result.length; i++) {
+				tr += `<tr>
+						<td width="5%">${i + 1}</td>
+						<td width="20%">
+							<a href="/document/detail?documentIdx=${result[i].documentIdx}&folderIdx=${result[i].folderIdx}">${result[i].title}</a> 
+							<span class="table-detail">ver.${result[i].version}</span>
+							<div class="table-detail">${result[i].projectName} > ${result[i].folderName}</div>
+						</td>
+						<td width="15%">${result[i].empName}<div class="table-detail">${result[i].deptName}</div></td>
+						<td width="10%"><span class="badge ${badgeCol[result[i].statusName]}">${result[i].statusName}</span></td>
+						<td width="15%">${result[i].comments}</td>
+						<td width="20%">${result[i].regdate}</td>
+						<td width="15%">
+							<button id="${result[i].documentIdx}" type="button" class="w-75 btn btn-sm btn-primary" ${isAbleProperty[result[i].statusName]} onClick=${isAbleEvent[result[i].statusName]}>상태 변경</button>
+						</td>
+					</tr>`;
+
+				if (result[i].statusName == "리뷰 중") {
+					tr += `<tr style="display: none">
+							<td colspan="7">
+								<div class="row">
+										<div class="col-md-10">
+											<div class="row">
+												<div class="col-2 pl-5">
+													<input type="hidden" name="documentIdx" value="${result[i].documentIdx}">
+													<label for="status-comments">상태 변경 코멘트</label>
+												</div>
+												<div class="col-10">
+													<input class="form-control" type="text" id="comments" name="comments">
+												</div>
+												</div>
+											</div>
+										<div class="col-md-2">
+											<button type="button" class="btn btn-sm btn-info btn-to-reviewed" onClick="changeStatusToReviewed(this, 'reviewed')">리뷰 완료하기</button>
+											<button type="button" class="btn btn-sm btn-danger btn-to-rejected" onClick="changeStatusToRejected(this, 'rejected')">반려하기</button>
+										</div>
+								</div>
+								</td>
+						</tr>`;
+				}
+				
+				if (result[i].statusName == "반려") {
+					tr += `<tr style="display: none">
+							<td colspan="7">
+								<div class="row">
+										<div class="col-md-10">
+											<div class="row">
+												<div class="col-2 pl-5">
+													<input type="hidden" name="documentIdx" value="${result[i].documentIdx}">
+													<label for="status-comments">상태 변경 코멘트</label>
+												</div>
+												<div class="col-10">
+													<input class="form-control" type="text" id="comments" name="comments">
+												</div>
+												</div>
+											</div>
+										<div class="col-md-2 d-flex justify-content-center">
+											<button type="button" class="btn btn-sm btn-info btn-to-reviewed" onClick="changeStatusBackToDraft(this, 'rejected')">반려 확인하기</button>
+										</div>
+								</div>
+								</td>
+						</tr>`;
+				}
+			}
+			preview.html(tr);
+		}
+		
 		/* 결재 상태에 따라 문서 목록 데이터 가져오기 (10개까지만) */
 		function getSummaryData(statusList) {
 			$.ajax({
 				type: "GET",
 				url: "/dashboard/list/entire?statusList=" + statusList,
-				success: function (result, status, xhr) {
-					// alert('문서 불러오기 성공');
-					// 테이블 초기화
-					let preview = $("#table-preview tbody");
-					preview.empty();
-
-					let tr = "";
-					if (result.length == 0) {
-						tr = "<tr><td colspan='6'>조회된 문서가 없습니다.</td></tr>";
-						preview.html(tr);
-						return;
-					}
-
-					let badgeCol = {
-						"리뷰 중": "badge-success",
-						"리뷰 완료": "badge-info",
-						"반려": "badge-danger"
-					};
-
-					// 차후 10건까지만 보여주는 것으로 변경 예정
-					let isAble = {
-						"리뷰 중": "",
-						"리뷰 완료": "disabled",
-						"반려": "disabled"
-					}
-					for (let i = 0; i < result.length; i++) {
-						tr += `<tr>
-								<td>${i + 1}</td>
-								<td>
-									<a href="/document/detail?documentIdx=${result[i].documentIdx}&folderIdx=${result[i].folderIdx}">${result[i].title}</a> 
-									<span class="table-detail">ver.${result[i].version}</span>
-									<div class="table-detail">${result[i].projectName} > ${result[i].folderName}</div>
-								</td>
-								<td>${result[i].empName}<div class="table-detail">${result[i].deptName}</div></td>
-								<td><span class="badge ${badgeCol[result[i].statusName]}">${result[i].statusName}</span></td>
-								<td>${result[i].comments}</td>
-								<td>${result[i].regdate}</td>
-								<td><button id="${result[i].documentIdx}" type="button" class="btn btn-sm btn-primary ${isAble[result[i].statusName]}" onClick="expandRow(this)">상태 변경</button></td>
-							</tr>`;
-
-						if (result[i].statusName == "리뷰 중") {
-							tr += `<tr style="display: none">
-									<td colspan="7">
-										<form class="form-status-change">
-										<div class="row pl-2 pr-2">
-												<div class="col-md-10">
-													<input type="hidden" name="documentIdx" value="${result[i].documentIdx}">
-													<label for="status-comments">코멘트</label>
-													<input class="d-inline form-control w-75" type="text" id="comments" name="comments">
-												</div>
-												<div class="col-md-2">
-													<button type="button" class="btn btn-sm btn-primary btn-to-reviewed" onClick="changeStatusToReviewed(this, 'reviewed')">리뷰 완료하기</button>
-													<button type="button" class="btn btn-sm btn-primary btn-to-rejected" onClick="changeStatusToRejected(this, 'rejected')">반려하기</button>
-												</div>
-										</div>
-										</form>
-									</td>
-								</tr>`;
-						}
-					}
-					preview.html(tr);
-
-				}, error: function (xhr, status, e) {
-					alert("문서를 조회하는 과정에서 문제가 발생했습니다. 담당자에게 문의해 주세요.");
-				}
-			});
+			})
+			.then(function(result){
+				onSuccessLoadingSummaryTable(result);
+			}, function(xhr, status, error) {
+				alert("문서를 조회하는 과정에서 문제가 발생했습니다. 담당자에게 문의해 주세요.");
+			})
 		}
 
 		/* 필터에 따라 문서 목록 가져오기 */
@@ -589,30 +591,59 @@
 
 			// 데이터 테이블 적용
 			$("#table-filtered").DataTable({
+				language: {
+					"decimal": "",
+					"emptyTable": "데이터가 없습니다.",
+					"info": "_START_ - _END_ (총 _TOTAL_ 개)",
+					"infoEmpty": "0개",
+					"infoFiltered": "(전체 _MAX_ 개 중 검색결과)",
+					"infoPostFix": "",
+					"thousands": ",",
+					"lengthMenu": "_MENU_ 개씩 보기",
+					"loadingRecords": "로딩중...",
+					"processing": "처리중...",
+					"search": "검색 : ",
+					"zeroRecords": "검색된 데이터가 없습니다.",
+					"paginate": {
+						"first": "첫 페이지",
+						"last": "마지막 페이지",
+						"next": "다음",
+						"previous": "이전"
+					},
+					"aria": {
+						"sortAscending": " :  오름차순 정렬",
+						"sortDescending": " :  내림차순 정렬"
+					}
+				},
 				ordering: true,
 				serverSide: false,
-				language: datatable_ko,
-				autoWidth: true,
 				responsive: true,
 				destroy: true,
 				columns: [
+					{ data: "listIndex", title: "No.", width: '5%'},
 					{ data: "projectName", title: "프로젝트", width: '10%' },
 					{ data: "folderName", title: "폴더", width: '10%' },
 					{ data: "title", title: "제목", width: '15%' },
-					{ data: "version", title: "버전", width: '5%' },
+					{ data: "version", title: "버전", width: '10%' },
 					{ data: "deptName", title: "부서", width: '10%' },
 					{ data: "empName", title: "사원", width: '10%' },
 					{ data: "statusName", title: "상태", width: '10%' },
 					{ data: "comments", title: "코멘트", width: '20%' },
 					{ data: "regdate", title: "일자", width: '10%' }
 				],
+				columnDefs: [
+					{ "targets": [0, 1], "visible": false }
+					/* { "targets" : 5, "render": function(data) {return "<a href=''>" + data +  "</a>"} } */
+				],
 				ajax: {
 					url: url,
 					type: "GET",
 					"dataSrc": function (result) {
-						return result;
+						var data = result;
+						for (let i = 0; i < data.length; i++) data[i].listIndex = i + 1; // 리스트번호 
+						return data;
 					}, error: function (xhr, status, err) {
-						alert('통신 실패!!!');
+						alert('문서 목록을 불러오지 못했습니다.');
 					}
 				}
 			});
@@ -657,16 +688,20 @@
 			getSummaryCount(); 	// 결재 상태별 문서 수 표시
 			getSummaryData([$('#btn-in_review').val()]); // 리뷰 대기 문서 목록 표시
 
+			// [요약 탭] 클릭 이벤트
 			$('#btn-in_review').click(function () {
 				let statusList = [$('#btn-in_review').val()];
+				getSummaryCount(); 	// 결재 상태별 문서 수 표시
 				getSummaryData(statusList); // 리뷰 대기 문서 미리보기 버튼 클릭 시 목록 가져오기
 			});
 			$('#btn-reviewed').click(function () {
 				let statusList = [$('#btn-reviewed').val()];
+				getSummaryCount(); 	// 결재 상태별 문서 수 표시
 				getSummaryData(statusList); // 리뷰 중 문서 미리보기 버튼 클릭 시 목록 가져오기
 			});
 			$('#btn-rejected').click(function () {
 				let statusList = [$('#btn-rejected').val()];
+				getSummaryCount(); 	// 결재 상태별 문서 수 표시
 				getSummaryData(statusList); // 리뷰 완료 문서 미리보기 버튼 클릭 시 목록 가져오기
 			});
 
@@ -688,7 +723,6 @@
 			$('#daterange-btn').daterangepicker({ 	// 날짜 선택 폼 플러그인 활성화
 				language: 'ko',
 				locale: {
-					//'format': 'YYYY-MM-DD HH:mm:ss',
 					'seperator': '-',
 					'applyLabel': '적용',
 					'cancelLabel': '취소',
@@ -724,8 +758,6 @@
 
 			$("input#radio-project-custom").click(function () {
 				$('#project-tag').prop('disabled', false);
-				/* $("input#radio-project-custom").prop('disabled', false);
-				$("input#radio-project-all").prop('disabled', true); */
 			})
 			$("input#radio-project-all").click(function () {
 				$('#project-tag').prop('disabled', true);
@@ -747,7 +779,7 @@
 				let statusList = null; // 상태 정보
 				if (filter_status == "radio-status-custom")
 					statusList = $('#status-tag').val();
-				alert("선택된 상태 코드: " + statusList);
+				//alert("선택된 상태 코드: " + statusList);
 
 				let startDate = null; // 날짜 정보
 				let endDate = null
@@ -755,12 +787,12 @@
 					startDate = dateRangePicker_startDate;
 					endDate = dateRangePicker_endDate;
 				}
-				alert("선택된 날짜: " + startDate + "-" + endDate)
+				//alert("선택된 날짜: " + startDate + "-" + endDate)
 
 				let projectList = null; // 프로젝트 정보
 				if (filter_project == "radio-project-custom")
 					projectList = $('#project-tag').val();
-				alert("선택된 프로젝트: " + projectList)
+				//alert("선택된 프로젝트: " + projectList)
 
 				getFilteredData(statusList, startDate, endDate, projectList); // 필터 처리된 목록 조회
 			});

@@ -139,13 +139,13 @@
 			$('textarea[name="versionLog.content"]').html(htmlContent);
 			
 			$.ajax({
-				url:"/document/save",
+				url:"/file/document/save",
 				type:"post",
 				data:$("#form1").serialize(),
 				success:function(result, status, xhr){ //200
 					alert("성공");
-					location.href="/document/list?folderIdx=" + $("#folderIdx").val();
-					//location.href="/document/detail?folder_idx="+$("#folder_idx").val();
+					location.href="/file/document/list?folderIdx=" + $("#folderIdx").val();
+					//location.href="/file/document/detail?folder_idx="+$("#folder_idx").val();
 				},
 				error:function(xhr, status, err){
 					alert("작성 실패");
@@ -173,7 +173,7 @@
 
 		
 	    function getList(){
-	    	location.href = "/document/list?folderIdx="+ $("#folderIdx").val();
+	    	location.href = "/file/document/list?folderIdx="+ $("#folderIdx").val();
 	    }
 	    
 		//빈공간 클릭시 draft or version sidebar 비활성화 스크립트

@@ -17,7 +17,6 @@
 </head>
 <body>
   <th:block th:replace="~{fragments/header :: header}" />
-
   <div class="container">
     <div class="row">
     
@@ -26,7 +25,7 @@
         <div class="card">
           <div class="card-body">
             <h5 class="card-title" th:text="${project.projectName}">HTML Basics</h5>
-        	<a th:href="@{/document/project(projectIdx=${project.projectIdx})}" class="btn btn-primary">열기</a>
+        	<a th:href="@{/client/document/project(projectIdx=${project.projectIdx})}" class="btn btn-primary">열기</a>
           </div>
         </div>
       </div>

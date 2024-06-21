@@ -1,20 +1,24 @@
 package com.sds.cmsapp.model.publishing;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.sds.cmsapp.domain.DocumentVersion;
 import com.sds.cmsapp.domain.Emp;
 import com.sds.cmsapp.domain.PublishedVersion;
 import com.sds.cmsapp.domain.PublishedVersionName;
 import com.sds.cmsapp.domain.RequestPublishingDTO;
+import com.sds.cmsapp.domain.StatusLog;
 import com.sds.cmsapp.exception.DocumentVersionException;
 import com.sds.cmsapp.exception.PublishedVersionException;
 import com.sds.cmsapp.exception.PublishedVersionNameException;
 import com.sds.cmsapp.exception.StatusLogException;
 import com.sds.cmsapp.model.document.DocumentVersionService;
+import com.sds.cmsapp.model.statuslog.StatusLogService;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -28,6 +32,8 @@ public class MainPublishingServiceImpl implements MainPublishingService {
 	@Autowired
 	DocumentVersionService documentVersionService;
 	
+	@Autowired
+	StatusLogService statusLogService;
 
 	@Transactional
 	public void publishDoc(RequestPublishingDTO publishingDTO)
@@ -46,11 +52,17 @@ public class MainPublishingServiceImpl implements MainPublishingService {
 		// document_version 테이블에서 배포한 문서의 상태 변경하기
 		Emp emp = new Emp(1); // 임시
 		
-		documentVersionService.changeStatusOfPublishedDocList(publishedVerList, emp, publishingDTO.getComments());
+		List<DocumentVersion> documentVersionList = new ArrayList<DocumentVersion>();
+		for (PublishedVersion pv : publishedVerList) {
+			DocumentVersion dv = new DocumentVersion(pv.getDocument(), emp, publishingDTO.getComments());
+			documentVersionList.add(dv);
+		}
+		
+		documentVersionService.changeStatusOfPublishedDocList(documentVersionList);
 		
 		// status_log 테이블에 배포한 문서 로그 쌓기
 		// 사원 세션 정보 불러오고 나면 사원 정보도 추가하기. 지금은 임시로 1번 사원 넣어놓았음
-		//statusLogService.registPublishedLog(publishedVerList, publishingDTO.getComments(), new Emp(1));
+		statusLogService.insertByDocumentVersionList(documentVersionList);
 		
 	}
 }
