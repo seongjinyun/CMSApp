@@ -141,13 +141,13 @@
 			
 		    
 			$.ajax({
-				url:"/document/edit",
+				url:"/file/document/edit",
 				type:"post",
 				data:$("#form1").serialize(),
 				success:function(result, status, xhr){ //200
 					alert("성공");
-					location.href="/document/detail?documentIdx="+ $("#documentIdx").val() + "&folderIdx=" + $("#folderIdx").val();
-					//location.href="/document/detail?folder_idx="+$("#folder_idx").val();
+					location.href="/file/document/detail?documentIdx="+ $("#documentIdx").val() + "&folderIdx=" + $("#folderIdx").val();
+					//location.href="/file/document/detail?folder_idx="+$("#folder_idx").val();
 				},
 				error:function(xhr, status, err){
 					alert("등록실패");
@@ -175,7 +175,7 @@
 		}
 		
 	    function getList(){
-	    	location.href = "/document/list?folderIdx="+ $("#folderIdx").val();
+	    	location.href = "/file/document/list?folderIdx="+ $("#folderIdx").val();
 	    }
 	    
 		//빈공간 클릭시 draft or version sidebar 비활성화 스크립트
