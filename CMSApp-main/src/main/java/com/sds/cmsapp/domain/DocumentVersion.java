@@ -36,6 +36,12 @@ public class DocumentVersion {
 		this.masterCode = masterCode;
 	}
 	
+	public DocumentVersion(Document document, Emp emp, String statusComments) {
+		this.document = document;
+		this.emp = emp;
+		this.statusComments = statusComments;
+	}
+	
 	public DocumentVersion(Document document, MasterCode masterCode, Emp emp, String statusComments) {
 		this.document = document;
 		this.masterCode = masterCode;
