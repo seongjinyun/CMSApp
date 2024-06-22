@@ -7,7 +7,7 @@
 
         function loadTopLevelProjects() {
             $.ajax({
-                url: '/sidebar/folder',
+                url: '/file/sidebar/folder',
                 method: 'GET',
                 success: function (result, status, xhr) {
                     if (!Array.isArray(result)) {
@@ -25,7 +25,7 @@
 
         function loadFolder(folderIdx, parentElement) {
             $.ajax({
-                url: '/sidebar/folder/sub',
+                url: '/file/sidebar/folder/sub',
                 method: 'GET',
                 data: { folderIdx: folderIdx },
                 success: function (result, status, xhr) {
@@ -45,7 +45,7 @@
         function renderFolder(folder, parentElement) {
             let depth = folder.depth || 0;
             let folderHTML = `<li class="nav-item">
-                                    <a href="/document/list?folderIdx=${folder.folderIdx}" class="nav-link" data-folder-id="${folder.folderIdx}">
+                                    <a href="/file/document/list?folderIdx=${folder.folderIdx}" class="nav-link" data-folder-id="${folder.folderIdx}">
                                         <i class="nav-icon fas fa-box ml-${depth * 2}"></i>                            
                                         <p>${folder.folderName}</p>
                                         <i class="fas fa-angle-left right toggle-dropdown" data-folder-id="${folder.folderIdx}"></i>
@@ -55,7 +55,7 @@
             if (folder.childFolderList) {
                 folder.childFolderList.forEach(subFolder => {
                     folderHTML += `<li class="nav-item">
-                                        <a href="/document/list?folderIdx=${subFolder.folderIdx}" class="nav-link" data-folder-id="${subFolder.folderIdx}">
+                                        <a href="/file/document/list?folderIdx=${subFolder.folderIdx}" class="nav-link" data-folder-id="${subFolder.folderIdx}">
                                             <i class="fas fa-folder nav-icon ml-${subFolder.depth * 2}"></i>
                                             <p>${subFolder.folderName}</p>
                                             <i class="fas fa-angle-left right toggle-dropdown" data-folder-id="${subFolder.folderIdx}"></i>
@@ -67,7 +67,7 @@
             if (folder.documentList) {
                 folder.documentList.forEach(doc => {
                     folderHTML += `<li class="nav-item">
-                                        <a href="/document/detail?documentIdx=${doc.documentIdx}&folderIdx=${doc.folder.folderIdx}" class="nav-link" data-doc-id="${doc.documentIdx}" data-folder-id="${doc.folder.folderIdx}">
+                                        <a href="/file/document/detail?documentIdx=${doc.documentIdx}&folderIdx=${doc.folder.folderIdx}" class="nav-link" data-doc-id="${doc.documentIdx}" data-folder-id="${doc.folder.folderIdx}">
                                             <i class="far fa-file nav-icon ml-${(depth + 1) * 2}"></i>
                                             <p>${doc.versionLog.title}</p>
                                         </a>
@@ -100,7 +100,7 @@
             const docId = $(this).data('doc-id');
             const folderId = $(this).data('folder-id');
             // 문서 상세보기 로직 구현
-            location.href = "/document/detail?documentIdx=" + docId + "&folderIdx=" + folderId;
+            location.href = "/file/document/detail?documentIdx=" + docId + "&folderIdx=" + folderId;
         });
 
     </script>
