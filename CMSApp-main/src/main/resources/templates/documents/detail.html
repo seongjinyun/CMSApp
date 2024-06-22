@@ -64,12 +64,16 @@
 		<div class="content-wrapper">
 			<section class="content">
 				<div class="row">
-					<div class="col-sm-6">
+					<div class="col-6">
 						<ol th:each="folder, i : ${folderList}"
 							class="breadcrumb float-sm-left">
-							<li	class="breadcrumb-item"><a
+							<li th:unless="${i.index == #lists.size(folderList)}"
+								class="breadcrumb-item ml-1 mr-1"><a
 								th:href="|/document/list?folderIdx=${folder.folderIdx}|"
-								th:text="|/ ${folder.folderName}|"></a></li>
+								th:text="|${folder.folderName} / |"></a></li>
+							<li th:if="${i.index + 1 == #lists.size(folderList)}"
+								class="breadcrumb-item active ml-1 mr-1"
+								th:text="|${documentVersion.versionLog.title}|"></li>
 						</ol>
 					</div>
 					<div class="col-6">
@@ -326,7 +330,7 @@
 				console.log(objectIdx);
 				let objectIdxList = new Array();
 				objectIdxList.push(objectIdx);
-				
+				console.log(objectIdxList);
 				$.ajax({
 					url : "/document/list/trash",
 					data : JSON.stringify(objectIdxList),

@@ -3,15 +3,12 @@
         $(document).ready(function () {
             // 초기 최상위 폴더(프로젝트) 로드
             loadTopLevelProjects();
-            loadEmpInfo();
         });
-        let sidebarEmpIdx;
 
         function loadTopLevelProjects() {
             $.ajax({
                 url: '/file/sidebar/folder',
                 method: 'GET',
-                data: sidebarEmpIdx,
                 success: function (result, status, xhr) {
                     if (!Array.isArray(result)) {
                         result = [result];
@@ -105,27 +102,6 @@
             // 문서 상세보기 로직 구현
             location.href = "/file/document/detail?documentIdx=" + docId + "&folderIdx=" + folderId;
         });
-        
-     
-        // 토큰을 사용하여 사원 정보를 불러오는 AJAX 요청
-        function loadEmpInfo() {
-          const token = localStorage.getItem('token');
-          $.ajax({
-            url: "/setting/setting/mypage/info",
-            type: "get",
-            headers: {
-              "Authorization": "Bearer " + token
-            },
-            success: function(result) {
-              sidebarEmpIdx = result.empIdx;
-              console.log(result.empIdx);
-            },
-            error: function(xhr, status, err) {
-              alert("sidebar_script에서 로그인 정보를 불러오는데 실패했습니다.");
-            }
-          });
-        }
-        
 
     </script>
 </th:block>

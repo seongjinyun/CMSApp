@@ -73,9 +73,5 @@
     	SELECT * FROM folder WHERE folder_name = 'restored'
     	]]>
 	</select>
-	
-	<select id="selectTopProjectFolder" parameterType="int" resultMap="FolderMap">
-		select * from folder where parent_folder_idx is null and project_idx = #{projectIdx}
-	</select>
 
 </mapper>
