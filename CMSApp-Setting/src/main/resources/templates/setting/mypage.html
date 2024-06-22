@@ -118,7 +118,7 @@
                     <label for="inputDepartment" class="col-sm-2 col-form-label">Department</label>
                     <div class="col-sm-10">
                       <div class="form-group">
-                        <select id="inputDeptIdx" name="deptIdx" class="select1 form-control" data-placeholder="부서 선택" style="width: 100%;" disabled="disabled">
+                        <select id="inputDeptIdx" name="deptIdx" class="select1 form-control" data-placeholder="부서 선택" style="width: 100%;">
                           <!-- 부서 리스트는 JavaScript로 채워넣기 -->
                         </select>
                       </div>
@@ -128,7 +128,7 @@
                     <label for="inputRole" class="col-sm-2 col-form-label">Role</label>
                     <div class="col-sm-10">
                       <div class="form-group">
-                        <select id="inputRoleCode" name="roleCode" class="select1 form-control" data-placeholder="역할 선택" style="width: 100%;" disabled="disabled">
+                        <select id="inputRoleCode" name="roleCode" class="select1 form-control" data-placeholder="역할 선택" style="width: 100%;">
                           <!-- 역할 리스트는 JavaScript로 채워넣기 -->
                         </select>
                       </div>
@@ -230,6 +230,15 @@
             roleOptions += `<option value="${role.roleCode}" ${role.roleCode === result.emp.role.roleCode ? 'selected' : ''}>${role.roleName}</option>`;
           });
           $("select[name='roleCode']").html(roleOptions);
+          
+       	  // 역할에 따라 selectbox 활성화/비활성화
+          if (result.empRole === 'Admin') {
+              $("select[name='deptIdx']").attr('disabled', false);
+              $("select[name='roleCode']").attr('disabled', false);
+          } else {
+              $("select[name='deptIdx']").attr('disabled', true);
+              $("select[name='roleCode']").attr('disabled', true);
+          }
         },
         error: function(xhr, status, err) {
           alert("정보를 불러오는데 실패했습니다.");
