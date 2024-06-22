@@ -64,12 +64,12 @@
 		<div class="content-wrapper">
 			<section class="content">
 				<div class="row">
-					<div class="col-6">
+					<div class="col-sm-6">
 						<ol th:each="folder, i : ${folderList}"
 							class="breadcrumb float-sm-left">
-							<li	class="breadcrumb-item ml-1 mr-1"><a
+							<li	class="breadcrumb-item"><a
 								th:href="|/document/list?folderIdx=${folder.folderIdx}|"
-								th:text="|${folder.folderName} / |"></a></li>
+								th:text="|/ ${folder.folderName}|"></a></li>
 						</ol>
 					</div>
 					<div class="col-6">
