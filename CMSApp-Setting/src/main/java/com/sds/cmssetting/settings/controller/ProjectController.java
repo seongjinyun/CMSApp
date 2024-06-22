@@ -3,6 +3,8 @@ package com.sds.cmssetting.settings.controller;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -30,7 +32,7 @@ public class ProjectController {
 	
 	// 프로젝트 생성
 	@PostMapping("/setting/project/insert")
-	public String insertDept(Project project, @RequestParam("deptIdx") List<Integer> deptIds,
+	public ResponseEntity<String> insertDept(Project project, @RequestParam("deptIdx") List<Integer> deptIds,
 							 RedirectAttributes redirectAttributes ) {	
 		try {
 			// 프로젝트 추가
@@ -55,18 +57,16 @@ public class ProjectController {
 				deptProject.setDept(dept);
 				deptProjectService.insert(deptProject);
 			}
-		    redirectAttributes.addFlashAttribute("message", "프로젝트가 성공적으로 추가되었습니다.");
+			return ResponseEntity.ok("프로젝트가 성공적으로 추가되었습니다.");
 		} catch (Exception e) {
 		    e.printStackTrace();
-		    redirectAttributes.addFlashAttribute("error", "프로젝트 추가에 실패했습니다.");
+		    return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("프로젝트 추가에 실패했습니다.");
 		}
-	    
-		return "redirect:/setting/dept_project";
 	}
 	
 	// 프로젝트 삭제
 	@PostMapping("/setting/project/delete")
-	public String deleteProject(@RequestParam("projectIdx") String projectIdx, RedirectAttributes redirectAttributes) {
+	public ResponseEntity<String> deleteProject(@RequestParam("projectIdx") String projectIdx, RedirectAttributes redirectAttributes) {
 		
 		Project project = projectService.selectByProjectIdx(Integer.parseInt(projectIdx));
  
@@ -79,12 +79,10 @@ public class ProjectController {
 			// 프로젝트 삭제
 			projectService.delete(project);
 						
-		    redirectAttributes.addFlashAttribute("message", "프로젝트가 성공적으로 삭제되었습니다.");
+			return ResponseEntity.ok("프로젝트가 성공적으로 삭제되었습니다.");
 		} catch (Exception e) {
 		    e.printStackTrace();
-		    redirectAttributes.addFlashAttribute("error", "프로젝트 삭제에 실패했습니다.");
+		    return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("프로젝트 삭제에 실패했습니다.");
 		} 
-		
-		return "redirect:/setting/dept_project";
 	}
 }

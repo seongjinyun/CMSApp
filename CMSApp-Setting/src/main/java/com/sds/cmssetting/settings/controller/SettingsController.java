@@ -137,6 +137,7 @@ public class SettingsController {
 	    EmpDetail empDetail = empDetailService.selectByEmpIdx(emp.getEmpIdx());
 
 	    String profileImgUrl = "/profileImg/" + empDetail.getEmpProfileUrl();
+	    log.warn(profileImgUrl);
 
 	    Map<String, Object> response = new HashMap<>();
 	    response.put("empIdx", emp.getEmpIdx());

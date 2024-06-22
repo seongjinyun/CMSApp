@@ -45,7 +45,7 @@ public class EmpController {
 	private PasswordEncoder passwordEncoder;
 	
 	@PostMapping("/emp/regist")
-	public void regist(Emp emp, EmpDetail empDetail, @RequestParam("deptIdx") int deptIdx, @RequestParam("roleCode") int roleCode) {
+	public ResponseEntity<String> regist(Emp emp, EmpDetail empDetail, @RequestParam("deptIdx") int deptIdx, @RequestParam("roleCode") int roleCode) {
 		try {
 			 MultipartFile file = empDetail.getFile();
 			 // log.debug("title: "+empDetail.getFile());
@@ -53,12 +53,11 @@ public class EmpController {
 			 // File directory = resourceLoader.getResource("classpath:/static/profileImg/").getFile();
 			 // log.debug("파일을 저장할 경로는 "+directory.getAbsolutePath());			 
 	            if (file != null && !file.isEmpty()) {            // 파일이 존재한다면 
-	                String fileUrl = fileManager.save(empDetail); // 서버에 저장
 	                // Path path = Paths.get(directory.getAbsolutePath());
 	                // Path savePath = path.resolve(file.getOriginalFilename());
 	                // Files.copy(file.getInputStream(), savePath);
 	                // log.debug(savePath.toString());
-	                empDetail.setEmpProfileUrl(fileUrl);
+	                empDetail.setEmpProfileUrl(fileManager.save(empDetail)); // 서버에 저장
 	            } 
 	        
             Dept dept = new Dept();
@@ -68,10 +67,6 @@ public class EmpController {
             Role role = new Role();
             role.setRoleCode(roleCode);
             emp.setRole(role);    
-            
-            System.out.println("emp.getEmpName(): " + emp.getEmpName());
-            System.out.println("empDetail.getEmpId(): "+ empDetail.getEmpId());
-            System.out.println("empDetail.getEmpPw(): " + empDetail.getEmpPw());
 	            
             // EmpDetail 객체를 DB에 저장하는 로직	        
 	        empService.insert(emp);
@@ -79,10 +74,13 @@ public class EmpController {
 	        empDetail.setEmpPw(passwordEncoder.encode(empDetail.getEmpPw())); 
 	        empDetailService.insert(empDetail);
 
-            System.out.println("Employee added successfully");
+            log.warn("사원 등록 성공");
+            return ResponseEntity.ok("Employee added successfully");
         } catch (UploadException e) {
         	e.printStackTrace();
-            throw new UploadException("사원 등록 실패", e);
+        	log.warn("사원 등록 실패");
+            // throw new UploadException("사원 등록 실패", e);
+        	return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Employee registration failed");
         }
 	}
 	
@@ -110,12 +108,11 @@ public class EmpController {
     }
 	
 	@PostMapping("/setting/mypage/update")
-	public void update(Emp emp, EmpDetail empDetail, @RequestParam("deptIdx") int deptIdx, @RequestParam("roleCode") int roleCode) {
+	public ResponseEntity<String> update(Emp emp, EmpDetail empDetail, @RequestParam("deptIdx") int deptIdx, @RequestParam("roleCode") int roleCode) {
 		try {
 			 MultipartFile file = empDetail.getFile();
-	            if (file != null && !file.isEmpty()) {            // 파일이 존재한다면 
-	                String fileUrl = fileManager.save(empDetail); // 서버에 저장
-	                empDetail.setEmpProfileUrl(fileUrl);
+	            if (file != null && !file.isEmpty()) {            			 // 파일이 존재한다면 
+	                empDetail.setEmpProfileUrl(fileManager.save(empDetail)); // 서버에 저장
 	            } 
 	        
            Dept dept = new Dept();
@@ -144,10 +141,11 @@ public class EmpController {
 	        empDetail.setEmp(emp);
 	        empDetailService.update(empDetail);
 
-           System.out.println("Employee updated successfully");
+	        return ResponseEntity.ok("Employee update successfully");
        } catch (UploadException e) {
-       	e.printStackTrace();
-           throw new UploadException("사원 수정 실패", e);
+       	   e.printStackTrace();
+           // throw new UploadException("사원 수정 실패", e);
+           return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Employee update failed");
        }
 		
 	}

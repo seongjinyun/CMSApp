@@ -268,15 +268,36 @@
 <th:block th:replace="~{fragments/footer_script :: footer_script}"/>
 <script type="text/javascript">
 
+/*
 	function registEmp() { // 회원 등록 정보 전송
-		$("form.inputImg").attr({
+		$("#addNewEmp").attr({
 			action:"/setting/emp/regist",
 			method:"POST",
 			// 텍스트 데이터와 바이너리 데이터가 섞여 있는 복합 데이터 전송: enctype multipart/form-data
 			enctype:"multipart/form-data"
 		});
-		$("form.inputImg").submit();
-		location.href = "/setting/setting/user";
+		$("#addNewEmp").submit();
+		// location.href = "/setting/setting/user"; // 값 변경 안됨
+	}
+*/
+
+	function registEmp() { // 회원 등록 정보 전송
+	    var formData = new FormData($("#addNewEmp")[0]);
+	    
+	    $.ajax({
+	        url: '/setting/emp/regist',
+	        type: 'POST',
+	        data: formData,
+	        processData: false,
+	        contentType: false,
+	        success: function(response) {
+	            alert("Employee added successfully");
+	            location.href = '/setting/setting/user';
+	        },
+	        error: function(jqXHR, textStatus, errorThrown) {
+	            alert("Failed to add employee: " + textStatus);
+	        }
+	    });
 	}
 	
 	function updateEmps() { // 회원 정보 변경 전송
