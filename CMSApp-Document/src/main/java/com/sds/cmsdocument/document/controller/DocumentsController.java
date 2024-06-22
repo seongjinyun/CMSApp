@@ -118,7 +118,7 @@ package com.sds.cmsdocument.document.controller;
 		//즐겨찾기
 		@GetMapping("/document/bookmark")
 		public String getBookmark() {
-			return "documents/bookmark";
+			return "";
 		} 
 		//전체보기 (프로젝트 목록)
 		@GetMapping("/document/project_list")
