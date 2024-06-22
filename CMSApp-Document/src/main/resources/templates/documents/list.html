@@ -218,6 +218,7 @@
 
 <script>
 $(function(){
+	loadEmpInfo();
     checkBoxAll();
     write();
     searchFile();
@@ -225,6 +226,7 @@ $(function(){
     del();
     openCreateFolderModal();
   });
+  let currentEmpIdx;
   
   function checkBoxAll(){
 	  $("#checkall").click(function(){
@@ -265,7 +267,7 @@ $(function(){
 	          $('input[name="objectSelect"]:checked').each(function () {
 	            selectedIdxList.push($(this).val());
 	          });
-	          let empIdx = 1;
+	          let empIdx = currentEmpIdx;
 	          let request = {
 	          			objectIdxList: selectedIdxList,
 	          			empIdx: empIdx
@@ -349,6 +351,25 @@ $(function(){
       });
     }
 	}
+	
+	// 토큰을 사용하여 사원 정보를 불러오는 AJAX 요청
+    function loadEmpInfo() {
+      const token = localStorage.getItem('token');
+      $.ajax({
+        url: "/setting/setting/mypage/info",
+        type: "get",
+        headers: {
+          "Authorization": "Bearer " + token
+        },
+        success: function(result) {
+          currentEmpIdx = result.empIdx;
+          console.log(result.empIdx);
+        },
+        error: function(xhr, status, err) {
+          alert("list.html 에서 로그인 정보를 불러오는데 실패했습니다.");
+        }
+      });
+    }
 
 
   </script>

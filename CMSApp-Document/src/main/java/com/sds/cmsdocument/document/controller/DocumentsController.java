@@ -63,7 +63,9 @@ package com.sds.cmsdocument.document.controller;
 		//파일목록
 		@GetMapping("/document/list")
 
-		public String getDocumentList(Model model, DocumentVersion documentVersion, @RequestParam(value="folderIdx", defaultValue = "0") final int folderIdx) {
+		public String getDocumentList(Model model, DocumentVersion documentVersion, 
+				@RequestParam(value="folderIdx", defaultValue = "0") final int folderIdx,
+				@RequestParam("empIdx") final int empIdx) {
 			if (folderIdx == 0) {
 				HashMap<String, Integer> map=new HashMap<String, Integer>();
 				map.put("startIndex", pager.getStartIndex());
