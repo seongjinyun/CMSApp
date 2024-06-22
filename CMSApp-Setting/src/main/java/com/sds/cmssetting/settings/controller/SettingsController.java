@@ -67,6 +67,22 @@ public class SettingsController {
 		return "/login/loginForm";
 	}
 	
+	@GetMapping("/getUserInfo")
+	public ResponseEntity<?> getUserInfo(@RequestHeader(name="Authorization") String header) {
+	    String token = header.replace("Bearer ", "");
+	    Emp emp = jwtValidService.getEmpFromJwt(token);
+	    String empName = emp.getEmpName();
+	    String roleName = emp.getRole().getRoleName();
+	    
+	    Map<String, String> response = new HashMap<>();
+	    response.put("empName", empName);
+	    response.put("roleName", roleName);
+	    if(empName!=null && roleName!=null)
+	    	return ResponseEntity.ok(response);
+	    else
+	    	return ResponseEntity.status(HttpStatus.NOT_FOUND).body(response);
+	}
+	
 	/*----------------------------------------------------
 	 * 더이상 사용하지 않음
 
