@@ -71,6 +71,7 @@
 								th:href="|/document/list?folderIdx=${folder.folderIdx}|"
 								th:text="|/ ${folder.folderName}|"></a></li>
 						</ol>
+						<input type="hidden" th:value="emp.empIdx" id="empIdx" name="empIdx">
 					</div>
 					<div class="col-6">
 						<div class="float-right">
@@ -329,7 +330,10 @@
 				console.log(objectIdxList);
 				$.ajax({
 					url : "/file/document/list/trash",
-					data : JSON.stringify(objectIdxList),
+					data : {
+						objectIdxList: objectIdxList,
+						empIdx: $("input[name='documentIdx']").val()
+					},
 					method : "POST",
 					contentType : "application/json",
 					success : function(result, status, xhr) {

@@ -59,7 +59,8 @@
                     </div>
                   </div>
                   <input type="button" class="btn btn-default btn-sm" value="글 작성" id="write">
-                  <input type="hidden" id=folderIdx name="folderIdx" th:value="${folderIdx}">
+                  <input type="hidden" id="folderIdx" name="folderIdx" th:value="${folderIdx}">
+                  <input type="hidden" id="empIdx" name="empIdx" th:value="${emp.empIdx}">
                 </div>
                 
               </div>
@@ -71,12 +72,6 @@
                 <div class="btn-group">
                   <button type="button" class="btn btn-default btn-sm" id="trash_btn">
                     <i class="far fa-trash-alt"></i>
-                  </button>
-                  <button type="button" class="btn btn-default btn-sm">
-                    <i class="fas fa-reply"></i>
-                  </button>
-                  <button type="button" class="btn btn-default btn-sm">
-                    <i class="fas fa-share"></i>
                   </button>
 	              <button type="button" class="btn btn-default btn-sm" onclick="location.reload(true);">
 	                <i class="fas fa-sync-alt"></i>
@@ -132,7 +127,7 @@
                      		</div>
 				        </td>
 				        <td class="mailbox-star"><a href="#"><i class="fa fa-star-o" aria-hidden="true"></i></a></td>
-				        <td><i class="far fa-folder mr-3"></i><a th:href="|/file/document/list?folderIdx=${folder.folderIdx}|" th:text="${folder.folderName}"></a></td>
+				        <td><i class="far fa-folder mr-3"></i><a th:href="|/file/document/list?folderIdx=${folder.folderIdx}&empIdx=${emp.empIdx}|" th:text="${folder.folderName}"></a></td>
 				        <td>폴더</td>
 				        <td th:text="${folder.regdate}"></td>
 				        <td></td>
@@ -146,7 +141,7 @@
 				        </td>
 				        <td class="mailbox-star"><a href="#"><i class="fa fa-star-o" aria-hidden="true"></i></a></td>
 				        <!-- title, 업데이트 날짜, document가 아닌 versionLog에서 가져와야함.\ -->
-				        <td><a th:href="@{/file/document/detail(documentIdx=${documentVersion.document.documentIdx}, folderIdx=${documentVersion.document.folder.folderIdx})}" th:text="${documentVersion.versionLog.title}">튜토리얼</a></td>
+				        <td><a th:href="@{/file/document/detail(documentIdx=${documentVersion.document.documentIdx}, folderIdx=${documentVersion.document.folder.folderIdx}, empIdx=${emp.empIdx})}" th:text="${documentVersion.versionLog.title}">튜토리얼</a></td>
 				        <td th:text="'v' + ${documentVersion.versionLog.version}">v2.1</td>
 				        <td th:text="${documentVersion.versionLog.regdate}">2024.05.23 16:44</td>
 				        <!-- 상태는 masterCode 에서 가져와야함  -->
@@ -228,6 +223,27 @@ $(function(){
   });
   let currentEmpIdx;
   
+  /*$(function() {
+	  getEmpIdx();
+  });
+	  
+	  function getEmpIdx() {
+	      const token = localStorage.getItem('token');
+	      $.ajax({
+	        url: "/file/test/test/test",
+	        type: "get",
+	        headers: {
+	          "Authorization": "Bearer " + token
+	        },
+	        success: function(result) {
+	  		  var empIdx = result.empIdx;
+	        },
+	        error: function(xhr, status, err) {
+	          alert("로그인 사원 정보를 불러오는데 실패했습니다.");
+	        }
+	      });
+  }*/
+  
   function checkBoxAll(){
 	  $("#checkall").click(function(){
 	      if($("#checkall").prop("checked")) {
@@ -245,7 +261,7 @@ $(function(){
 			  return;
 		  }
 			//글쓰기 폼 요청
-			location.href="/file/document/writeform?folderIdx="+$("input[name='folderIdx']").val();
+			location.href="/file/document/writeform?folderIdx="+$("input[name='folderIdx']").val() + "&empIdx=" + $("input[name='empIdx']").val();
 		});
   }
 	  
@@ -272,6 +288,7 @@ $(function(){
 	          			objectIdxList: selectedIdxList,
 	          			empIdx: empIdx
 	          };
+	          
 	          $.ajax({
 	            method: "POST",
 	            url: "/file/document/list/trash",

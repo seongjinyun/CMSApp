@@ -164,10 +164,11 @@ public class SettingsController {
 	    String token = header.replace("Bearer ", "");
 	    Emp emp = jwtValidService.getEmpFromJwt(token);
 	    String roleName = emp.getRole().getRoleName();
-	    
+	    int empIdx = emp.getEmpIdx();
 	    Map<String, String> response = new HashMap<>();
 	    if(roleName.equals("Admin") || roleName.equals("Draft Writer")) {
 	        response.put("url", "/setting/mypage");
+	        response.put("empIdx", "" + empIdx);
 	        return ResponseEntity.ok(response);
 	    } else {
 	        response.put("url", "/error");
