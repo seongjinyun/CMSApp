@@ -92,7 +92,7 @@
           </div><!-- /.col -->
           <div class="col-sm-6">
             <ol class="breadcrumb float-sm-right">
-              <li class="breadcrumb-item"><a th:href="">Setting</a></li>
+              <li class="breadcrumb-item">Setting</li>
               <li class="breadcrumb-item active">User</li>
             </ol>
           </div><!-- /.col -->
@@ -276,6 +276,7 @@
 			enctype:"multipart/form-data"
 		});
 		$("form.inputImg").submit();
+		location.href = "/setting/setting/user";
 	}
 	
 	function updateEmps() { // 회원 정보 변경 전송
@@ -286,13 +287,12 @@
 	        data: formData,
 	        success: function(response) {
 	            alert("Employees updated successfully");
-	            window.location.href = '/setting/setting/user';
+		        location.href = '/setting/setting/user';
 	        },
 	        error: function(jqXHR, textStatus, errorThrown) {
 	            alert("Failed to update employees: " + textStatus);
 	        }
 		});
-		 
 		$("form.updateEmps").submit();
 	}
 	

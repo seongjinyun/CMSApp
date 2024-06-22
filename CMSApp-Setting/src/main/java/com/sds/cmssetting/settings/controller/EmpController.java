@@ -3,6 +3,8 @@ package com.sds.cmssetting.settings.controller;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -43,7 +45,7 @@ public class EmpController {
 	private PasswordEncoder passwordEncoder;
 	
 	@PostMapping("/emp/regist")
-	public String regist(Emp emp, EmpDetail empDetail, @RequestParam("deptIdx") int deptIdx, @RequestParam("roleCode") int roleCode) {
+	public void regist(Emp emp, EmpDetail empDetail, @RequestParam("deptIdx") int deptIdx, @RequestParam("roleCode") int roleCode) {
 		try {
 			 MultipartFile file = empDetail.getFile();
 			 // log.debug("title: "+empDetail.getFile());
@@ -66,6 +68,10 @@ public class EmpController {
             Role role = new Role();
             role.setRoleCode(roleCode);
             emp.setRole(role);    
+            
+            System.out.println("emp.getEmpName(): " + emp.getEmpName());
+            System.out.println("empDetail.getEmpId(): "+ empDetail.getEmpId());
+            System.out.println("empDetail.getEmpPw(): " + empDetail.getEmpPw());
 	            
             // EmpDetail 객체를 DB에 저장하는 로직	        
 	        empService.insert(emp);
@@ -74,7 +80,6 @@ public class EmpController {
 	        empDetailService.insert(empDetail);
 
             System.out.println("Employee added successfully");
-	        return "redirect:/setting/user";
         } catch (UploadException e) {
         	e.printStackTrace();
             throw new UploadException("사원 등록 실패", e);
@@ -82,7 +87,7 @@ public class EmpController {
 	}
 	
 	@PostMapping("/emp/update")
-    public String update(@RequestParam("empIdx") List<Integer> empIdxList,
+    public ResponseEntity<?> update(@RequestParam("empIdx") List<Integer> empIdxList,
                          @RequestParam("roleCode") List<Integer> roleCodeList,
                          @RequestParam("deptIdx") List<Integer> deptIdxList) {
         for (int i = 0; i < empIdxList.size(); i++) {
@@ -97,13 +102,15 @@ public class EmpController {
                 emp.setRole(role);
 
                 empService.update(emp);
+            } else {
+            	return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
             }
         }
-        return "redirect:/setting/user";
+        return ResponseEntity.ok(null);
     }
 	
 	@PostMapping("/setting/mypage/update")
-	public String update(Emp emp, EmpDetail empDetail, @RequestParam("deptIdx") int deptIdx, @RequestParam("roleCode") int roleCode) {
+	public void update(Emp emp, EmpDetail empDetail, @RequestParam("deptIdx") int deptIdx, @RequestParam("roleCode") int roleCode) {
 		try {
 			 MultipartFile file = empDetail.getFile();
 	            if (file != null && !file.isEmpty()) {            // 파일이 존재한다면 
@@ -138,7 +145,6 @@ public class EmpController {
 	        empDetailService.update(empDetail);
 
            System.out.println("Employee updated successfully");
-           return "redirect:/setting/mypage";
        } catch (UploadException e) {
        	e.printStackTrace();
            throw new UploadException("사원 수정 실패", e);
