@@ -289,4 +289,9 @@ public class FolderServiceImpl implements FolderService {
 		}
 		return restoreFolder;
 	}
+	
+	@Override
+	public List<Folder> selectTopProjectFolder(final int projectIdx) {
+		return folderDAO.selectTopProjectFolder();
+	}
 }

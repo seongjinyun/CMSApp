@@ -1,30 +1,33 @@
 package com.sds.cmsdocument.document.controller;
 
 	import java.util.ArrayList;
-	import java.util.Collections;
-	import java.util.HashMap;
-	import java.util.List;
-	import java.util.Map;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
-	import org.springframework.beans.factory.annotation.Autowired;
-	import org.springframework.stereotype.Controller;
-	import org.springframework.ui.Model;
-	import org.springframework.web.bind.annotation.GetMapping;
-	import org.springframework.web.bind.annotation.RequestMapping;
-	import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestHeader;
+import org.springframework.web.bind.annotation.RequestParam;
 
-	import com.sds.cmsdocument.common.Pager;
-	import com.sds.cmsdocument.domain.DocumentVersion;
-	import com.sds.cmsdocument.domain.Emp;
-	import com.sds.cmsdocument.domain.Folder;
-	import com.sds.cmsdocument.domain.Trash;
-	import com.sds.cmsdocument.domain.VersionLog;
-	import com.sds.cmsdocument.model.document.DocumentEditingService;
-	import com.sds.cmsdocument.model.document.DocumentService;
-	import com.sds.cmsdocument.model.folder.FolderService;
-	import com.sds.cmsdocument.model.trash.TrashService;
+import com.sds.cmsdocument.common.Pager;
+import com.sds.cmsdocument.domain.DocumentVersion;
+import com.sds.cmsdocument.domain.Emp;
+import com.sds.cmsdocument.domain.Folder;
+import com.sds.cmsdocument.domain.Trash;
+import com.sds.cmsdocument.domain.VersionLog;
+import com.sds.cmsdocument.jwt.JwtValidService;
+import com.sds.cmsdocument.model.document.DocumentEditingService;
+import com.sds.cmsdocument.model.document.DocumentService;
+import com.sds.cmsdocument.model.emp.EmpService;
+import com.sds.cmsdocument.model.folder.FolderService;
+import com.sds.cmsdocument.model.trash.TrashService;
 
-	import lombok.extern.slf4j.Slf4j;
+import lombok.extern.slf4j.Slf4j;
 
 	@Slf4j
 	@Controller
@@ -45,10 +48,18 @@ package com.sds.cmsdocument.document.controller;
 		@Autowired
 		private FolderService folderService;
 		
+		@Autowired
+		private JwtValidService jwtValidService;
+		
+		@Autowired
+		private EmpService empService;
+		
 		//글 작성 폼
 		@GetMapping("/document/writeform")
-		public String getDocument(Model model,@RequestParam(value="folderIdx") int folderIdx) {
-			
+		public String getDocument(Model model,@RequestParam(value="folderIdx") int folderIdx
+				, @RequestParam("empIdx") final int empIdx) {
+			Emp emp = empService.selectByEmpIdx(empIdx);
+			model.addAttribute("emp", emp);
 			model.addAttribute("folderIdx", folderIdx);
 			return "documents/writeform";
 		} 
@@ -62,8 +73,11 @@ package com.sds.cmsdocument.document.controller;
 		
 		//파일목록
 		@GetMapping("/document/list")
-
-		public String getDocumentList(Model model, DocumentVersion documentVersion, @RequestParam(value="folderIdx", defaultValue = "0") final int folderIdx) {
+		public String getDocumentList(Model model, DocumentVersion documentVersion, 
+				@RequestParam(value="folderIdx", defaultValue = "0") final int folderIdx,
+				@RequestParam("empIdx") final int empIdx) {
+			Emp emp = empService.selectByEmpIdx(empIdx);
+			model.addAttribute(emp);
 			if (folderIdx == 0) {
 				HashMap<String, Integer> map=new HashMap<String, Integer>();
 				map.put("startIndex", pager.getStartIndex());
@@ -129,20 +143,23 @@ package com.sds.cmsdocument.document.controller;
 		@GetMapping("/document/detail")
 		public String getDetail(@RequestParam("documentIdx") int documentIdx,
 								            @RequestParam("folderIdx") int folderIdx,
+								            @RequestParam("empIdx") final int empIdx,
 								            Model model) {
 			DocumentVersion documentVersion  = documentService.documentDetailSelect(documentIdx);
 			documentVersion.getVersionLog().setEmp(new Emp());
 			documentVersion.getVersionLog().getEmp().setEmpIdx(3); //empIdx 넘어올 자리
 			System.out.println(documentVersion.getVersionLog().getEmp().getEmpIdx());
-
+			Emp emp = empService.selectByEmpIdx(empIdx);
 			
 	        List<VersionLog> versionLogs = documentService.getVersionLogSelect(documentIdx);
 	        List<Folder> folderList = folderService.selectParentList(folderIdx);
+	        Collections.reverse(folderList);
 	        model.addAttribute("folderList", folderList);
 	        model.addAttribute("versionLogs", versionLogs);
 	        model.addAttribute("documentVersion", documentVersion);
 	        model.addAttribute("folderIdx", folderIdx);
 	        model.addAttribute("documentIdx", documentIdx);
+	        model.addAttribute("emp", emp);
 			return "documents/detail";
 		}
 		
@@ -150,7 +167,9 @@ package com.sds.cmsdocument.document.controller;
 		@GetMapping("/document/editform")
 		public String getEdit(@RequestParam("documentIdx") int documentIdx,
 	            						@RequestParam("folderIdx") int folderIdx,
+	            						@RequestParam("empIdx") final int empIdx,
 	            						Model model) {
+			Emp emp = empService.selectByEmpIdx(empIdx);
 	        // 이미 다른 사용자가 수정 중이면 접근을 막음
 //	        if (editingService.isDocumentBeingEdited(documentIdx)) {
 //	            model.addAttribute("serverMessage", "다른 사용자가 수정 중인 문서입니다.");
@@ -165,8 +184,20 @@ package com.sds.cmsdocument.document.controller;
 	        model.addAttribute("folderIdx", folderIdx);
 	        model.addAttribute("documentIdx", documentIdx);
 	        model.addAttribute("versionLogIdx", documentVersion.getVersionLog().getVersionLogIdx());
+	        model.addAttribute("emp", emp);
 	        return "documents/editform";
 		}
 		
 
+		// 수정할 것
+		@GetMapping("/test/test/test")
+		public ResponseEntity<?> getEmpIdx(@RequestHeader(name="Authorization") String header) {
+			String token = header.replace("Bearer ", "");
+			Emp emp = jwtValidService.getEmpFromJwt(token);
+		    // String roleName = emp.getRole().getRoleName();
+			Map<String, String> response = new HashMap<>();
+			response.put("empIdx", ""+emp.getEmpIdx());
+			
+			return ResponseEntity.ok(response);
+		}
 	}
