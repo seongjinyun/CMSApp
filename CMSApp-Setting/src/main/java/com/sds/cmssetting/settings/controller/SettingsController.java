@@ -111,7 +111,7 @@ public class SettingsController {
 	    
 	    Map<String, String> response = new HashMap<>();
 	    if(roleName.equals("Admin")) {
-	        response.put("url", "/setting/dept_project");
+	        response.put("url", "/setting/setting/dept_project");
 	        return ResponseEntity.ok(response);
 	    } else {
 	        response.put("url", "/error");
@@ -167,8 +167,11 @@ public class SettingsController {
 	    int empIdx = emp.getEmpIdx();
 	    Map<String, String> response = new HashMap<>();
 	    if(roleName.equals("Admin") || roleName.equals("Draft Writer")) {
-	        response.put("url", "/setting/mypage");
+
 	        response.put("empIdx", "" + empIdx);
+
+	        response.put("url", "/setting/setting/mypage");
+
 	        return ResponseEntity.ok(response);
 	    } else {
 	        response.put("url", "/error");
@@ -176,7 +179,7 @@ public class SettingsController {
 	    }
 	}
 	//----------------------------------------------------------------------------------------	
-
+	
 	@GetMapping("/setting/user")
 	public String getUserInfo(@RequestParam(value="currentPage", defaultValue="1") int currentPage, Model model) {
 		
@@ -215,7 +218,7 @@ public class SettingsController {
 	    
 	    Map<String, String> response = new HashMap<>();
 	    if(roleName.equals("Admin")) {
-	        response.put("url", "/setting/user");
+	        response.put("url", "/setting/setting/user");
 	        return ResponseEntity.ok(response);
 	    } else {
 	        response.put("url", "/error");
@@ -257,7 +260,7 @@ public class SettingsController {
 	    
 	    Map<String, String> response = new HashMap<>();
 	    if(roleName.equals("Admin")) {
-	        response.put("url", "/setting/role");
+	        response.put("url", "/setting/setting/role");
 	        return ResponseEntity.ok(response);
 	    } else {
 	        response.put("url", "/error");

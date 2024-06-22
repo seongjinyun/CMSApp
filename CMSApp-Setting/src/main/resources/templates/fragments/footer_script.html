@@ -3,7 +3,7 @@
 		function redirectPage(pageUrl) {
 		    const token = localStorage.getItem('token');
 		    $.ajax({
-		        url: "/checkAuthority" + pageUrl,
+		        url: "/setting/checkAuthority" + pageUrl,
 		        type: "get",
 		        headers: {
 		            "Authorization": "Bearer " + token
