@@ -9,7 +9,7 @@
 		<association column="version_log_idx" property="versionLog" javaType="VersionLog"
 			select="com.sds.cmsdocument.model.versionlog.VersionLogDAO.select"/>
 		<association column="published_version_name_idx" property="publishedVersionName"
-			select="com.sds.cmsdocument.model.versionlog.PublishedVersionNameDAO.select"/>
+			select="com.sds.cmsdocument.model.publishing.PublishedVersionNameDAO.select"/>
 	</resultMap>
 	
 	<insert id="insert" parameterType="PublishedVersion">
@@ -55,5 +55,13 @@
 		select * from published_version
 		where document_idx = #{document.documentIdx}
 	</select>
+	
+	<select id="selectLastestPublishedVersionByDocumentIdx" resultMap="PublishedVersionMap">
+		select * from published_version 
+		where document_idx=#{document.documentIdx}
+		order by published_version_name_idx desc 
+		limit 1;
+	</select>
+	
 	
 </mapper>

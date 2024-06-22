@@ -1,4 +1,4 @@
-package com.sds.cmsdocument.controller;
+package com.sds.cmsdocument.document.controller;
 
 import java.util.List;
 

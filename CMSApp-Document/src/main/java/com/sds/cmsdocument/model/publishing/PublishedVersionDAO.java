@@ -18,5 +18,7 @@ public interface PublishedVersionDAO {
 	public PublishedVersion select(final int publishedVersionIdx);
 	
 	public PublishedVersion selectByDocumentIdx(final int documentIdx);
+	
+	public PublishedVersion selectLastestPublishedVersionByDocumentIdx(final int documentIdx);
 
 }

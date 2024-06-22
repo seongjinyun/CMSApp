@@ -17,6 +17,18 @@
 			emp_idx=#{emp.empIdx}, 
 			status_comments=#{statusComments},
 			status_regdate = now()
+			<if test="versionLog != null">
+				, version_log_idx = #{versionLog.versionLogIdx}
+			</if>
+		where document_idx = #{document.documentIdx}
+	</update>
+	
+	<update id="updateStatusByDocumentIdxForPublishing" parameterType="DocumentVersion">
+		update document_version 
+			set status_code = 100, 
+			emp_idx=#{emp.empIdx}, 
+			status_comments=#{statusComments},
+			status_regdate = now()
 		where document_idx = #{document.documentIdx}
 	</update>
 
