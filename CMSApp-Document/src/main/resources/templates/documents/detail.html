@@ -67,11 +67,14 @@
 					<div class="col-6">
 						<ol th:each="folder, i : ${folderList}"
 							class="breadcrumb float-sm-left">
-							<li	class="breadcrumb-item"><a
-								th:href="|/document/list?folderIdx=${folder.folderIdx}|"
-								th:text="|/ ${folder.folderName}|"></a></li>
+							<li th:unless="${i.index == #lists.size(folderList)}"
+								class="breadcrumb-item ml-1 mr-1"><a
+								th:href="|/file/document/list?folderIdx=${folder.folderIdx}|"
+								th:text="|${folder.folderName} / |"></a></li>
+							<li th:if="${i.index + 1 == #lists.size(folderList)}"
+								class="breadcrumb-item active ml-1 mr-1"
+								th:text="|${documentVersion.versionLog.title}|"></li>
 						</ol>
-						<input type="hidden" th:value="emp.empIdx" id="empIdx" name="empIdx">
 					</div>
 					<div class="col-6">
 						<div class="float-right">
@@ -330,10 +333,7 @@
 				console.log(objectIdxList);
 				$.ajax({
 					url : "/file/document/list/trash",
-					data : {
-						objectIdxList: objectIdxList,
-						empIdx: $("input[name='documentIdx']").val()
-					},
+					data : JSON.stringify(objectIdxList),
 					method : "POST",
 					contentType : "application/json",
 					success : function(result, status, xhr) {

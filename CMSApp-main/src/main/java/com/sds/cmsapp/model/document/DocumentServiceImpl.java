@@ -255,7 +255,7 @@ public class DocumentServiceImpl implements DocumentService {
 		StatusLog statusLog = new StatusLog(documentVersion.getDocument().getDocumentIdx(), 
 				documentVersion.getVersionLog().getVersionLogIdx(), documentVersion.getEmp().getEmpIdx(), 100,  
 				documentVersion.getStatusComments());
-		//statusLogDAO.insert(statusLog);
+		statusLogDAO.insert(statusLog);
 		
 		if (result < 1) {
 			throw new StatusLogException("상태 변결 로그 insert 실패");

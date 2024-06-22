@@ -12,11 +12,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.sds.cmsdocument.domain.Folder;
-import com.sds.cmsdocument.domain.Project;
 import com.sds.cmsdocument.exception.FolderException;
-import com.sds.cmsdocument.model.emp.EmpService;
 import com.sds.cmsdocument.model.folder.FolderService;
-import com.sds.cmsdocument.model.relationship.DeptProjectService;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -27,23 +24,9 @@ public class RestSidebarController {
 	@Autowired
 	private FolderService folderService;
 	
-	@Autowired
-	private EmpService empService;
-	
-	@Autowired
-	private DeptProjectService deptProjectService;
-	
 	@GetMapping("/sidebar/folder")
-	public ResponseEntity<List<Folder>> getFolderList(@RequestParam("empIdx") final Integer empIdx) throws FolderException {
-		List<Folder> folderList = new ArrayList<>();
-		if(empIdx == null) {
-			folderList = folderService.selectTopFolder();
-		} else {
-			List<Project> projectList = deptProjectService.selectByDeptIdx(empService.selectByEmpIdx(empIdx).getDept().getDeptIdx());
-			for(Project project : projectList) {
-				folderList.addAll(folderService.selectTopProjectFolder(project.getProjectIdx()));
-			}
-		}
+	public ResponseEntity<List<Folder>> getFolderList() throws FolderException {
+		List<Folder> folderList = folderService.selectTopFolder();
 		for(int i = 0; i < folderList.size(); i++) {
 			Folder folder = folderList.get(i);
 			folder = folderService.completeFolderWithDocument(folder.getFolderIdx());
