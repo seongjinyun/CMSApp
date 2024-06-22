@@ -143,6 +143,8 @@ public class SettingsController {
 	    response.put("empName", emp.getEmpName());
 	    response.put("empId", empDetail.getEmpId());
 	    response.put("empPw", empDetail.getEmpPw());
+	    response.put("empRole", emp.getRole().getRoleName());
+	    log.warn("empRole: "+emp.getRole().getRoleName());
 	    response.put("deptList", deptList);
 	    response.put("roleList", roleList);
 	    response.put("profileImgUrl", profileImgUrl);
