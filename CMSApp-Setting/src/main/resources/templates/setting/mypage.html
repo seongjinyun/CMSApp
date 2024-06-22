@@ -142,7 +142,6 @@
                           <div class="addImage" id="image-show" style="width: 200px; height: 200px;">
                             <img id="profileImg" alt="Profile Image">
                           </div>
-                          <label class="inputFileButton" for="inputFile">이미지 첨부</label>
                           <input type="file" name="file" id="inputfile" accept="image/*" onchange="loadFile(this)" style="margin-top: 15px; display: block;">
                         </div>
                       </div>
@@ -184,6 +183,7 @@
 
 <th:block th:replace="~{fragments/footer_script :: footer_script}"/>
 <script type="text/javascript">
+/*
   function updateEmpAccount() {
     $("#empAccount").attr({
       action: "/setting/setting/mypage/update",
@@ -193,6 +193,26 @@
     $("#empAccount").submit();
     location.href = "/setting/setting/mypage";
   }
+*/
+
+	function updateEmpAccount() { // 회원 정보 변경
+	    var formData = new FormData($("#empAccount")[0]);
+	    
+	    $.ajax({
+	        url: '/setting/setting/mypage/update',
+	        type: 'POST',
+	        data: formData,
+	        processData: false,
+	        contentType: false,
+	        success: function(response) {
+	            alert("Employee updated successfully");
+	            location.href = '/setting/setting/mypage';
+	        },
+	        error: function(jqXHR, textStatus, errorThrown) {
+	            alert("Failed to update employee: " + textStatus);
+	        }
+	    });
+	}
   
   $(function() {
     $("#updateEmpAccount").click(function() {
@@ -216,6 +236,7 @@
           $("input[name='empName']").val(result.empName);
           $("input[name='empId']").val(result.empId);
           $("input[name='empPw']").val(result.empPw);
+          //console.log("result.profileImgUrl: "+result.profileImgUrl);
           $("#profileImg").attr("src", result.profileImgUrl);
 
           // 부서 리스트 채우기
@@ -249,5 +270,6 @@
 
     // 페이지 로드 시 사원 정보 로드
     loadEmpInfo();
+
   });
 </script>
