@@ -125,7 +125,7 @@ public class PublishedVersionServiceImpl implements PublishedVersionService {
 		return newPublishedVerList;
 	}
 	
-	// 배포 대기 문서 목록 생성 (오버로딩)
+	// 배포 대기 문서 목록 생성 (오버로딩) - 배포용
 	@Transactional(propagation = Propagation.REQUIRED)
 	public List<PublishedVersion> selectWaitingQueue(PublishedVersionName publishedVersionName)
 		throws PublishedVersionException {

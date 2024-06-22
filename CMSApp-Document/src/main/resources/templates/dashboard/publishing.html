@@ -96,10 +96,12 @@ div.table-detail, span.table-detail {
 				
 				<div class="row">
 						<div class="col-md-12">
-						<h5>배포 안내</h5>
-									<li>이전 배포판에서 변경 사항이 생기지 않은 문서는 자동으로 새로운 배포판에 포함됩니다.</li>
-									<li>이전 배포판에서 변경 사항이 발생하여 리뷰가 진행 중이거나 반려된 문서가 있으면 배포를 진행할 수 없습니다.</li>
-									<li>리뷰가 진행 중인 문서는 리뷰를 완료해주십시오.</li>
+						<div class="alert alert-warning" role="alert">
+							<h5>배포 안내</h5>
+								<li>변경 사항이 없는 문서는 자동으로 배포됩니다.</li>
+								<li>새롭게 생성된 문서는 리뷰가 완료되기 전까지 배포되지 않습니다.</li>
+								<li>리뷰가 진행 중이거나 반려된 문서가 있으면 배포를 진행할 수 없습니다. 리뷰 완료 또는 반려 확인을 완료한 뒤에 배포를 진행해 주십시오.</li>
+						</div>
 							<!-- Card -->
 							<div class="card mt-2" id="filter-card">
 								<div class="card-body">
@@ -209,16 +211,19 @@ div.table-detail, span.table-detail {
 				responsive: true,
 				destroy: true,
 				columns: [
-					{ data: "document.documentIdx", title: "문서 번호", width: '10%'},
-					{ data: "versionLog.title", title: "제목", width: '30%'},
-					{ data: "versionLog.version", title: "버전", width: '10%'},
+					{ data: "listIndex", title: "No.", width: '5%'},
+					{ data: "document.folder.project.projectName", title: "프로젝트", width: '10%'},
+					{ data: "versionLog.title", title: "제목", width: '40%'},
+					{ data: "versionLog.version", title: "ver.", width: '5%'},
 					{ data: "versionLog.comments", title: "버전 코멘트", width: '40%'}
 				],
 				ajax: {
 					url: url,
 					type: "GET",
 					"dataSrc": function (result) {
-						return result;
+						var data = result;
+						for (let i = 0; i < data.length; i++) data[i].listIndex = i + 1; // 리스트번호 
+						return data;
 		            }, error: function(jqXHR, status, err) {
 		            	alert("배포할 문서가 없거나 리뷰 중 / 반려 문서가 있습니다.");
 					}
@@ -237,7 +242,7 @@ div.table-detail, span.table-detail {
 	            },
 	            success: function(result) {
 					alert("새로운 배포판 생성 성공");
-					location.href = "/file/admin/dashboard/activity";
+					location.href = "/file/dashboard/activity";
 	            }, error: function(xhr, status, error) {
 	            	alert("배포판 생성 실패")
 	                console.log(status);

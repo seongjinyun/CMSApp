@@ -363,6 +363,8 @@
 	<script src="/file/admin/plugins/datatables-buttons/js/buttons.print.min.js"></script>
 	<script src="/file/admin/plugins/datatables-buttons/js/buttons.colVis.min.js"></script>
 	<script>
+	
+		
 
 		// [상태 변경 버튼] 클릭 이벤트: 상태 변경 폼이 있는 행이 추가됨
 		function controlFormRow(obj) {
@@ -632,7 +634,6 @@
 					{ data: "regdate", title: "일자", width: '25%' }
 				],
 				columnDefs: [
-					/* { "targets" : 5, "render": function(data) {return "<a href=''>" + data +  "</a>"} } */
 					{ "targets" : 8, "render": function(data) {
 						return `<a href="#" title="" data-toggle="popover" data-trigger="hover" data-content="${data}">
 									<span class="info-box-icon"> <i class="fas fa-comments"></i></span>
@@ -691,6 +692,30 @@
 		}
 
 		$(function () {
+			
+			
+		  loadEmpInfo();
+		  
+		  function loadEmpInfo() {
+		      const token = localStorage.getItem('token');
+		      $.ajax({
+		        url: "/file/emp/check",
+		        type: "get",
+		        headers: {
+		          "Authorization": "Bearer " + token
+		        },
+		        success: function(result) {
+		     		var empIdx = result.empIdx;
+		     		console.log(result.empIdx);
+		     		console.log(result.roleName);
+		        },
+		        error: function(xhr, status, err) {
+		          alert("로그인 사원 정보를 불러오는데 실패했습니다.");
+		        }
+		      });
+		  }
+			
+			
 			
 			/* [요약 탭] 초기화 */
 			getSummaryCount(); 	// 결재 상태별 문서 수 표시

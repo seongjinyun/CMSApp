@@ -148,6 +148,9 @@ public class DocumentServiceImpl implements DocumentService {
 			String projectName = folder.getProject().getProjectName();
 			//String projectName =  Optional.ofNullable(folder.getProject()).map(Project::getProjectName).orElse("N/A");
 			
+			// 프로젝트 이름과 폴더 이름이 같으면 폴더 이름 생략
+			if (projectName.equals(folderName)) folderName = "";
+			
 			// 문서결재 상태, 버전 정보, 상태 변경 사원, 상태 변경 코멘트, 상태 변경 메시지를 가지고 있는 DocumentVersion 한 건 조회
 			DocumentVersion docVer = documentVersionDAO.selectByDocumentIdx(docIdx); // DocumentVersionDAO 수행 결과: DocumentVersionMap > MasterCode, Emp, VersionLog
 			if (docVer == null)	throw new DocumentVersionException("document_version 테이블에서 해당 문서를 찾을 수 없습니다.");
