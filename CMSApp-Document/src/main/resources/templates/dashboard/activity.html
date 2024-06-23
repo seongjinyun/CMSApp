@@ -363,6 +363,8 @@
 	<script src="/file/admin/plugins/datatables-buttons/js/buttons.print.min.js"></script>
 	<script src="/file/admin/plugins/datatables-buttons/js/buttons.colVis.min.js"></script>
 	<script>
+	
+		
 
 		// [상태 변경 버튼] 클릭 이벤트: 상태 변경 폼이 있는 행이 추가됨
 		function controlFormRow(obj) {
@@ -623,17 +625,20 @@
 					{ data: "listIndex", title: "No.", width: '5%'},
 					{ data: "projectName", title: "프로젝트", width: '10%' },
 					{ data: "folderName", title: "폴더", width: '10%' },
-					{ data: "title", title: "제목", width: '15%' },
-					{ data: "version", title: "버전", width: '10%' },
+					{ data: "title", title: "제목", width: '20%' },
+					{ data: "version", title: "ver.", width: '5%' },
 					{ data: "deptName", title: "부서", width: '10%' },
 					{ data: "empName", title: "사원", width: '10%' },
 					{ data: "statusName", title: "상태", width: '10%' },
-					{ data: "comments", title: "코멘트", width: '20%' },
-					{ data: "regdate", title: "일자", width: '10%' }
+					{ data: "comments", title: "<span class='info-box-icon'><i class='fas fa-comments'></i></span>", width: '5%' },
+					{ data: "regdate", title: "일자", width: '25%' }
 				],
 				columnDefs: [
-					{ "targets": [0, 1], "visible": false }
-					/* { "targets" : 5, "render": function(data) {return "<a href=''>" + data +  "</a>"} } */
+					{ "targets" : 8, "render": function(data) {
+						return `<a href="#" title="" data-toggle="popover" data-trigger="hover" data-content="${data}">
+									<span class="info-box-icon"> <i class="fas fa-comments"></i></span>
+								</a>`} 
+					}
 				],
 				ajax: {
 					url: url,
@@ -645,6 +650,9 @@
 					}, error: function (xhr, status, err) {
 						alert('문서 목록을 불러오지 못했습니다.');
 					}
+				},
+				drawCallback: function(settings) {
+					$('[data-toggle="popover"]').popover();
 				}
 			});
 		}
@@ -684,6 +692,31 @@
 		}
 
 		$(function () {
+			
+			
+		  loadEmpInfo();
+		  
+		  function loadEmpInfo() {
+		      const token = localStorage.getItem('token');
+		      $.ajax({
+		        url: "/file/emp/check",
+		        type: "get",
+		        headers: {
+		          "Authorization": "Bearer " + token
+		        },
+		        success: function(result) {
+		     		var empIdx = result.empIdx;
+		     		console.log(result.empIdx);
+		     		console.log(result.roleName);
+		        },
+		        error: function(xhr, status, err) {
+		          alert("로그인 사원 정보를 불러오는데 실패했습니다.");
+		        }
+		      });
+		  }
+			
+			
+			
 			/* [요약 탭] 초기화 */
 			getSummaryCount(); 	// 결재 상태별 문서 수 표시
 			getSummaryData([$('#btn-in_review').val()]); // 리뷰 대기 문서 목록 표시
@@ -738,7 +771,7 @@
 				},
 				autoApply: true, // [취소], [적용] 버튼 없음
 			}, function (start, end, label) {
-				alert(label + " : " + start.format("YYYY-MM-DD HH:mm:ss") + "-" + end.format("YYYY-MM-DD HH:mm:ss")); // 날짜 선택 확인용 메시지
+				//alert(label + " : " + start.format("YYYY-MM-DD HH:mm:ss") + "-" + end.format("YYYY-MM-DD HH:mm:ss")); // 날짜 선택 확인용 메시지
 				dateRangePicker_startDate = start.format("YYYY-MM-DD HH:mm:ss");
 				dateRangePicker_endDate = end.format("YYYY-MM-DD HH:mm:ss");
 				// 선택한 기간 라벨을 폼에 표시

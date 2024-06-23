@@ -100,14 +100,14 @@ public class RestDocumentController {
 	}
 	
 	//페이지에서 벗어날 시 AJAX 요청을 받아 수정 중인 상태를 해제하는 컨트롤러 메서드
-	@PostMapping("/document/releaseEditing")
-	@ResponseBody
-	public ResponseEntity<String> releaseEditing(@RequestParam("documentIdx") int documentIdx) {
-	    editingService.removeEditingDocument(documentIdx);
-	    
-	    System.out.println("releaseEditing 실행");
-	    return ResponseEntity.ok("수정 중 상태 해제 완료");
-	}
+//	@PostMapping("/document/releaseEditing")
+//	@ResponseBody
+//	public ResponseEntity<String> releaseEditing(@RequestParam("documentIdx") int documentIdx) {
+//	    editingService.removeEditingDocument(documentIdx);
+//	    
+//	    System.out.println("releaseEditing 실행");
+//	    return ResponseEntity.ok("수정 중 상태 해제 완료");
+//	}
 	
 	@GetMapping("/document/folder/list")
 	public ResponseEntity getFolderList() throws FolderException {
