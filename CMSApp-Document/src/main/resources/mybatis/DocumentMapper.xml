@@ -84,11 +84,11 @@
 	        vl.title,
 	        vl.regdate,
 	        mc.status_name
-	    FROM Document_Version dv
-	    JOIN Document d ON dv.document_idx = d.document_idx
-	    JOIN Folder f ON d.folder_idx = f.folder_idx
-	    JOIN Version_Log vl ON dv.version_log_idx = vl.version_log_idx
-	    JOIN masterCode mc On dv.status_code = mc.status_code
+	    FROM document_version dv
+	    JOIN document d ON dv.document_idx = d.document_idx
+	    JOIN folder f ON d.folder_idx = f.folder_idx
+	    JOIN version_log vl ON dv.version_log_idx = vl.version_log_idx
+	    JOIN mastercode mc On dv.status_code = mc.status_code
 	    where d.folder_idx = #{folderIdx};
     </select>
 	
