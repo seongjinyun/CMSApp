@@ -7,6 +7,9 @@ import lombok.Setter;
 public class RequestDocStatusChanging {
 
 	public String statusName;
+	
+	public int empIdx;
+	public String roleName;
 	public String comments;
 	
 }

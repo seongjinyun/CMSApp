@@ -86,7 +86,7 @@
                 "Authorization": "Bearer " + token
             },
             success: function(result) {
-            	location.href = "/setting"+result.url;
+            	location.href = "/file/dashboard/activity";
             },
             error: function(xhr, status, err) {
                 alert("정보를 불러오는데 실패했습니다.");

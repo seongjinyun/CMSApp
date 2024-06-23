@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 
+import com.sds.cmsdocument.domain.Emp;
 import com.sds.cmsdocument.domain.ErrorResponse;
 import com.sds.cmsdocument.domain.PublishedVersion;
 import com.sds.cmsdocument.domain.RequestPublishingDTO;
@@ -38,7 +39,13 @@ public class PublishingController {
 	
 	/* 문서 목록 배포 */
 	@PostMapping("/admin/dashboard/publishing")
-	public ResponseEntity<String> publishDocumentList(RequestPublishingDTO publishingDTO) {
+	public ResponseEntity<?> publishDocumentList(RequestPublishingDTO publishingDTO) {
+		
+		// review 권한이 있는 사원인지(admin 역할) 검증
+		if (!publishingDTO.getRoleName().equals("Admin")) return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ErrorResponse("권한이 없는 사용자입니다."));
+		
+		// 사원 번호 가져오기
+		log.debug("배포 사원 번호: " + publishingDTO.getEmpIdx());
 		log.debug("입력받은 배포판 이름: " + publishingDTO.getPublishedVersionName());
 		log.debug("입력받은 코멘트: " + publishingDTO.getComments());
 		

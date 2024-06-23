@@ -7,7 +7,7 @@
 	<title>Dashboard | 나의 활동</title>
 
 	<!-- data-table css -->
-	<link rel="stylesheet" href="/file/admin/plugins/datatables-bs4/css/dataTables.bootstrap4.min.css">
+	<link rel="stylesheet" href="/file/admin/plugins/datatables-bs4/css/dataTables.bootstrap4.min.css">x
 	<link rel="stylesheet" href="/file/admin/plugins/datatables-responsive/css/responsive.bootstrap4.min.css">
 	<link rel="stylesheet" href="/file/admin/plugins/datatables-buttons/css/buttons.bootstrap4.min.css">
 	<!-- select2 css -->
@@ -346,7 +346,9 @@
 	<!-- ./wrapper -->
 
 	<th:block th:replace="~{fragments/footer_link :: footer_link}" />
-
+		<th:block th:replace="~{elements/sidebar_script :: sidebar_script}" />
+	<!-- /.사이드바 디렉토리 관련 로직 -->
+	
 	<!-- select2 js 파일 -->
 	<script src="/file/admin/plugins/select2/js/select2.full.min.js"></script>
 	<!-- datatables js 파일 -->
@@ -364,7 +366,27 @@
 	<script src="/file/admin/plugins/datatables-buttons/js/buttons.colVis.min.js"></script>
 	<script>
 	
-		
+		// 로그인 사원 정보
+		let empIdx = 0;
+		let roleName = null;
+		function loadEmpInfo() {
+		     const token = localStorage.getItem('token');
+		     $.ajax({
+		       url: "/file/emp/check",
+		       type: "get",
+		       headers: {
+		         "Authorization": "Bearer " + token
+		       },
+		       success: function(result) {
+		    	   	empIdx = result.empIdx; // 로그인한 사원의 번호 저장
+		    		roleName = result.roleName; // 로그인한 사원의 역할 저장
+		       },
+		       error: function(xhr, status, err) {
+		         alert("로그인이 필요한 서비스입니다.");
+		         location.href = "/setting/loginForm";
+		       }
+		     });
+		 }
 
 		// [상태 변경 버튼] 클릭 이벤트: 상태 변경 폼이 있는 행이 추가됨
 		function controlFormRow(obj) {
@@ -404,7 +426,11 @@
 			$.ajax({
 				type: "POST",
 				url: "/file/admin/document/" + documentIdx + "/status/reviewed",
-				data: {"comments": comments}
+				data: {
+					"comments": comments,
+					"empIdx": empIdx,
+					"roleName": roleName
+					}
 				})
 				.then(function(result) {
 					onSuccess(obj, result, '리뷰 완료');
@@ -426,7 +452,11 @@
 			$.ajax({
 				type: "POST",
 				url: "/file/admin/document/" + documentIdx + "/status/rejected",
-				data: {"comments": comments}
+				data: {
+					"comments": comments,
+					"empIdx": empIdx,
+					"roleName": roleName
+					}
 				})
 				.then(function(result) {
 					onSuccess(obj, result, '반려');
@@ -448,7 +478,10 @@
 			$.ajax({
 				type: "POST",
 				url: "/file/admin/document/" + documentIdx + "/status/confirm",
-				data: {"comments": comments}
+				data: {
+					"comments": comments,
+					"empIdx": empIdx,	
+				}
 				})
 				.then(function(result) {
 					onSuccess(obj, result, '반려 확인');
@@ -491,17 +524,28 @@
 				"반려": "badge-danger"
 			};
 
-			let isAbleProperty = {
+			let isBtnDisplay = {
 				"리뷰 중": "",
+				"리뷰 완료": "none",
+				"반려": ""
+			}
+			
+			let isAbleProperty = {
+				"리뷰 중": "disabled",
 				"리뷰 완료": "disabled",
 				"반려": ""
 			}
 			
 			let isAbleEvent = {
-					"리뷰 중": "controlFormRow(this)",
+					"리뷰 중": "",
 					"리뷰 완료": "",
 					"반려": "controlFormRow(this)"
 			}	
+			
+			if (roleName == "Admin") {
+				isAbleProperty['리뷰 중'] = "";
+				isAbleEvent['리뷰 중'] = "controlFormRow(this)";
+			}
 		
 			for (let i = 0; i < result.length; i++) {
 				tr += `<tr>
@@ -516,7 +560,7 @@
 						<td width="15%">${result[i].comments}</td>
 						<td width="20%">${result[i].regdate}</td>
 						<td width="15%">
-							<button id="${result[i].documentIdx}" type="button" class="w-75 btn btn-sm btn-primary" ${isAbleProperty[result[i].statusName]} onClick=${isAbleEvent[result[i].statusName]}>상태 변경</button>
+							<button	style="display: ${isBtnDisplay[result[i].statusName]}" id="${result[i].documentIdx}" type="button" class="w-75 btn btn-sm btn-primary" ${isAbleProperty[result[i].statusName]} onClick=${isAbleEvent[result[i].statusName]}>상태 변경</button>
 						</td>
 					</tr>`;
 
@@ -566,6 +610,7 @@
 								</td>
 						</tr>`;
 				}
+				
 			}
 			preview.html(tr);
 		}
@@ -692,32 +737,8 @@
 		}
 
 		$(function () {
+			loadEmpInfo();
 			
-			
-		  loadEmpInfo();
-		  
-		  function loadEmpInfo() {
-		      const token = localStorage.getItem('token');
-		      $.ajax({
-		        url: "/file/emp/check",
-		        type: "get",
-		        headers: {
-		          "Authorization": "Bearer " + token
-		        },
-		        success: function(result) {
-		     		var empIdx = result.empIdx;
-		     		console.log(result.empIdx);
-		     		console.log(result.roleName);
-		        },
-		        error: function(xhr, status, err) {
-		          alert("로그인 사원 정보를 불러오는데 실패했습니다.");
-		        }
-		      });
-		  }
-			
-			
-			
-			/* [요약 탭] 초기화 */
 			getSummaryCount(); 	// 결재 상태별 문서 수 표시
 			getSummaryData([$('#btn-in_review').val()]); // 리뷰 대기 문서 목록 표시
 

@@ -176,7 +176,7 @@ div.table-detail, span.table-detail {
 	
 	<script>
 	
-		function redirectPage() {
+		function redirectDashboardPage() {
 		    const token = localStorage.getItem('token');
 		    $.ajax({
 		        url: "checkAuthority/admin/dashboard/publishing",
@@ -196,6 +196,7 @@ div.table-detail, span.table-detail {
 	
 		// 로그인 사원 정보
 		let empIdx = 0;
+		let roleName = null;
 		function loadEmpInfo() {
 		     const token = localStorage.getItem('token');
 		     $.ajax({
@@ -206,10 +207,12 @@ div.table-detail, span.table-detail {
 		       },
 		       success: function(result) {
 		    		empIdx = result.empIdx; // 로그인한 사원의 idx정보 저장
-		    		redirectPage();
+		    		roleName = result.roleName;
+		    		redirectDashboardPage();
 		       },
 		       error: function(xhr, status, err) {
-		         alert("로그인 사원 정보를 불러오는데 실패했습니다.");
+		         alert("로그인이 필요한 서비스입니다.");
+		         location.href = "/setting/loginForm";
 		       }
 		     });
 		 }

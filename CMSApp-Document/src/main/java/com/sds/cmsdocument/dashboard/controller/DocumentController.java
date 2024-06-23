@@ -41,14 +41,13 @@ public class DocumentController {
 	}
 	
 	@GetMapping("/checkAuthority/admin/dashboard/publishing")
-	public ResponseEntity<?> checkAuthorityForMypage(@RequestHeader(name="Authorization") String header) {
+	public ResponseEntity<?> checkAuthorityForPublishingPage(@RequestHeader(name="Authorization") String header) {
 	    String token = header.replace("Bearer ", "");
 	    Emp emp = jwtValidService.getEmpFromJwt(token);
 	    String roleName = emp.getRole().getRoleName();
 	    
 	    Map<String, String> response = new HashMap<>();
 	    if(roleName.equals("Admin")) {
-	        response.put("url", "/admin/dashboard/publishing");
 	        return ResponseEntity.ok(response);
 	    } else {
 	        response.put("url", "/error");
