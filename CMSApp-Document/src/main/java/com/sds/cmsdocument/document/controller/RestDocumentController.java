@@ -126,6 +126,7 @@ public class RestDocumentController {
 			//final List<String> objectIdxList){//, final int empIdx) {
 		List<String> objectIdxList = (List<String>)request.get("objectIdxList");
 		Integer empIdx = (Integer)request.get("empIdx");
+		System.out.println(empIdx);
 		
 		int countAll = objectIdxList.size();
 		int countFail = 0;
@@ -240,11 +241,9 @@ public class RestDocumentController {
 	
 	//리뷰요청
 	@PostMapping("/document/review/request")
-	public ResponseEntity reviewRequest(
-			@RequestParam("documentIdx") int documentIdx,
-			@RequestParam("comments") String comments,
-			@RequestParam("empIdx") int empIdx) {
-		Emp emp = new Emp(empIdx); // 임시 지정
+	public ResponseEntity reviewRequest(@RequestParam("documentIdx") int documentIdx, @RequestParam("empIdx") int empIdx,
+														@RequestParam("comments") String comments) {
+		Emp emp = new Emp(empIdx);
 		Document document = new Document(documentIdx);
 		MasterCode masterCode = new MasterCode(200);
 		DocumentVersion documentVersion = new DocumentVersion(document, masterCode, emp, comments);

@@ -219,6 +219,7 @@ $(function(){
               contentType: 'application/json',
               success: function(result, status, xhr) {
                   alert('휴지통을 성공적으로 비웠어요');
+                  location.reload(true);
               },
               error: function(status, xhr, err) {
                   alert('휴지통을 비우는데 실패했어요');
