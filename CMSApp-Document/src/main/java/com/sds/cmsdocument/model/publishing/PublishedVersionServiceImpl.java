@@ -57,7 +57,7 @@ public class PublishedVersionServiceImpl implements PublishedVersionService {
 	}
 	
 	// 배포 대기 문서 목록 생성
-	@Transactional(propagation = Propagation.REQUIRED)
+	@Transactional
 	public List<PublishedVersion> selectWaitingQueue()
 		throws PublishedVersionException {
 		List<PublishedVersion> newPublishedVerList = new ArrayList<PublishedVersion>(); 		// 배포판 테이블에 배포할 문서 목록 생성
@@ -96,7 +96,7 @@ public class PublishedVersionServiceImpl implements PublishedVersionService {
 					}
 					// 배포된 적 없다면
 				} else {
-					log.debug("아직 리뷰되지 않은 문서입니다.");
+					log.debug("배포된 적 없는 문서입니다.");
 					continue; // 안 됨
 				}
 			}
@@ -113,7 +113,8 @@ public class PublishedVersionServiceImpl implements PublishedVersionService {
 				if (lastPublishedVersion != null) {
 					log.debug("변경 사항이 있는 문서 중 리뷰 진행 중이거나 반려된 문서");
 					excludedDocList.add(doc);
-					throw new PublishedVersionException("변경된 문서 중 상태가 확정되지 않은 문서가 있습니다.");
+					continue;
+					//throw new PublishedVersionException("변경된 문서 중 상태가 확정되지 않은 문서가 있습니다.");
 				}
 			}
 			
@@ -126,7 +127,7 @@ public class PublishedVersionServiceImpl implements PublishedVersionService {
 	}
 	
 	// 배포 대기 문서 목록 생성 (오버로딩) - 배포용
-	@Transactional(propagation = Propagation.REQUIRED)
+	@Transactional
 	public List<PublishedVersion> selectWaitingQueue(PublishedVersionName publishedVersionName)
 		throws PublishedVersionException {
 		List<PublishedVersion> newPublishedVerList = new ArrayList<PublishedVersion>(); 		// 배포판 테이블에 배포할 문서 목록 생성
@@ -165,7 +166,7 @@ public class PublishedVersionServiceImpl implements PublishedVersionService {
 					}
 					// 배포된 적 없다면
 				} else {
-					log.debug("아직 리뷰되지 않은 문서입니다.");
+					log.debug("배포된 적 없는 문서입니다.");
 					continue; // 안 됨
 				}
 			}
