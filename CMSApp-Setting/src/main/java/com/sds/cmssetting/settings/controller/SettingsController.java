@@ -73,10 +73,13 @@ public class SettingsController {
 	    Emp emp = jwtValidService.getEmpFromJwt(token);
 	    String empName = emp.getEmpName();
 	    String roleName = emp.getRole().getRoleName();
+	    int empIdx = emp.getEmpIdx();
 	    
 	    Map<String, String> response = new HashMap<>();
 	    response.put("empName", empName);
 	    response.put("roleName", roleName);
+	    response.put("empIdx", ""+empIdx);
+	    
 	    if(empName!=null && roleName!=null)
 	    	return ResponseEntity.ok(response);
 	    else

@@ -1,5 +1,7 @@
 <th:block th:fragment="footer_script">
 	<script>
+		var empIdx;
+	
 		function redirectPage(pageUrl) {
 		    const token = localStorage.getItem('token');
 		    $.ajax({
@@ -48,6 +50,8 @@
                     // 사용자 정보 설정
                     const userName = result.empName;
                     const userRole = result.roleName;
+                    empIdx = parseInt(result.empIdx, 10);
+                    console.log("empIdx: "+empIdx);
                     
                     // 사용자 이름 업데이트
                     document.getElementById('user-name').textContent = userName;
