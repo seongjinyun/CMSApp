@@ -3,9 +3,11 @@
         $(document).ready(function () {
             // 초기 최상위 폴더(프로젝트) 로드
             loadTopLevelProjects();
+            console.log("sidebar_script.html 로드 완료");
         });
 
         function loadTopLevelProjects() {
+        	console.log("TopLevelProject() 호출");
             $.ajax({
                 url: '/file/sidebar/folder',
                 method: 'GET',
@@ -13,17 +15,21 @@
                     if (!Array.isArray(result)) {
                         result = [result];
                     }
+                    console.log("TopLeverProject() 요청 성공");
                     result.forEach(folder => {
                         renderFolder(folder, $('#folderTree'));
+                        console.log("renderFolder() TopLevelProject()에서 호출");
                     });
                 },
                 error: function (error) {
                     console.error('Error loading top level projects:', error);
                 }
             });
+            console.log("topLeverProject() 종료");
         }
 
         function loadFolder(folderIdx, parentElement) {
+        	console.log("loadFolder() 호출");
             $.ajax({
                 url: '/file/sidebar/folder/sub',
                 method: 'GET',
@@ -31,9 +37,11 @@
                 success: function (result, status, xhr) {
                     if (!Array.isArray(result)) {
                         result = [result];
+                        console.log(result);
                     }
                     result.forEach(subFolder => {
                         renderFolder(subFolder, parentElement);
+                        console.log("loadFolder() 에서 renderFolder() 호출");
                     });
                 },
                 error: function (error) {
@@ -43,6 +51,7 @@
         }
 
         function renderFolder(folder, parentElement) {
+        	console.log("renderFolder() 호출");
             let depth = folder.depth || 0;
             let folderHTML = `<li class="nav-item">
                                     <a href="/file/document/list?folderIdx=${folder.folderIdx}" class="nav-link" data-folder-id="${folder.folderIdx}">
@@ -81,6 +90,7 @@
 
         // 클릭 이벤트 핸들러 (드롭다운용)
         $(document).on('click', '.toggle-dropdown', function (e) {
+        	console.log("드롭다운");
             e.preventDefault();
             const folderId = $(this).data('folder-id');
             const $this = $(this);
@@ -96,6 +106,7 @@
 
         // 클릭 이벤트 핸들러 (문서용)
         $(document).on('click', '.nav-link[data-doc-id]', function (e) {
+        	console.log("문서 redirect");
             e.preventDefault();
             const docId = $(this).data('doc-id');
             const folderId = $(this).data('folder-id');
