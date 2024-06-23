@@ -349,8 +349,6 @@
 		<th:block th:replace="~{elements/sidebar_script :: sidebar_script}" />
 	<!-- /.사이드바 디렉토리 관련 로직 -->
 	
-			<!-- footerScript -->
-	<th:block th:replace="~{fragments/footer_script :: footer_script}"/>
 	
 	<!-- select2 js 파일 -->
 	<script src="/file/admin/plugins/select2/js/select2.full.min.js"></script>
@@ -390,10 +388,10 @@
 		}
 		
 		// 0623 추가: setting 마이크로서비스로 리다이렉트
-		function redirectSetting(pageUrl) {
+		function redirectSetting(serverUrl, pageUrl) {
 		    const token = localStorage.getItem('token');
 		    $.ajax({
-		        url: "/setting/checkAuthority" + pageUrl,
+		        url: serverUrl + "/checkAuthority" + pageUrl,
 		        type: "get",
 		        headers: {
 		            "Authorization": "Bearer " + token
