@@ -84,10 +84,15 @@ public class RestDocumentController {
 	
 	// 리뷰 중 문서에 대하여 [리뷰 완료] 버튼 클릭 (200  -> 300)
 	@PostMapping("/admin/document/{documentIdx}/status/reviewed")
-	public ResponseEntity<?> changeStatusToReviewed(@PathVariable(value="documentIdx") int documentIdx, RequestDocStatusChanging requestDTO) {
+	public ResponseEntity<?> changeStatusToReviewed(
+			@PathVariable(value="documentIdx") int documentIdx, 
+			RequestDocStatusChanging requestDTO) {
 		
 		// review 권한이 있는 사원인지(admin 역할) 검증
-		Emp emp = new Emp(1); // 임시값
+		if (!requestDTO.getRoleName().equals("Admin")) return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ErrorResponse("권한이 없는 사용자입니다."));
+		
+		// 사원 번호 가져오기
+		Emp emp = new Emp(requestDTO.getEmpIdx());
 		
 		// 현재 문서 상태가 '리뷰 중' (200)인 문서인지 검증
 		MasterCode masterCode = documentVersionService.selectByDocumentIdx(documentIdx).getMasterCode();
@@ -112,7 +117,10 @@ public class RestDocumentController {
 	@PostMapping("/admin/document/{documentIdx}/status/rejected")
 	public ResponseEntity<?> changeStatusToRejected(@PathVariable(value="documentIdx") int documentIdx, RequestDocStatusChanging requestDTO) {
 		// review 권한이 있는 사원인지(admin 역할) 검증
-		Emp emp = new Emp(1); // 임시값
+		if (!requestDTO.getRoleName().equals("Admin")) return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ErrorResponse("권한이 없는 사용자입니다."));
+		
+		// 사원 번호 가져오기
+		Emp emp = new Emp(requestDTO.getEmpIdx());
 		
 		// 현재 문서 상태가 '리뷰 중' (200)인 문서인지 검증
 		MasterCode masterCode = documentVersionService.selectByDocumentIdx(documentIdx).getMasterCode();
@@ -134,8 +142,11 @@ public class RestDocumentController {
 	// 반려 문서에 대하여 [확인] 버튼 클릭 (500 -> 100), 버전 되돌리기
 	@PostMapping("/admin/document/{documentIdx}/status/confirm")
 	public ResponseEntity<?> changeStatusBackToDraft(@PathVariable(value="documentIdx") int documentIdx, RequestDocStatusChanging requestDTO) {
-		// 해당 문서가 소속된 project에 접근할 수 있는 부서인지 검증
-		Emp emp = new Emp(1); // 임시값
+
+		// 사원 번호 가져오기
+		Emp emp = new Emp(requestDTO.getEmpIdx());
+		
+		// 해당 프로젝트에 접근할 수 있는 사원인지 검증
 		
 		// 현재 문서 상태가 '반려' (500)인 문서인지 검증
 		MasterCode masterCode = documentVersionService.selectByDocumentIdx(documentIdx).getMasterCode();

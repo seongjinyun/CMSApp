@@ -49,7 +49,7 @@ public class MainPublishingServiceImpl implements MainPublishingService {
 		publishedVersionService.registPublishedVersion(publishedVerList);
 		
 		// document_version 테이블에서 배포한 문서의 상태 변경하기
-		Emp emp = new Emp(1); // 임시
+		Emp emp = new Emp(publishingDTO.getEmpIdx()); // 배포 요청자
 		
 		List<DocumentVersion> documentVersionList = new ArrayList<DocumentVersion>();
 		for (PublishedVersion pv : publishedVerList) {
