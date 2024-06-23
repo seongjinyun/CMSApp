@@ -38,8 +38,9 @@
 										class="nav-icon far fa-calendar-alt"></i>
 									<p>나의 활동</p>
 								</a></li>
-							<li class="nav-item"><a href="/file/admin/dashboard/publishing" class="nav-link"> <i
-										class="nav-icon far fa-plus-square"></i>
+							<li class="nav-item">
+								<a href="/file/admin/dashboard/publishing" class="nav-link"> 
+							<i class="nav-icon far fa-plus-square"></i>
 									<p>배포 관리</p>
 								</a></li>
 						</ul>
@@ -55,15 +56,13 @@
 						</a>
 						<ul class="nav nav-treeview">
 							<li class="nav-item">
-
-								<a href="/file/document/list" class="nav-link">
-
+								<a href="javascript:void(0);" class="nav-link" onclick="redirectSetting('/file', '/document/list')">
 									<i class="fas fa-archive nav-icon"></i>
 									<p>전체보기</p>
 								</a>
 							</li>
 							<li class="nav-item">
-								<a href="/file/document/trash" class="nav-link">
+								<a href="javascript:void(0);" class="nav-link" onclick="redirectSetting('/file', '/document/trash')">
 									<i class="far fa-trash-alt nav-icon"></i>
 									<p>휴지통</p>
 								</a>
@@ -95,27 +94,27 @@
 						</a>
 						<ul class="nav nav-treeview">
 							<li class="nav-item">
-							    <a href="javascript:void(0);" class="nav-link" onclick="redirectSetting('/setting/dept_project')">
+							    <a href="javascript:void(0);" class="nav-link" onclick="redirectSetting('/setting', '/setting/dept_project')">
 							        <i class="fas fa-building nav-icon"></i>
 							        <p>부서 및 프로젝트</p>
 							    </a>
 							</li>
 							<li class="nav-item">
 
-							    <a href="javascript:void(0);" class="nav-link" onclick="redirectSetting('/setting/mypage')">
+							    <a href="javascript:void(0);" class="nav-link" onclick="redirectSetting('/setting', '/setting/mypage')">
 							        <i class="fas fa-user nav-icon"></i>
 							        <p>개인 정보 변경</p>
 							    </a>
 							</li>
 							<li class="nav-item">
-							    <a href="javascript:void(0);" class="nav-link" onclick="redirectSetting('/setting/user')">
+							    <a href="javascript:void(0);" class="nav-link" onclick="redirectSetting('/setting', '/setting/user')">
 
 							        <i class="fas fa-users nav-icon"></i>
 							        <p>이용자 관리</p>
 							    </a>
 							</li>
 							<li class="nav-item">
-							    <a href="javascript:void(0);" class="nav-link" onclick="redirectSetting('/setting/role')">
+							    <a href="javascript:void(0);" class="nav-link" onclick="redirectSetting('/setting', '/setting/role')">
 
 							        <i class="fas fa-eye nav-icon"></i>
 							        <p>역할 및 권한</p>
@@ -130,3 +129,5 @@
 		</div>
 	</aside>
 </th:block>
+	
+

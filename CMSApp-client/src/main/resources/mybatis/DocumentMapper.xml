@@ -64,21 +64,29 @@
         FROM published_version p
         JOIN document d ON p.document_idx = d.document_idx
         JOIN version_log v ON p.version_log_idx = v.version_log_idx
-        WHERE d.folder_idx = #{folder.folderIdx}
+        WHERE d.folder_idx = #{folder.folderIdx} AND p.published_version_name_idx = (
+          SELECT MAX(pv.published_version_name_idx)
+          FROM published_version pv
+      )
     </select>
 	
 	<select id="getPublishedVersionByDocumentIdx" parameterType="int" resultMap="publishedVersionResultMap">
-        SELECT
-            p.published_version_idx,
-            p.document_idx,
-            p.version_log_idx,
-            p.published_version_name_idx,
-            d.folder_idx,
-            v.title,
-            v.content
-        FROM published_version p
-        JOIN document d ON p.document_idx = d.document_idx
-        JOIN version_log v ON p.version_log_idx = v.version_log_idx
-        WHERE p.document_idx = #{documentIdx}
+	    SELECT
+	        p.published_version_idx,
+	        p.document_idx,
+	        p.version_log_idx,
+	        p.published_version_name_idx,
+	        d.folder_idx,
+	        v.title,
+	        v.content
+	    FROM published_version p
+	    JOIN document d ON p.document_idx = d.document_idx
+	    JOIN version_log v ON p.version_log_idx = v.version_log_idx
+	    WHERE p.document_idx = #{documentIdx}
+	      AND p.published_version_name_idx = (
+	          SELECT MAX(pv.published_version_name_idx)
+	          FROM published_version pv
+	          WHERE pv.document_idx = #{documentIdx}
+	      )
     </select>
 </mapper>

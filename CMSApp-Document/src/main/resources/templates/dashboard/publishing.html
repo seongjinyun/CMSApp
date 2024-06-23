@@ -159,7 +159,9 @@ div.table-detail, span.table-detail {
 	<th:block th:replace="~{fragments/footer_link :: footer_link}" />
 		<th:block th:replace="~{elements/sidebar_script :: sidebar_script}" />
 	<!-- /.사이드바 디렉토리 관련 로직 -->
-
+		<!-- footerScript -->
+	<th:block th:replace="~{fragments/footer_script :: footer_script}"/>
+	
 	<!-- datatables js 파일 -->
 	<script src="/file/admin/plugins/datatables/jquery.dataTables.min.js"></script>
 	<script src="/file/admin/plugins/datatables-bs4/js/dataTables.bootstrap4.min.js"></script>

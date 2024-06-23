@@ -7,10 +7,13 @@ package com.sds.cmsdocument.document.controller;
 	import java.util.Map;
 
 	import org.springframework.beans.factory.annotation.Autowired;
-	import org.springframework.stereotype.Controller;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Controller;
 	import org.springframework.ui.Model;
 	import org.springframework.web.bind.annotation.GetMapping;
-	import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestHeader;
+import org.springframework.web.bind.annotation.RequestMapping;
 	import org.springframework.web.bind.annotation.RequestParam;
 
 	import com.sds.cmsdocument.common.Pager;
@@ -19,12 +22,13 @@ package com.sds.cmsdocument.document.controller;
 	import com.sds.cmsdocument.domain.Folder;
 	import com.sds.cmsdocument.domain.Trash;
 	import com.sds.cmsdocument.domain.VersionLog;
-	import com.sds.cmsdocument.model.document.DocumentEditingService;
+import com.sds.cmsdocument.jwt.JwtValidService;
+import com.sds.cmsdocument.model.document.DocumentEditingService;
 	import com.sds.cmsdocument.model.document.DocumentService;
 	import com.sds.cmsdocument.model.folder.FolderService;
 	import com.sds.cmsdocument.model.trash.TrashService;
 
-	import lombok.extern.slf4j.Slf4j;
+import lombok.extern.slf4j.Slf4j;
 
 	@Slf4j
 	@Controller
@@ -45,6 +49,9 @@ package com.sds.cmsdocument.document.controller;
 		@Autowired
 		private FolderService folderService;
 		
+	    @Autowired
+	    private JwtValidService jwtValidService;
+	    
 		//글 작성 폼
 		@GetMapping("/document/writeform")
 		public String getDocument(Model model,@RequestParam(value="folderIdx") int folderIdx) {
@@ -102,7 +109,23 @@ package com.sds.cmsdocument.document.controller;
 				return "documents/list";
 			}
 		} 
-
+		
+		@GetMapping("/checkAuthority/document/list")
+		public ResponseEntity<?> checkAuthorityForList(@RequestHeader(name="Authorization") String header) {
+		    String token = header.replace("Bearer ", "");
+		    Emp emp = jwtValidService.getEmpFromJwt(token);
+		    String roleName = emp.getRole().getRoleName();
+		    
+		    Map<String, String> response = new HashMap<>();
+		    if(roleName.equals("Admin") || roleName.equals("Draft Writer")) {
+		        response.put("url", "/file/document/list");
+		        return ResponseEntity.ok(response);
+		    } else {
+		        response.put("url", "/error");
+		        return ResponseEntity.status(HttpStatus.FORBIDDEN).body(response);
+		    }
+		}
+		
 		//휴지통
 		@GetMapping("/document/trash")
 		public String getTrash(Model model, @RequestParam(value="currentPage", defaultValue="1") int currentPage) {
@@ -113,6 +136,22 @@ package com.sds.cmsdocument.document.controller;
 			List<Trash> trashList = trashService.selectAllWithRange(map);
 			model.addAttribute(trashList);
 			return "documents/trash";
+		}
+		
+		@GetMapping("/checkAuthority/document/trash")
+		public ResponseEntity<?> checkAuthorityForTrash(@RequestHeader(name="Authorization") String header) {
+		    String token = header.replace("Bearer ", "");
+		    Emp emp = jwtValidService.getEmpFromJwt(token);
+		    String roleName = emp.getRole().getRoleName();
+		    
+		    Map<String, String> response = new HashMap<>();
+		    if(roleName.equals("Admin") || roleName.equals("Draft Writer")) {
+		        response.put("url", "/file/document/trash");
+		        return ResponseEntity.ok(response);
+		    } else {
+		        response.put("url", "/error");
+		        return ResponseEntity.status(HttpStatus.FORBIDDEN).body(response);
+		    }
 		}
 		
 		//즐겨찾기
@@ -152,13 +191,13 @@ package com.sds.cmsdocument.document.controller;
 	            						@RequestParam("folderIdx") int folderIdx,
 	            						Model model) {
 	        // 이미 다른 사용자가 수정 중이면 접근을 막음
-//	        if (editingService.isDocumentBeingEdited(documentIdx)) {
-//	            model.addAttribute("serverMessage", "다른 사용자가 수정 중인 문서입니다.");
-//	            return "redirect:/document/list"; // 예시로 리스트 페이지로 리다이렉트
-//	        }
-//	        
-//	        // 해당 문서를 수정 중으로 표시
-//	        editingService.addEditingDocument(documentIdx);
+	        if (editingService.isDocumentBeingEdited(documentIdx)) {
+	            model.addAttribute("serverMessage", "다른 사용자가 수정 중인 문서입니다.");
+	            return "error/edit_error"; // 예시로 리스트 페이지로 리다이렉트
+	        }
+	        
+	        // 해당 문서를 수정 중으로 표시
+	        editingService.addEditingDocument(documentIdx);
 	        
 			DocumentVersion documentVersion  = documentService.documentDetailSelect(documentIdx);
 			model.addAttribute("documentVersion", documentVersion);
