@@ -64,6 +64,8 @@
 		<div class="content-wrapper">
 			<section class="content">
 				<div class="row">
+					<div class="col-6">
+					</div>
 					
 					<div class="col-6">
 						<div class="float-right">
@@ -320,16 +322,20 @@
 				let objectIdxList = new Array();
 				objectIdxList.push(objectIdx);
 				console.log(objectIdxList);
-				$.ajax({
-					url : "/file/document/list/trash",
-					data : {
+				let currentEmpIdx = 1;
+				let request = {
 						objectIdxList: objectIdxList,
 						empIdx: currentEmpIdx
-					},
+				};
+				$.ajax({
+					url : "/file/document/list/trash",
+					data : JSON.stringify(request),
 					method : "POST",
 					contentType : "application/json",
 					success : function(result, status, xhr) {
 						alert("문서를 성공적으로 휴지통에 보냈어요" + result);
+						location.href = "/file/document/list?folderIdx=" + $("input[name='folderIdx']").val();
+						console.log("/file/document/list?folderIdx=" + $("input[name='folderIdx']").val());
 					},
 					error : function(status, xhr, err) {
 						alert("문서를 휴지통으로 보내는데 실패했어요");
