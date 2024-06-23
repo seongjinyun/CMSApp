@@ -232,17 +232,13 @@
     <!-- ./wrapper -->
 
     <th:block th:replace="~{fragments/footer_link :: footer_link}" />
+	<th:block th:replace="~{elements/sidebar_script :: sidebar_script}"/>
     <th:block th:replace="~{elements/datatables_footer_link :: datatables_footer_link}" />
-    <th:block th:replace="~{elements/advanced_forms_footer_link :: advanced_forms_footer_link}" />
-    
-    <!-- 사이드바 디렉토리 관련 로직 -->
-  	<th:block th:replace="~{elements/sidebar_script :: sidebar_script}"/>
-  	<!-- /.사이드바 디렉토리 관련 로직 -->
-    
-
+    <th:block th:replace="~{elements/advanced_forms_footer_link :: advanced_forms_footer_link}" />    
 </body>
 
 </html>
+
 <th:block th:replace="~{fragments/footer_script :: footer_script}"/>
 <script type="text/javascript">
     // 추가 form에 보여질 프로젝트 option 태그 채우기
