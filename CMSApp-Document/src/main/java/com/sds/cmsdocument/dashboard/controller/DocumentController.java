@@ -1,5 +1,6 @@
 package com.sds.cmsdocument.dashboard.controller;
 
+
 import java.util.HashMap;
 import java.util.Map;
 
@@ -13,11 +14,14 @@ import org.springframework.web.bind.annotation.RequestHeader;
 import com.sds.cmsdocument.domain.Emp;
 import com.sds.cmsdocument.jwt.JwtValidService;
 
+import lombok.extern.slf4j.Slf4j;
+
+@Slf4j
 @Controller(value="dashboardDocumentController")
 public class DocumentController {
 	
 	@Autowired
-	JwtValidService jwtValidService;
+	private JwtValidService jwtValidService;
 
 	@GetMapping("/dashboard/activity")
 	public String getAdminDashboardActivity() {
@@ -45,6 +49,7 @@ public class DocumentController {
 	    String token = header.replace("Bearer ", "");
 	    Emp emp = jwtValidService.getEmpFromJwt(token);
 	    String roleName = emp.getRole().getRoleName();
+	    log.debug("" + roleName);
 	    
 	    Map<String, String> response = new HashMap<>();
 	    if(roleName.equals("Admin")) {
