@@ -246,7 +246,8 @@
 				type : 'POST',
 				data : {
 					documentIdx : $("#documentIdx").val(),
-					comments : $("input[name=status-comments]").val()
+					comments : $("input[name=status-comments]").val(),
+					empIdx : empIdx
 				},
 				success : function(result, status, xhr) { //200
 					alert("리뷰 요청 성공");
