@@ -69,7 +69,7 @@ public class RestDocumentController {
 		VersionLog versionLog = documentRequest.getVersionLog();
 
 		log.debug("document 안의 folderIdx " + document.getFolder().getFolderIdx());
-		log.debug("document 안의 empIdx is " + document.getEmp().getEmpIdx());
+		log.debug("version 안의 empIdx is " + versionLog.getEmp().getEmpIdx());
 		log.debug("version log title is " + versionLog.getTitle());
 		log.debug("version log content is " + versionLog.getContent());
 
@@ -87,9 +87,9 @@ public class RestDocumentController {
 		VersionLog versionLog = documentRequest.getVersionLog();
 		
         // 다른 사용자가 수정 중인 경우 예외 처리 또는 처리 로직 추가
-        if (!editingService.isDocumentBeingEdited(versionLog.getDocument().getDocumentIdx())) {
-            return ResponseEntity.status(HttpStatus.FORBIDDEN).body("다른 사용자가 수정 중인 문서입니다.");
-        }
+//        if (!editingService.isDocumentBeingEdited(versionLog.getDocument().getDocumentIdx())) {
+//            return ResponseEntity.status(HttpStatus.FORBIDDEN).body("다른 사용자가 수정 중인 문서입니다.");
+//        }
         
         // 수정 완료 후 해당 문서의 수정 중 표시를 제거
         editingService.removeEditingDocument(versionLog.getDocument().getDocumentIdx());
@@ -100,14 +100,14 @@ public class RestDocumentController {
 	}
 	
 	//페이지에서 벗어날 시 AJAX 요청을 받아 수정 중인 상태를 해제하는 컨트롤러 메서드
-//	@PostMapping("/document/releaseEditing")
-//	@ResponseBody
-//	public ResponseEntity<String> releaseEditing(@RequestParam("documentIdx") int documentIdx) {
-//	    editingService.removeEditingDocument(documentIdx);
-//	    
-//	    System.out.println("releaseEditing 실행");
-//	    return ResponseEntity.ok("수정 중 상태 해제 완료");
-//	}
+	@PostMapping("/document/releaseEditing")
+	@ResponseBody
+	public ResponseEntity<String> releaseEditing(@RequestParam("documentIdx") int documentIdx) {
+		System.out.println("releaseEditing 실행");
+	    editingService.removeEditingDocument(documentIdx);
+	    
+	    return ResponseEntity.ok("수정 중 상태 해제 완료");
+	}
 	
 	@GetMapping("/document/folder/list")
 	public ResponseEntity getFolderList() throws FolderException {

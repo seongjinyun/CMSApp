@@ -26,8 +26,6 @@
 	margin-bottom: 5px;
 }
 
-
-
 .timeline-wrapper {
 	height: 100%; /* 원하는 높이로 설정 */
 	overflow-y: auto; /* 세로 스크롤 활성화 */
@@ -54,13 +52,14 @@
 			<section class="content">
 				<div class="row">
 					<div class="col d-flex align-items-center">
-					    <h4 class="mb-0">글 작성</h4>
-					  </div>
+						<h4 class="mb-0">글 작성</h4>
+					</div>
 					<div class="col-6">
 						<div class="float-right">
 
 
-							<button type="button" class="btn btn-default" id="document_list" onclick="getList();">
+							<button type="button" class="btn btn-default" id="document_list"
+								onclick="getList();">
 								<i class="far fa-list-alt"></i>목록
 							</button>
 
@@ -78,26 +77,31 @@
 					<div class="col-md-12">
 						<div class="card card-outline card-info">
 							<form id="form1">
-								<input type="hidden" id="folderIdx" name="document.folder.folderIdx" th:value="${folderIdx}"> 
+								<input type="hidden" id="folderIdx" name="document.folder.folderIdx" th:value="${folderIdx}">
 								<input type="hidden" id="documentIdx" name="versionLog.document.documentIdx" th:value="${documentIdx}"> 
 								<input type="hidden" id="versionLogIdx" name="versionLog.versionLogIdx" th:value="${versionLogIdx}"> 
-								<input type="hidden" name="document.emp.empIdx" th:value="1">
+								<input type="hidden" name="versionLog.emp.empIdx" id="empIdxInput" th:value="${empIdx}" />
+								
 								<div class="card-header">
 									<div class="col-sm-12">
 										<input type="text" name="versionLog.title"
-											class="form-control" id="" placeholder="제목..." th:value="${documentVersion.versionLog.title}">
+											class="form-control" id="" placeholder="제목..."
+											th:value="${documentVersion.versionLog.title}">
 									</div>
 								</div>
 								<!-- /.card-header -->
 								<div class="card-body">
-									<textarea name="versionLog.content" id="summernote" rows="6" th:text="${documentVersion.versionLog.content}">
+									<textarea name="versionLog.content" id="summernote" rows="6"
+										th:text="${documentVersion.versionLog.content}">
 					             </textarea>
 								</div>
 								<div class="card-footer">
-								  <div class="col-sm-12">
-								    <h5>Comments</h5>
-								    <textarea name="versionLog.comments" id="comments" rows="2" class="form-control" th:text="${documentVersion.versionLog.comments}"></textarea>
-								  </div>
+									<div class="col-sm-12">
+										<h5>Comments</h5>
+										<textarea name="versionLog.comments" id="comments" rows="2"
+											class="form-control"
+											th:text="${documentVersion.versionLog.comments}"></textarea>
+									</div>
 								</div>
 							</form>
 						</div>
@@ -120,6 +124,10 @@
 	<!-- ./wrapper -->
 
 	<th:block th:replace="~{fragments/footer_link :: footer_link}" />
+
+	<!-- footerScript -->
+	<th:block th:replace="~{fragments/footer_script :: footer_script}" />
+
 	<script type="text/javascript">
 		$(function() {
 			// Summernote276
@@ -131,6 +139,35 @@
 			});
 		})
 
+		$(window).on('beforeunload', function(e) {
+			// AJAX 요청을 비동기적으로 보냄
+			$.ajax({
+				url : "/file/document/releaseEditing",
+				type : "POST",
+				async : true, // 동기적 요청으로 변경
+				data : {
+					documentIdx : $("#documentIdx").val()
+				},
+				success : function(response) {
+					console.log("수정 중 상태 해제 완료");
+				},
+				error : function(xhr, status, error) {
+					console.error("AJAX 오류 발생: " + error);
+				}
+			});
+
+			// 사용자에게 경고 메시지를 표시하여 페이지를 떠날 때 확인을 요청
+			var confirmationMessage = "이 페이지를 떠나면 수정 중인 상태가 해제됩니다.";
+			e.returnValue = confirmationMessage;
+			return confirmationMessage;
+		});
+
+		// 확인 버튼을 눌렀을 때의 처리
+		$(window).on('unload', function() {
+			// 여기에 추가적인 처리를 할 수 있습니다.
+			console.log("페이지를 떠납니다.");
+		});
+
 		function edit() {
 			// 서머노트의 현재 내용을 HTML 형식으로 가져옴
 			var htmlContent = $('#summernote').summernote('code');
@@ -138,18 +175,19 @@
 			// 가져온 HTML 내용을 해당 폼의 textarea에 설정.
 			// 폼 데이터에 서머노트의 내용이 HTML 형식으로 포함됨
 			$('textarea[name="versionLog.content"]').html(htmlContent);
-			
-		    
+
 			$.ajax({
-				url:"/file/document/edit",
-				type:"post",
-				data:$("#form1").serialize(),
-				success:function(result, status, xhr){ //200
+				url : "/file/document/edit",
+				type : "post",
+				data : $("#form1").serialize(),
+				success : function(result, status, xhr) { //200
 					alert("성공");
-					location.href="/file/document/detail?documentIdx="+ $("#documentIdx").val() + "&folderIdx=" + $("#folderIdx").val();
+					location.href = "/file/document/detail?documentIdx="
+							+ $("#documentIdx").val() + "&folderIdx="
+							+ $("#folderIdx").val();
 					//location.href="/file/document/detail?folder_idx="+$("#folder_idx").val();
 				},
-				error:function(xhr, status, err){
+				error : function(xhr, status, err) {
 					alert("등록실패");
 				}
 			})
@@ -163,7 +201,7 @@
 				focus : true, // 에디터 로딩후 포커스를 맞출지 여부
 				lang : "ko-KR", // 한글 설정
 				placeholder : '내용을 입력하세요.' //placeholder 설정
-				
+
 			});
 		}
 
@@ -173,26 +211,24 @@
 				$('#draftPopup').toggle();
 			});
 		}
-		
-	    function getList(){
-	    	location.href = "/file/document/list?folderIdx="+ $("#folderIdx").val();
-	    }
-	    
-		//빈공간 클릭시 draft or version sidebar 비활성화 스크립트
-		$(document)
-				.ready(
-						function() {
-							$(document)
-									.click(
-											function(event) {
-												if (!$(event.target)
-														.closest(
-																'#draftButton, #draftPopup').length) {
-													$('#draftPopup').hide();
-												}
-											});
 
-						});
+		function getList() {
+			location.href = "/file/document/list?folderIdx="
+					+ $("#folderIdx").val();
+		}
+
+		//빈공간 클릭시 draft or version sidebar 비활성화 스크립트
+		$(document).ready(
+				function() {
+					$(document).click(
+							function(event) {
+								if (!$(event.target).closest(
+										'#draftButton, #draftPopup').length) {
+									$('#draftPopup').hide();
+								}
+							});
+
+				});
 	</script>
 </body>
 </html>
