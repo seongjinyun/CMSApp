@@ -126,6 +126,7 @@ public class RestDocumentController {
 			//final List<String> objectIdxList){//, final int empIdx) {
 		List<String> objectIdxList = (List<String>)request.get("objectIdxList");
 		Integer empIdx = (Integer)request.get("empIdx");
+		System.out.println(empIdx);
 		
 		int countAll = objectIdxList.size();
 		int countFail = 0;

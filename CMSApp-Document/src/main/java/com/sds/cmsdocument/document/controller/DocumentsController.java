@@ -69,7 +69,6 @@ import lombok.extern.slf4j.Slf4j;
 		
 		//파일목록
 		@GetMapping("/document/list")
-
 		public String getDocumentList(Model model, DocumentVersion documentVersion, @RequestParam(value="folderIdx", defaultValue = "0") final int folderIdx) {
 			if (folderIdx == 0) {
 				HashMap<String, Integer> map=new HashMap<String, Integer>();
