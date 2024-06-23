@@ -194,6 +194,24 @@ div.table-detail, span.table-detail {
 		    });
 		}
 		
+		// 0623 추가: setting 마이크로서비스로 리다이렉트
+		function redirectSetting(pageUrl) {
+		    const token = localStorage.getItem('token');
+		    $.ajax({
+		        url: "/setting/checkAuthority" + pageUrl,
+		        type: "get",
+		        headers: {
+		            "Authorization": "Bearer " + token
+		        },
+		        success: function(result) {
+		            location.href = result.url;
+		        },
+		        error: function(xhr, status, err) {
+		            alert("권한이 없습니다.");
+		        }
+		    });
+		}
+		
 		// 0623 추가: 사이드바에 이용할 사용자 정보 가져오기
 		function getUserInfo() {
 	        const token = localStorage.getItem('token');
