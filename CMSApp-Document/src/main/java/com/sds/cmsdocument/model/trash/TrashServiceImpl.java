@@ -95,7 +95,6 @@ public class TrashServiceImpl implements TrashService{
 		};
 		oneditDAO.deleteByDocumentIdx(documentIdx);
 		trashDAO.delete(trashIdx);
-		bookmarkDAO.deleteByDocumentIdx(documentIdx);
 		publishedVersionDAO.deleteByDocumentIdx(documentIdx);
 		documentVersionDAO.deleteByDocumentIdx(documentIdx);
 		versionLogDAO.deleteByDocumentIdx(documentIdx);

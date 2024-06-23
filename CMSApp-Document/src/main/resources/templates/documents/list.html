@@ -62,6 +62,7 @@
                   </div>
                   <input type="button" class="btn btn-default btn-sm" value="글 작성" id="write">
                   <input type="hidden" id=folderIdx name="folderIdx" th:value="${folderIdx}">
+                  <input type="hidden" id=empIdx name="empIdx">
                 </div>
                 
               </div>
@@ -204,6 +205,7 @@
 	
 <script>
 $(function(){
+	getUserInfo();
     checkBoxAll();
     write();
     searchFile();
@@ -211,6 +213,8 @@ $(function(){
     del();
     openCreateFolderModal();
   });
+  
+  let currentEmpIdx = 0;
   
   function checkBoxAll(){
 	  $("#checkall").click(function(){
@@ -251,11 +255,12 @@ $(function(){
 	          $('input[name="objectSelect"]:checked').each(function () {
 	            selectedIdxList.push($(this).val());
 	          });
-	          let empIdx = 1;
+	          let empIdx = currentEmpIdx;
 	          let request = {
 	          			objectIdxList: selectedIdxList,
-	          			empIdx: empIdx
+	          			empIdx: currentEmpIdx
 	          };
+	          console.log(request);
 	          $.ajax({
 	            method: "POST",
 	            url: "/file/document/list/trash",
@@ -335,6 +340,40 @@ $(function(){
       });
     }
 	}
+	
+	function getUserInfo() {
+        const token = localStorage.getItem('token');
+        $.ajax({
+            url: "/setting/getUserInfo",
+            type: "get",
+            headers: {
+                "Authorization": "Bearer " + token
+            },
+            success: function(result) {
+                // 사용자 정보 설정
+                const userName = result.empName;
+                const userRole = result.roleName;
+                CurrentEmpIdx = parseInt(result.empIdx, 10);
+                roleName = result.roleName;
+                console.log("empIdx: "+empIdx);
+                currentEmpIdx = empIdx;
+                // 사용자 이름 업데이트
+                document.getElementById('user-name').textContent = userName;
+
+                // 사용자 역할에 따라 아이콘 업데이트
+                const userIcon = document.getElementById('user-icon');
+                if (userRole === 'Admin') {
+                    userIcon.innerHTML = '<i class="fas fa-solid fa-crown" style="color: #ffffff; position: relative; top: 4px;"></i>';
+                } else if (userRole === 'Draft Writer') {
+                    userIcon.innerHTML = '<i class="fas fa-solid fa-user" style="color: #ffffff; position: relative; top: 4px;"></i>';
+                }
+            },
+            error: function(xhr, status, err) {
+                alert("로그인을 진행해주세요");
+                location.href="/setting/loginForm"
+            }
+        });
+    }
 
 
   </script>
