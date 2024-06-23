@@ -83,6 +83,14 @@ public class DocumentServiceImpl implements DocumentService {
 			map.put("folderIdx", folder.getFolderIdx());
 			resultList.addAll(documentListSelect(map));
 		}		
+		List<Integer> documentIdxInTrashList = trashDAO.selectDocumentIdx();
+
+		for(int i = 0; i < resultList.size(); i++) {
+			DocumentVersion dto = resultList.get(i);
+			if(documentIdxInTrashList.contains(dto.getDocument().getDocumentIdx())){
+				resultList.remove(i);
+			}
+		}
 		return resultList;
 	};
 	
