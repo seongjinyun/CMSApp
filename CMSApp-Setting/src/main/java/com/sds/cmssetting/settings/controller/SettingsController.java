@@ -67,6 +67,22 @@ public class SettingsController {
 		return "/login/loginForm";
 	}
 	
+	@GetMapping("/getUserInfo")
+	public ResponseEntity<?> getUserInfo(@RequestHeader(name="Authorization") String header) {
+	    String token = header.replace("Bearer ", "");
+	    Emp emp = jwtValidService.getEmpFromJwt(token);
+	    String empName = emp.getEmpName();
+	    String roleName = emp.getRole().getRoleName();
+	    
+	    Map<String, String> response = new HashMap<>();
+	    response.put("empName", empName);
+	    response.put("roleName", roleName);
+	    if(empName!=null && roleName!=null)
+	    	return ResponseEntity.ok(response);
+	    else
+	    	return ResponseEntity.status(HttpStatus.NOT_FOUND).body(response);
+	}
+	
 	/*----------------------------------------------------
 	 * 더이상 사용하지 않음
 
@@ -111,7 +127,7 @@ public class SettingsController {
 	    
 	    Map<String, String> response = new HashMap<>();
 	    if(roleName.equals("Admin")) {
-	        response.put("url", "/setting/dept_project");
+	        response.put("url", "/setting/setting/dept_project");
 	        return ResponseEntity.ok(response);
 	    } else {
 	        response.put("url", "/error");
@@ -137,6 +153,7 @@ public class SettingsController {
 	    EmpDetail empDetail = empDetailService.selectByEmpIdx(emp.getEmpIdx());
 
 	    String profileImgUrl = "/profileImg/" + empDetail.getEmpProfileUrl();
+	    log.warn(profileImgUrl);
 
 	    Map<String, Object> response = new HashMap<>();
 	    response.put("empIdx", emp.getEmpIdx());
@@ -167,7 +184,7 @@ public class SettingsController {
 	    
 	    Map<String, String> response = new HashMap<>();
 	    if(roleName.equals("Admin") || roleName.equals("Draft Writer")) {
-	        response.put("url", "/setting/mypage");
+	        response.put("url", "/setting/setting/mypage");
 	        return ResponseEntity.ok(response);
 	    } else {
 	        response.put("url", "/error");
@@ -175,7 +192,7 @@ public class SettingsController {
 	    }
 	}
 	//----------------------------------------------------------------------------------------	
-
+	
 	@GetMapping("/setting/user")
 	public String getUserInfo(@RequestParam(value="currentPage", defaultValue="1") int currentPage, Model model) {
 		
@@ -214,7 +231,7 @@ public class SettingsController {
 	    
 	    Map<String, String> response = new HashMap<>();
 	    if(roleName.equals("Admin")) {
-	        response.put("url", "/setting/user");
+	        response.put("url", "/setting/setting/user");
 	        return ResponseEntity.ok(response);
 	    } else {
 	        response.put("url", "/error");
@@ -256,7 +273,7 @@ public class SettingsController {
 	    
 	    Map<String, String> response = new HashMap<>();
 	    if(roleName.equals("Admin")) {
-	        response.put("url", "/setting/role");
+	        response.put("url", "/setting/setting/role");
 	        return ResponseEntity.ok(response);
 	    } else {
 	        response.put("url", "/error");

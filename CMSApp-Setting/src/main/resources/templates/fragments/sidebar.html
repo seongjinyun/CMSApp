@@ -10,24 +10,11 @@
 		<div class="sidebar">
 			<!-- Sidebar user panel (optional) -->
 			<div class="user-panel mt-3 pb-3 mb-3 d-flex">
-				<div class="image">
-					<img src="/setting/admin/dist/img/user2-160x160.jpg" class="img-circle elevation-2" alt="User Image">
+				<div class="image" id="user-icon">
+					<!-- roleName에 따라 동적으로 다른 아이콘을 표시 -->
 				</div>
 				<div class="info">
-					<a href="#" class="d-block">사용자 이름</a>
-				</div>
-			</div>
-
-			<!-- SidebarSearch Form -->
-			<div class="form-inline">
-				<div class="input-group" data-widget="sidebar-search">
-					<input class="form-control form-control-sidebar" type="search" placeholder="Search"
-						aria-label="Search">
-					<div class="input-group-append">
-						<button class="btn btn-sidebar">
-							<i class="fas fa-search fa-fw"></i>
-						</button>
-					</div>
+					<a href="#" class="d-block" id="user-name">사용자 이름</a>
 				</div>
 			</div>
 
@@ -76,12 +63,6 @@
 								</a>
 							</li>
 							<li class="nav-item">
-								<a href="/file/document/bookmark" class="nav-link">
-									<i class="fa fa-star nav-icon"></i>
-									<p>즐겨찾기</p>
-								</a>
-							</li>
-							<li class="nav-item">
 								<a href="/file/document/trash" class="nav-link">
 									<i class="far fa-trash-alt nav-icon"></i>
 									<p>휴지통</p>
@@ -114,25 +95,25 @@
 						</a>
 						<ul class="nav nav-treeview">
 							<li class="nav-item">
-							    <a href="javascript:void(0);" class="nav-link" onclick="redirectPage('/setting/setting/dept_project')">
+							    <a href="javascript:void(0);" class="nav-link" onclick="redirectPage('/setting/dept_project')">
 							        <i class="fas fa-building nav-icon"></i>
 							        <p>부서 및 프로젝트</p>
 							    </a>
 							</li>
 							<li class="nav-item">
-							    <a href="javascript:void(0);" class="nav-link" onclick="redirectPage('/setting/setting/mypage')">
+							    <a href="javascript:void(0);" class="nav-link" onclick="redirectPage('/setting/mypage')">
 							        <i class="fas fa-user nav-icon"></i>
 							        <p>개인 정보 변경</p>
 							    </a>
 							</li>
 							<li class="nav-item">
-							    <a href="javascript:void(0);" class="nav-link" onclick="redirectPage('/setting/setting/user')">
+							    <a href="javascript:void(0);" class="nav-link" onclick="redirectPage('/setting/user')">
 							        <i class="fas fa-users nav-icon"></i>
 							        <p>이용자 관리</p>
 							    </a>
 							</li>
 							<li class="nav-item">
-							    <a href="javascript:void(0);" class="nav-link" onclick="redirectPage('/setting/setting/role')">
+							    <a href="javascript:void(0);" class="nav-link" onclick="redirectPage('/setting/role')">
 							        <i class="fas fa-eye nav-icon"></i>
 							        <p>역할 및 권한</p>
 							    </a>

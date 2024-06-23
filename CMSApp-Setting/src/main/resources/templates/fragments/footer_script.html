@@ -3,7 +3,7 @@
 		function redirectPage(pageUrl) {
 		    const token = localStorage.getItem('token');
 		    $.ajax({
-		        url: "/checkAuthority" + pageUrl,
+		        url: "/setting/checkAuthority" + pageUrl,
 		        type: "get",
 		        headers: {
 		            "Authorization": "Bearer " + token
@@ -16,5 +16,38 @@
 		        }
 		    });
 		}
+		
+		function getUserInfo() {
+            const token = localStorage.getItem('token');
+            $.ajax({
+                url: "/setting/getUserInfo",
+                type: "get",
+                headers: {
+                    "Authorization": "Bearer " + token
+                },
+                success: function(result) {
+                    // 사용자 정보 설정
+                    const userName = result.empName;
+                    const userRole = result.roleName;
+                    
+                    // 사용자 이름 업데이트
+                    document.getElementById('user-name').textContent = userName;
+
+                    // 사용자 역할에 따라 아이콘 업데이트
+                    const userIcon = document.getElementById('user-icon');
+                    if (userRole === 'Admin') {
+                        userIcon.innerHTML = '<i class="fas fa-solid fa-crown" style="color: #ffffff; position: relative; top: 4px;"></i>';
+                    } else if (userRole === 'Draft Writer') {
+                        userIcon.innerHTML = '<i class="fas fa-solid fa-user" style="color: #ffffff; position: relative; top: 4px;"></i>';
+                    }
+                },
+                error: function(xhr, status, err) {
+                    alert("로그인을 진행해주세요");
+                    location.href="/setting/loginForm"
+                }
+            });
+        }
+		
+		getUserInfo();
 	</script>
 </th:block>

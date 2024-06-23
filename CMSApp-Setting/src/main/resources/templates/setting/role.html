@@ -35,7 +35,7 @@
           </div><!-- /.col -->
           <div class="col-sm-6">
             <ol class="breadcrumb float-sm-right">
-              <li class="breadcrumb-item"><a th:href="">Settings</a></li>
+              <li class="breadcrumb-item">Settings</li>
               <li class="breadcrumb-item active">Role</li>
             </ol>
           </div><!-- /.col -->
@@ -79,11 +79,7 @@
 							                </div>
 							                <div class="form-check">
 							                    <input class="form-check-input" type="checkbox" name="authorities" value="300" id="review">
-							                    <label class="form-check-label" for="review">Review</label>
-							                </div>
-							                <div class="form-check">
-							                    <input class="form-check-input" type="checkbox" name="authorities" value="400" id="publish" disabled>
-							                    <label class="form-check-label" for="publish">Publish</label>
+							                    <label class="form-check-label" for="review">Publish</label>
 							                </div>
 							            </div>
 							        </div>
@@ -189,6 +185,7 @@
             data: JSON.stringify(jsonData),
             success: function(response) {
                 alert('Roles saved successfully!');
+                location.href = '/setting/setting/role';
             },
             error: function(error) {
                 alert('Error saving roles!');
@@ -223,6 +220,7 @@
             success: function(response) {
                 if(response.success) {
                     alert("Changes saved successfully.");
+                    location.href = '/setting/setting/role';
                 } else {
                     alert("Failed to save changes.");
                 }

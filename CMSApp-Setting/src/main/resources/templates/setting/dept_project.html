@@ -284,7 +284,7 @@
             }
         });
     }
-
+/*
     // 새 부서 추가
     function addNewDepartment() {
         $("#addNewDept").attr({
@@ -338,6 +338,128 @@
     	});
     	$("#deleteEmptyProject").submit();
     }
+ */
+ 
+	 //새 부서 추가
+	 function addNewDepartment() {
+	     var formData = new FormData($("#addNewDept")[0]);
+	
+	     $.ajax({
+	         url: '/setting/setting/dept/insert',
+	         type: 'POST',
+	         data: formData,
+	         processData: false,
+	         contentType: false,
+	         success: function(response) {
+	             alert("New department added successfully");
+	             location.href = '/setting/setting/dept_project';
+	         },
+	         error: function(jqXHR, textStatus, errorThrown) {
+	             alert("Failed to add new department: " + textStatus);
+	         }
+	     });
+	 }
+	
+	 // 새 프로젝트 추가
+	 function addNewProject() {
+	     var formData = new FormData($("#addNewProject")[0]);
+	
+	     $.ajax({
+	         url: '/setting/setting/project/insert',
+	         type: 'POST',
+	         data: formData,
+	         processData: false,
+	         contentType: false,
+	         success: function(response) {
+	             alert("New project added successfully");
+	             location.href = '/setting/setting/dept_project';
+	         },
+	         error: function(jqXHR, textStatus, errorThrown) {
+	             alert("Failed to add new project: " + textStatus);
+	         }
+	     });
+	 }
+	
+	 // 기존 부서에 프로젝트 추가
+	 function addProject() {
+	     var formData = new FormData($("#addDeptProject")[0]);
+	
+	     $.ajax({
+	         url: '/setting/setting/deptProject/insert',
+	         type: 'POST',
+	         data: formData,
+	         processData: false,
+	         contentType: false,
+	         success: function(response) {
+	             alert("Project added to department successfully");
+	             location.href = '/setting/setting/dept_project';
+	         },
+	         error: function(jqXHR, textStatus, errorThrown) {
+	             alert("Failed to add project to department: " + textStatus);
+	         }
+	     });
+	 }
+	
+	 // 기존 부서에 프로젝트 제거
+	 function deleteProject() {
+	     var formData = new FormData($("#deleteDeptProject")[0]);
+	
+	     $.ajax({
+	         url: '/setting/setting/deptProject/delete',
+	         type: 'POST',
+	         data: formData,
+	         processData: false,
+	         contentType: false,
+	         success: function(response) {
+	             alert("Project removed from department successfully");
+	             location.href = '/setting/setting/dept_project';
+	         },
+	         error: function(jqXHR, textStatus, errorThrown) {
+	             alert("Failed to remove project from department: " + textStatus);
+	         }
+	     });
+	 }
+	
+	 // 빈(어느 프로젝트 및 사원도 보유하지 않은) 부서 삭제
+	 function deleteEmptyDept() {
+	     var formData = new FormData($("#deleteEmptyDept")[0]);
+	
+	     $.ajax({
+	         url: '/setting/setting/dept/delete',
+	         type: 'POST',
+	         data: formData,
+	         processData: false,
+	         contentType: false,
+	         success: function(response) {
+	             alert("Empty department deleted successfully");
+	             location.href = '/setting/setting/dept_project';
+	         },
+	         error: function(jqXHR, textStatus, errorThrown) {
+	             alert("Failed to delete empty department: " + textStatus);
+	         }
+	     });
+	 }
+	
+	 // 빈 프로젝트 삭제
+	 function deleteEmptyProject() {
+	     var formData = new FormData($("#deleteEmptyProject")[0]);
+	
+	     $.ajax({
+	         url: '/setting/setting/project/delete',
+	         type: 'POST',
+	         data: formData,
+	         processData: false,
+	         contentType: false,
+	         success: function(response) {
+	             alert("Empty project deleted successfully");
+	             location.href = '/setting/setting/dept_project';
+	         },
+	         error: function(jqXHR, textStatus, errorThrown) {
+	             alert("Failed to delete empty project: " + textStatus);
+	         }
+	     });
+	 }
+
 
     $(function() {
         $("#btnAddNewDept").click(function() {
