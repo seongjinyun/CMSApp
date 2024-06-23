@@ -216,7 +216,8 @@
 	<th:block th:replace="~{elements/sidebar_script :: sidebar_script}" />
 	<!-- /.사이드바 디렉토리 관련 로직 -->
 
-
+		<!-- footerScript -->
+	<th:block th:replace="~{fragments/footer_script :: footer_script}"/>
 
 	<script>
 		$(function() {
@@ -304,23 +305,7 @@
 				location.href = "/file/document/editform?documentIdx="
 						+ $("input[name='documentIdx']").val() + "&folderIdx="
 						+ $("input[name='folderIdx']").val();
-				
-/* 				$(window).on('unload', function() {
-				    $.ajax({
-				        url: "/file/document/releaseEditing",
-				        type: "POST",
-				        async: true, // 비동기적 요청으로 변경
-				        data: {
-				            documentIdx: $("#documentIdx").val()
-				        },
-				        success: function(response) {
-				            console.log("수정 중 상태 해제 완료");
-				        },
-				        error: function(xhr, status, error) {
-				            console.error("AJAX 오류 발생: " + error);
-				        }
-				    });
-				}); */
+
 			}
 		}
 

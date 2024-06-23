@@ -71,7 +71,7 @@
 	        #{title},
 	        #{content},
 	        #{comments},
-	        7
+	        #{emp.empIdx}
 	    )
 	    <selectKey keyColumn="version_log_idx" keyProperty="versionLogIdx" resultType="int" order="AFTER">
 	        SELECT LAST_INSERT_ID() AS version_log_idx

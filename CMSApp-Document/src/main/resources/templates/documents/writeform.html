@@ -76,7 +76,7 @@
 						<div class="card card-outline card-info">
 							<form id="form1">
 								<input type="hidden" id="folderIdx" name="document.folder.folderIdx" th:value="${folderIdx}"> 
-								<input type="hidden" name="document.emp.empIdx" th:value="1">
+								<input type="hidden" name="versionLog.emp.empIdx" id="empIdxInput" th:value="${empIdx}" />
 								<div class="card-header">
 									<div class="col-sm-12">
 										<input type="text" name="versionLog.title"
@@ -118,13 +118,17 @@
 	<th:block th:replace="~{fragments/footer_link :: footer_link}" />
 	<!-- 사이드바 디렉토리 관련 로직 -->
   	<th:block th:replace="~{elements/sidebar_script :: sidebar_script}"/>
+  	
+  			<!-- footerScript -->
+	<th:block th:replace="~{fragments/footer_script :: footer_script}"/>
   	<!-- /.사이드바 디렉토리 관련 로직 -->
 	<script type="text/javascript">
+	
 		$(function() {
 			// Summernote276
 			summernote();
 			draftBtn();
-
+			
 			$("#bt_save").click(function() {
 				edit();
 			});

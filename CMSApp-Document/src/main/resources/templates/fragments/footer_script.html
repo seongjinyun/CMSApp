@@ -1,7 +1,7 @@
 <th:block th:fragment="footer_script">
 	<script>
 		var empIdx;
-	
+		
 		function redirectPage(pageUrl) {
 		    const token = localStorage.getItem('token');
 		    $.ajax({
@@ -20,10 +20,10 @@
 		}
 		
 		// 0623 추가: setting 마이크로서비스로 리다이렉트
-		function redirectSetting(pageUrl) {
+		function redirectSetting(serverUrl, pageUrl) {
 		    const token = localStorage.getItem('token');
 		    $.ajax({
-		        url: "/setting/checkAuthority" + pageUrl,
+		        url: serverUrl + "/checkAuthority" + pageUrl,
 		        type: "get",
 		        headers: {
 		            "Authorization": "Bearer " + token
@@ -63,6 +63,11 @@
                     } else if (userRole === 'Draft Writer') {
                         userIcon.innerHTML = '<i class="fas fa-solid fa-user" style="color: #ffffff; position: relative; top: 4px;"></i>';
                     }
+                    
+                    // empIdx 값을 hidden input의 value로 설정
+                    if (document.getElementById("empIdxInput")) {
+            	        document.getElementById("empIdxInput").value = empIdx;
+                    }
                 },
                 error: function(xhr, status, err) {
                     alert("로그인을 진행해주세요");
@@ -72,5 +77,6 @@
         }
 		
 		getUserInfo();
+		
 	</script>
 </th:block>

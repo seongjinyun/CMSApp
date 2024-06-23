@@ -316,6 +316,11 @@ public class DocumentServiceImpl implements DocumentService {
 		documentVersion.getVersionLog().setContent(versionLog.getContent());
 		documentVersion.getVersionLog().setComments(versionLog.getComments());
 		
+		Emp emp = new Emp();
+		emp.setEmpIdx(versionLog.getEmp().getEmpIdx());;
+		
+		documentVersion.getVersionLog().setEmp(emp);
+		
 		int maxVersion = documentDetailDAO.findMaxVersionByDocumentIdx(versionLog.getDocument().getDocumentIdx());
 		
 		//버전 로그 증가
