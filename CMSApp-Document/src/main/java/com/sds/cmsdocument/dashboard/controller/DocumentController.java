@@ -17,7 +17,7 @@ import com.sds.cmsdocument.jwt.JwtValidService;
 public class DocumentController {
 	
 	@Autowired
-	JwtValidService jwtValidService;
+	private JwtValidService jwtValidService;
 
 	@GetMapping("/dashboard/activity")
 	public String getAdminDashboardActivity() {
