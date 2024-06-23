@@ -173,49 +173,63 @@ div.table-detail, span.table-detail {
 	<script src="/file/admin/plugins/datatables-buttons/js/buttons.html5.min.js"></script>
 	<script src="/file/admin/plugins/datatables-buttons/js/buttons.print.min.js"></script>
 	<script src="/file/admin/plugins/datatables-buttons/js/buttons.colVis.min.js"></script>
-	
 	<script>
-	
-		function redirectDashboardPage() {
+		let empIdx = 0;
+		let roleName = null;
+		
+		function redirectPublishing() {
 		    const token = localStorage.getItem('token');
 		    $.ajax({
-		        url: "checkAuthority/admin/dashboard/publishing",
+		        url: "/file/checkAuthority/admin/dashboard/publishing",
 		        type: "get",
 		        headers: {
 		            "Authorization": "Bearer " + token
 		        },
 		        success: function(result) {
-		        	console.log('인증 성공');
 		        },
 		        error: function(xhr, status, err) {
 		            alert("권한이 없습니다.");
-		           	location.href="/file/dashboard/activity";
+		           	location.href = "/file/dashboard/activity";
 		        }
 		    });
 		}
+		
+		// 0623 추가: 사이드바에 이용할 사용자 정보 가져오기
+		function getUserInfo() {
+	        const token = localStorage.getItem('token');
+	        $.ajax({
+	            url: "/setting/getUserInfo",
+	            type: "get",
+	            headers: {
+	                "Authorization": "Bearer " + token
+	            },
+	            success: function(result) {
+	                // 사용자 정보 설정
+	                const userName = result.empName;
+	                const userRole = result.roleName;
+	                empIdx = parseInt(result.empIdx, 10);
+	                roleName = result.roleName;
+	                console.log("empIdx: "+empIdx);
+	                
+	                // 사용자 이름 업데이트
+	                document.getElementById('user-name').textContent = userName;
 	
-		// 로그인 사원 정보
-		let empIdx = 0;
-		let roleName = null;
-		function loadEmpInfo() {
-		     const token = localStorage.getItem('token');
-		     $.ajax({
-		       url: "/file/emp/check",
-		       type: "get",
-		       headers: {
-		         "Authorization": "Bearer " + token
-		       },
-		       success: function(result) {
-		    		empIdx = result.empIdx; // 로그인한 사원의 idx정보 저장
-		    		roleName = result.roleName;
-		    		redirectDashboardPage();
-		       },
-		       error: function(xhr, status, err) {
-		         alert("로그인이 필요한 서비스입니다.");
-		         location.href = "/setting/loginForm";
-		       }
-		     });
-		 }
+	                // 사용자 역할에 따라 아이콘 업데이트
+	                const userIcon = document.getElementById('user-icon');
+	                if (userRole === 'Admin') {
+	                    userIcon.innerHTML = '<i class="fas fa-solid fa-crown" style="color: #ffffff; position: relative; top: 4px;"></i>';
+	                } else if (userRole === 'Draft Writer') {
+	                    userIcon.innerHTML = '<i class="fas fa-solid fa-user" style="color: #ffffff; position: relative; top: 4px;"></i>';
+	                }
+	                
+	                redirectPublishing();
+	            },
+	            error: function(xhr, status, err) {
+	                alert("로그인을 진행해주세요");
+	                location.href="/setting/loginForm"
+	            }
+	        });
+	    }
 
 		/* 배포 완료 문서 목록 가져오기 */
 		function getWaitingList() {
@@ -294,7 +308,7 @@ div.table-detail, span.table-detail {
 		}
 
 		$(function() {
-			loadEmpInfo();
+			getUserInfo();
 			
 			getWaitingList();
 			
