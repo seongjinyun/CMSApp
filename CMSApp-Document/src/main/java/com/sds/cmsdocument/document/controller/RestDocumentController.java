@@ -241,9 +241,9 @@ public class RestDocumentController {
 	
 	//리뷰요청
 	@PostMapping("/document/review/request")
-	public ResponseEntity reviewRequest(@RequestParam("documentIdx") int documentIdx,
+	public ResponseEntity reviewRequest(@RequestParam("documentIdx") int documentIdx, @RequestParam("empIdx") int empIdx,
 														@RequestParam("comments") String comments) {
-		Emp emp = new Emp(1); // 임시 지정
+		Emp emp = new Emp(empIdx);
 		Document document = new Document(documentIdx);
 		MasterCode masterCode = new MasterCode(200);
 		DocumentVersion documentVersion = new DocumentVersion(document, masterCode, emp, comments);
