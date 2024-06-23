@@ -795,6 +795,7 @@
 			
 			getSummaryCount(); 	// 결재 상태별 문서 수 표시
 			getSummaryData([$('#btn-in_review').val()]); // 리뷰 대기 문서 목록 표시
+			getFilteredData(null, null, null, null);
 
 			// [요약 탭] 클릭 이벤트
 			$('#btn-in_review').click(function () {
