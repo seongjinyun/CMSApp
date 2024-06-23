@@ -295,7 +295,9 @@ div.table-detail, span.table-detail {
 	            url: "/file/admin/dashboard/publishing",
 	            data: {
 	            	'publishedVersionName' : publishedVersionName,
-	            	'comments': comments
+	            	'comments': comments,
+	            	'roleName': roleName,
+	            	'empIdx': empIdx
 	            },
 	            success: function(result) {
 					alert("새로운 배포판 생성 성공");
