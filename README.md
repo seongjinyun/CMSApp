@@ -65,7 +65,7 @@ AdminLTE를 이용하여 화면 구성을 하였습니다.
 
 ## 구현 영상
 
-[![구현 영상](Readme Assets/thumbnail.png)](https://youtu.be/sVmesITMDE0?si=EruV6gsFUnc_JmLc)
+https://youtu.be/sVmesITMDE0?si=EruV6gsFUnc_JmLc
 
 ## 이슈 및 트러블슈팅
 
