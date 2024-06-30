@@ -9,7 +9,7 @@
 - 인원: 4명
     - 차정현 jhcha0822@hanyang.ac.kr
     - 박준형 jhpp0105@gmail.com
-    - 윤성진 
+    - 윤성진 ckwdktek12@gmail.com
     - 최지인 chris309804@gmail.com
 - 기간: 2024.05.07 ~ 06.25 (7주)
 - CMS는 Content Management System의 약어로, 문서를 작성 및 편집할 수 있는 기능을 제공하는 툴입니다. 회사에서 기술 문서 사이트를 제공해야 하는 경우가 많이 생기고 있는데, 이럴 때 사용할 수 있는 사이트를 만들어보고자 하였습니다.
