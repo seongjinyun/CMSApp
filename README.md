@@ -7,7 +7,7 @@
 **멀티캠퍼스 백엔드 개발자 부트캠프(스프링) 최종 프로젝트 최우수 수상**
 
 - 인원: 4명
-    - 차정현 jhcha0822@hanyang.ac.kr
+    - 차정현 jhcha0822@gmail.com
     - 박준형 jhpp0105@gmail.com
     - 윤성진 ckwdktek12@gmail.com
     - 최지인 chris309804@gmail.com
